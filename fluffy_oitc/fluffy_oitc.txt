@@ -2,4 +2,6 @@
 {
 	"base"	"fluffy_mg_base"
 	"title"	"One In The Chamber"
+	"menusystem" "1"
+	"maps"	"^oitc_"
 }
