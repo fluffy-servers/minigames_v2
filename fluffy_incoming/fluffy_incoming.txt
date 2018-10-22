@@ -1,0 +1,5 @@
+"fluffy_incoming"
+{
+	"base"	"fluffy_mg_base"
+	"title"	"Incoming!"
+}
