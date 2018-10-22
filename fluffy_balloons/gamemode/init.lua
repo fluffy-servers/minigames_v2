@@ -3,15 +3,20 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
+-- Give players the balloon revolver on spawn
 function GM:PlayerLoadout( ply )
 	ply:StripAmmo()
 	ply:StripWeapons()
 	ply:Give("balloon_revolver")
 end
 
+-- Spawn a balloon at a random spawning entity
 function GM:SpawnBalloon()
 	local spawnents = ents.FindByClass('balloon_spawner')
 	if #spawnents == 0 then return end
+	-- Star Balloons  03%
+	-- Heart Balloons 12%
+	-- Basic Balloons 85%
 	local type = "balloon_base"
 	if math.random() > 0.97 then
 		type = "balloon_star"
@@ -21,18 +26,20 @@ function GM:SpawnBalloon()
 	table.Random(spawnents):SpawnBalloon(type)
 end
 
+-- Award score to players when balloons are popped
 function GM:PopBalloon(ply, points, type)
 	local score = ply:GetNWInt("Balloons", 0)
 	ply:SetNWInt("Balloons", score + points)
 end
 
-hook.Add('RoundStart', 'PrepareCratePhase', function()
+-- Reset balloon scores before round starts
+hook.Add('PreRoundStart', 'PrepareBalloonPhase', function()
 	for k,v in pairs(player.GetAll()) do
 		v:SetNWInt("Balloons", 0)
 	end
 end )
 
--- Prop
+-- Spawn balloons every so often
 BalloonSpawnTimer = 0
 local Delay = 0.5
 hook.Add("Tick", "TickBalloonSpawn", function()
@@ -44,11 +51,12 @@ hook.Add("Tick", "TickBalloonSpawn", function()
 	end
 end )
 
+-- Players can't take damage from each other in this gamemode
 function GM:EntityTakeDamage(target, dmginfo)
 	if target:IsPlayer() then dmginfo:SetDamage(0) return end
 end
 
--- Basic function to get the player with the most frags
+-- Basic function to get the player with the most balloons
 function GM:GetWinningPlayer()
     -- Doesn't really make sense in Team gamemodes
     -- if GAMEMODE.TeamBased then return nil end

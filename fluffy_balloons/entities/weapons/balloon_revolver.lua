@@ -61,6 +61,9 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 	bullet.TracerName = "balloon_revolver_tracer"
 	self.Owner:FireBullets(bullet)
 	
+	-- Fire a secondary tracer
+	-- Traces a box slightly bigger than a balloon
+	-- Near-misses will still pop the balloon
 	if SERVER then
 		local startpos = self.Owner:GetShootPos()
 		local endpos = self.Owner:GetShootPos() + ( self.Owner:GetAimVector() * 1000 )
@@ -76,6 +79,7 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 			mask = MASK_SHOT_HULL
 		} )
 		
+		-- If the tracer hits a balloon - apply damage to it
 		if tr.Hit and !tr.HitWorld then
 			if tr.Entity.Balloon then
 				tr.Entity:TakeDamage(100, self.Owner, self)
