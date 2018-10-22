@@ -4,6 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 include('ply_extension.lua')
 
+-- Players get the punch weapon by default
 function GM:PlayerLoadout(ply)
     ply:SetCarrier(false)
     ply:Give('bt_punch')
@@ -28,6 +29,7 @@ function GM:PickBomber()
     
     if #GAMEMODE:GetAlivePlayers() < 2 then return end
 	
+	-- Give the bomb & set the time randomly
 	local newply = table.Random( GAMEMODE:GetAlivePlayers() )
 	newply:SetCarrier( true )
 	newply:SetTime(math.random(15, 30))
@@ -42,10 +44,12 @@ hook.Add('DoPlayerDeath', 'CheckBomb', function(ply)
     end
 end )
 
+-- Pick a new bomb carrier at round start
 hook.Add('RoundStart', 'PickUnluckyStart', function()
     GAMEMODE:PickBomber()
 end )
 
+-- Remove any bombs still around when the timer runs out
 hook.Add('RoundEnd', 'RemoveSpareBombs', function()
 	for k,v in pairs(player.GetAll()) do
 		v:StripWeapons()
