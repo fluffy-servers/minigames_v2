@@ -6,6 +6,7 @@ ENT.Model = "models/maxofs2d/balloon_classic.mdl"
 ENT.Points = 1
 ENT.SpeedMin = 20 
 ENT.SpeedMax = 30
+ENT.Balloon = true
 
 function ENT:Initialize()
 	if CLIENT then return end

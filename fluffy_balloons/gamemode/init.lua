@@ -6,10 +6,7 @@ include('shared.lua')
 function GM:PlayerLoadout( ply )
 	ply:StripAmmo()
 	ply:StripWeapons()
-	ply:Give("weapon_crossbow")
-	ply:Give("weapon_357")
-	ply:GiveAmmo(500, "XBowBolt")
-	ply:GiveAmmo(200, "357")
+	ply:Give("balloon_revolver")
 end
 
 function GM:SpawnBalloon()
