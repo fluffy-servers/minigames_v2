@@ -12,6 +12,7 @@ function GM:PlayerLoadout( ply )
 	ply:SetAmmo(0, "Pistol")
 end
 
+-- Give 1 pistol ammo when a player gets a kill
 hook.Add('DoPlayerDeath', 'OITCDeath', function(victim, attacker, dmg)
 	if not attacker:IsPlayer() then return end
 	

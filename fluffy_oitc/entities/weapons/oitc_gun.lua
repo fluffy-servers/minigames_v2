@@ -27,7 +27,7 @@ function SWEP:PrimaryAttack()
 	
 	self:TakePrimaryAmmo(1)
 	self:ShootBullets(self.Primary.Damage, 1, self.Primary.Cone)
-	self.Weapon:EmitSound(self.Primary.Sound, 100, math.random(95,105) )
+	self.Weapon:EmitSound(self.Primary.Sound, 100, math.random(95,105))
 end
 
 function SWEP:SecondaryAttack()
@@ -45,10 +45,9 @@ function SWEP:ShootBullets( damage, numbullets, aimcone)
 	bullet.Force	= math.Round(damage * 2)							
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = "Pistol"
+	self.Owner:FireBullets(bullet)
 	
-	self.Owner:FireBullets( bullet )
-	
-	self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK ) 		// View model animation
-	self.Owner:MuzzleFlash()								// Crappy muzzle light
-	self.Owner:SetAnimation( PLAYER_ATTACK1 )				// 3rd Person Animation
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+	self.Owner:MuzzleFlash()
+	self.Owner:SetAnimation(PLAYER_ATTACK1)
 end

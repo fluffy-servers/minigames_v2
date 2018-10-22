@@ -1,5 +1,5 @@
-"minigames"
+"fluffy_oitc"
 {
-	"base"	"fluffy_base"
+	"base"	"fluffy_mg_base"
 	"title"	"One In The Chamber"
 }
