@@ -5,8 +5,7 @@ GM.Author = 'FluffyXVI'
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundTime = 200
-
-GM.DeathSounds = true
+GM.RoundNumber = 3
 
 function GM:Initialize()
 
