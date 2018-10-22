@@ -19,6 +19,8 @@ end
 hook.Add('DoPlayerDeath', 'OITCDeath', function(victim, attacker, dmg)
 	-- Verify the attacker is a player
 	if not attacker:IsPlayer() then return end
+	-- Verify it wasn't a suicide
 	if attacker == victim then return end
+	-- Award the 1 ammo for kills
 	attacker:GiveAmmo(1, "Pistol", true)
 end)
