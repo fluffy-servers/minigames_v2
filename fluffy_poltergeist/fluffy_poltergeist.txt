@@ -1,5 +1,0 @@
-"fluffy_poltergeist"
-{
-	"base"	"fluffy_mg_base"
-	"title"	"Poltergeist"
-}

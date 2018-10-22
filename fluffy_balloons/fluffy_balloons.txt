@@ -1,6 +1,0 @@
-"fluffy_cratewars"
-{
-	"base"	"fluffy_mg_base"
-	"title"	"Crate Wars"
-	"maps"	"^cw_"
-}

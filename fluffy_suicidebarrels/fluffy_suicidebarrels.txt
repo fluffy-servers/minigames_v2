@@ -1,6 +1,0 @@
-"fluffy_suicidebarrels"
-{
-	"base"	"fluffy_mg_base"
-	"title"	"Suicide Barrels"
-	"maps"	"^sb_"
-}

@@ -1,6 +1,0 @@
-"fluffy_laserdance"
-{
-	"base"	"fluffy_mg_base"
-	"title"	"Laser Dance"
-	"maps"	"^ld_"
-}

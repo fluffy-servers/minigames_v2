@@ -1,5 +1,0 @@
-"fluffy_cactus"
-{
-	"base"	"fluffy_mg_base"
-	"title"	"Cactus"
-}
