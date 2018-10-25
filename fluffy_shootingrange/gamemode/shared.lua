@@ -7,8 +7,9 @@ TEAM_RED = 1
 TEAM_BLUE = 2
 
 GM.TeamBased = true		
-GM.Elimination = false	
-GM.RoundTime = 150		
+GM.Elimination = true	
+GM.WinBySurvival = true
+GM.RoundTime = 100		
 GM.RoundNumber = 6		
 GM.RoundCooldown = 5
 
