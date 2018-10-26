@@ -271,7 +271,7 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     attacker:AddFrags(1)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
     
-    if not GAMEMODE.TeamBased
+    if not GAMEMODE.TeamBased then
         attacker.FFAKills = attacker.FFAKills + 1
     end
 end
