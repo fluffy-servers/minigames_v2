@@ -13,17 +13,14 @@ local sounds = {
 function PANEL:Init()
     local w = self:GetParent():GetWide()
     local h = self:GetParent():GetTall()
-    
     self:SetSize(w/3, h)
-    self.StartTime = CurTime()
-    self.CurrentXP = 0
-    self.TargetXP = 0
-    self.MaxXP = 100
-    self.XPMessage = ""
-    self.Level = 32
     
-    timer.Simple(2, function() self:AddXP(50, "Kills") end)
-    timer.Simple(5, function() self:AddXP(50, "Rounds Won") end)
+    self.CurrentXP = LocalPlayer():GetExperience()
+    self.MaxXP = LocalPlayer():GetMaxExperience()
+    self.Level = LocalPlayer():GetLevel()
+    
+    self.TargetXP = self.CurrentXP
+    self.XPMessage = ""
 end
 
 function PANEL:Paint(w, h)
