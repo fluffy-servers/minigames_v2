@@ -1,7 +1,7 @@
 local meta = FindMetaTable("Player")
 
 function meta:GetExperience()
-    return self:GetNWInt("MGExperience") or 0
+    return self:GetNWInt("MGExperience", 0)
 end
 
 function meta:GetMaxExperience()

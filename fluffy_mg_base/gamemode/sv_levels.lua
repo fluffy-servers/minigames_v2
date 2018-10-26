@@ -33,7 +33,7 @@ function meta:LoadLevelFromDB()
         if type(data) == 'table' and #data > 0 then
             -- Load information from DB
             ply:SetLevel(data[1]['level'])
-            ply:SetExperience(data[1]['experience'])
+            ply:SetExperience(data[1]['xp'])
         else
             -- Add new blank row into the table
             local q = GAMEMODE.MinigamesPQueries['addnewlevel']
