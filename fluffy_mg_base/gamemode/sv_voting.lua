@@ -12,6 +12,7 @@ GM.VoteGamemodes = {
 	{'fluffy_balls', 'Ballz', 'Free For All'},
 	{'fluffy_cratewars', 'Crate Wars', 'Free For All'},
 	{'fluffy_oitc', 'One in the Chamber', 'Team DM'},
+    {'fluffy_balloons', 'Balloons', 'Free For All'},
 }
 
 -- List of maps in rotation
@@ -21,13 +22,15 @@ GM.VoteMaps = {
     fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_nolookingback_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
     fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_darkwood_b3', 'sb_killingrooms', 'sb_storage_v3'},
     fluffy_dodgeball = {'db_arena_t1', 'db_stairs', 'db_terminus_v3'},
-    fluffy_pitfall = {'pf_ocean', 'pf_midnight'},
+    fluffy_pitfall = {'pf_ocean', 'pf_midnight_v1'},
     fluffy_incoming = {'inc_duo', 'inc_linear'},
     fluffy_bombtag = {'bt_diamond', 'bt_rainbow', 'bt_plaza_v2', 'bt_museum'},
     fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_cloudy'},
-	fluffy_cratewars = {'cw_spaceslide', 'cw_cloudy'},
+	fluffy_cratewars = {'cw_spaceslide', 'cw_cloudy', 'cw_bricks'},
 	fluffy_balls = {'gm_shootout'},
-	fluffy_oitc = {'sw_rainbow'}
+	fluffy_oitc = {'sw_rainbow'},
+    fluffy_balloons = {'bl_skyoasis', 'bl_spaceage', 'bl_cloudy'},
+    fluffy_shootingrange = {'cb_cylinder', 'cb_split'}
 }
 
 -- Variables to keep track of voting
@@ -57,12 +60,12 @@ function table.Shuffle(t)
   return t
 end
 
--- Generate the voting 'queue' of 4 options
+-- Generate the voting 'queue' of six options
 function GM:GenerateVotingQueue()
     -- Copy the gamemodes & shuffle
     local vote = table.Copy(GAMEMODE.VoteGamemodes)
     table.Shuffle(vote)
-    vote = {vote[1], vote[2], vote[3], vote[4]}
+    vote = {vote[1], vote[2], vote[3], vote[4], vote[5], vote[6]}
     
     -- Add a map to each gamemode
     for k,v in pairs(vote) do
@@ -94,7 +97,8 @@ end
 
 -- Count the votes cast by a player
 function GM:CountVote(ply, vote)
-    if vote != 1 and vote != 2 and vote !=3 and vote !=4 then return end -- probably can be done better but i like confidence
+    if type(vote) != "number" then return end
+    if vote < 1 or vote > 6 then return end
     GAMEMODE.VotingResults[ply] = vote
 end
 -- Player has cast a vote, count it
@@ -110,8 +114,10 @@ function GM:PickWinningVote()
     results[2] = 0
     results[3] = 0
     results[4] = 0
+    results[5] = 0
+    results[6] = 0
     for k,v in pairs(GAMEMODE.VotingResults) do
-        if v > 4 then continue end
+        if v > 6 then continue end
         results[v] = results[v] + 1
     end
     
