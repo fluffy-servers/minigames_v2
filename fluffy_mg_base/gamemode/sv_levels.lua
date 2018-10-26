@@ -1,5 +1,3 @@
-local meta = FindMetaTable("Player")
-
 hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
 	local db = GAMEMODE:CheckDBConnection()
 	GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
@@ -7,25 +5,19 @@ hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
 	GAMEMODE.MinigamesPQueries['updatelevel'] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
 end )
 
-function meta:GetLevel()
-    return self:GetNWInt("MGLevel", 0)
-end
+local meta = FindMetaTable("Player")
 
 function meta:SetLevel(level)
     self:SetNWInt("MGLevel", level)
 end
 
-function meta:GetExperience()
-    return self.MGExperience or 0
-end
-
 function meta:SetExperience(xp)
-    self.MGExperience = xp
+    self:SetNWInt("MGExperience", xp)
 end
 
 function meta:AddExperience(xp)
-    local old_xp = self.MGExperience
-    self.MGExperience = old_xp + xp
+    local old_xp = self:GetNWInt("MGExperience", 0)
+    self:SetNWInt("MGExperience", old_xp + xp)
 end
 
 function meta:LoadLevelFromDB()
@@ -71,7 +63,7 @@ function meta:UpdateLevelToDB()
     
     -- Success function
     function q:onSuccess(data)
-        print('success')
+        --print('success')
     end
     
     -- Print error if any occur (they shouldn't)
