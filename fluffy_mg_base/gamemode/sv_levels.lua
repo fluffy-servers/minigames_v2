@@ -1,3 +1,4 @@
+-- Prepare some prepared queries to make database stuff faster and more secure
 hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
 	local db = GAMEMODE:CheckDBConnection()
 	GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
@@ -7,19 +8,29 @@ end )
 
 local meta = FindMetaTable("Player")
 
+-- Also note sh_levels.lua which has getters of the below methods
+
+-- Set the level of the player
+-- Does NOT automatically save
 function meta:SetLevel(level)
     self:SetNWInt("MGLevel", level)
 end
 
+-- Add a certain amount of XP to the player
+-- Does NOT automatically save
 function meta:SetExperience(xp)
     self:SetNWInt("MGExperience", xp)
 end
 
+-- Add a certain amount of XP to the player
+-- Does NOT automatically save
 function meta:AddExperience(xp)
     local old_xp = self:GetNWInt("MGExperience", 0)
     self:SetNWInt("MGExperience", old_xp + xp)
 end
 
+-- Load the level and xp from the database
+-- This will automatically add blank rows if the player is new
 function meta:LoadLevelFromDB()
     if not self:SteamID64() or self:IsBot() then return end
     local ply = self
@@ -49,6 +60,7 @@ function meta:LoadLevelFromDB()
     q:start()
 end
 
+-- Save the level and xp to the database
 function meta:UpdateLevelToDB()
     if not self:SteamID64() or self:IsBot() then return end
     local ply = self
@@ -73,6 +85,40 @@ function meta:UpdateLevelToDB()
     q:start()
 end
 
+-- Load the player level from database on join
 hook.Add('PlayerInitialSpawn', 'LoadMinigamesLevelData', function(ply)
     ply:LoadLevelFromDB()
 end )
+
+-- Complicated methods of converting the various tracked stats to XP below
+-- Maximum of 100XP in one round
+-- Maximum of 20XP for any given source (except round wins)
+GM.StatConversions = {}
+GM.StatConversions['RoundWins'] = {'Rounds Won', 0}
+GM.StatConversions['kills'] = {'Kills', 1}
+
+-- Convert a stat name & score to a table with XP
+function GM:ConvertStat(name, points)
+    if not GAMEMODE.StatConversions[name] then return end
+    
+    if name == 'RoundWins' then
+        if not GAMEMODE.TeamBased then
+            local score = math.Clamp(points*8, 0, 40)
+            return {'Rounds Won', points, score}
+        end
+    else
+        local t = GAMEMODE.StatConversions[name]
+        local score = math.Clamp(points * t[2], 0, 20)
+        return {t[1], points, score}
+    end
+end
+
+-- Iterate through a player's stats to convert it all to experience
+function meta:ConvertStatsToExperience()
+    local xp = {}
+    for k,v in pairs(GAMEMODE:GetPlayerStatTable(self)) do
+        table.insert(GAMEMODE:ConvertStat(k, v))
+    end
+    
+    return xp
+end

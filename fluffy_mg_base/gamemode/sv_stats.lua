@@ -40,6 +40,22 @@ function GM:GetPlayerStatTable(ply)
     end
 end
 
+-- Get the player with the highest score in a certain stat
+function GM:GetStatWinner(stat) then
+    local highest_score = 0
+    local winning_player = nil
+    for k,v in pairs(GAMEMODE.StatsTracking) do
+        if not v[stat] then continue end
+        
+        if v[stat] > highest_score then
+            highest_score = v[stat]
+            winning_player = k
+        end
+    end
+    
+    return {winning_player, highest_score}
+end
+
 function GM:SendStatsToClients()
     net.Start("SendStatsReport")
         net.WriteTable(GAMEMODE.StatsTracking)
