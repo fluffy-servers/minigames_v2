@@ -41,11 +41,26 @@ function PANEL:AddChildren(width, height)
         
         draw.SimpleText(map, "FS_B32", w - 3, h - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         draw.SimpleText(map, "FS_B32", w - 4, h - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        
+        --print(GAMEMODE.CurrentVote, p.Index)
+        if GAMEMODE.CurrentVote and p.Index and GAMEMODE.CurrentVote == p.Index then
+            draw.SimpleText("✓", "FS_B40", w - 3, h - 56 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+            draw.SimpleText("✓", "FS_B40", w - 4, h - 56 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        end
+    end
+    
+    local map_button = vgui.Create('DButton', self)
+    map_button:SetText("")
+    map_button:SetSize(width, width)
+    function map_button:Paint() return end
+    function map_button:DoClick()
+        LocalPlayer():EmitSound('ambient/alarms/warningbell1.wav', 75, math.random(140, 180))
+        p:SendVote()
     end
 end
 
 function PANEL:SetIndex(i)
-    self.Index = 0
+    self.Index = i
 end
 
 function PANEL:SetOptions(options)
