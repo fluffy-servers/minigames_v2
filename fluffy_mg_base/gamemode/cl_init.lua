@@ -8,6 +8,11 @@ include('cl_thirdperson.lua')
 include('cl_playerpanel.lua')
 include('cl_scoreboard.lua')
 
+include('vgui/MapVotePanel.lua')
+include('vgui/Screen_Experience.lua')
+include('vgui/Screen_Maps.lua')
+include('vgui/Screen_Scoreboard.lua')
+
 --[[
     Universal Fonts
 ]]--
@@ -35,6 +40,10 @@ surface.CreateFont( "FS_64", {
 	font = "Coolvetica",
 	size = 64,
 } )
+surface.CreateFont( "FS_128", {
+	font = "Coolvetica",
+	size = 128,
+} )
 
 surface.CreateFont( "FS_B24", {
     font = "Bebas Kai",
@@ -49,6 +58,16 @@ surface.CreateFont( "FS_B32", {
 surface.CreateFont( "FS_B40", {
     font = "Bebas Kai",
     size = 40,
+})
+
+surface.CreateFont( "FS_B64", {
+    font = "Bebas Kai",
+    size = 64,
+})
+
+surface.CreateFont( "FS_B96", {
+    font = "Bebas Kai",
+    size = 128,
 })
 
 --[[
