@@ -61,6 +61,7 @@ function GM:PreStartRound()
         if !GAMEMODE.TeamBased then v:SetTeam( TEAM_UNASSIGNED ) v:SetNWInt("RoundKills", 0) end
         v:Spawn()
         v:Freeze( true )
+        v.FFAKills = 0
     end
     
     -- Start the round after a short cooldown

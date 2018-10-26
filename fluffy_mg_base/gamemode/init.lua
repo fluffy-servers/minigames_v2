@@ -139,7 +139,7 @@ function GM:GetWinningPlayer()
     local bestscore = 0
     local bestplayer = nil
     for k,v in pairs( player.GetAll() ) do
-        local frags = v:Frags()
+        local frags = v.FFAKills or 0
         if frags > bestscore then
             bestscore = frags
             bestplayer = v
@@ -270,6 +270,10 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     -- Add the frag to scoreboard
     attacker:AddFrags(1)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
+    
+    if not GAMEMODE.TeamBased
+        attacker.FFAKills = attacker.FFAKills + 1
+    end
 end
 
 -- Import the component parts
