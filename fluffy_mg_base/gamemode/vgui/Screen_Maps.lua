@@ -14,6 +14,8 @@ function PANEL:Init()
     local panel_w = (w - margin*2 - (n-1)*padding ) / n
     local panel_h = (h/2) - 32
     
+    self.VotePanels = {}
+    
     for j = 1,2 do
         local yy = 16
         if j == 2 then yy = h - panel_w - 16 end
@@ -23,13 +25,21 @@ function PANEL:Init()
             map:SetSize(panel_w, panel_h)
             map:SetPos(margin + (panel_w+padding)*(i-1), yy)
             map:AddChildren()
-            map:SetIndex(1)
+            map:SetIndex(i + (j-1)*3)
+            self.VotePanels[i + (j-1)*3] = map
         end
     end
 end
 
 function PANEL:Paint(w, h)
 
+end
+
+function PANEL:SetVotes(options)
+    for i,o in pairs(options) do
+        if not self.VotePanels[i] then continue end
+        self.VotePanels[i]:SetOptions(o)
+    end
 end
 
 vgui.Register("Screen_Maps", PANEL, "Panel")

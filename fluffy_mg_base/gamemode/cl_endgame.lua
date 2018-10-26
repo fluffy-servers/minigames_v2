@@ -133,6 +133,7 @@ function GM:OpenEndGamePanel()
     
     local test2 = vgui.Create("Screen_Maps", scroll_panel)
     test2:SetPos(sw, 0)
+    GAMEMODE.MapVoteScreen = test2
     
     local test3 = vgui.Create("Screen_Experience", scroll_panel)
     test3:SetPos(sw*2, 0)
@@ -171,6 +172,7 @@ end )
 -- Get the map vote options information from the server
 net.Receive("SendMapVoteTable", function()
     GAMEMODE.VotingOptions = net.ReadTable()
+    GAMEMODE.MapVoteScreen:SetVotes(GAMEMODE.VotingOptions)
 end)
 
 -- Get the stats report information from the server

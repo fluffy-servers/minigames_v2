@@ -7,6 +7,7 @@ end
 function PANEL:AddChildren(width, height)
     local width = self:GetWide()
     local height = self:GetTall()
+    local p = self
     
     -- Create the icon for each map
     -- The icon is loaded from the Fluffy Servers website
@@ -19,9 +20,8 @@ function PANEL:AddChildren(width, height)
     end
     -- Wait until options are sent, then load the icon
     function map_icon:Think()
-        local options = GAMEMODE.VotingOptions
-        if not options then return end
-        local map = options[i][4]
+        if not p.Options then return end
+        local map = p.Options[4]
         if not map then return end
         
         -- Set the image
@@ -32,9 +32,9 @@ function PANEL:AddChildren(width, height)
     function map_icon:PaintOver(w, h)
         local gamemode = 'gamemode'
         local map = 'map'
-        if self.Options then
-            gamemode = self.Options[2] or 'gamemode'
-            map = self.Options[4] or 'map'
+        if p.Options then
+            gamemode = p.Options[2] or 'gamemode'
+            map = p.Options[4] or 'map'
         end
         draw.SimpleText(gamemode, "FS_B24", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         draw.SimpleText(gamemode, "FS_B24", w - 4, h - 28 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
@@ -53,6 +53,7 @@ function PANEL:SetOptions(options)
     -- Index 3: gamemode description
     -- Index 4: map
     self.Options = options
+    PrintTable(self.Options)
 end
 
 function PANEL:Paint(w, h)
