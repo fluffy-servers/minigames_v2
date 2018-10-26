@@ -118,7 +118,8 @@ function GM:DrawRoundState()
     
     -- Only draw this if the game hasn't yet started
     if GAME_STATE == 'GameNotStarted' then
-        draw.SimpleTextOutlined( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+        draw.SimpleText( 'Waiting For Players...', "FS_40", 4+2, 4+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
+		draw.SimpleText( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
     
