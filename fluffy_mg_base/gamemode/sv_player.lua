@@ -18,31 +18,6 @@ GM.ValidModels = {
     female06 = "models/player/Group01/female_06.mdl",
 }
 
--- Colors for FFA
--- Todo: remove ugly ones
-GM.FFAColors = {
-    Color(255, 195, 18),
-    Color(247, 159, 31),
-    Color(196, 229, 56),
-    Color(163, 203, 56),
-    Color(18, 203, 196),
-    Color(18, 137, 167),
-    Color(253, 167, 223),
-    Color(217, 128, 250),
-    Color(237, 76, 103),
-    Color(181, 52, 113),
-    Color(238, 90, 36),
-    Color(234, 32, 39),
-    Color(0, 148, 50),
-    Color(0, 98, 102),
-    Color(6, 82, 221),
-    Color(27, 20, 100),
-    Color(153, 128, 250),
-    Color(87, 88, 187),
-    Color(131, 52, 113),
-    Color(111, 30, 81),
-}
-
 -- Stop suicide in some gamemodes
 function GM:CanPlayerSuicide()
     return self.CanSuicide
@@ -81,7 +56,7 @@ function GM:PlayerSetModel(ply)
             local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
             ply:SetPlayerColor(c)
         else
-            ply.FFAColor = table.Random(GAMEMODE.FFAColors)
+            ply.FFAColor = HSVToColor(math.random(360), 1, 1)
             local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
             ply:SetPlayerColor(c)
         end

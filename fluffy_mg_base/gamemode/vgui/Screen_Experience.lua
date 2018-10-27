@@ -21,6 +21,8 @@ function PANEL:Init()
     
     self.TargetXP = self.CurrentXP
     self.XPMessage = ""
+    
+    timer.Simple(2, function() self:AddXP(100, "for being cool") end)
 end
 
 function PANEL:Paint(w, h)
