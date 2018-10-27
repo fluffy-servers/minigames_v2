@@ -19,6 +19,7 @@ AddCSLuaFile('cl_hud.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
 AddCSLuaFile('vgui/Screen_Experience.lua')
 AddCSLuaFile('vgui/Screen_Maps.lua')
+AddCSLuaFile('vgui/Screen_Scoreboard.lua')
 
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
