@@ -121,15 +121,20 @@ end
 function meta:ConvertStatsToExperience()
     local xp = {}
     local total_xp = 0
+    local hit_max = false
     for k,v in pairs(self:GetStatTable()) do
         local s = GAMEMODE:ConvertStat(k, v)
         -- Limit of 100XP per game
-        if total_xp + s[2] > 100 then
+        if (total_xp + s[2] > 100) and (!hit_max) then
             s[2] = 100 - total_xp
+            hit_max = true
             table.insert(xp, s)
-            break
+        elseif (hit_max) then
+            s[2] = 0
+            table.insert(xp, s)
+        else
+            table.insert(xp, s)
         end
-        table.insert(xp, s)
     end
     
     return xp
