@@ -94,10 +94,10 @@ end
 
 function GM:OpenEndGamePanel()
     local frame = vgui.Create('DFrame')
-    local w = ScrW() * 0.8
+    local w = ScrW()
     local h = ScrH()
     frame:SetSize(w, h)
-    frame:SetPos(ScrW() - w, 0)
+    frame:SetPos(0, 0)
     frame:SetTitle("")
     frame:ShowCloseButton(true)
     frame:SetBackgroundBlur(true)
@@ -135,7 +135,7 @@ function GM:OpenEndGamePanel()
     test2:SetPos(sw, 0)
     GAMEMODE.MapVoteScreen = test2
     
-    local test3 = vgui.Create("Screen_Experience", scroll_panel)
+    local test3 = vgui.Create("Screen_Scoreboard", scroll_panel)
     test3:SetPos(sw*2, 0)
     
     local function inQuad(fraction, beginning, change)
@@ -154,7 +154,7 @@ function GM:OpenEndGamePanel()
         p:SetPos( inQuad(delta, -sw, -sw), 0 )
     end)
     timer.Simple(8, function() anim:Start(1) end)
-    timer.Simple(16, function() anim2:Start(1) end)
+    timer.Simple(25, function() anim2:Start(1) end)
     
     scroll_panel.Think = function(self)
         if anim:Active() then anim:Run() end
@@ -176,6 +176,6 @@ net.Receive("SendMapVoteTable", function()
 end)
 
 -- Get the stats report information from the server
-net.Receive("SendStatsReport", function()
+net.Receive("SendExperienceTable", function()
     GAMEMODE.StatsReport = net.ReadTable()
 end)
