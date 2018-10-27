@@ -120,7 +120,7 @@ end
 -- Iterate through a player's stats to convert it all to experience
 function meta:ConvertStatsToExperience()
     local xp = {}
-    for k,v in pairs(GAMEMODE:GetPlayerStatTable(self)) do
+    for k,v in pairs(self:GetStatTable()) do
         print(k, v)
         local s = GAMEMODE:ConvertStat(k, v)
         table.insert(xp, s)

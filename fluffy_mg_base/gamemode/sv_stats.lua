@@ -61,3 +61,16 @@ function GM:SendStatsToClients()
         net.WriteTable(GAMEMODE.StatsTracking)
     net.Broadcast()
 end
+
+local meta = FindMetaTable("Player")
+function meta:GetStat(stat)
+    return GAMEMODE:GetStat(self, stat)
+end
+
+function meta:GetStatTable()
+    return GAMEMODE:GetPlayerStatTable(self)
+end
+
+function meta:AddStatPoints(stat, amount)
+    return GAMEMODE:AddStatPoints(self, stat, amount)
+end
