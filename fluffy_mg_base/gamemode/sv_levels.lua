@@ -151,6 +151,7 @@ function meta:ProcessLevels()
     if new_xp > max_xp then
         new_xp = new_xp - max_xp
         new_level = new_level + 1
+        hook.Run('MinigamesLevelUp', self, new_level)
     end
     
     -- Save changes
