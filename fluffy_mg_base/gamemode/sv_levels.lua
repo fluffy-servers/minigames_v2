@@ -93,7 +93,7 @@ end )
 -- Complicated methods of converting the various tracked stats to XP below
 -- Maximum of 100XP in one round
 -- Maximum of 20XP for any given source (except round wins)
-GM.StatConversions = {}
+GM.StatConversions = GM.StatConversions or {}
 GM.StatConversions['RoundWins'] = {'Rounds Won', 0}
 GM.StatConversions['RoundsPlayed'] = {'Thanks for playing!', 1.5}
 GM.StatConversions['kills'] = {'Kills', 1}

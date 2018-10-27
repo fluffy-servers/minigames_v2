@@ -137,7 +137,7 @@ end
 function GM:StatsRoundWin(winners)
     if IsEntity(winners) then
         if winners:IsPlayer() then
-            
+            winners:AddStatPoints('RoundWins', 1)
         end
     elseif type(winners) == 'number' then
         if winners > 0 then
