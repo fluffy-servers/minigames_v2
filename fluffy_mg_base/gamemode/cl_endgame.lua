@@ -130,6 +130,7 @@ function GM:OpenEndGamePanel()
     
     local test = vgui.Create("Screen_Experience", scroll_panel)
     test:SetPos(0, 0)
+    GAMEMODE.ExperienceScreen = test
     
     local test2 = vgui.Create("Screen_Maps", scroll_panel)
     test2:SetPos(sw, 0)
@@ -137,6 +138,7 @@ function GM:OpenEndGamePanel()
     
     local test3 = vgui.Create("Screen_Scoreboard", scroll_panel)
     test3:SetPos(sw*2, 0)
+    GAMEMODE.ScoreboardScreen = test3
     
     local function inQuad(fraction, beginning, change)
         if fraction < 0.5 then
@@ -153,15 +155,23 @@ function GM:OpenEndGamePanel()
     local anim2 = Derma_Anim("EaseInQuad", scroll_panel, function(p, a2, delta, data)
         p:SetPos( inQuad(delta, -sw, -sw), 0 )
     end)
-    timer.Simple(8, function() anim:Start(1) end)
-    timer.Simple(25, function() anim2:Start(1) end)
+    
+    function scroll_panel:TriggerMapVote()
+        anim:Start(1)
+        frame.CurrentScreen = 'MapVote'
+    end
+    
+    function scroll_panel:TriggerScoreboard()
+        anim2:Start(1)
+        frame.CurrentScreen = 'Scoreboard'
+    end
     
     scroll_panel.Think = function(self)
         if anim:Active() then anim:Run() end
         if anim2:Active() then anim2:Run() end
     end
     
-    --GAMEMODE:CreateMapVotePanel()
+    frame.CurrentScreen = 'Experience'
 end
 
 -- Open up the end game panel when the server says the game has ended
@@ -178,4 +188,7 @@ end)
 -- Get the stats report information from the server
 net.Receive("SendExperienceTable", function()
     GAMEMODE.StatsReport = net.ReadTable()
+    if GAMEMODE.ExperienceScreen then
+        GAMEMODE.ExperienceScreen:ProcessXP(GAMEMODE.StatsReport)
+    end
 end)

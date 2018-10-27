@@ -21,8 +21,6 @@ function PANEL:Init()
     
     self.TargetXP = self.CurrentXP
     self.XPMessage = ""
-    
-    timer.Simple(2, function() self:AddXP(100, "for being cool") end)
 end
 
 function PANEL:Paint(w, h)
@@ -30,7 +28,7 @@ function PANEL:Paint(w, h)
     draw.SimpleText("Level", "FS_40", w/2, h/3 - 24, GAMEMODE.FCol2, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
     
     self.CurrentXP = math.Approach(self.CurrentXP, self.TargetXP, FrameTime()*25)
-    if self.CurrentXP == self.MaxXP then
+    if self.CurrentXP >= self.MaxXP then
         self:LevelUp()
     end
     local percentage = math.Clamp(self.CurrentXP/self.MaxXP, 0, 1)
@@ -90,11 +88,24 @@ end
 function PANEL:LevelUp()
     self.Level = self.Level + 1
     self.CurrentXP = 0
-    self.TargetXP = 0
+    self.TargetXP = self.TargetXP - self.MaxXP
     self.LevelledUp = true
     
     local sound = table.Random(sounds)
     LocalPlayer():EmitSound(sound, 75, math.random(100, 125))
+end
+
+function PANEL:ProcessXP(tbl)
+    local ttime = 1
+    for k,v in pairs(tbl) do
+        local amount = v[3]
+        local reason = v[1]
+        if amount == 0 then continue end
+        timer.Simple(ttime, function() self:AddXP(amount, reason) end)
+        ttime = ttime + (amount/25) + 1.25
+    end
+    
+    timer.Simple(ttime + 2.5, function() self:GetParent():TriggerMapVote() end)
 end
 
 -- ambient/alarms/warningbell1.wav
