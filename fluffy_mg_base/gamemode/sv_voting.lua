@@ -88,8 +88,14 @@ function GM:StartVoting()
         net.WriteTable(options)
     net.Broadcast()
     
-    -- Send stats out as well
-    GAMEMODE:SendStatsToClients()
+    -- Handle the stats queue
+    for k,v in pairs(player.GetAll()) do
+        local tbl = v:ConvertStatsToExperience()
+        net.Start('SendExperienceTable')
+            net.WriteTable(tbl)
+        net.Send(v)
+        v:ProcessLevels()
+    end
     
     -- 30 seconds of voting time
     timer.Simple(30, function() GAMEMODE:EndVote() end)
