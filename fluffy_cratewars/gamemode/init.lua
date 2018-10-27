@@ -3,9 +3,6 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
--- Stat to XP conversions
-GM.StatConversions['Crates'] = {'Crates Smashed', 0.05}
-
 function GM:PlayerLoadout( ply )
 	ply:StripAmmo()
 	ply:StripWeapons()

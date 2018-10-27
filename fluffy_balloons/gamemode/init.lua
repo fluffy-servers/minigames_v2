@@ -3,11 +3,6 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
--- Stat to XP conversions
-GM.StatConversions = GM.StatConversions or {}
-GM.StatConversions['balloons_popped'] = {'Balloons Popped', 0.05}
-GM.StatConversions['balloon_score'] = {'Total Score', 0}
-
 -- Give players the balloon revolver on spawn
 function GM:PlayerLoadout( ply )
 	ply:StripAmmo()

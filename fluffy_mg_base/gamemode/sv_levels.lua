@@ -93,10 +93,15 @@ end )
 -- Complicated methods of converting the various tracked stats to XP below
 -- Maximum of 100XP in one round
 -- Maximum of 20XP for any given source (except round wins)
+
 GM.StatConversions = GM.StatConversions or {}
 GM.StatConversions['RoundWins'] = {'Rounds Won', 0}
 GM.StatConversions['RoundsPlayed'] = {'Thanks for playing!', 1.5}
 GM.StatConversions['kills'] = {'Kills', 1}
+GM.StatConversions['balloons_popped'] = {'Balloons Popped', 0.05}
+GM.StatConversions['balloon_score'] = {'Total Score', 0}
+GM.StatConversions['Crates'] = {'Crates Smashed', 0.05}
+GM.StatConversions['platforms_broken'] = {'Platforms Broken', 0.1}
 
 -- Convert a stat name & score to a table with XP
 function GM:ConvertStat(name, points)
@@ -124,6 +129,7 @@ function meta:ConvertStatsToExperience()
     local hit_max = false
     for k,v in pairs(self:GetStatTable()) do
         local s = GAMEMODE:ConvertStat(k, v)
+        if not s then print(k) continue end
         -- Limit of 100XP per game
         if (total_xp + s[3] > 100) and (!hit_max) then
             s[3] = 100 - total_xp
