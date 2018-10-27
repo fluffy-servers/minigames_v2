@@ -10,7 +10,7 @@ GM.TeamBased = true
 GM.Elimination = true	
 GM.WinBySurvival = true
 GM.RoundTime = 100		
-GM.RoundNumber = 6		
+GM.RoundNumber = 10		
 GM.RoundCooldown = 5
 
 GM.CanSuicide = false
