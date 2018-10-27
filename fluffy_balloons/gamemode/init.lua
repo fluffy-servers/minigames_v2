@@ -3,6 +3,10 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
+-- Stat to XP conversions
+GM.StatConversions['balloons_popped'] = {'Balloons Popped', 0.05}
+GM.StatConversions['balloon_score'] = {'Total Score', 0}
+
 -- Give players the balloon revolver on spawn
 function GM:PlayerLoadout( ply )
 	ply:StripAmmo()
@@ -30,6 +34,8 @@ end
 function GM:PopBalloon(ply, points, type)
 	local score = ply:GetNWInt("Balloons", 0)
 	ply:SetNWInt("Balloons", score + points)
+    ply:AddStatPoints('balloons_popped', 1)
+    ply:AddStatPoints('balloon_score', points)
 end
 
 -- Reset balloon scores before round starts

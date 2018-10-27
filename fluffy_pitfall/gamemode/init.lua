@@ -3,6 +3,9 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
+-- Stat to XP conversions
+GM.StatConversions['platforms_broken'] = {'Platforms Broken', 0.1}
+
 PlatformPositions = {}
 PlatformPositions['pf_ocean'] = Vector(0, 0, 1500)
 PlatformPositions['pf_ocean_d'] = Vector(0, 0, 1500)

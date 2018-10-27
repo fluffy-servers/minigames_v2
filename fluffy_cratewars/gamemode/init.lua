@@ -3,6 +3,9 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
+-- Stat to XP conversions
+GM.StatConversions['Crates'] = {'Crates Smashed', 0.05}
+
 function GM:PlayerLoadout( ply )
 	ply:StripAmmo()
 	ply:StripWeapons()
@@ -46,6 +49,7 @@ hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
 	if !ply.SmashedCrates then return end
 	ply.SmashedCrates = ply.SmashedCrates + 1
 	ply:SetNWInt("Crates", ply.SmashedCrates)
+    ply:AddStatPoints('Crates', 1)
 end )
 
 -- Prop
