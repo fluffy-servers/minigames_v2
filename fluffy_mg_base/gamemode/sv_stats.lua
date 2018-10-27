@@ -41,7 +41,7 @@ function GM:GetPlayerStatTable(ply)
 end
 
 -- Get the player with the highest score in a certain stat
-function GM:GetStatWinner(stat) then
+function GM:GetStatWinner(stat)
     local highest_score = 0
     local winning_player = nil
     for k,v in pairs(GAMEMODE.StatsTracking) do

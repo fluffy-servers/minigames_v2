@@ -95,6 +95,7 @@ end )
 -- Maximum of 20XP for any given source (except round wins)
 GM.StatConversions = {}
 GM.StatConversions['RoundWins'] = {'Rounds Won', 0}
+GM.StatConversions['RoundsPlayed'] = {'Thanks for playing!', 1.5}
 GM.StatConversions['kills'] = {'Kills', 1}
 
 -- Convert a stat name & score to a table with XP
@@ -105,10 +106,13 @@ function GM:ConvertStat(name, points)
         if not GAMEMODE.TeamBased then
             local score = math.Clamp(points*8, 0, 40)
             return {'Rounds Won', points, score}
+        elseif GAMEMODE.TeamBased then
+            local score = math.Clamp(points*5, 0, 20)
+            return {'Rounds Won', points, score}
         end
     else
         local t = GAMEMODE.StatConversions[name]
-        local score = math.Clamp(points * t[2], 0, 20)
+        local score = math.Clamp(math.floor(points * t[2]), 0, 20)
         return {t[1], points, score}
     end
 end
@@ -117,7 +121,9 @@ end
 function meta:ConvertStatsToExperience()
     local xp = {}
     for k,v in pairs(GAMEMODE:GetPlayerStatTable(self)) do
-        table.insert(GAMEMODE:ConvertStat(k, v))
+        print(k, v)
+        local s = GAMEMODE:ConvertStat(k, v)
+        table.insert(xp, s)
     end
     
     return xp
