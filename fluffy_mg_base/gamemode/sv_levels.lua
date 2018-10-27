@@ -120,11 +120,41 @@ end
 -- Iterate through a player's stats to convert it all to experience
 function meta:ConvertStatsToExperience()
     local xp = {}
+    local total_xp = 0
     for k,v in pairs(self:GetStatTable()) do
-        print(k, v)
         local s = GAMEMODE:ConvertStat(k, v)
+        -- Limit of 100XP per game
+        if total_xp + s[2] > 100 then
+            s[2] = 100 - total_xp
+            table.insert(xp, s)
+            break
+        end
         table.insert(xp, s)
     end
     
     return xp
+end
+
+-- Process a queue of XP serverside
+function meta:ProcessLevels()
+    local queue = self:ConvertStatsToExperience()
+    local new_xp = self:GetExperience()
+    local new_level = self:GetLevel()
+    local max_xp = self:GetMaxExperience()
+    -- Sum up the XP
+    for k,v in pairs(queue) do
+        local amount = v[2]
+        new_xp = new_xp + amount
+    end
+    
+    -- Check level ups!
+    if new_xp > max_xp then
+        new_xp = new_xp - max_xp
+        new_level = new_level + 1
+    end
+    
+    -- Save changes
+    self:SetExperience(new_xp)
+    self:SetLevel(new_level)
+    timer.Simple(5, function() self:UpdateLevelToDB() end)
 end
