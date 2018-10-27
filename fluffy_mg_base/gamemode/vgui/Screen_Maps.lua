@@ -11,18 +11,20 @@ function PANEL:Init()
     local n = 3
     local margin = 32
     local padding = 24
+    
+    local panel_h = (h/2) - 32 - 48
+    
     local panel_w = (w - margin*2 - (n-1)*padding ) / n
-    local panel_h = (h/2) - 32
     
     self.VotePanels = {}
     
     for j = 1,2 do
         local yy = 16
-        if j == 2 then yy = h - panel_w - 16 end
+        if j == 2 then yy = h - panel_h - 16 end
         
         for i = 1,3 do
             local map = vgui.Create("MapVotePanel", self)
-            map:SetSize(panel_w, panel_h)
+            map:SetSize(panel_h, panel_h)
             map:SetPos(margin + (panel_w+padding)*(i-1), yy)
             map:AddChildren()
             map:SetIndex(i + (j-1)*3)
