@@ -41,6 +41,11 @@ hook.Add('PreRoundStart', 'PrepareBalloonPhase', function()
 	end
 end )
 
+function GM:Delay()
+    local ply = #player.GetAll()
+    return math.Clamp( 1/ply, 0.1, 1)
+end
+
 -- Spawn balloons every so often
 BalloonSpawnTimer = 0
 local Delay = 0.5
@@ -48,7 +53,7 @@ hook.Add("Tick", "TickBalloonSpawn", function()
     if GetGlobalString('RoundState') != 'InRound' then return end
 	
 	if BalloonSpawnTimer < CurTime() then
-		BalloonSpawnTimer = CurTime() + Delay
+		BalloonSpawnTimer = CurTime() + GAMEMODE:Delay()
 		GAMEMODE:SpawnBalloon()
 	end
 end )
