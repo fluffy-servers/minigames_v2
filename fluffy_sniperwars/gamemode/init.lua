@@ -14,10 +14,7 @@ function GM:PlayerLoadout( ply )
 	end
 end
 
--- This doesn't work but at least I tried
--- Reduce fall damage for the anti-grav boost
+-- Remove fall damage
 function GM:GetFallDamage( ply, speed )
-	if ply:GetGravity() < 0.5 then return end
-	
-	return speed / 8
+    return 0
 end

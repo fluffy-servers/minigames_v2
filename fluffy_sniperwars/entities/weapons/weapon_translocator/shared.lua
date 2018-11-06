@@ -116,17 +116,11 @@ local function LowGravEnd( ply )
 	ply:SetJumpPower( 200 )
 end
 
-local function LowGravWarn( ply )
-	ply:SetGravity( 0.75 )
-	ply:SetJumpPower( 150 )
-	timer.Simple( 5, function() LowGravEnd( ply ) end )
-end
-
 function SWEP:LowGrav()
 	self.Owner:SetGravity( 0.25 )
 	self.Owner:SetJumpPower( 500 )
 	local ply = self.Owner
-	timer.Simple( 15, function() LowGravWarn( ply ) end )
+	timer.Simple( 15, function() LowGravEnd( ply ) end )
 end
 
 function SWEP:Initialize()
