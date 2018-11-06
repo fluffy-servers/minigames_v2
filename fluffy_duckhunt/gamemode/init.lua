@@ -8,8 +8,8 @@ function GM:PlayerLoadout( ply )
     if ply:Team() == TEAM_BLUE then
         -- Runners
         ply:StripWeapons()
-        ply:SetWalkSpeed( 375 )
-        ply:SetRunSpeed( 425 )
+        ply:SetWalkSpeed( 325 )
+        ply:SetRunSpeed( 375 )
     elseif ply:Team() == TEAM_RED then
         -- Snipers
         ply:Give('sniper_normal')
