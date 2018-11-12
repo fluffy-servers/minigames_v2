@@ -6,7 +6,7 @@ local Spawnmenu = nil
 function GM:CreateSpawnMenu()
     Spawnmenu = vgui.Create('DFrame')
     local modelH = 64
-    Spawnmenu:SetSize(256, 512)
+    Spawnmenu:SetSize(480, 640)
     Spawnmenu:Center()
     Spawnmenu:SetTitle("Spawner")
     Spawnmenu:SetVisible(false)
