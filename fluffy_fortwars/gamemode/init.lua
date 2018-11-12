@@ -7,6 +7,10 @@ include('sv_gravgun.lua')
 
 -- Handle everything to do with starting the build phase
 function GM:StartBuildPhase()
+    for k,v in pairs(player.GetAll()) do
+        GAMEMODE:RemoveProps(v)
+        v:SetNWInt('Props', 0)
+    end
     GAMEMODE.ROUND_PHASE = "BUILDING"
     timer.Simple(100, function() GAMEMODE:EndBuildPhase() end)
 end
@@ -17,17 +21,29 @@ end)
 
 -- Finish up the build phase & start the fighting phase
 function GM:EndBuildPhase()
-    -- Freeze all the props
-    -- Reset the loadouts
+    GAMEMODE.ROUND_PHASE = "FIGHTING"
+    
+    -- Remove the barrier
     local ent = ents.FindByName("separator")[1]
     SafeRemoveEntity(ent)
     
+    -- Remove any prop forcefields
     for k,v in pairs(ents.FindByClass("func_fw_propfield")) do
         SafeRemoveEntity(v)
     end
-    -- Remove any barriers & spawn the flags
     
-    GAMEMODE.ROUND_PHASE = "FIGHTING"
+    -- Loadout all players
+    for k,v in pairs(player.GetAll()) do
+        GAMEMODE:PlayerLoadout(v)
+    end
+    
+    -- Freeze all physics objects
+    for k,v in pairs(ents.FindByClass("prop_physics")) do
+        local phys = self.Entity:GetPhysicsObject()
+        if phys:IsValid() then
+            phys:Sleep()
+        end
+    end
 end
 
 function GM:PlayerLoadout(ply)
