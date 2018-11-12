@@ -68,7 +68,7 @@ local function RemoveProps(ply, cmd, args)
     end
     ply:SetNWInt('Props', 0)
 end
-concommand.add("fw_remove", RemoveProps)
+concommand.Add("fw_remove", RemoveProps)
 
 -- TODO: Health properties for props
 -- Kinda important to do but hey what you can do
