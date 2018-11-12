@@ -1,6 +1,7 @@
 -- Remove props on physgun reload
 function GM:OnPhysgunReload(physgun, ply)
     local ent = ply:GetEyeTrace().Entity
+    if ent:GetClass() != "prop_physics" then return end
     
     local owner = ent:GetNWInt("Owner", nil)
     if ent:IsValid() and (ply == owner or owner == nil) then
