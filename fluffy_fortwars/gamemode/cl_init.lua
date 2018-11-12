@@ -25,7 +25,7 @@ function GM:CreateSpawnMenu()
         p:SetTooltip(v[2])
         function p:DoClick()
             surface.PlaySound('ui/buttonclickrelease.wav')
-            RunConsoleCommand("fw_spawn", v[2])
+            RunConsoleCommand("fw_spawn", v[1])
         end
     end
 end
@@ -36,7 +36,7 @@ function GM:OnSpawnMenuOpen()
     if !ply:Alive() then return end
     if ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED then return end
     -- check round state
-    if not Spawnmenu then
+    if not IsValid(Spawnmenu) then
         GAMEMODE:CreateSpawnMenu()
     end
     Spawnmenu:SetVisible(true)
