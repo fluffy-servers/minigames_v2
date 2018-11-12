@@ -1,9 +1,11 @@
 -- Remove props on physgun reload
 function GM:OnPhysgunReload(physgun, ply)
     local ent = ply:GetEyeTrace().Entity
+    
     local owner = ent:GetNWInt("Owner", nil)
     if ent:IsValid() and (ply == owner or owner == nil) then
         ent:Remove()
+        ply:EmitSound('ui/buttonclickrelease.wav')
     end
 end
 
@@ -38,6 +40,7 @@ function GM:SpawnProp(ply, model)
     if not IsValid(prop) then return end
     prop:SetSkin(math.random(0, 10))
     prop:SetModel(model)
+    prop:SetColor(team.GetColor(ply:Team()))
     prop:SetNWEntity('Owner', ply)
     ply:SetNWInt('Props', ply:GetNWInt('Props', 0) + 1)
     
@@ -50,8 +53,16 @@ function GM:SpawnProp(ply, model)
     local fp = hitpos - (trace.HitNormal*512)
     fp = hitpos + prop:GetPos() - prop:NearestPoint(fp)
     prop:SetPos(fp)
-    
     prop:Spawn()
+    
+    local phys = prop:GetPhysicsObject()
+    if IsValid(phys) then
+        local hp = math.floor(phys:GetMass())
+        prop:SetNWInt("Health", hp)
+        prop:SetNWInt("MaxHealth", hp)
+        prop:SetHealth(hp*5)
+    end
+    prop:PrecacheGibs()
 end
 
 -- Concommand for spawning props
@@ -83,3 +94,16 @@ end
 
 -- TODO: Health properties for props
 -- Kinda important to do but hey what you can do
+function GM:EntityTakeDamage(target, dmginfo)
+    if target:GetClass() == "prop_physics" then
+        local hp = target:GetNWInt("Health", 0)
+        local new_hp = hp - dmginfo:GetDamage()
+        if new_hp < 0 then
+            target:SetNWInt("Health", new_hp)
+        else
+            target:GibBreakClient(dmginfo:GetDamageForce())
+        end
+    elseif target:IsPlayer() then
+        if GAMEMODE.ROUND_PHASE == "BUILDING" then dmginfo:SetDamage(0) return end
+    end
+end
