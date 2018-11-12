@@ -10,10 +10,9 @@ function ENT:Initialize()
 	self.Entity:SetSolid( SOLID_VPHYSICS )  
 	
 	local phys = self.Entity:GetPhysicsObject()
-	if ( phys:IsValid() ) then
-		phys:Sleep() //ZZZZZzzzzzz.....
+	if phys:IsValid() then
+		phys:Sleep()
 	end
-
 end
 
 function ENT:OnTakeDamage( dmg )
@@ -21,7 +20,6 @@ function ENT:OnTakeDamage( dmg )
 end
  
 function ENT:PhysicsUpdate()
-	//Flags don't need updating physics!
 end
 
 if CLIENT then
@@ -31,12 +29,11 @@ if CLIENT then
     local changing = false
     
     function ENT:Think()
-        
         local goalcol = self.Entity:GetNWVector( "RColor", Vector( 1, 1, 1 ) ) //R from Refract!
         local thinktime = 1/45
         
-        if ( col != goalcol ) then
-            if ( !changing ) then
+        if col != goalcol then
+            if !changing then
                 progress = 0
                 changing = true
             end
@@ -44,17 +41,14 @@ if CLIENT then
             changing = false
         end
         
-        if ( changing ) then
-        
-            progress = progress + FrameTime()
-            if ( progress >= 1 ) then
+        if changing then
+            progress = progress + FrameTime()/2
+            if progress >= 1 then
                 progress = 1
                 changing = false
                 col = goalcol
             end
-            
             col = LerpVector( progress, col, goalcol )
-            
         else
             col = goalcol
             thinktime = 1/15
@@ -65,27 +59,22 @@ if CLIENT then
         local size = 256
         
         local dlight = DynamicLight( self:EntIndex() )
-        if ( dlight ) then
+        if dlight then
             dlight.Pos = self:GetPos()
-            dlight.r = col.x * 255
-            dlight.g = col.y * 255
-            dlight.b = col.z * 255
-            dlight.Brightness = 1
+            dlight.r = col.x * 127
+            dlight.g = col.y * 127
+            dlight.b = col.z * 127
+            dlight.Brightness = 2
             dlight.Size = size
             dlight.Decay = size * 5
             dlight.DieTime = CurTime() + 1
         end
         
         self.Entity:NextThink( CurTime() + thinktime )
-        return true // Note: You need to return true to override the default next think time
-        
+        return true
     end
     
     function ENT:Draw()
-    
-        --self.BaseClass.Draw(self)  			-- We want to override rendering, so don't call baseclass.
-        
         self.Entity:DrawModel()
-    
     end
 end
