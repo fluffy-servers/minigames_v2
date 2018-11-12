@@ -61,6 +61,11 @@ function GM:PreStartRound()
         if !GAMEMODE.TeamBased then v:SetTeam( TEAM_UNASSIGNED ) v:SetNWInt("RoundKills", 0) end
         v:Spawn()
         v:Freeze( true )
+        v.FFAKills = 0
+        
+        if (not GAMEMODE.TeamBased) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
+            v:AddStatPoints('RoundsPlayed', 1)
+        end
     end
     
     -- Start the round after a short cooldown
@@ -132,19 +137,19 @@ end
 function GM:StatsRoundWin(winners)
     if IsEntity(winners) then
         if winners:IsPlayer() then
-            GAMEMODE:AddStatPoints(winners, 'RoundWins', 1)
+            winners:AddStatPoints('RoundWins', 1)
         end
     elseif type(winners) == 'number' then
         if winners > 0 then
             for k,v in pairs(team.GetPlayers(winners)) do
-                GAMEMODE:AddStatPoints(v, 'RoundWins', 1)
+                v:AddStatPoints('RoundWins', 1)
             end
         end
     elseif type(winners) == 'table' then
         for k,v in pairs(winners) do
             if not IsEntity(v) then continue end
             if not v:IsPlayer() then continue end
-            GAMEMODE:AddStatPoints(v, 'RoundWins', 1)
+            v:AddStatPoints('RoundWins', 1)
         end
     end
 end
@@ -179,6 +184,12 @@ function GM:HandleTeamWin(reason)
     elseif GAMEMODE.TeamSurvival then
         winners = GAMEMODE.HunterTeam
         msg = team.GetName(GAMEMODE.HunterTeam) .. ' win the round!'    
+    end
+    
+    if msg == 'The round has ended!' and type(winners) == 'number' then
+        msg = team.GetName(winners) .. ' win the round!'
+    elseif msg == 'The round has ended!' and type(winners) == 'Player' then
+        msg = winners:Nick() .. ' wins the round!'
     end
     
     if winners and winners > 0 then team.AddScore( winners, 1 ) end

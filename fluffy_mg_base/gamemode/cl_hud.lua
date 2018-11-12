@@ -118,7 +118,8 @@ function GM:DrawRoundState()
     
     -- Only draw this if the game hasn't yet started
     if GAME_STATE == 'GameNotStarted' then
-        draw.SimpleTextOutlined( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1, Color( 0, 0, 0 ) )
+        draw.SimpleText( 'Waiting For Players...', "FS_40", 4+2, 4+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
+		draw.SimpleText( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
     
@@ -368,10 +369,11 @@ function GM:CreateScoringPane()
     function Frame:CreatePlayer( ply, x )
         local p = vgui.Create('DPanel', Frame )
         p:SetPos( x, 0 )
-        p:SetSize( 64, 64 )
+        p:SetSize( 64, 80 )
         function p:Paint()
             local score = GAMEMODE:ScoringPaneScore(ply) or 0
-            draw.SimpleText(score, 'FS_32', 32, 40, color_white, TEXT_ALIGN_CENTER )
+            draw.SimpleText(score, 'FS_32', 32 + 2, 40 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER )
+            draw.SimpleText(score, 'FS_32', 32, 40, GAMEMODE.FCol1, TEXT_ALIGN_CENTER )
         end
         
         local Avatar = vgui.Create('AvatarImage', p )

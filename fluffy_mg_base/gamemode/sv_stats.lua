@@ -2,9 +2,6 @@
     This file is used as a handy stat tracking file
     Useful for tracking kills, round wins, damage dealt, etc.
 ]]--
-
-util.AddNetworkString("SendStatsReport")
-
 GM.StatsTracking = {}
 
 -- Add some points to a given statistic
@@ -40,8 +37,31 @@ function GM:GetPlayerStatTable(ply)
     end
 end
 
-function GM:SendStatsToClients()
-    net.Start("SendStatsReport")
-        net.WriteTable(GAMEMODE.StatsTracking)
-    net.Broadcast()
+-- Get the player with the highest score in a certain stat
+function GM:GetStatWinner(stat)
+    local highest_score = 0
+    local winning_player = nil
+    for k,v in pairs(GAMEMODE.StatsTracking) do
+        if not v[stat] then continue end
+        
+        if v[stat] > highest_score then
+            highest_score = v[stat]
+            winning_player = k
+        end
+    end
+    
+    return {winning_player, highest_score}
+end
+
+local meta = FindMetaTable("Player")
+function meta:GetStat(stat)
+    return GAMEMODE:GetStat(self, stat)
+end
+
+function meta:GetStatTable()
+    return GAMEMODE:GetPlayerStatTable(self)
+end
+
+function meta:AddStatPoints(stat, amount)
+    return GAMEMODE:AddStatPoints(self, stat, amount)
 end

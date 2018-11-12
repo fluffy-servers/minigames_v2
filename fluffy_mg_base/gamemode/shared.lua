@@ -5,6 +5,7 @@
 
 DeriveGamemode('base')
 include('sound_tables.lua')
+include('sh_levels.lua')
 
 GM.Name = 'Minigames'
 GM.Author = 'FluffyXVI'

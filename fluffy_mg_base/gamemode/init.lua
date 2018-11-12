@@ -15,8 +15,15 @@ AddCSLuaFile('cl_thirdperson.lua')
 AddCSLuaFile('cl_playerpanel.lua')
 AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
+
+AddCSLuaFile('vgui/MapVotePanel.lua')
+AddCSLuaFile('vgui/Screen_Experience.lua')
+AddCSLuaFile('vgui/Screen_Maps.lua')
+AddCSLuaFile('vgui/Screen_Scoreboard.lua')
+
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
+AddCSLuaFile('sh_levels.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
@@ -27,6 +34,7 @@ include('shared.lua')
 -- Add net message
 util.AddNetworkString('EndRound')
 util.AddNetworkString('MinigamesGameEnd')
+util.AddNetworkString('SendExperienceTable')
 
 -- Called each time a player spawns
 function GM:PlayerSpawn( ply )
@@ -139,7 +147,7 @@ function GM:GetWinningPlayer()
     local bestscore = 0
     local bestplayer = nil
     for k,v in pairs( player.GetAll() ) do
-        local frags = v:Frags()
+        local frags = v.FFAKills or 0
         if frags > bestscore then
             bestscore = frags
             bestplayer = v
@@ -270,6 +278,11 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     -- Add the frag to scoreboard
     attacker:AddFrags(1)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
+    
+    if not GAMEMODE.TeamBased then
+        if not attacker.FFAKills then attacker.FFAKills = 0 end
+        attacker.FFAKills = attacker.FFAKills + 1
+    end
 end
 
 -- Import the component parts
@@ -279,5 +292,4 @@ include('sv_round.lua')
 include('sv_voting.lua')
 include('sv_player.lua')
 include('sv_levels.lua')
-
 include('gametype_hunter.lua')

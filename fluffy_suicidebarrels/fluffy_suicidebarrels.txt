@@ -1,4 +1,4 @@
-"fluffy_suicidebarrels"
+"minigames"
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Suicide Barrels"
