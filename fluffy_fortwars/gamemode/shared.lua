@@ -1,4 +1,5 @@
 DeriveGamemode('fluffy_mg_base')
+include('prop_list.lua')
 
 GM.Name = 'Fortwars'
 GM.Author = 'FluffyXVI'
