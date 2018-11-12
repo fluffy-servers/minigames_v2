@@ -77,5 +77,9 @@ local function RemoveProps(ply, cmd, args)
 end
 concommand.Add("fw_remove", RemoveProps)
 
+function GM:PhysgunPickup(ply, ent)
+    return (ent:GetClass() == "prop_physics")
+end
+
 -- TODO: Health properties for props
 -- Kinda important to do but hey what you can do
