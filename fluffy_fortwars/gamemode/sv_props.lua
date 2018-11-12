@@ -22,6 +22,7 @@ function GM:SpawnProp(ply, model)
     local allowed = false
     local price = 0
     for k,v in pairs(GAMEMODE.PropList) do
+        print(model, v[1])
         if model == v[1] then
             price = v[2]
             allowed = true
@@ -46,9 +47,11 @@ function GM:SpawnProp(ply, model)
     prop:SetAngles( Angle(0, ang.y, 0) )
     
     local hitpos = trace.HitPos
-    local fp = hitpost - (trace.HitNormal*512)
+    local fp = hitpos - (trace.HitNormal*512)
     fp = hitpos + prop:GetPos() - prop:NearestPoint(fp)
     prop:SetPos(fp)
+    
+    prop:Spawn()
 end
 
 -- Concommand for spawning props
@@ -57,9 +60,7 @@ local function Spawn(ply, cmd, args)
 end
 concommand.Add("fw_spawn", Spawn)
 
--- Concommand for removing props
-local function RemoveProps(ply, cmd, args)
-    if GAMEMODE.ROUND_PHASE != "BUILDING" then return end
+function GM:RemoveProps(ply)
     if ply:GetNWInt('Props', 0) == 0 then return end
     for k,v in pairs(ents.FindByClass("prop_physics")) do
         if v:GetNWEntity('Owner') == ply then
@@ -67,6 +68,12 @@ local function RemoveProps(ply, cmd, args)
         end
     end
     ply:SetNWInt('Props', 0)
+end
+
+-- Concommand for removing props
+local function RemoveProps(ply, cmd, args)
+    if GAMEMODE.ROUND_PHASE != "BUILDING" then return end
+    GAMEMODE:RemoveProps(ply)
 end
 concommand.Add("fw_remove", RemoveProps)
 
