@@ -1,4 +1,4 @@
-"fluffy_laserdance"
+"minigames"
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Laser Dance"

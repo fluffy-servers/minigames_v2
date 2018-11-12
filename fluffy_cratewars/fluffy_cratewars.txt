@@ -1,4 +1,4 @@
-"fluffy_cratewars"
+"minigames"
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Crate Wars"

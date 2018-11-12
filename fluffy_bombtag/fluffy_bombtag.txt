@@ -1,5 +1,6 @@
 "minigames"
 {
 	"base"	"fluffy_mg_base"
-	"title"	"Minigames"
+	"title"	"Bomb Tag"
+    "maps"	"^bt_"
 }

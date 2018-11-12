@@ -1,5 +1,6 @@
 "minigames"
 {
 	"base"	"fluffy_base"
-	"title"	"Minigames"
+	"title"	"Dodgeball"
+    "maps"	"^db_"
 }

@@ -1,4 +1,4 @@
-"fluffy_cactus"
+"minigames"
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Cactus"
