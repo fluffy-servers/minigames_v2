@@ -41,12 +41,14 @@ function GM:OnSpawnMenuOpen()
     end
     Spawnmenu:SetVisible(true)
     Spawnmenu:SetMouseInputEnabled(true)
+    gui.EnableScreenClicker(true)
     RestoreCursorPosition()
 end
 
 -- Close the spawning menu
 function GM:OnSpawnMenuClose()
     RememberCursorPosition()
-    Spawnmenu:SetVisible(false)
+    gui.EnableScreenClicker(false)
     Spawnmenu:SetMouseInputEnabled(false)
+    Spawnmenu:SetVisible(false)
 end
