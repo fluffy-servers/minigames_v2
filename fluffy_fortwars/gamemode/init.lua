@@ -11,7 +11,7 @@ function GM:StartBuildPhase()
     timer.Simple(100, function() GAMEMODE:EndBuildPhase() end)
 end
 
-hook.Add('RoundStart', 'BuildingStart', function()
+hook.Add('PreRoundStart', 'BuildingStart', function()
     GAMEMODE:StartBuildPhase()
 end)
 
