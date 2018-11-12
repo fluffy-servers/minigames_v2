@@ -52,3 +52,18 @@ function GM:OnSpawnMenuClose()
     Spawnmenu:SetMouseInputEnabled(false)
     Spawnmenu:SetVisible(false)
 end
+
+hook.Add('HUDPaint', 'DrawPropInfo', function()
+    if !LocalPlayer():Alive() then return end
+    local ent = LocalPlayer():GetEyeTrace().Entity
+    if IsValid(ent) and ent:GetClass() == "prop_physics" then
+        local pos = ent:GetPos():ToScreen()
+        local owner = ent:GetNWEntity('Owner')
+        if not IsValid(owner) then return end
+        local hp = ent:GetNWInt("Health", 0)
+        local max_hp = ent:GetNWInt("MaxHealth", 0)
+        
+        draw.SimpleTextOutlined(owner:Nick(), "Default", pos.x, pos.y - 6, color_white, 1, 1, 1, color_black)
+        draw.SimpleTextOutlined(hp .. "/" .. max_hp, "Default", pos.x, pos.y + 6, color_white, 1, 1, 1, color_black)
+    end
+end)
