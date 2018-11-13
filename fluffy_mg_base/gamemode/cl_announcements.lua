@@ -1,3 +1,13 @@
+--[[
+    Clientside announcements library
+    Contains some local functions for drawing fancy text
+    Announcements here are triggered on the server and then displayed here for information
+    Currently contains the following announcement types:
+        - Countdown
+--]]
+
+-- Draw text that can be scaled
+-- Useful for cool animations without creating lost of different font sizes
 local function drawScaledText(x, y, text, font, color, scale)
     -- Setup the matrix
 	local mat = Matrix()
@@ -19,6 +29,7 @@ local function drawScaledText(x, y, text, font, color, scale)
     render.PopFilterMin()
 end
 
+-- Draw text that can be rotated
 local function drawRotatedText(x, y, text, font, color, ang)
     -- Get the size of the text
     surface.SetFont(font)
@@ -40,6 +51,7 @@ local function drawRotatedText(x, y, text, font, color, ang)
     render.PopFilterMin()
 end
 
+-- Draw text that is a combination of the above two functions
 local function drawRotatedScaledText(x, y, text, font, color, ang, scale)
     -- Get the size of the text
     surface.SetFont(font)
@@ -62,6 +74,8 @@ local function drawRotatedScaledText(x, y, text, font, color, ang, scale)
     render.PopFilterMin()
 end
 
+-- Create a countdown announcement
+-- Counts down in the middle of the screen before displaying the endtext
 function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
     local test = vgui.Create("DPanel")
     test:SetSize(ScrW(), ScrH())
@@ -99,3 +113,14 @@ function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
         drawScaledText(x, y, tostring(num), "FS_64", GAMEMODE.FCol1, s + 0.25)
     end
 end
+
+-- Net handler to parse announcements
+net.Receive('MinigamesAnnouncement', function()
+    local tbl = net.ReadTable()
+    if not tbl.type then return end
+    if tbl.type == 'countdown' then
+        local length = tbl.length or 5
+        local endtext = tbl.endtext or ""
+        GAMEMODE:CountdownAnnouncement(length, endtext, tbl.endsound, tbl.ticksound)
+    end
+end)
