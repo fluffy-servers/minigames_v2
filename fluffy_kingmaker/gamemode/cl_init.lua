@@ -11,11 +11,15 @@ end
 function GM:PostPlayerDraw(ply)
     if not ply:GetNWBool("IsKing", false) then return end
     
-    local p = ply:GetPos() + Vector(0, 0, 64)
+    if not ply:Alive() then return end -- should never happen
+    
+    local p = ply:GetPos() + ply:OBBCenter() + Vector(0, 0, 50)
     p = p:ToScreen()
     
-    draw.SimpleText("King!", "FS_32", x+1, y+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    draw.SimpleText("King!", "FS_32", x, y, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    cam.Start2D()
+        draw.SimpleText("King!", "FS_32", p.x+1, p.y+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText("King!", "FS_32", p.x, p.y, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    cam.End2D()
 end
 
 hook.Add('HUDPaint', 'DrawKingNotice', function()
