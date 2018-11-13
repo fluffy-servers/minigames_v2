@@ -10,17 +10,18 @@ include('sh_levels.lua')
 GM.Name = 'Minigames'
 GM.Author = 'FluffyXVI'
 
-GM.TeamBased = false -- Is the gamemode team based, or is it FFA?
-GM.Elimination = false -- Should players stay dead, or should they respawn?
+GM.TeamBased = false    -- Is the gamemode team based, or is it FFA?
+GM.Elimination = false  -- Should players stay dead, or should they respawn?
 
-GM.RoundNumber = 5 -- How many rounds?
-GM.RoundTime = 90 -- How long should each round go for?
-GM.RoundCooldown = 5 -- How long between each round?
+GM.RoundNumber = 5      -- How many rounds?
+GM.RoundTime = 90       -- How long should each round go for?
+GM.RoundCooldown = 5    -- How long between each round?
 
-GM.CanSuicide = true -- Should players be able to die at will? :(
-GM.ThirdPersonEnabled = false -- Should players have access to thirdperson?
+GM.CanSuicide = true            -- Should players be able to die at will? :(
+GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
 
 GM.DeathSounds = true	-- Should voicelines play on player death?
+GM.KillValue = 1        -- How many points should be awarded for a kill?
 
 GM.TeamSurvival = false		-- Is this a Hunter vs Hunted gametype?
 GM.SurvivorTeam = TEAM_BLUE	-- Survivor team

@@ -278,7 +278,7 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     if attacker == ply then return end -- Suicides aren't important
     
     -- Add the frag to scoreboard
-    attacker:AddFrags(1)
+    attacker:AddFrags(GAMEMODE.KillValue)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
     
     if not GAMEMODE.TeamBased then
