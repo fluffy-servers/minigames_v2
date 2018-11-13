@@ -99,17 +99,20 @@ end )
 -- Maximum of 100XP in one round
 -- Maximum of 20XP for any given source (except round wins)
 
-GM.StatConversions = GM.StatConversions or {}
-GM.StatConversions['RoundWins'] = {'Rounds Won', 0}
-GM.StatConversions['RoundsPlayed'] = {'Thanks for playing!', 1.5}
-GM.StatConversions['kills'] = {'Kills', 1}
-GM.StatConversions['balloons_popped'] = {'Balloons Popped', 0.05}
-GM.StatConversions['balloon_score'] = {'Total Score', 0}
-GM.StatConversions['Crates'] = {'Crates Smashed', 0.05}
-GM.StatConversions['platforms_broken'] = {'Platforms Broken', 0.1}
+function GM:AddStatConversion(type, nicename, value)
+    if not GAMEMODE.StatConversions then GAMEMODE.StatConversions = {} end
+    GAMEMODE.StatConversions[type] = {nicename, value}
+end
+
+hook.Add('Initialize', 'AddBaseStatConversions', function()
+    GAMEMODE:AddStatConversion('RoundWins', 'Rounds Won', 0)
+    GAMEMODE:AddStatConversion('RoundsPlayed', 'Thanks for playing!', 1.5)
+    GAMEMODE:AddStatConversion('kills', 'Kills', 1)
+end)
 
 -- Convert a stat name & score to a table with XP
 function GM:ConvertStat(name, points)
+    if not GAMEMODE.StatConversions then return end
     if not GAMEMODE.StatConversions[name] then return end
     
     if name == 'RoundWins' then
