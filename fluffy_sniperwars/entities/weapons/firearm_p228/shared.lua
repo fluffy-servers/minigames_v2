@@ -40,7 +40,7 @@ SWEP.SprintAng = Vector(-16.9413, -5.786, 4.0159)
 
 SWEP.Primary.Sound			= Sound("weapons/p228/p228-1.wav")
 SWEP.Primary.Recoil			= 3.5
-SWEP.Primary.Damage			= 16
+SWEP.Primary.Damage			= 35
 SWEP.Primary.NumShots		= 1
 SWEP.Primary.Cone			= 0.030
 SWEP.Primary.Delay			= 0.180

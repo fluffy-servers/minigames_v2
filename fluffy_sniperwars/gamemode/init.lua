@@ -8,6 +8,7 @@ function GM:PlayerLoadout( ply )
 	ply:Give( "sniper_normal" )
 	ply:Give( "firearm_p228" )
 	ply:Give( "weapon_translocator" )
+    ply:Give( "weapon_mg_knife" )
 	
 	if SHOP then
 		--ply:EquipKnife()
