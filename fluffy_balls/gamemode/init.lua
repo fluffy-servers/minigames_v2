@@ -39,8 +39,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		b:SetVelocity(vel)
 		b:Spawn()
 
-        local c = HSVToColor(math.random(0, 360), 1, 1)
-        b:SetBallColor(c)
+        local c3 = ply:GetPlayerColor()
+        b:SetBallColor(c3)
     end
     ply:SetNWInt("Balls", 0)
     
