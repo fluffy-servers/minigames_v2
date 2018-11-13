@@ -43,7 +43,7 @@ function PANEL:Paint(w, h)
 	
 	surface.SetDrawColor( color_white )
 	draw.NoTexture()
-    drawCircle( w/2, h/2, w/2, 48 )
+    drawCircle( w/2, h/2, w/2, 24 )
  
     render.SetStencilFailOperation( STENCILOPERATION_ZERO )
     render.SetStencilPassOperation( STENCILOPERATION_REPLACE )

@@ -1,6 +1,5 @@
 -- Include useful files
 include('shared.lua')
-include('avatar_circle.lua')
 include('cl_endgame.lua')
 include('cl_hud.lua')
 include('cl_crosshair.lua')
@@ -9,6 +8,7 @@ include('cl_playerpanel.lua')
 include('cl_scoreboard.lua')
 include('cl_announcements.lua')
 
+include('vgui/avatar_circle.lua')
 include('vgui/MapVotePanel.lua')
 include('vgui/Screen_Experience.lua')
 include('vgui/Screen_Maps.lua')

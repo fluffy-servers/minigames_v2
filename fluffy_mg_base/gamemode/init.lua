@@ -6,7 +6,6 @@
 
 -- Send all the required files to the client
 -- Very important! Don't forget!
-AddCSLuaFile('avatar_circle.lua')
 AddCSLuaFile('drawarc.lua')
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('cl_crosshair.lua')
@@ -17,6 +16,7 @@ AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
 AddCSLuaFile('cl_announcements.lua')
 
+AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
 AddCSLuaFile('vgui/Screen_Experience.lua')
 AddCSLuaFile('vgui/Screen_Maps.lua')

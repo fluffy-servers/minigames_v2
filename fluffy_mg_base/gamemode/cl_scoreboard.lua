@@ -1,4 +1,4 @@
-include('avatar_circle.lua')
+include('vgui/avatar_circle.lua')
 
 --[[
     This file was originally not part of the gamemode
