@@ -22,6 +22,11 @@ function GM:MakeKing(ply)
     ply:SetWalkSpeed(1000)
 end
 
+-- Stop regi-sui-cide?
+function GM:CanPlayerSuicide(ply)
+    return not ply:GetNWBool("IsKing", false)
+end
+
 -- Death function
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
