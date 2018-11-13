@@ -61,7 +61,13 @@ function GM:PlayerLoadout(ply)
     elseif GAMEMODE.ROUND_PHASE == "FIGHTING" then
         -- weapons here
         ply:Give("weapon_pistol")
+        ply:Give("weapon_smg1")
+        ply:Give("weapon_shotgun")
         ply:Give("weapon_physcannon")
+        
+        ply:GiveAmmo(128, "Pistol", true)
+        ply:GiveAmmo(256, "Buckshot", true)
+        ply:GiveAmmo(512, "SMG1", true)
     end
 end
 
@@ -113,11 +119,10 @@ function GM:HandleTeamWin(reason)
     local winners = reason -- Default: set to winning team in certain gamemodes
     local msg = 'The round has ended!'
     
-    if !GAMEMODE.RoundPoints then
-        -- Nobody wins :\
-        winners = 0
-        msg = 'Draw! Nobody wins.'
-    elseif GAMEMODE.RoundPoints[1] > GAMEMODE.RoundPoints[2] then
+    if !GAMEMODE.RoundPoints[1] then GAMEMODE.RoundPoints[1] = 0 end
+    if !GAMEMODE.RoundPoints[2] then GAMEMODE.RoundPoints[2] = 0 end
+    
+    if GAMEMODE.RoundPoints[1] > GAMEMODE.RoundPoints[2] then
         -- 1 wins
         winners = 1
         msg = team.GetName(1) .. ' win the round!'
