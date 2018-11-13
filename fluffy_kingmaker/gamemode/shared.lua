@@ -1,6 +1,6 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Balls Test'
+GM.Name = 'Kingmaker'
 GM.Author = 'FluffyXVI'
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?
