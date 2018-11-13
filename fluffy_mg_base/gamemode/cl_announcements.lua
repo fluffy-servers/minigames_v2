@@ -114,13 +114,49 @@ function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
     end
 end
 
+-- Creates a pulse announcement
+-- Simple announcement that zooms in before zooming out quickly
+function GM:PulseAnnouncement(duration, text, size, sound)
+    if sound then surface.PlaySound(sound) end
+    local test = vgui.Create("DPanel")
+    test:SetSize(ScrW(), ScrH())
+    test:Center()
+    test:NoClipping(true)
+    local starttime = CurTime()
+    local midtime = starttime + duration/2
+    local scale = 1
+    function test:GetScalingInfo()
+        if CurTime() < midtime then
+            scale = size - (midtime - CurTime())/duration
+        else
+            scale = size + (midtime - CurTime())*4
+        end
+        
+        if scale < 0 then
+            self:Remove()
+            return
+        end
+    end
+    
+    function test:Paint(w, h)
+        self:GetScalingInfo()
+        
+        local x = w/2
+        local y = h/2
+        drawScaledText(x+2, y+2, text, "FS_64", GAMEMODE.FColShadow, scale)
+        drawScaledText(x, y, text, "FS_64", GAMEMODE.FCol1, scale)
+    end
+end
+
 -- Net handler to parse announcements
 net.Receive('MinigamesAnnouncement', function()
     local tbl = net.ReadTable()
     if not tbl.type then return end
     if tbl.type == 'countdown' then
-        local length = tbl.length or 5
-        local endtext = tbl.endtext or ""
-        GAMEMODE:CountdownAnnouncement(length, endtext, tbl.endsound, tbl.ticksound)
+        GAMEMODE:CountdownAnnouncement(tbl.length or 5, tbl.endtext or "", tbl.endsound, tbl.ticksound)
+    elseif tbl.type == 'pulse' then
+        if not tbl.text then return end
+        local duration = tbl.duration or 5
+        GAMEMODE:PulseAnnouncement(duration, tbl.text, tbl.size or 1.5, tbl.sound)
     end
 end)
