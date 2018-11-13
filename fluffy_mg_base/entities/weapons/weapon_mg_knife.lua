@@ -11,6 +11,7 @@ if ( CLIENT ) then
 	SWEP.CSMuzzleFlashes	= true
 	SWEP.Slot				= 2
 	SWEP.SlotPos			= 0
+    killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color( 255, 80, 0, 255 ))
 end
 
 SWEP.Spawnable				= true

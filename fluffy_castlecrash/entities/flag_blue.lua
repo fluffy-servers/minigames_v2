@@ -23,6 +23,7 @@ function ENT:PhysicsUpdate()
 end
 
 if CLIENT then
+    killicon.AddFont("flag_blue", "HL2MPTypeDeath", "8", Color( 255, 80, 0, 255 ))
     local mat = Material( "models/fw/flaginner" )
     local col = Vector(0, 0, 255)
     local progress = 0

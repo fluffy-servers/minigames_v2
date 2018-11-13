@@ -6,6 +6,7 @@ if CLIENT then
 	SWEP.PrintName				= "Barrel Shooter"
 	SWEP.Slot					= 0
 	SWEP.SlotPos				= 0
+    killicon.AddFont("weapon_barrel_killa", "HL2MPTypeDeath", "-", Color( 255, 80, 0, 255 ) )
 end
 
 SWEP.Base						= "weapon_base"
