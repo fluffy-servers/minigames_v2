@@ -7,6 +7,8 @@ function GM:OnPhysgunReload(physgun, ply)
     if ent:IsValid() and (ply == owner or owner == nil) then
         ent:Remove()
         ply:EmitSound('ui/buttonclickrelease.wav')
+        local props = ply:GetNWInt('Props', 0)
+        ply:SetNWInt('Props', props-1)
     end
 end
 
@@ -25,7 +27,6 @@ function GM:SpawnProp(ply, model)
     local allowed = false
     local price = 0
     for k,v in pairs(GAMEMODE.PropList) do
-        print(model, v[1])
         if model == v[1] then
             price = v[2]
             allowed = true
@@ -58,10 +59,10 @@ function GM:SpawnProp(ply, model)
     
     local phys = prop:GetPhysicsObject()
     if IsValid(phys) then
-        local hp = math.floor(phys:GetMass())
+        local hp = 200--math.floor(phys:GetMass())
         prop:SetNWInt("Health", hp)
         prop:SetNWInt("MaxHealth", hp)
-        prop:SetHealth(hp*5)
+        prop:SetHealth(hp*5) -- Ensure it only breaks when *we* want it to
     end
     prop:PrecacheGibs()
 end
@@ -72,6 +73,7 @@ local function Spawn(ply, cmd, args)
 end
 concommand.Add("fw_spawn", Spawn)
 
+-- Remove all the props of a player
 function GM:RemoveProps(ply)
     if ply:GetNWInt('Props', 0) == 0 then return end
     for k,v in pairs(ents.FindByClass("prop_physics")) do
@@ -89,8 +91,14 @@ local function RemoveProps(ply, cmd, args)
 end
 concommand.Add("fw_remove", RemoveProps)
 
+-- Stop players from moving the barrier
 function GM:PhysgunPickup(ply, ent)
     return (ent:GetClass() == "prop_physics")
+end
+
+-- Only the flag can be picked up with the gravity gun
+function GM:GravGunPickupAllowed(ply, ent)
+    return (ent:GetClass() == "fw_flag")
 end
 
 -- TODO: Health properties for props
@@ -106,5 +114,9 @@ function GM:EntityTakeDamage(target, dmginfo)
         end
     elseif target:IsPlayer() then
         if GAMEMODE.ROUND_PHASE == "BUILDING" then dmginfo:SetDamage(0) return end
+        local inflictor = dmginfo:GetInflictor()
+        if inflictor:GetClass() == "fw_flag" then
+            dmginfo:SetDamageType(DMG_DISSOLVE)
+        end
     end
 end

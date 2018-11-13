@@ -12,9 +12,13 @@ function GM:StartBuildPhase()
         v:SetNWInt('Props', 0)
     end
     GAMEMODE.ROUND_PHASE = "BUILDING"
+    timer.Simple(95, function() GAMEMODE:CountdownAnnouncement(5, "Fight!") end)
     timer.Simple(100, function() GAMEMODE:EndBuildPhase() end)
+    
+    GAMEMODE.RoundPoints = {}
 end
 
+-- When a round is about to start, prepare the building phase
 hook.Add('PreRoundStart', 'BuildingStart', function()
     GAMEMODE:StartBuildPhase()
 end)
@@ -35,6 +39,8 @@ function GM:EndBuildPhase()
     -- Loadout all players
     for k,v in pairs(player.GetAll()) do
         GAMEMODE:PlayerLoadout(v)
+        local used_props = GAMEMODE.MaxProps - v:GetNWInt('Props')
+        v:AddStatPoints('SpawnedProps', used_props)
     end
     
     -- Freeze all physics objects
@@ -46,6 +52,8 @@ function GM:EndBuildPhase()
     end
 end
 
+-- Loadout the players
+-- Different depending on the round phase
 function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     if GAMEMODE.ROUND_PHASE == "BUILDING" then
@@ -57,12 +65,15 @@ function GM:PlayerLoadout(ply)
     end
 end
 
+-- Get the flag entity
 function GM:GetFlag()
     local flag = ents.FindByClass("fw_flag")[1]
     if !IsValid(flag) then return end
     return flag
 end
 
+-- Thinking allocates points for holding the flag
+-- That is the important part of the gamemode, after all
 local lastcheck = CurTime()
 function GM:Think()
     local flag = GAMEMODE:GetFlag()
@@ -76,12 +87,49 @@ function GM:Think()
     -- Add points if held
     if lastcheck < CurTime() then
         if flag:IsPlayerHolding() then
+            local held_team = holder:Team()
+            if held_team == TEAM_SPECTATOR or holder:Team() == TEAM_UNASSIGNED then return end
             lastcheck = CurTime() + 1
             flag:EmitSound("npc/roller/code2.wav")
-            team.AddScore(holder:Team(), 1)
+            -- Awards points to the team
+            team.AddScore(held_team, 1)
+            if not GAMEMODE.RoundPoints[held_team] then
+                GAMEMODE.RoundPoints[held_team] = 1
+            else
+                GAMEMODE.RoundPoints[held_team] = GAMEMODE.RoundPoints[held_team] + 1
+            end
+            -- Awards points to the holder
+            holder:AddStatPoints('FlagCarried', 1)
+            holder:AddFrags(1)
         else
             flag:SetNWVector("RColor", Vector(1, 1, 1))
             flag:SetNWEntity("Holder", nil)
         end
     end
+end
+
+-- Make victories based on the proper scoring
+function GM:HandleTeamWin(reason)
+    local winners = reason -- Default: set to winning team in certain gamemodes
+    local msg = 'The round has ended!'
+    
+    if !GAMEMODE.RoundPoints then
+        -- Nobody wins :\
+        winners = 0
+        msg = 'Draw! Nobody wins.'
+    elseif GAMEMODE.RoundPoints[1] > GAMEMODE.RoundPoints[2] then
+        -- 1 wins
+        winners = 1
+        msg = team.GetName(1) .. ' win the round!'
+    elseif GAMEMODE.RoundPoints[2] > GAMEMODE.RoundPoints[1] then
+        -- 2 wins
+        winners = 2
+        msg = team.GetName(2) .. ' win the round!'
+    else
+        -- Nobody wins :\
+        winners = 0
+        msg = 'Draw! Nobody wins.'
+    end
+    
+    return winners, msg
 end

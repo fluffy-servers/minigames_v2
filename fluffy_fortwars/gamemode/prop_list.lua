@@ -1,8 +1,7 @@
 GM.PropList = {
     {"models/props_junk/wood_crate001a.mdl", 'Wooden Crate', 1},
     {"models/props_junk/wood_crate002a.mdl", 'Bigger Crate', 1},
-    {"models/props_phx/construct/concrete_barrier00.mdl", 'Concrete Barrier A', 1},
-    {"models/props_phx/construct/concrete_barrier01.mdl", 'Concrete Barrier B', 1},
+    {"models/props_c17/concrete_barrier001a.mdl", 'Concrete Barrier', 1},
     {"models/props_wasteland/interior_fence002d.mdl", 'Chain Fence', 1},
     {"models/props_lab/blastdoor001b.mdl", 'Blast Door', 1},
     {"models/props_interiors/VendingMachineSoda01a.mdl", 'Vending Machine', 1},
