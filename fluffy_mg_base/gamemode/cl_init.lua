@@ -71,6 +71,15 @@ surface.CreateFont( "FS_B96", {
     size = 128,
 })
 
+-- Font for CSS Kill Icons
+-- Needed for some weapons
+surface.CreateFont( "CSKillIcons", {
+  font = "csd",
+  size = 100,
+  weight = 500,
+  antialias = false,
+})
+
 --[[
     Universal Colors
     Colors are defined in this file for use across the Minigames HUD
