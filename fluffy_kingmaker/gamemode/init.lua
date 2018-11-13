@@ -34,6 +34,13 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         ply:EmitSound(sound)
     end
     
+    if attacker:GetNWBool('IsKing', false) and (attacker == ply or !attacker:IsValid() or !attacker:IsPlayer()) then
+        ply:SetNWBool('IsKing', false)
+        GAMEMODE:PulseAnnouncement(2, 'Nobody is King!', 1)
+        GAMEMODE.CurrentKing = nil
+        return
+    end
+    
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
     
@@ -52,6 +59,21 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         attacker:AddFrags(1)
         attacker:AddStatPoints('KingEliminations', 1)
         GAMEMODE:MakeKing(attacker)
+        GAMEMODE.CurrentKing = attacker
+        local name = string.sub(attacker:Nick(), 1, 10)
+        GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1)
+    end
+    
+    -- Similar to above, any kills with no king become king
+    if not IsValid(GAMEMODE.CurrentKing) then
+        attacker:SetNWBool('IsKing', true)
+        attacker:SetNWInt('KingFrags', attacker:GetNWInt('KingFrags', 0) + 1)
+        attacker:AddFrags(1)
+        attacker:AddStatPoints('KingFrags', 1)
+        GAMEMODE:MakeKing(attacker)
+        GAMEMODE.CurrentKing = attacker
+        local name = string.sub(attacker:Nick(), 1, 10)
+        GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1)
     end
     
     -- Do not count deaths unless in round
@@ -63,10 +85,12 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
 end
 
-hook.Add('RoundStart', 'ResetBalls', function()
+hook.Add('PreRoundStart', 'ResetKing', function()
 	for k,v in pairs(player.GetAll()) do
 		v:SetNWInt("KingFrags", 0)
+        v:SetNWBool("King", false)
 	end
+    GAMEMODE.CurrentKing = nil
 end )
 
 -- Basic function to get the player with the most frags
