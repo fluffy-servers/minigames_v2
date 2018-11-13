@@ -88,7 +88,7 @@ end
 hook.Add('PreRoundStart', 'ResetKing', function()
 	for k,v in pairs(player.GetAll()) do
 		v:SetNWInt("KingFrags", 0)
-        v:SetNWBool("King", false)
+        v:SetNWBool("IsKing", false)
 	end
     GAMEMODE.CurrentKing = nil
 end )
