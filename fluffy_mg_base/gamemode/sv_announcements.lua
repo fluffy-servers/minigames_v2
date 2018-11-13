@@ -7,10 +7,11 @@
 -- Serverside function for making a countdown announcement
 function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
     local tbl = {
-        length: length,
-        endtext: endtext,
-        endsound: endsound,
-        ticksound: ticksound
+        type = 'countdown',
+        length = length,
+        endtext = endtext,
+        endsound = endsound,
+        ticksound = ticksound
     }
     net.Start('MinigamesAnnouncement')
         net.WriteTable(tbl)
