@@ -34,6 +34,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         ply:EmitSound(sound)
     end
     
+    -- If the King dies accidentally, make King up for grabs
     if attacker:GetNWBool('IsKing', false) and (attacker == ply or !attacker:IsValid() or !attacker:IsPlayer()) then
         ply:SetNWBool('IsKing', false)
         GAMEMODE:PulseAnnouncement(2, 'Nobody is King!', 1)
@@ -56,7 +57,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         ply:SetNWBool('IsKing', false)
         attacker:SetNWBool('IsKing', true)
         attacker:SetNWInt('KingFrags', attacker:GetNWInt('KingFrags', 0) + 1)
-        attacker:AddFrags(1)
+        attacker:AddFrags(5)
         attacker:AddStatPoints('KingEliminations', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
@@ -83,6 +84,10 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
+end
+
+function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
+    -- All is handled above!
 end
 
 hook.Add('PreRoundStart', 'ResetKing', function()
