@@ -1,6 +1,8 @@
 --[[
-    This file is used as a handy stat tracking file
+    Stats tracking library
     Useful for tracking kills, round wins, damage dealt, etc.
+    Ties in with sv_levels.lua to convert these stats to XP at the end of the game
+    Use this wherever possible! Stats are always fun to have!
 ]]--
 GM.StatsTracking = {}
 

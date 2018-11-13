@@ -1,3 +1,8 @@
+--[[
+    Functions related to the player
+    Stuff like playermodels, FFA colors, etc.
+--]]
+
 -- Valid playermodels
 GM.ValidModels = {
     male01 = "models/player/Group01/male_01.mdl",

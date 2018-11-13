@@ -1,3 +1,8 @@
+--[[
+    Shared tables for a whole bunch of sounds
+    Mostly just cool death sounds
+--]]
+
 GM.DefaultDeathSoundsRare = {
     male = {
         'vo/npc/male01/vanswer04.wav', -- Should I take that personally?

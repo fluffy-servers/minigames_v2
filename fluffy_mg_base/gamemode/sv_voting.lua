@@ -1,3 +1,8 @@
+--[[
+    Handles the map and gamemode rotation system
+    Map icons are delivered via. webserver
+--]]
+
 -- List of gamemodes in rotation
 GM.VoteGamemodes = {
     {'fluffy_sniperwars', 'Sniper Wars', 'Team DM'},

@@ -1,3 +1,7 @@
+--[[
+    Shared files for experience & levels system
+--]]
+
 local meta = FindMetaTable("Player")
 
 -- Get the current experience of the player

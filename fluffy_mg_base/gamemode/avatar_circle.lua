@@ -1,3 +1,8 @@
+--[[
+    VGUI for a circular avatar
+    This file is in the wrong place - sorry
+--]]
+
 PANEL = {}
 function PANEL:Init()
     self.Avatar = vgui.Create("AvatarImage", self)
