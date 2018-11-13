@@ -43,7 +43,10 @@ function GM:HUDPaint()
 		y = tr.HitPos:ToScreen().y
         self:DrawCrosshair(x, y)
     else
-        self:DrawCrosshair(ScrW()/2, ScrH()/2)
+        local tr = LocalPlayer():GetEyeTrace()
+        if (tr.Entity and not tr.Entity:IsPlayer()) or (!tr.Entity) then
+            self:DrawCrosshair(ScrW()/2, ScrH()/2)
+        end
     end
 	
 	-- Scoring pane
@@ -392,4 +395,65 @@ function GM:CreateScoringPane()
 	ScoreRefreshPlayers = timer.Create('RefreshPlayers', 2, 0, function()
 		GAMEMODE:ScoreRefreshSort()
 	end)
+end
+
+GM.PlayerPanels = {}
+function GM:GetPlayerInfoPanel(ply)
+    if GAMEMODE.PlayerPanels[ply] then return GAMEMODE.PlayerPanels[ply] end
+    local panel = vgui.Create("DPanel")
+    panel:SetSize(160, 64)
+    panel:SetPaintedManually(true)
+    local avatar = vgui.Create('AvatarCircle', panel)
+    avatar:SetSize(32, 32)
+    avatar:SetPos(16, 16)
+    local last_health = ply:GetMaxHealth() or 100
+    function panel:Paint(w, h)
+        -- Small animation for the arc
+        local hp_max = ply:GetMaxHealth() or 100
+        if last_health then
+            last_health = math.Approach(last_health, ply:Health(), 300*FrameTime())
+        else
+            last_health = 100
+        end
+        
+        local hp = last_health
+        if hp <= 0 then return end
+        
+        draw.NoTexture()
+        
+        local c = team.GetColor(ply:Team())
+        
+        local poly = poly or draw.CirclePoly(32, 32, 24, 24)
+        surface.SetDrawColor(c)
+        surface.DrawPoly(poly)
+        
+        local ang = (hp/hp_max) * -360
+        if ang % 2 == 1 then ang = ang - 1 end
+        draw.Arc(32, 32, 20, 8, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
+        
+        local name = ply:Nick()
+        draw.SimpleText(name, "FS_24", 64 + 1, 32 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(name, "FS_24", 64, 32, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    end
+    
+    GAMEMODE.PlayerPanels[ply] = panel
+    return panel
+end
+
+function GM:HUDDrawTargetID()
+	local tr = util.GetPlayerTrace( LocalPlayer() )
+	local trace = util.TraceLine( tr )
+	if !trace.Hit then return end
+	if !trace.HitNonWorld then return end
+    
+    if not trace.Entity:IsPlayer() then return end
+    local xx, yy = gui.MousePos()
+    if xx == 0 and yy == 0 then
+        xx = ScrW()/2
+        yy = ScrH()/2
+    end
+    
+    local panel = GAMEMODE:GetPlayerInfoPanel(trace.Entity)
+    panel:SetPos(xx - panel:GetWide()/2, yy - panel:GetTall()/2)
+    panel:PaintManual()
 end
