@@ -7,6 +7,7 @@ include('cl_crosshair.lua')
 include('cl_thirdperson.lua')
 include('cl_playerpanel.lua')
 include('cl_scoreboard.lua')
+include('cl_announcements.lua')
 
 include('vgui/MapVotePanel.lua')
 include('vgui/Screen_Experience.lua')

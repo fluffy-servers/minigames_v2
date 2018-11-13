@@ -1,3 +1,13 @@
+--[[
+    Main logic for the rounds system
+    Useful hooks to know:
+        - PreRoundStart
+        - RoundStart
+        - RoundEnd
+    Please don't override the functions unless absolutely critical
+    Some functions regarding winning conditions are designed to be overridden
+--]]
+
 --[[ Thinking for round coordination ]]--
 hook.Add('Think', 'MinigamesRoundThink', function()
     local state = GetGlobalString('RoundState', 'GameNotStarted')

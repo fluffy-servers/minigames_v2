@@ -1,3 +1,9 @@
+--[[
+    Clientside crosshair library
+    Creates the convars that are in charge of the crosshairs
+    Also adds the crosshair editor
+--]]
+
 -- Custom crosshair convars
 local crosshair_outlined = CreateClientConVar("crosshair_outlined", 1, true, false)
 local crosshair_image = CreateClientConVar("crosshair_image", "crosshair012.png", true, false)

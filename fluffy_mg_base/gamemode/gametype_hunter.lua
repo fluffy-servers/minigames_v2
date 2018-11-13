@@ -1,5 +1,6 @@
--- The file provides a couple of functions that are used in Team Survival gamemodes
--- Saves repeating them in each gamemode folder
+--[[
+    Useful functions that are used for TeamSurvival gamemodes
+--]]
 
 -- Make new players join the Hunter team on connection
 function GM:PlayerInitialSpawn(ply)
