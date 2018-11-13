@@ -125,8 +125,10 @@ function GM:DrawRoundState()
     
     -- Draw message for end of rounds (if applicable)
     -- This amazingly hasn't been improved in a while -> consider reworking & making nice
+    -- 14th November: Slightly improved
     if EndGameMessage then
-        draw.SimpleTextOutlined( EndGameMessage, "FS_32", ScrW()/2, 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleText( EndGameMessage, "FS_32", ScrW()/2 + 2, 35, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        draw.SimpleText( EndGameMessage, "FS_32", ScrW()/2, 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     
     -- Draw spectating message on bottom (very rare)
