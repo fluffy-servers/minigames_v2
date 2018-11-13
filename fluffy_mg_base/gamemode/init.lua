@@ -15,6 +15,7 @@ AddCSLuaFile('cl_thirdperson.lua')
 AddCSLuaFile('cl_playerpanel.lua')
 AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
+AddCSLuaFile('cl_announcements.lua')
 
 AddCSLuaFile('vgui/MapVotePanel.lua')
 AddCSLuaFile('vgui/Screen_Experience.lua')
