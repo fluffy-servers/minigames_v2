@@ -5,10 +5,34 @@ include('shared.lua')
 
 -- Appropiate weapon stuff
 function GM:PlayerLoadout( ply )
+    ply:StripWeapons()
+    ply:StripAmmo()
+    
     if ply:Team() == TEAM_BLUE then
         -- Survivors
+        ply:Give('weapon_pistol')
+        ply:Give('weapon_smg1')
+        ply:Give('weapon_shotgun')
+        ply:GiveAmmo(512, 'Pistol', true)
+        ply:GiveAmmo(512, 'Buckshot', true)
+        ply:GiveAmmo(1024, 'SMG1', true)
+        
+        ply:SetRunSpeed(300)
+        ply:SetWalkSpeed(200)
     elseif ply:Team() == TEAM_RED then
         -- Infected
+        ply:Give('weapon_fists')
+        ply:SetRunSpeed(500)
+        ply:SetWalkSpeed(300)
+    end
+end
+
+-- Pick player models
+function GM:PlayerSetModel( ply )
+    if ply:Team() == TEAM_RED then
+        ply:SetModel( "models/player/zombie_classic.mdl" )
+    else
+        GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
 end
 
