@@ -62,7 +62,7 @@ local function drawRotatedScaledText(x, y, text, font, color, ang, scale)
     render.PopFilterMin()
 end
 
-function GM:CountdownAnnouncement(length, endtext)
+function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
     local test = vgui.Create("DPanel")
     test:SetSize(ScrW(), ScrH())
     test:Center()
@@ -71,8 +71,10 @@ function GM:CountdownAnnouncement(length, endtext)
     local number = length
     local finished = false
     
+    if ticksound then surface.PlaySound(ticksound) end
+    
     function test:GetCountdownInfo()
-        if finished then return 1.25, endtext end
+        if finished then return 1, endtext end
         local timeleft = lasttick - CurTime()+1
         if timeleft < 0 then
             timeleft = 1
@@ -80,7 +82,10 @@ function GM:CountdownAnnouncement(length, endtext)
             number = number - 1
             if number < 1 then
                 finished = true
+                if endsound then surface.PlaySound(endsound) end
                 timer.Simple(1, function() self:Remove() end)
+            else
+                if ticksound then surface.PlaySound(ticksound) end
             end
         end
         return timeleft, number
