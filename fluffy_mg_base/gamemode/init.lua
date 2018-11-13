@@ -70,17 +70,17 @@ function GM:PlayerSpawn( ply )
     ply.Spectating = false
 end
 
--- Initial spawn stuff
-function GM:PlayerInitialSpawn(ply)
+-- Open up team menu
+hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     -- Assign teams
     if ply:IsBot() then
-        self:PlayerRequestTeam( ply, team.BestAutoJoinTeam() )
+        GAMEMODE:PlayerRequestTeam( ply, team.BestAutoJoinTeam() )
     elseif GAMEMODE.TeamBased then
         ply:ConCommand( "gm_showteam" )
     else
         ply:SetTeam( TEAM_UNASSIGNED )
     end
-end
+end)
 
 -- Disable friendly fire
 function GM:PlayerShouldTakeDamage( victim, ply )
