@@ -22,8 +22,8 @@ function GM:PlayerLoadout( ply )
     elseif ply:Team() == TEAM_RED then
         -- Infected
         ply:Give('weapon_fists')
-        ply:SetRunSpeed(500)
-        ply:SetWalkSpeed(300)
+        ply:SetRunSpeed(400)
+        ply:SetWalkSpeed(250)
     end
 end
 
@@ -53,3 +53,11 @@ function GM:StatsRoundWin(winners)
         end
     end
 end
+
+hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
+    local wep = dmg:GetInflictor()
+    if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
+    if wep:GetClass() == "weapon_fists" then
+        dmg:ScaleDamage(3)
+    end
+end)
