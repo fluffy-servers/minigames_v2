@@ -1,6 +1,6 @@
-"fluffy_cratewars"
+"minigames"
 {
 	"base"	"fluffy_mg_base"
-	"title"	"Crate Wars"
-	"maps"	"^cw_"
+	"title"	"Balloons"
+	"maps"	"^bl_"
 }

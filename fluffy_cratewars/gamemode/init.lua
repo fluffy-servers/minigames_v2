@@ -46,6 +46,7 @@ hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
 	if !ply.SmashedCrates then return end
 	ply.SmashedCrates = ply.SmashedCrates + 1
 	ply:SetNWInt("Crates", ply.SmashedCrates)
+    ply:AddStatPoints('Crates', 1)
 end )
 
 -- Prop

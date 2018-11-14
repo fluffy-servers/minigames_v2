@@ -27,7 +27,7 @@ if CLIENT then
 	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color( 50, 200, 50, 255 ), TEXT_ALIGN_CENTER )
 	end
-	
+	killicon.AddFont("weapon_propkilla", "HL2MPTypeDeath", "2", Color( 255, 80, 0, 255 ))
 end
 
 SWEP.HoldType = "ar2"

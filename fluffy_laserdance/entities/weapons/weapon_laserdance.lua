@@ -18,7 +18,7 @@ SWEP.BounceWeaponIcon   = false					// Should the weapon icon bounce?
 SWEP.SwayScale			= 1.0					// The scale of the viewmodel sway
 SWEP.BobScale			= 1.0					// The scale of the viewmodel bob
 SWEP.WepSelectIcon		= surface.GetTextureID( "weapons/swep" )
-
+killicon.AddFont("weapon_propkilla", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
 end
 
 SWEP.ViewModelFOV	= 62

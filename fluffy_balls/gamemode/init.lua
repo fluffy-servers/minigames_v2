@@ -38,6 +38,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 		b:SetPos(p + v)
 		b:SetVelocity(vel)
 		b:Spawn()
+
+        local c3 = ply:GetPlayerColor()
+        b:SetBallColor(c3)
     end
     ply:SetNWInt("Balls", 0)
     

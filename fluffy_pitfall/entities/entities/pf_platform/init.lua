@@ -70,6 +70,9 @@ function ENT:OnTakeDamage( dmg )
 	if( self.MyHealth <= 0 ) then
 	
 		self.LastAttacker = attacker
+        if IsValid(self.LastAttacker) and self.LastAttacker:IsPlayer() then
+            self.LastAttacker:AddStatPoints('platforms_broken', 1)
+        end
 		
 		if !self.IsFalling then
 			self.IsFalling = true

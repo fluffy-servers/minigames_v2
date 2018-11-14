@@ -22,7 +22,7 @@ if CLIENT then
 	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
 		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
 	end
-	
+	killicon.AddFont("bt_bomb", "HL2MPTypeDeath", "*", Color( 255, 80, 0, 255 ))
 end
 
 SWEP.HoldType = "slam"
@@ -121,8 +121,6 @@ function SWEP:Trace()
 
 	local trace = util.TraceHull( tr )
 	local ent = trace.Entity
-    
-    print(ent)
 
 	if not IsValid( ent ) or not ent:IsPlayer() then 
 		return 

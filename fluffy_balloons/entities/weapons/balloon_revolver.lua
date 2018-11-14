@@ -82,7 +82,7 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 		-- If the tracer hits a balloon - apply damage to it
 		if tr.Hit and !tr.HitWorld then
 			if tr.Entity.Balloon then
-				tr.Entity:TakeDamage(100, self.Owner, self)
+				tr.Entity:TakeDamage(damage, self.Owner, self.Weapon)
 			end
 		end
 	end

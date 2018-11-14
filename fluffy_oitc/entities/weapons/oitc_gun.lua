@@ -4,6 +4,7 @@ if CLIENT then
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
+    killicon.AddFont("oitc_gun", "CSKillIcons", "f", Color( 255, 80, 0, 255 ))
 end
 
 -- Primary fire damage and aim settings

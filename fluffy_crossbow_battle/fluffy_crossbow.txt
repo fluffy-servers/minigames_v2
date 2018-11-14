@@ -1,0 +1,5 @@
+"fluffy_crossbow_battle"
+{
+	"base"	"fluffy_mg_base"
+	"title"	"Crossbow Battle"
+}

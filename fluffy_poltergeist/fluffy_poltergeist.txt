@@ -1,5 +1,6 @@
-"fluffy_poltergeist"
+"minigames"
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Poltergeist"
+    "maps"	"^pg_"
 }

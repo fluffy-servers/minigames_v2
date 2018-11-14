@@ -24,3 +24,12 @@ hook.Add('DoPlayerDeath', 'OITCDeath', function(victim, attacker, dmg)
 	-- Award the 1 ammo for kills
 	attacker:GiveAmmo(1, "Pistol", true)
 end)
+
+-- Buff the knife in OITC
+hook.Add('ScalePlayerDamage', 'BuffOITCKnife', function(ply, hg, dmg)
+    if dmg:GetInflictor():GetClass() == 'weapon_mg_knife' then
+        dmg:SetDamage(100)
+        dmg:ScaleDamage(10)
+        return
+    end
+end)

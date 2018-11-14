@@ -8,16 +8,14 @@ function GM:PlayerLoadout( ply )
 	ply:Give( "sniper_normal" )
 	ply:Give( "firearm_p228" )
 	ply:Give( "weapon_translocator" )
+    ply:Give( "weapon_mg_knife" )
 	
 	if SHOP then
 		--ply:EquipKnife()
 	end
 end
 
--- This doesn't work but at least I tried
--- Reduce fall damage for the anti-grav boost
+-- Remove fall damage
 function GM:GetFallDamage( ply, speed )
-	if ply:GetGravity() < 0.5 then return end
-	
-	return speed / 8
+    return 0
 end

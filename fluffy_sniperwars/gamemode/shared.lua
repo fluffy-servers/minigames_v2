@@ -7,6 +7,8 @@ GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundTime = 200
 GM.RoundNumber = 3
 
+GM.MaxProps = 10
+
 function GM:Initialize()
 
 end

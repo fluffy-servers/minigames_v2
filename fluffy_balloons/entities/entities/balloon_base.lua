@@ -34,18 +34,25 @@ end
 
 function ENT:OnTakeDamage(dmginfo)
 	-- Balloon pop effect
-	local c = self:GetColor()
-	local effectdata = EffectData()
-	effectdata:SetOrigin( self:GetPos() )
-	effectdata:SetStart( Vector( c.r, c.g, c.b ) )
-	util.Effect( "balloon_pop", effectdata )
-	
+    print(dmginfo:GetAttacker(), dmginfo:GetInflictor())
 	-- If a player popped the balloon, award points
 	local attacker = dmginfo:GetAttacker()
 	if IsValid(attacker) and attacker:IsPlayer() then
 		GAMEMODE:PopBalloon(attacker, self.Points, self:GetClass())
 	end
-	self:Remove()
+    
+    self.DoEffect = true
+    self:Remove()
+end
+
+function ENT:OnRemove(effect)
+    if not self.DoEffect then return end
+    
+	local c = self:GetColor()
+	local effectdata = EffectData()
+	effectdata:SetOrigin( self:GetPos() )
+	effectdata:SetStart( Vector( c.r, c.g, c.b ) )
+	util.Effect( "balloon_pop", effectdata )
 end
 
 -- Make the balloon physically float as expected
