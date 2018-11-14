@@ -10,7 +10,7 @@ for k,v in pairs(player.GetAll()) do
         v:SetTeam(TEAM_RED)
     end
 end
-GAMEMODE.RoundType = ( math.random( 1, 2 ) )
+GAMEMODE.RoundType = ( math.random( 1, 3 ) )
 local blue_score = team.GetScore(TEAM_BLUE)
 local red_score = team.GetScore(TEAM_RED)
 team.SetScore(TEAM_BLUE, red_score)
@@ -46,5 +46,18 @@ function GM:PlayerLoadout( ply )
 			ply:SetRunSpeed( 500 )
 			ply:SetHealth( 100 )
 		end
-	end	
+	elseif GAMEMODE.RoundType == 3 then
+    	if ply:Team() == TEAM_BLUE then
+			ply:StripWeapons()
+			ply:SetWalkSpeed( 250 )
+			ply:SetRunSpeed( 350 )
+			ply:SetHealth( 200 )
+		elseif ply:Team() == TEAM_RED then
+			ply:Give('weapon_ar2')
+			ply:GiveAmmo(200, "AR2AltFire")
+			ply:SetWalkSpeed( 250 )
+			ply:SetRunSpeed( 325 )
+			ply:SetHealth( 100 )
+		end
+    end
 end
