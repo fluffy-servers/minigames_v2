@@ -9,7 +9,7 @@ GM.VoteGamemodes = {
     {'fluffy_poltergeist', 'Poltergeist', 'Hunter vs Hunted'},
     {'fluffy_duckhunt', 'Duck Hunt', 'Hunter vs Hunted'},
     {'fluffy_suicidebarrels', 'Suicide Barrels', 'Hunter vs Hunted'},
-    {'fluffy_dodgeball', 'Dodgeball', 'Team DM'},
+    --{'fluffy_dodgeball', 'Dodgeball', 'Team DM'},
     {'fluffy_pitfall', 'Pitfall', 'FFA Elimination'},
     {'fluffy_incoming', 'Incoming!', 'Free For All'},
     {'fluffy_bombtag', 'Bomb Tag', 'FFA Elimination'},
