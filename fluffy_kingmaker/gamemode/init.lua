@@ -12,14 +12,15 @@ function GM:PlayerLoadout(ply)
     ply:SetRunSpeed(500)
     ply:SetWalkSpeed(300)
     ply:SetMaxHealth(100)
+    ply:SetJumpPower(250)
 end
 
 function GM:MakeKing(ply)
     ply:SetMaxHealth(250)
-    ply:SetHealth(250)
+    ply:SetHealth(350)
     ply:SetJumpPower(500)
-    ply:SetRunSpeed(1000)
-    ply:SetWalkSpeed(1000)
+    ply:SetRunSpeed(600)
+    ply:SetWalkSpeed(600)
 end
 
 -- Stop regi-sui-cide?
@@ -121,4 +122,9 @@ function GM:GetWinningPlayer()
     
     -- Return the winner! Yay!
     return bestplayer
+end
+
+-- Remove fall damage
+function GM:GetFallDamage( ply, speed )
+    return 0
 end
