@@ -108,6 +108,7 @@ hook.Add('Initialize', 'AddBaseStatConversions', function()
     GAMEMODE:AddStatConversion('RoundWins', 'Rounds Won', 0)
     GAMEMODE:AddStatConversion('RoundsPlayed', 'Thanks for playing!', 1.5)
     GAMEMODE:AddStatConversion('kills', 'Kills', 1)
+    GAMEMODE:AddStatConversion('LastSurvivor', 'Last Survivor Bonus', 5)
 end)
 
 -- Convert a stat name & score to a table with XP
