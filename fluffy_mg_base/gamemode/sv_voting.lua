@@ -44,6 +44,7 @@ GM.VoteMaps = {
     fluffy_shootingrange = {'cb_cylinder', 'cb_split'},
     fluffy_infection = pvp_maps,
     fluffy_kingmaker = pvp_maps,
+    fluffy_gungame = pvp_maps,
     fluffy_fortwars = {'fw_battlefield'},
 }
 
