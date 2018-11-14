@@ -406,6 +406,7 @@ function GM:GetPlayerInfoPanel(ply)
     local avatar = vgui.Create('AvatarCircle', panel)
     avatar:SetSize(32, 32)
     avatar:SetPos(16, 16)
+    avatar.Avatar:SetPlayer(ply, 32)
     local last_health = ply:GetMaxHealth() or 100
     function panel:Paint(w, h)
         -- Small animation for the arc
