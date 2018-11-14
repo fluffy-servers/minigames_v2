@@ -48,7 +48,7 @@ SWEP.ScopePos = Vector(0,0,0)
 SWEP.ScopeAng = Vector(0,0,0)
 
 SWEP.ZoomModes = { 0, 50, 10 }
-SWEP.ZoomSpeeds = { 5, 5, 5 }
+SWEP.ZoomSpeeds = { 2, 3, 3 }
 
 SWEP.Primary.Sound			= Sound("Weapon_USP.Single")
 SWEP.Primary.Recoil			= 3.5
@@ -85,7 +85,7 @@ function SWEP:GetViewModelPosition( pos, ang )
 
 	local newpos = self.Weapon:GetNWVector("ViewVector",nil)
 	local newang = self.Weapon:GetNWVector("ViewAngle",nil)
-	local movetime = self.Weapon:GetNWInt("ViewDuration",0.25) // time to reach position defaults to 0.25
+	local movetime = self.Weapon:GetNWInt("ViewDuration",0.10) // time to reach position defaults to 0.25
 	local duration = self.Weapon:GetNWInt("ViewTime",0) // the curtime when started
 		
 	if ( !newpos || !newang ) then
@@ -296,14 +296,14 @@ function SWEP:SecondaryAttack()
 
 	if not self.Weapon:CanSecondaryAttack() then return end
 
-	self.Weapon:SetNextSecondaryFire( CurTime() + 0.5 )
+	self.Weapon:SetNextSecondaryFire( CurTime() + 0.25 )
 
 	if SERVER then
 		
 		if self.Weapon:GetZoomMode() == 1 then
 			self.Weapon:SetNWBool("ReverseAnim",false)
 			self.Weapon:SetViewModelPosition(self.ScopePos, self.ScopeAng, 0.3)
-			self.MoveTime = CurTime() + 0.35
+			self.MoveTime = CurTime() + 0.01
 		else
 			self.Weapon:SetZoomMode( self.Weapon:GetZoomMode() + 1 )
 			
