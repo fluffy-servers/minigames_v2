@@ -75,9 +75,11 @@ hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     -- Assign teams
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam( ply, team.BestAutoJoinTeam() )
-    elseif GAMEMODE.TeamBased then
-        ply:ConCommand("minigames_info")
     else
+        ply:ConCommand("minigames_info")
+    end
+    
+    if not GAMEMODE.TeamBased then
         ply:SetTeam( TEAM_UNASSIGNED )
     end
 end)
