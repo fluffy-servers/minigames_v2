@@ -6,6 +6,13 @@ DeriveGamemode('fluffy_mg_base')
 
 GM.Name = 'Infection'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Oh no! A generic zombie outbreak!
+    
+    Zombies have to eliminate all the humans.
+    Humans have to stay alive until the round ends.
+    When a human dies, they will become a zombie.
+]]
 
 TEAM_RED = 1
 TEAM_BLUE = 2
