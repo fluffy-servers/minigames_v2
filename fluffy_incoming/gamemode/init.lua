@@ -83,6 +83,7 @@ end)
 
 function GM:IncomingVictory(ply)
     ply:AddFrags(3)
+    ply.BestDistance = 1
     GAMEMODE:EndRound(ply)
 end
 
