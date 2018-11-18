@@ -422,7 +422,13 @@ function GM:GetPlayerInfoPanel(ply)
         
         draw.NoTexture()
         
-        local c = team.GetColor(ply:Team())
+        local c = Color(0, 168, 255)
+        if GAMEMODE.TeamBased then
+            c = team.GetColor(ply:Team())
+        else
+            local pc = ply:GetPlayerColor()
+            c = Color(pc.r*255, pc.g*255, pc.b*255)
+        end
         
         local poly = poly or draw.CirclePoly(32, 32, 24, 24)
         surface.SetDrawColor(c)
