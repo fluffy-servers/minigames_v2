@@ -73,3 +73,21 @@ function GM:CreateTeams()
 	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"}) 
 end
+
+-- Function to toggle displaying cosmetics
+-- Obviously, cosmetic items shouldn't be displayed on barrels etc.
+function GM:ShouldDrawCosmetics(ply)
+    if GAMEMODE.TeamSurvival then
+        -- Cosmetics shouldn't show for the Hunter Team (in most cases)
+        -- Override in some cases
+        if ply:Team() == GAMEMODE.HunterTeam then
+            return false
+        else
+            return true
+        end
+    else
+        -- Should be okay in most cases
+        -- Override in others
+        return true
+    end
+end
