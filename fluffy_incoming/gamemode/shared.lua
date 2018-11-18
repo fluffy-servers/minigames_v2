@@ -2,6 +2,13 @@ DeriveGamemode('fluffy_mg_base')
 
 GM.Name = 'Incoming!'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Race to the top of the slope!
+    Avoid all the falling props!
+    
+    First person to reach the top wins.
+    Points are given based on distance travelled.
+]]
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?
 GM.Elimination = false
