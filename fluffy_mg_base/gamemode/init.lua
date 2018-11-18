@@ -76,11 +76,21 @@ hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam( ply, team.BestAutoJoinTeam() )
     elseif GAMEMODE.TeamBased then
-        ply:ConCommand( "gm_showteam" )
+        ply:ConCommand("minigames_info")
     else
         ply:SetTeam( TEAM_UNASSIGNED )
     end
 end)
+
+-- Rebind help menu
+function GM:ShowHelp(ply)
+    ply:ConCommand("minigames_info")
+end
+
+-- Rebind team menu
+function GM:ShowTeam(ply)
+    ply:ConCommand("minigames_info")
+end
 
 -- Disable friendly fire
 function GM:PlayerShouldTakeDamage( victim, ply )
