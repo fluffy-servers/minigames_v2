@@ -112,6 +112,21 @@ function GM:PlayerLoadout( ply )
 
 end
 
+function GM:GetWinningEntity()
+    if GAMEMODE.WinningZone and IsValid(GAMEMODE.WinningZone) then
+        return GAMEMODE.WinningZone
+    else
+        local e = ents.FindByClass('inc_winners_area')[1]
+        if not IsValid(e) then
+            print('Map has no winning area')
+            return nil
+        end
+        
+        GAMEMODE.WinningZone = e
+        return GAMEMODE.WinningZone
+    end
+end
+
 CurrentPropsCategory = 'Both'
 
 -- Prop
@@ -132,11 +147,62 @@ hook.Add("Tick", "TickPropSpawn", function()
 	end
 end )
 
+-- Randomly pick a group of props
 hook.Add('PreRoundStart', 'IncomingPropsChange', function()
     local category = table.Random( table.GetKeys( DefaultProps ) )
     CurrentPropsCategory = category
+    
+    for k,v in pairs(player.GetAll()) do
+        v.BestDistance = nil
+    end
 end )
 
+-- Get the starting distance to the goal
+-- Used for calculating % later
+hook.Add('PlayerSpawn', 'IncomingDistanceSpawn', function(ply)
+    local winent = GAMEMODE:GetWinningEntity()
+    timer.Simple(0.1, function()
+        ply.StartDistance = ply:GetPos():DistToSqr(winent:GetPos())
+    end)
+end)
+
+function GM:GetDistanceToEnd(ply)
+    if not ply.StartDistance then return end
+    
+    local winent = GAMEMODE:GetWinningEntity()
+    local distance = ply:GetPos():DistToSqr(winent:GetPos())
+    local percent = 1 - (distance / ply.StartDistance)
+    
+    if ply.BestDistance then
+        if percent > ply.BestDistance then
+            ply.BestDistance = percent
+        end
+    else
+        ply.BestDistance = percent
+    end
+end
+
+-- Get a % of how close the player got to the ending
+-- This is used for better scoring than all-or-nothing
+hook.Add('DoPlayerDeath', 'IncomingDistanceCheck', function(ply)
+    GAMEMODE:GetDistanceToEnd(ply)
+end)
+
+hook.Add('RoundEnd', 'IncomingDistancePoints', function()
+    for k,v in pairs(player.GetAll()) do
+        GAMEMODE:GetDistanceToEnd(v)
+        if v.BestDistance then
+            local p = math.floor(v.BestDistance * 100)
+            v:AddStatPoints('IncomingDistance', p)
+            v:AddFrags(math.floor(p/10))
+        end
+    end
+end)
+
+function GM:IncomingVictory(ply)
+    ply:AddFrags(3)
+    GAMEMODE:EndRound(ply)
+end
 
 -- Network resources
 function IncludeResFolder( dir )
@@ -166,7 +232,6 @@ function IncludeResFolder( dir )
 end
 
 IncludeResFolder( "materials/models/clannv/incoming/" )
-
 IncludeResFolder( "models/clannv/incoming/box/" )
 IncludeResFolder( "models/clannv/incoming/cone/" )
 IncludeResFolder( "models/clannv/incoming/cylinder/" )
