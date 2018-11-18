@@ -2,6 +2,11 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
+hook.Add('Initialize', 'AddKingmakerStatConversions', function()
+    GAMEMODE:AddStatConversion('KingFrags', 'Kills as King', 0.25)
+    GAMEMODE:AddStatConversion('KingEliminations', 'Regicide', 1)
+end)
+
 function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:StripWeapons()
