@@ -9,6 +9,10 @@ include('sh_levels.lua')
 
 GM.Name = 'Minigames'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    There doesn't appear to be any help text for this gamemode.
+    Report this to the creator.
+]]
 
 GM.TeamBased = false -- Is the gamemode team based, or is it FFA?
 GM.Elimination = false -- Should players stay dead, or should they respawn?
