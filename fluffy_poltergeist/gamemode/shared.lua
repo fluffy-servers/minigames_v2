@@ -2,6 +2,21 @@ DeriveGamemode('fluffy_mg_base')
 
 GM.Name = 'Poltergeist'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Angry ghosts are out to kill all humans!
+    
+    Humans have to survive until the round ends to win.
+    Humans that die will join the angry ghosts.
+    
+    Poltergeists:
+     Primary: dash attack. Best with large props.
+     Reload to change props
+     Secondary: explosion. Best with smaller props.
+    
+    Humans:
+     Shoot the props to destroy them
+     Don't get killed
+]]
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.TeamSurvival = true

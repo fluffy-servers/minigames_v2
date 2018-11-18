@@ -8,6 +8,18 @@ DeriveGamemode('fluffy_mg_base')
 
 GM.Name = 'Duck Hunt'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Runners have to make it to the end before getting sniped!
+    
+    Runners that die will become Snipers.
+    
+    Runners
+     Run! Make it to the end of the course as fast as you can!
+     Try and dodge all the bullets flying at you.
+     
+    Snipers
+     Shoot the Runners before they make it to the end
+]]
 
 TEAM_RED = 1
 TEAM_BLUE = 2
