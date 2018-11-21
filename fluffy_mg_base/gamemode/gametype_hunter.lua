@@ -12,11 +12,18 @@ end
 -- If team survival pick one player to be a hunter
 hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
     if GAMEMODE.TeamSurvival then
+        local num_players = 0
         for k,v in pairs( player.GetAll() ) do
             if v:Team() == TEAM_SPECTATOR then continue end
             v:SetTeam( GAMEMODE.SurvivorTeam )
+            num_players = num_players + 1
         end
-        GAMEMODE:GetRandomPlayer():SetTeam( GAMEMODE.HunterTeam )
+        
+        -- Make 20% of players (+1) hunters
+        local num_hunters = math.floor((num_players-1)/5) + 1
+        for k,v in pairs(GAMEMODE:GetRandomPlayer(num_hunters, true)) do
+            v:SetTeam(GAMEMODE.HunterTeam)
+        end
     end
 end )
 
@@ -34,7 +41,6 @@ function GM:GetLastPlayer(exclude_player)
     for k,v in pairs( player.GetAll() ) do
         if v:Alive() and v:Team() == GAMEMODE.SurvivorTeam and !v.Spectating then
             if exclude_player and v == exclude_player then continue end
-            print(v, exclude_player, 'alive!')
             if IsValid(last_alive) then
                 return false
             else
