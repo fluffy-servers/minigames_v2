@@ -112,3 +112,13 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone )
 	self:ShootEffects()
 	
 end
+
+function SWEP:DoImpactEffect( tr, nDamageType )
+	if (tr.HitSky) then return end
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin(tr.HitPos + tr.HitNormal)
+	effectdata:SetNormal(tr.HitNormal)
+	util.Effect("AR2Impact", effectdata)
+    return true
+end
