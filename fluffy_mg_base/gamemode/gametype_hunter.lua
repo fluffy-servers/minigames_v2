@@ -17,12 +17,14 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
             if v:Team() == TEAM_SPECTATOR then continue end
             v:SetTeam( GAMEMODE.SurvivorTeam )
             num_players = num_players + 1
+            v.InitialHunter = false
         end
         
         -- Make 20% of players (+1) hunters
         local num_hunters = math.floor((num_players-1)/5) + 1
         for k,v in pairs(GAMEMODE:GetRandomPlayer(num_hunters, true)) do
             v:SetTeam(GAMEMODE.HunterTeam)
+            v.InitialHunter = true
         end
     end
 end )
