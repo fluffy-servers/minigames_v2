@@ -236,21 +236,21 @@ end
 function GM:GetRandomPlayer(num, forcetable)
     num = num or 1
     local players = table.Shuffle(player.GetAll())
-    PrintTable(players)
     local output = {}
     local i = 1
     while #output < num do
         if i > #players then break end
         local p = players[i]
+        i = i + 1
         if p:Team() == TEAM_SPECTATOR then continue end
         if p.Spectating then continue end
         table.insert(output, p)
     end
     
     if num == 1 and not forcetable then
-        return players[1] -- return entity for compatibility
+        return output[1] -- return entity for compatibility
     else
-        return players -- return table
+        return output -- return table
     end
 end
 
