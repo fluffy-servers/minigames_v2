@@ -44,9 +44,9 @@ function GM:HUDPaint()
         self:DrawCrosshair(x, y)
     else
         local tr = LocalPlayer():GetEyeTrace()
-        if (tr.Entity and not tr.Entity:IsPlayer()) or (!tr.Entity) then
+        --if (tr.Entity and not tr.Entity:IsPlayer()) or (!tr.Entity) then
             self:DrawCrosshair(ScrW()/2, ScrH()/2)
-        end
+        --end
     end
 	
 	-- Scoring pane
@@ -450,18 +450,26 @@ function GM:GetPlayerInfoPanel(ply)
         draw.NoTexture()
         
         local c = team.GetColor(ply:Team())
+        if not GAMEMODE.TeamBased then
+            local v = ply:GetPlayerColor()
+            c = Color(v.x * 255, v.y * 255, v.z * 255)
+        end
         
-        local poly = poly or draw.CirclePoly(32, 32, 24, 24)
+        local poly = poly or draw.CirclePoly(32, 32, 26, 24)
         surface.SetDrawColor(c)
         surface.DrawPoly(poly)
         
         local ang = (hp/hp_max) * -360
         if ang % 2 == 1 then ang = ang - 1 end
-        draw.Arc(32, 32, 20, 8, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
+        draw.Arc(32, 32, 24, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
         
         local name = ply:Nick()
-        draw.SimpleText(name, "FS_24", 64 + 1, 32 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        draw.SimpleText(name, "FS_24", 64, 32, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(name, "FS_24", 64 + 1, 24 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(name, "FS_24", 64, 24, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        
+        hp = math.floor(hp)
+        draw.SimpleText(hp .. 'HP', 'FS_24', 64+1, 24+1 + 20, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(hp .. 'HP', 'FS_24', 64, 24 + 20, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
     
     GAMEMODE.PlayerPanels[ply] = panel
