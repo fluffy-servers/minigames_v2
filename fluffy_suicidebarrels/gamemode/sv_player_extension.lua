@@ -20,6 +20,7 @@ hook.Add('KeyPress', 'SuicideBarrelBoom', function( ply, key )
 		
         if ply.NextBoom and CurTime() >= ply.NextBoom then
             ply.NextBoom = nil
+            ply:SetWalkSpeed(175)
             
 			-- Play blip sounds then explode
 			-- This should probably be improved
