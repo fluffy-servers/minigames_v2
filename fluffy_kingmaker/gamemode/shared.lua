@@ -3,14 +3,12 @@ DeriveGamemode('fluffy_mg_base')
 GM.Name = 'Kingmaker'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    Become the King and defeat everyone!
+    Become the King and survive!
     
-    As the King, you are more powerful than everyone else
-    Get kills as the King to earn points
+    Whoever is the King will earn a point for every second they survive.
+    Anyone who kills the King will become the King.
     
-    If you're not the King, work together to defeat the King!
-    You can kill anyone - but there's no points for it.
-    Only kills you make while you are the King will give you points.
+    The King is defenseless apart from a slight speed & health boost.
 ]]
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?

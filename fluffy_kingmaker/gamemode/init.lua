@@ -14,17 +14,18 @@ function GM:PlayerLoadout(ply)
 	ply:Give("weapon_shotgun")
     ply:GiveAmmo(512, "SMG1", true)
 	ply:GiveAmmo(512, "Buckshot", true)
-    ply:SetRunSpeed(500)
-    ply:SetWalkSpeed(300)
+    ply:SetRunSpeed(450)
+    ply:SetWalkSpeed(350)
     ply:SetMaxHealth(100)
 end
 
 function GM:MakeKing(ply)
-    ply:SetMaxHealth(250)
-    ply:SetHealth(250)
-    ply:SetJumpPower(500)
-    ply:SetRunSpeed(1000)
-    ply:SetWalkSpeed(1000)
+    ply:StripWeapons()
+    ply:SetMaxHealth(150)
+    ply:SetHealth(150)
+    ply:SetJumpPower(250)
+    ply:SetRunSpeed(575)
+    ply:SetWalkSpeed(575)
 end
 
 -- Stop regi-sui-cide?
@@ -55,19 +56,13 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
     
-    -- If the attacker is the King
-    if attacker:GetNWBool('IsKing', false) then
-        attacker:SetNWInt('KingFrags', attacker:GetNWInt('KingFrags', 0) + 1)
-        attacker:AddFrags(1)
-        attacker:AddStatPoints('KingFrags', 1)
-    end
-    
     -- If the deceased is the King
     if ply:GetNWBool('IsKing', false) then
         ply:SetNWBool('IsKing', false)
         attacker:SetNWBool('IsKing', true)
-        attacker:SetNWInt('KingFrags', attacker:GetNWInt('KingFrags', 0) + 1)
-        attacker:AddFrags(5)
+        attacker:SetNWInt('KingPoints', ply:GetNWInt('KingPoints', 0) + 1)
+        attacker:AddFrags(1)
+        attacker:AddStatPoints('KingPoints', 1)
         attacker:AddStatPoints('KingEliminations', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
@@ -78,9 +73,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Similar to above, any kills with no king become king
     if not IsValid(GAMEMODE.CurrentKing) then
         attacker:SetNWBool('IsKing', true)
-        attacker:SetNWInt('KingFrags', attacker:GetNWInt('KingFrags', 0) + 1)
+        attacker:SetNWInt('KingPoints', ply:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
-        attacker:AddStatPoints('KingFrags', 1)
+        attacker:AddStatPoints('KingPoints', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
@@ -102,11 +97,25 @@ end
 
 hook.Add('PreRoundStart', 'ResetKing', function()
 	for k,v in pairs(player.GetAll()) do
-		v:SetNWInt("KingFrags", 0)
+		v:SetNWInt("KingPoints", 0)
         v:SetNWBool("IsKing", false)
 	end
     GAMEMODE.CurrentKing = nil
 end )
+
+hook.Add('Think', 'KingTimer', function()
+    if GetGlobalString('RoundState') != 'InRound' then return end
+    if GAMEMODE.LastKingThink and CurTime() >= GAMEMODE.LastKingThink+1 then
+        if IsValid(GAMEMODE.CurrentKing) then
+            GAMEMODE.CurrentKing:AddFrags(1)
+            GAMEMODE.CurrentKing:SetNWInt('KingPoints', GAMEMODE.CurrentKing:GetNWInt('KingPoints', 0) + 1)
+            GAMEMODE.CurrentKing:EmitSound("npc/roller/code2.wav")
+            GAMEMODE.LastKingThink = CurTime()
+        end
+    elseif not GAMEMODE.LastKingThink then
+        GAMEMODE.LastKingThink = CurTime()
+    end
+end)
 
 -- Basic function to get the player with the most frags
 function GM:GetWinningPlayer()
@@ -117,7 +126,7 @@ function GM:GetWinningPlayer()
     local bestscore = 0
     local bestplayer = nil
     for k,v in pairs( player.GetAll() ) do
-        local frags = v:GetNWInt("KingFrags")
+        local frags = v:GetNWInt("KingPoints")
         if frags > bestscore then
             bestscore = frags
             bestplayer = v
