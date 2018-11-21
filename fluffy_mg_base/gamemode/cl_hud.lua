@@ -341,15 +341,15 @@ function GM:CreateRoundEndPanel(message, tagline)
     p.Message = message
     function p:Paint(w, h)
         if self.TagLine then
-            draw.RoundedBoxEx(8, 0, 0, w, h-bar_h, GAMEMODE.FCol2, false, false, false, false)
-            draw.RoundedBoxEx(8, 0, h-bar_h, w, bar_h, GAMEMODE.FCol3, false, false, true, true)
+            draw.RoundedBoxEx(16, 0, 0, w, h-bar_h, GAMEMODE.FCol2, false, false, false, false)
+            draw.RoundedBoxEx(16, 0, h-bar_h, w, bar_h, GAMEMODE.FCol3, false, false, true, true)
             
-            draw.SimpleText(self.Message, 'FS_B32', w/2 + 2, 20 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.Message, 'FS_B32', w/2 + 2, 20 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(self.Message, 'FS_B32', w/2, 20, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(self.TagLine, 'FS_16', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         else
-            draw.RoundedBoxEx(8, 0, 0, w, h, GAMEMODE.FCol2, false, false, true, true)
-            draw.SimpleText(self.Message, 'FS_B32', w/2 + 2, h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.RoundedBoxEx(16, 0, 0, w, h, GAMEMODE.FCol2, false, false, true, true)
+            draw.SimpleText(self.Message, 'FS_B32', w/2 + 2, h/2 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(self.Message, 'FS_B32', w/2, h/2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
     end
