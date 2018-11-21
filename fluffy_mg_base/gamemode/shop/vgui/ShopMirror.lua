@@ -17,6 +17,7 @@ end
 
 function PANEL:LayoutEntity(ent)
     self:RunAnimation()
+    ent:SetEyeTarget( Vector(24, 0, 64) )
 
     if not self.Angles then
         self.Angles = Angle(0, 0, 0)
@@ -62,7 +63,6 @@ end
 function PANEL:Think()
     if self.Transition then
         local time_percent = (CurTime() - self.Transition.start)/self.Transition.duration
-        print(time_percent)
         local smooth = math.EaseInOut(time_percent, 0.5, 0.5)
         smooth = math.min(smooth, 1)
         

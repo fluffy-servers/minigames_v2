@@ -1,6 +1,6 @@
 include('cl_inventory.lua')
 include('vgui/ShopMirror.lua')
-include('vgui/ShopItem.lua')
+include('vgui/ShopItemPanel.lua')
 
 surface.CreateFont('FS_I16', {
     font = 'Roboto',
