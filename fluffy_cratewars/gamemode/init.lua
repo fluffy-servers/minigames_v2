@@ -38,8 +38,10 @@ hook.Add('PreRoundStart', 'PrepareCratePhase', function()
 	end
 	
 	GAMEMODE.CratePhase = true
-	
-	timer.Simple(math.random(45, 65), function() GAMEMODE:StartBattlePhase() end)
+    
+  local time = math.random(40, 60)
+  timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!") end)
+  timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
 end )
 
 hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)

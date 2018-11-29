@@ -13,7 +13,7 @@ end
 function ENT:StartTouch( entity )
 	if IsValid( self ) && entity:IsPlayer() then
         self:Remove()
-		GAMEMODE:EndRound( entity )
+		GAMEMODE:IncomingVictory( entity )
 	end
 end
 

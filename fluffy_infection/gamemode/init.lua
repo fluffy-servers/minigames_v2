@@ -64,3 +64,11 @@ function GM:StatsRoundWin(winners)
         end
     end
 end
+
+hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
+    local wep = dmg:GetInflictor()
+    if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
+    if wep:GetClass() == "weapon_fists" then
+        dmg:ScaleDamage(3)
+    end
+end)

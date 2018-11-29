@@ -434,6 +434,7 @@ function GM:GetPlayerInfoPanel(ply)
     local avatar = vgui.Create('AvatarCircle', panel)
     avatar:SetSize(32, 32)
     avatar:SetPos(16, 16)
+    avatar.Avatar:SetPlayer(ply, 32)
     local last_health = ply:GetMaxHealth() or 100
     function panel:Paint(w, h)
         -- Small animation for the arc
@@ -449,10 +450,12 @@ function GM:GetPlayerInfoPanel(ply)
         
         draw.NoTexture()
         
-        local c = team.GetColor(ply:Team())
-        if not GAMEMODE.TeamBased then
-            local v = ply:GetPlayerColor()
-            c = Color(v.x * 255, v.y * 255, v.z * 255)
+        local c = Color(0, 168, 255)
+        if GAMEMODE.TeamBased then
+            c = team.GetColor(ply:Team())
+        else
+            local pc = ply:GetPlayerColor()
+            c = Color(pc.r*255, pc.g*255, pc.b*255)
         end
         
         local poly = poly or draw.CirclePoly(32, 32, 26, 24)

@@ -329,6 +329,14 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     end
 end
 
+hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
+    local wep = dmg:GetInflictor()
+    if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
+    if wep:GetClass() == "weapon_shotgun" then
+        dmg:ScaleDamage(2)
+    end
+end)
+
 -- Import the component parts
 include('sv_database.lua')
 include('sv_stats.lua')

@@ -2,114 +2,20 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 
 include('shared.lua')
+include('sv_maps.lua')
 
 -- Nobody wins in Incoming ?
 function GM:GetWinningPlayer()
     return nil
 end
 
-INCMaps = {}
--- Default model list
-DefaultProps = {}
-DefaultProps['Geometric'] = {
-	"models/clannv/incoming/box/box1.mdl",
-	"models/clannv/incoming/box/box2.mdl",
-	"models/clannv/incoming/box/box3.mdl",
-	
-	"models/clannv/incoming/cone/cone1.mdl",
-	"models/clannv/incoming/cone/cone2.mdl",
-	"models/clannv/incoming/cone/cone3.mdl",
-	
-	"models/clannv/incoming/cylinder/cylinder1.mdl",
-	"models/clannv/incoming/cylinder/cylinder2.mdl",
-	"models/clannv/incoming/cylinder/cylinder3.mdl",
-	
-	"models/clannv/incoming/hexagon/hexagon1.mdl",
-	"models/clannv/incoming/hexagon/hexagon2.mdl",
-	"models/clannv/incoming/hexagon/hexagon3.mdl",
-	
-	"models/clannv/incoming/pentagon/pentagon1.mdl",
-	"models/clannv/incoming/pentagon/pentagon2.mdl",
-	"models/clannv/incoming/pentagon/pentagon3.mdl",
-	
-	"models/clannv/incoming/sphere/sphere1.mdl",
-	"models/clannv/incoming/sphere/sphere2.mdl",
-	"models/clannv/incoming/sphere/sphere3.mdl",
-	
-	"models/clannv/incoming/triangle/triangle1.mdl",
-	"models/clannv/incoming/triangle/triangle2.mdl",
-	"models/clannv/incoming/triangle/triangle3.mdl"
-}
-
-DefaultProps['Vehicles'] = {
-    'models/props_vehicles/van001a_physics.mdl',
-    'models/props_vehicles/car001a_hatchback.mdl',
-    'models/props_vehicles/car001b_hatchback.mdl',
-    'models/props_vehicles/car002a_physics.mdl',
-    'models/props_vehicles/car002b_physics.mdl',
-    'models/props_vehicles/car003a_physics.mdl',
-    'models/props_vehicles/car003b_physics.mdl',
-    'models/props_vehicles/car004a_physics.mdl',
-    'models/props_vehicles/car004b_physics.mdl',
-    'models/props_vehicles/car005a_physics.mdl',
-    'models/props_vehicles/car005b_physics.mdl',
-    'models/props_vehicles/apc001.mdl',
-    'models/props_vehicles/trailer001a.mdl',
-    'models/props_vehicles/trailer002a.mdl',
-    'models/props_vehicles/truck001a.mdl',
-    'models/props_vehicles/truck003a.mdl',
-}
-
-DefaultProps['Both'] = {
-    'models/props_vehicles/van001a_physics.mdl',
-    'models/props_vehicles/car001a_hatchback.mdl',
-    'models/props_vehicles/car001b_hatchback.mdl',
-    'models/props_vehicles/car002a_physics.mdl',
-    'models/props_vehicles/car002b_physics.mdl',
-    'models/props_vehicles/car003a_physics.mdl',
-    'models/props_vehicles/car003b_physics.mdl',
-    'models/props_vehicles/car004a_physics.mdl',
-    'models/props_vehicles/car004b_physics.mdl',
-    'models/props_vehicles/car005a_physics.mdl',
-    'models/props_vehicles/car005b_physics.mdl',
-    'models/props_vehicles/apc001.mdl',
-    'models/props_vehicles/trailer001a.mdl',
-    'models/props_vehicles/trailer002a.mdl',
-    'models/props_vehicles/truck001a.mdl',
-    'models/props_vehicles/truck003a.mdl',
-    
-    "models/clannv/incoming/box/box1.mdl",
-	"models/clannv/incoming/box/box2.mdl",
-	"models/clannv/incoming/box/box3.mdl",
-	
-	"models/clannv/incoming/cone/cone1.mdl",
-	"models/clannv/incoming/cone/cone2.mdl",
-	"models/clannv/incoming/cone/cone3.mdl",
-	
-	"models/clannv/incoming/cylinder/cylinder1.mdl",
-	"models/clannv/incoming/cylinder/cylinder2.mdl",
-	"models/clannv/incoming/cylinder/cylinder3.mdl",
-	
-	"models/clannv/incoming/hexagon/hexagon1.mdl",
-	"models/clannv/incoming/hexagon/hexagon2.mdl",
-	"models/clannv/incoming/hexagon/hexagon3.mdl",
-	
-	"models/clannv/incoming/pentagon/pentagon1.mdl",
-	"models/clannv/incoming/pentagon/pentagon2.mdl",
-	"models/clannv/incoming/pentagon/pentagon3.mdl",
-	
-	"models/clannv/incoming/sphere/sphere1.mdl",
-	"models/clannv/incoming/sphere/sphere2.mdl",
-	"models/clannv/incoming/sphere/sphere3.mdl",
-	
-	"models/clannv/incoming/triangle/triangle1.mdl",
-	"models/clannv/incoming/triangle/triangle2.mdl",
-	"models/clannv/incoming/triangle/triangle3.mdl"
-}
-
 -- No weapons
 function GM:PlayerLoadout( ply )
 
+end
+
+function GM:EndingPoint()
+    return GAMEMODE.MapInfo[game.GetMap()].endpos
 end
 
 CurrentPropsCategory = 'Both'
@@ -119,9 +25,9 @@ INCPropSpawnTimer = 0
 local Delay = 2
 hook.Add("Tick", "TickPropSpawn", function()
     if GetGlobalString('RoundState') != 'InRound' then return end
-    local Props = DefaultProps[ CurrentPropsCategory ]
+    local Props = GAMEMODE.DefaultProps[ CurrentPropsCategory ]
 	if ( INCPropSpawnTimer < CurTime() ) then
-		for k, v in pairs( ents.FindByClass( INCMaps["SpawnEntity"] or 'inc_prop_spawner' ) ) do
+		for k, v in pairs( ents.FindByClass('inc_prop_spawner') ) do
 			INCPropSpawnTimer = CurTime() + Delay
 			local Ent = ents.Create( "prop_physics" )
 			Ent:SetModel( Props[ math.random( 1, #Props ) ] )
@@ -132,11 +38,54 @@ hook.Add("Tick", "TickPropSpawn", function()
 	end
 end )
 
+-- Randomly pick a group of props
 hook.Add('PreRoundStart', 'IncomingPropsChange', function()
-    local category = table.Random( table.GetKeys( DefaultProps ) )
+    local category = table.Random( table.GetKeys( GAMEMODE.DefaultProps ) )
     CurrentPropsCategory = category
+    
+    for k,v in pairs(player.GetAll()) do
+        v.BestDistance = nil
+    end
 end )
 
+function GM:GetDistanceToEnd(ply)
+    local endpos = GAMEMODE:EndingPoint()
+    local distance = ply:GetPos():Distance(endpos)
+    local maxdist = GAMEMODE.MapInfo[game.GetMap()].distance
+    local percent = 1 - (distance / maxdist)
+    if percent < 0 then return end
+    
+    if ply.BestDistance then
+        if percent > ply.BestDistance then
+            ply.BestDistance = percent
+        end
+    else
+        ply.BestDistance = percent
+    end
+end
+
+-- Get a % of how close the player got to the ending
+-- This is used for better scoring than all-or-nothing
+hook.Add('DoPlayerDeath', 'IncomingDistanceCheck', function(ply)
+    GAMEMODE:GetDistanceToEnd(ply)
+end)
+
+hook.Add('RoundEnd', 'IncomingDistancePoints', function()
+    for k,v in pairs(player.GetAll()) do
+        GAMEMODE:GetDistanceToEnd(v)
+        if v.BestDistance then
+            local p = math.floor(v.BestDistance * 100)
+            v:AddStatPoints('IncomingDistance', p)
+            v:AddFrags(math.floor(p/10))
+        end
+    end
+end)
+
+function GM:IncomingVictory(ply)
+    ply:AddFrags(3)
+    ply.BestDistance = 1
+    GAMEMODE:EndRound(ply)
+end
 
 -- Network resources
 function IncludeResFolder( dir )
@@ -170,7 +119,6 @@ hook.Add('Initialize', 'AddIncomingStatConversions', function()
 end)
 
 IncludeResFolder( "materials/models/clannv/incoming/" )
-
 IncludeResFolder( "models/clannv/incoming/box/" )
 IncludeResFolder( "models/clannv/incoming/cone/" )
 IncludeResFolder( "models/clannv/incoming/cylinder/" )
