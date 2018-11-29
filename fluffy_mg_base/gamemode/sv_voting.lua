@@ -15,18 +15,20 @@ GM.VoteGamemodes = {
     {'fluffy_bombtag', 'Bomb Tag', 'FFA Elimination'},
     {'fluffy_laserdance', 'Laser Dance', 'Free For All'},
 	{'fluffy_balls', 'Ballz', 'Free For All'},
-	{'fluffy_cratewars', 'Crate Wars', 'Free For All'},
+	--{'fluffy_cratewars', 'Crate Wars', 'Free For All'},
 	{'fluffy_oitc', 'One in the Chamber', 'Team DM'},
-    {'fluffy_balloons', 'Balloons', 'Free For All'},
-    {'fluffy_shootingrange', 'Shooting Range', 'Team DM'},
-    {'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
+    --{'fluffy_balloons', 'Balloons', 'Free For All'},
+    --{'fluffy_shootingrange', 'Shooting Range', 'Team DM'},
+    --{'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
     {'fluffy_gungame', 'Gun Game', 'FFA'},
-    {'fluffy_kingmaker', 'Kingmaker', 'FFA'},
-    {'fluffy_fortwars', 'Fort Wars', 'Team DM'},
+    --{'fluffy_kingmaker', 'Kingmaker', 'FFA'},
+    --{'fluffy_fortwars', 'Fort Wars', 'Team DM'},
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_neonone', 'pvp_rainbow2', 'pvp_warehouse'}
+local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2'}
+local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2'}
+
 GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v2'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
@@ -44,7 +46,7 @@ GM.VoteMaps = {
     fluffy_shootingrange = {'cb_cylinder', 'cb_split'},
     fluffy_infection = pvp_maps,
     fluffy_kingmaker = pvp_maps,
-    fluffy_gungame = pvp_maps,
+    fluffy_gungame = pvp_maps_team,
     fluffy_fortwars = {'fw_battlefield'},
 }
 
