@@ -3,6 +3,9 @@ include('prop_list.lua')
 
 GM.Name = 'Fortwars'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Build forts and then compete for the flag!
+]]
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundTime = 240

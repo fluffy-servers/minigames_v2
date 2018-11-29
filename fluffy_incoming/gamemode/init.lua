@@ -114,6 +114,10 @@ function IncludeResFolder( dir )
 	end
 end
 
+hook.Add('Initialize', 'AddIncomingStatConversions', function()
+    GAMEMODE:AddStatConversion('Distance', 'Slope Distance', 0.01)
+end)
+
 IncludeResFolder( "materials/models/clannv/incoming/" )
 IncludeResFolder( "models/clannv/incoming/box/" )
 IncludeResFolder( "models/clannv/incoming/cone/" )

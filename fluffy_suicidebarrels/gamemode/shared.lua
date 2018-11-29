@@ -8,6 +8,20 @@ DeriveGamemode('fluffy_mg_base')
 
 GM.Name = 'Suicide Barrels'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Some explosive barrels have turned sentient.
+    
+    When a human is eliminated, they will join the Barrel team.
+    
+    Humans:
+     Try to survive against the onslaught
+     Shoot a barrel and it will explode instantly
+     Be cautious! Don't shoot barrels to close to teammates
+     
+    Barrels:
+     Try to eliminate all the humans before time runs out
+     Left click to explode after a short delay
+]]
 
 TEAM_RED = 1
 TEAM_BLUE = 2

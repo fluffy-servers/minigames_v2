@@ -20,6 +20,18 @@ function GM:GetAlivePlayers()
     return tbl
 end
 
+-- Timing based on active players
+function GM:GetNewBombTime()
+    local amount = player.GetCount()
+    if amount < 4 then
+        return math.random(16, 30)
+    elseif amount < 8 then
+        return math.random(12, 20)
+    else
+        return math.random(10, 15)
+    end
+end
+
 -- Select a bomber at random
 function GM:PickBomber()
 	for k,v in pairs( player.GetAll() ) do 
@@ -32,7 +44,7 @@ function GM:PickBomber()
 	-- Give the bomb & set the time randomly
 	local newply = table.Random( GAMEMODE:GetAlivePlayers() )
 	newply:SetCarrier( true )
-	newply:SetTime(math.random(15, 30))
+	newply:SetTime(GAMEMODE:GetNewBombTime())
 	newply:StripWeapons()
 	newply:Give('bt_bomb')
 end
@@ -55,6 +67,15 @@ hook.Add('RoundEnd', 'RemoveSpareBombs', function()
 		v:StripWeapons()
 	end
 end )
+
+-- Check disconnected players for bombs
+-- This should help ensure there is always a bomb in play
+hook.Add('PlayerDisconnected', 'DisconnectBombCheck', function(ply)
+    if ply:IsCarrier() then
+        timer.Simple(1, function() GAMEMODE:PickBomber() end)
+        ply:KillSilent()
+    end
+end)
 
 -- Track survived rounds
 function GM:StatsRoundWin(winners)

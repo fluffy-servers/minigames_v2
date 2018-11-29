@@ -118,6 +118,7 @@ function GM:EndRound(reason)
     -- Send the result to the players
     net.Start('EndRound')
         net.WriteString( msg )
+        net.WriteString('')
     net.Broadcast()
     
     -- STATS: Add round wins

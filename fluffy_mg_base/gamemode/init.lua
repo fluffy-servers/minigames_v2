@@ -75,12 +75,24 @@ hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     -- Assign teams
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam( ply, team.BestAutoJoinTeam() )
-    elseif GAMEMODE.TeamBased then
-        ply:ConCommand( "gm_showteam" )
     else
+        ply:ConCommand("minigames_info")
+    end
+    
+    if not GAMEMODE.TeamBased then
         ply:SetTeam( TEAM_UNASSIGNED )
     end
 end)
+
+-- Rebind help menu
+function GM:ShowHelp(ply)
+    ply:ConCommand("minigames_info")
+end
+
+-- Rebind team menu
+function GM:ShowTeam(ply)
+    ply:ConCommand("minigames_info")
+end
 
 -- Disable friendly fire
 function GM:PlayerShouldTakeDamage( victim, ply )
@@ -202,14 +214,44 @@ function GM:GetTeamLivingPlayers( t )
     return alive
 end
 
+-- Table shuffle
+-- Borrowed from TTT
+-- Fisher-Yates implementation
+local table = table
+function table.Shuffle(t)
+  local n = #t
+
+  while n > 2 do
+    -- n is now the last pertinent index
+    local k = rand(n) -- 1 <= k <= n
+    -- Quick swap
+    t[n], t[k] = t[k], t[n]
+    n = n - 1
+  end
+
+  return t
+end
+
 -- Pick a random player
-function GM:GetRandomPlayer()
-    local ply = table.Random( player.GetAll() )
-    while ply:Team() == TEAM_SPECTATOR do
-        ply = table.Random( player.GetAll() )
+function GM:GetRandomPlayer(num, forcetable)
+    num = num or 1
+    local players = table.Shuffle(player.GetAll())
+    local output = {}
+    local i = 1
+    while #output < num do
+        if i > #players then break end
+        local p = players[i]
+        i = i + 1
+        if p:Team() == TEAM_SPECTATOR then continue end
+        if p.Spectating then continue end
+        table.insert(output, p)
     end
     
-    return ply
+    if num == 1 and not forcetable then
+        return output[1] -- return entity for compatibility
+    else
+        return output -- return table
+    end
 end
 
 -- This is for rewarding melons at the end of a game

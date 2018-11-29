@@ -31,16 +31,17 @@ function GM:StartBattlePhase()
 	end
 end
 
-hook.Add('RoundStart', 'PrepareCratePhase', function()
+hook.Add('PreRoundStart', 'PrepareCratePhase', function()
 	for k,v in pairs(player.GetAll()) do
 		v.SmashedCrates = 0
+        v:SetNWInt('Crates', 0)
 	end
 	
 	GAMEMODE.CratePhase = true
-	
-    local time = math.random(40, 60)
-    timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!") end)
-	timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
+    
+  local time = math.random(40, 60)
+  timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!") end)
+  timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
 end )
 
 hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)

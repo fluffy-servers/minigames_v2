@@ -3,7 +3,7 @@ include('shared.lua')
 GM.ScoringPaneEnabled = true
 
 function GM:ScoringPaneScore(ply)
-	return ply:GetNWInt("KingFrags", 0)
+	return ply:GetNWInt("KingPoints", 0)
 end
 
 -- Draw BIG label above the King

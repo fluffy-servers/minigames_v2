@@ -19,11 +19,22 @@ function GM:PlayerLoadout( ply )
         
         ply:SetRunSpeed(300)
         ply:SetWalkSpeed(200)
+        ply:SetBloodColor(BLOOD_COLOR_RED)
     elseif ply:Team() == TEAM_RED then
         -- Infected
-        ply:Give('weapon_fists')
-        ply:SetRunSpeed(400)
-        ply:SetWalkSpeed(250)
+        -- Initial infected are stronger but slower
+        ply:SetBloodColor(BLOOD_COLOR_GREEN)
+        if ply.InitialHunter then
+            ply:SetMaxHealth(200)
+            ply:SetHealth(200)
+            ply:Give('weapon_fists')
+            ply:SetRunSpeed(400)
+            ply:SetWalkSpeed(200)
+        else
+            ply:Give('weapon_fists')
+            ply:SetRunSpeed(500)
+            ply:SetWalkSpeed(300)
+        end
     end
 end
 

@@ -44,9 +44,9 @@ function GM:HUDPaint()
         self:DrawCrosshair(x, y)
     else
         local tr = LocalPlayer():GetEyeTrace()
-        if (tr.Entity and not tr.Entity:IsPlayer()) or (!tr.Entity) then
+        --if (tr.Entity and not tr.Entity:IsPlayer()) or (!tr.Entity) then
             self:DrawCrosshair(ScrW()/2, ScrH()/2)
-        end
+        --end
     end
 	
 	-- Scoring pane
@@ -124,14 +124,6 @@ function GM:DrawRoundState()
         draw.SimpleText( 'Waiting For Players...', "FS_40", 4+2, 4+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
 		draw.SimpleText( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
-    end
-    
-    -- Draw message for end of rounds (if applicable)
-    -- This amazingly hasn't been improved in a while -> consider reworking & making nice
-    -- 14th November: Slightly improved
-    if EndGameMessage then
-        draw.SimpleText( EndGameMessage, "FS_32", ScrW()/2 + 2, 35, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        draw.SimpleText( EndGameMessage, "FS_32", ScrW()/2, 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     
     -- Draw spectating message on bottom (very rare)
@@ -331,12 +323,48 @@ function GM:DrawAmmo()
     -- Todo: add a check for 'infinite' ammo (I think this is done)
 end
 
+function GM:CreateRoundEndPanel(message, tagline)
+    surface.PlaySound( 'friends/friend_join.wav' )
+    if IsValid(GAMEMODE.RoundEndPanel) then
+        GAMEMODE.RoundEndPanel:Remove()
+    end
+    
+    local w = 288
+    local h = 64
+    local bar_h = 24
+    local p = vgui.Create('DPanel')
+    p:SetSize(w, h)
+    p:SetPos(ScrW()/2 - w/2, -h)
+    p.TagLine = tagline or nil
+    if p.TagLine == '' or p.TagLine == ' ' then p.TagLine = nil end
+    
+    p.Message = message
+    function p:Paint(w, h)
+        if self.TagLine then
+            draw.RoundedBoxEx(16, 0, 0, w, h-bar_h, GAMEMODE.FCol2, false, false, false, false)
+            draw.RoundedBoxEx(16, 0, h-bar_h, w, bar_h, GAMEMODE.FCol3, false, false, true, true)
+            
+            draw.SimpleText(self.Message, 'FS_B32', w/2 + 2, 20 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.Message, 'FS_B32', w/2, 20, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.TagLine, 'FS_16', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        else
+            draw.RoundedBoxEx(16, 0, 0, w, h, GAMEMODE.FCol2, false, false, true, true)
+            draw.SimpleText(self.Message, 'FS_B32', w/2 + 2, h/2 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.Message, 'FS_B32', w/2, h/2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        end
+    end
+    
+    p:MoveTo(ScrW()/2 - w/2, 0, 1, 0, -1, function(anim, p)
+        p:MoveTo(ScrW()/2 - w/2, -h, 1, GAMEMODE.RoundCooldown - 1, -1, function(anim, p) p:Remove() end)
+    end)
+end
+
 -- Play a COOL sound when the round ends!
 -- Also display the EndGameMessage -> update the look of this soon
 net.Receive( 'EndRound', function()
-	surface.PlaySound( 'friends/friend_join.wav' )
-    EndGameMessage = net.ReadString()
-    timer.Simple( GAMEMODE.RoundCooldown, function() EndGameMessage = nil end )
+    local msg = net.ReadString()
+    local tagline = net.ReadString()
+    GAMEMODE:CreateRoundEndPanel(msg, tagline)
 end )
 
 function GM:ScoringPaneScore(ply)
@@ -430,17 +458,21 @@ function GM:GetPlayerInfoPanel(ply)
             c = Color(pc.r*255, pc.g*255, pc.b*255)
         end
         
-        local poly = poly or draw.CirclePoly(32, 32, 24, 24)
+        local poly = poly or draw.CirclePoly(32, 32, 26, 24)
         surface.SetDrawColor(c)
         surface.DrawPoly(poly)
         
         local ang = (hp/hp_max) * -360
         if ang % 2 == 1 then ang = ang - 1 end
-        draw.Arc(32, 32, 20, 8, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
+        draw.Arc(32, 32, 24, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
         
         local name = ply:Nick()
-        draw.SimpleText(name, "FS_24", 64 + 1, 32 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        draw.SimpleText(name, "FS_24", 64, 32, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(name, "FS_24", 64 + 1, 24 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(name, "FS_24", 64, 24, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        
+        hp = math.floor(hp)
+        draw.SimpleText(hp .. 'HP', 'FS_24', 64+1, 24+1 + 20, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(hp .. 'HP', 'FS_24', 64, 24 + 20, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
     
     GAMEMODE.PlayerPanels[ply] = panel
