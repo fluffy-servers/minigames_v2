@@ -18,6 +18,7 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
             v:SetTeam( GAMEMODE.SurvivorTeam )
             num_players = num_players + 1
             v.InitialHunter = false
+            v.Spectating = false
         end
         
         -- Make 20% of players (+1) hunters

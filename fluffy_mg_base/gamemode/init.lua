@@ -235,6 +235,12 @@ end
 -- Pick a random player
 function GM:GetRandomPlayer(num, forcetable)
     num = num or 1
+    
+    -- Return one player for compatibility
+    if num == 1 and not forcetable then
+        return table.Random(GAMEMODE:GetLivingPlayers())
+    end
+    
     local players = table.Shuffle(player.GetAll())
     local output = {}
     local i = 1
@@ -247,11 +253,7 @@ function GM:GetRandomPlayer(num, forcetable)
         table.insert(output, p)
     end
     
-    if num == 1 and not forcetable then
-        return output[1] -- return entity for compatibility
-    else
-        return output -- return table
-    end
+    return output -- return table
 end
 
 -- This is for rewarding melons at the end of a game
