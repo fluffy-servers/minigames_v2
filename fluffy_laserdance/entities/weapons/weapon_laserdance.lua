@@ -23,8 +23,9 @@ end
 
 SWEP.ViewModelFOV	= 62
 SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/weapons/v_357.mdl"
+SWEP.ViewModel		= "models/weapons/c_357.mdl"
 SWEP.WorldModel		= "models/weapons/w_357.mdl"
+SWEP.UseHands       = true
 SWEP.AnimPrefix		= "python"
 
 SWEP.Spawnable			= false
