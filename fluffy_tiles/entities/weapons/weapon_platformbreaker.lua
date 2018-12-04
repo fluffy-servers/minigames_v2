@@ -39,7 +39,6 @@ function SWEP:PrimaryAttack()
         tr.endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 500
         tr.filter = {self.Owner}
         local trace = util.TraceLine(tr)
-        print(trace.Entity, IsValid(trace.Entity))
         if IsValid(trace.Entity) and trace.Entity:GetClass() == 'til_tile' then
             trace.Entity:OnTakeDamage(self.Owner)
         end
