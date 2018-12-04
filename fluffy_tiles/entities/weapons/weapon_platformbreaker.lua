@@ -78,7 +78,7 @@ function SWEP:Knockback()
     if trace.Hit and trace.Entity and trace.Entity:IsPlayer() then
         local dist = self.Owner:GetPos():DistToSqr(trace.Entity:GetPos())
         if dist < 90000 then
-            trace.Entity:SetVelocity(trace.Entity:GetVelocity() + ((self.Owner:GetAimVector()+Vector(0, 0, 0.5)) * 1200) )
+            trace.Entity:SetVelocity(trace.Entity:GetVelocity() + ((self.Owner:GetAimVector() * 1000) + Vector(0, 0, 50) ))
         end
     end
     
