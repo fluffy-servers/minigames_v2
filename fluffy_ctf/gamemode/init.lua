@@ -64,6 +64,12 @@ function GM:ScoreGoal(team)
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     
     GAMEMODE:EndRound(team)
+    
+    -- Bonus to the person who scores the capture
+    if IsValid(GAMEMODE.LastCarrier) then
+        GAMEMODE.LastCarrier:AddFrags(3)
+        GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
+    end
 end
 
 function GM:GravGunOnPickedUp(ply, ent)
