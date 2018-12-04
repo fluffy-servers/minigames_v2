@@ -12,21 +12,27 @@ end
 
 function GM:SpawnFlag()
     local flag = ents.Create('ctf_flag')
-    local spawn = ents.FindByClass('ctf_flagspawn')[1]
-    if not IsValid(spawn) then
-        print('Spawn not found! Oh no!')
-        return
+    if not IsValid(flag) then return end
+    
+    if not GAMEMODE.FlagSpawnPosition then
+        local spawn = ents.FindByClass('ctf_flagspawn')[1]
+        if not IsValid(spawn) then
+            print('Spawn not found! Oh no!')
+            return
+        end
+        
+        GAMEMODE.FlagSpawnPosition = spawn:GetPos()
     end
-    flag:SetPos(spawn:GetPos())
+    
+    flag:SetPos(GAMEMODE.FlagSpawnPosition)
     flag:Spawn()
     flag:SetNWString('CurrentTeam', 'none')
     GAMEMODE.FlagEntity = flag
     return flag
 end
 
-hook.Add('PreRoundStart', 'InitialSpawnFlag', function()
-    timer.Simple(1, function() print('spawning after delay') GAMEMODE:SpawnFlag() end)
-    
+hook.Add('RoundStart', 'InitialSpawnFlag', function()
+    timer.Simple(2, function() GAMEMODE:SpawnFlag() end)
     GAMEMODE.LastCarrier = nil
 end )
 
