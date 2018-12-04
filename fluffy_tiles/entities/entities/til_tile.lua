@@ -96,4 +96,9 @@ function ENT:Drop()
         phys:Wake()
         phys:EnableMotion(true)
     end
+    
+    timer.Simple(1, function()
+        if not IsValid(self) then return end
+        self:Remove()
+    end)
 end
