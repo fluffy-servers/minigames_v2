@@ -31,3 +31,16 @@ function GM:PulseAnnouncement(duration, text, size, sound)
         net.WriteTable(tbl)
     net.Broadcast()
 end
+
+function GM:PlayerOnlyAnnouncement(ply, duration, text, size, sound)
+    local tbl = {
+        type = 'pulse',
+        duration = duration,
+        sound = sound,
+        text = text,
+        size = size,
+    }
+    net.Start('MinigamesAnnouncement')
+        net.WriteTable(tbl)
+    net.Send(ply)
+end
