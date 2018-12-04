@@ -20,6 +20,7 @@ local crosshair_mat = Material('crosshair_outline/crosshair012.png', 'noclamp sm
 -- To draw in center of screen: DrawCrossHair(ScrW()/2, ScrH()/2)
 function GM:DrawCrosshair(x, y, size, force, color )
     if not LocalPlayer():Alive() or LocalPlayer():Team() == TEAM_SPECTATOR then return end
+    if GAMEMODE.CoolTransition != nil then return end
     
     local crosshair_enabled = GetConVar('crosshair')
     

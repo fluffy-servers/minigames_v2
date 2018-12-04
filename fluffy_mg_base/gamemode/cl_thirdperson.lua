@@ -74,6 +74,9 @@ function GM:TransitionView(ply, origin, angles, fov)
     
     local targetpos = GAMEMODE.CoolTransition.pos
     if GAMEMODE.CoolTransition.ent then
+        if not IsValid(GAMEMODE.CoolTransition.ent) then
+            GAMEMODE:EndCoolTransition()
+        end
         targetpos = targetpos + GAMEMODE.CoolTransition.ent:GetPos()
     end
     
