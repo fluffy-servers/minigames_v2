@@ -36,7 +36,7 @@ function SWEP:PrimaryAttack()
     if SERVER then
         local tr = {}
         tr.start = self.Owner:GetShootPos()
-        tr.endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 500
+        tr.endpos = self.Owner:GetShootPos() + self.Owner:GetAimVector() * 1500
         tr.filter = {self.Owner}
         local trace = util.TraceLine(tr)
         if IsValid(trace.Entity) and trace.Entity:GetClass() == 'til_tile' then
@@ -76,8 +76,8 @@ function SWEP:Knockback()
     
     if trace.Hit and trace.Entity and trace.Entity:IsPlayer() then
         local dist = self.Owner:GetPos():DistToSqr(trace.Entity:GetPos())
-        if dist < 90000 then
-            trace.Entity:SetVelocity(trace.Entity:GetVelocity() + ((self.Owner:GetAimVector() * 1000) + Vector(0, 0, 50) ))
+        if dist < 400000 then
+            trace.Entity:SetVelocity(trace.Entity:GetVelocity() + ((self.Owner:GetAimVector() + Vector(0, 0, 0.3)) * 900))
         end
     end
     

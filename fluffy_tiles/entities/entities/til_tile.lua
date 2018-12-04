@@ -33,29 +33,50 @@ function ENT:Touch(ent)
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
     
-    self:AddDamage(FrameTime() * 50)
+    if self.HasPowerup and ent.ActivePowerup == nil then
+        GAMEMODE:PowerUpApply(ent, self.Powerup)
+        GAMEMODE:PlayerOnlyAnnouncement(ent, 3, GAMEMODE.PowerUps[self.Powerup].Text, 1)
+        self.Powerup = nil
+        self.HasPowerup = false
+        self:AddDamage(0)
+    end
+    
+    self:AddDamage(FrameTime() * 80)
 end
 
-function ENT:OnTakeDamage(attacker)
+function ENT:AddPowerUp(type)
+    self.HasPowerup = true
+    self.Powerup = type
+    
+    self:SetColor( Color(0, 255, 150) )
+end
+
+function ENT:OnTakeDamage(attacker, weapon)
     if attacker and IsValid(attacker) then
         self.LastAttacker = attacker
     end
     
-    local tmod = CurTime() - self.CreationTime
-    local damageamount = 15 + 20*(tmod/120)
-    self:AddDamage(damageamount)
+    if weapon == 'crowbar' then
+        self:AddDamage(100)
+    else
+        local tmod = CurTime() - self.CreationTime
+        local damageamount = 20 + 35*(tmod/120)
+        self:AddDamage(damageamount)
+    end
 end
 
 function ENT:AddDamage(amount)
     self.MyHealth = self.MyHealth - amount
     local scale = math.Clamp(self.MyHealth/100, 0, 1)
-    local r,g,b = (255), (scale*255), (scale*255)
-	self:SetColor( Color( r, g, b ) )
     
-    if self.MyHealth <= 0 and not self.Dropped then
+    if not self.HasPowerup then
+        local r,g,b = (255), (scale*255), (scale*255)
+        self:SetColor( Color( r, g, b ) )
+    end
+    
+    if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerup then
         self.Dropped = true
         self:EmitSound(table.Random(self.ActivateSounds), 33, math.random(70, 130))
-        print('emittttt')
         
         timer.Simple(1, function()
             if not IsValid(self) then return end
