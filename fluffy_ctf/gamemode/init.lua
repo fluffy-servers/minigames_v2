@@ -2,6 +2,8 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
+util.AddNetworkString('CTFCameraTrigger')
+
 function GM:PlayerLoadout( ply )
     ply:SetWalkSpeed( 350 )
     ply:SetRunSpeed( 360 )
@@ -13,6 +15,7 @@ end
 function GM:SpawnFlag()
     local flag = ents.Create('ctf_flag')
     if not IsValid(flag) then return end
+    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     
     if not GAMEMODE.FlagSpawnPosition then
         local spawn = ents.FindByClass('ctf_flagspawn')[1]
@@ -32,7 +35,7 @@ function GM:SpawnFlag()
 end
 
 hook.Add('RoundStart', 'InitialSpawnFlag', function()
-    timer.Simple(2, function() GAMEMODE:SpawnFlag() end)
+    timer.Simple(1, function() GAMEMODE:SpawnFlag() end)
     GAMEMODE.LastCarrier = nil
 end )
 
@@ -70,6 +73,10 @@ function GM:ScoreGoal(team)
         GAMEMODE.LastCarrier:AddFrags(3)
         GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
     end
+    
+    net.Start('CTFCameraTrigger')
+        net.WriteEntity(GAMEMODE:GetFlagEntity())
+    net.Broadcast()
 end
 
 function GM:GravGunOnPickedUp(ply, ent)
