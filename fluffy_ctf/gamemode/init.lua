@@ -10,6 +10,11 @@ function GM:PlayerLoadout( ply )
     
     ply:Give('weapon_physcannon')
     ply:Give('weapon_crowbar')
+    
+    ply:Give("weapon_smg1")
+	ply:Give("weapon_shotgun")
+    ply:GiveAmmo(512, "SMG1", true)
+	ply:GiveAmmo(512, "Buckshot", true)
 end
 
 function GM:SpawnFlag()
