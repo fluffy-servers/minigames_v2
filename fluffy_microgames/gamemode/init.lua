@@ -70,6 +70,12 @@ function GM:EndRound(reason)
     -- Stop the timer
     timer.Remove('GamemodeTimer')
     
+    if GAMEMODE.CurrentModifier.func_check then
+        for k,v in pairs(player.GetAll()) do
+            GAMEMODE.CurrentModifier.func_check(v)
+        end
+    end
+    
     -- The end of each round is honestly the painful part
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
