@@ -21,6 +21,10 @@ GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?
 
+GM.RoundType = 'default'    -- What system should be used for game/round logic?
+GM.GameTime = 600           -- If not using rounds, how long should the game go for?
+GM.EndOnTimeOut = true      -- If using 'timed' RoundType, should this cut off the middle of a round?
+
 GM.CanSuicide = true            -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
 
