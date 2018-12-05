@@ -95,6 +95,7 @@ function GM:EndRound(reason)
 end
 
 function GM:EndModifier()
+    local modifier = GAMEMODE.CurrentModifier
     for k,v in pairs(player.GetAll()) do
         v:StripWeapons()
         v:StripAmmo()
@@ -103,7 +104,18 @@ function GM:EndModifier()
         v:SetMoveType(2)
         v:SetHealth(100)
         v:SetMaxHealth(100)
+        v:SetJumpPower(200)
         hook.Call('PlayerSetModel', GAMEMODE, v)
+        
+        if modifier.func_finish then
+            modifier.func_finish(v)
+        end
+    end
+    
+    if modifier.hooks then
+        for k,v in pairs(modifier.hooks) do
+            hook.Remove(k, modifier.name)
+        end
     end
 end
 
@@ -123,6 +135,12 @@ function GM:NewModifier()
     if modifier.func_player then
         for k,v in pairs(player.GetAll()) do
             modifier.func_player(v)
+        end
+    end
+    
+    if modifier.hooks then
+        for k,v in pairs(modifier.hooks) do
+            hook.Add(k, modifier.name, v)
         end
     end
     
