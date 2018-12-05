@@ -21,8 +21,7 @@ GM.RoundNumber = 3
 
 GM.RoundType = 'timed_endless'
 GM.GameTime = 300
-
-GM.MaxProps = 10
+GM.HUDStyle = 4
 
 function GM:Initialize()
 
