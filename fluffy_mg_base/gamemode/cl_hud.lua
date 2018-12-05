@@ -278,7 +278,7 @@ function GM:RoundStateTimerOnly()
     local GameTime = GetGlobalFloat('GameStartTime')
     
     if !GameTime then return end
-    if GAME_STATE == 'EndRound' then return end
+    --if GAME_STATE == 'EndRound' then return end
     
     local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
@@ -313,7 +313,7 @@ function GM:RoundStateTimerTeamScore()
     local GameTime = GetGlobalFloat('GameStartTime')
     
     if !GameTime then return end
-    if GAME_STATE == 'EndRound' then return end
+    --if GAME_STATE == 'EndRound' then return end
     
     local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
