@@ -28,8 +28,19 @@ function GM:PreStartRound()
 	SetGlobalFloat( 'RoundStart', CurTime() )
     hook.Call('PreRoundStart')
     
-    -- End any properties from the last gamemode modifier
-    GAMEMODE:EndModifier()
+    -- Respawn the dead
+    for k,v in pairs(player.GetAll()) do
+        if v.Spectating and v:Team() != TEAM_SPECTATOR then
+            v.Spectating = false
+            v:UnSpectate()
+            v:KillSilent()
+        end
+        v.RoundScore = 0
+        
+        if v:Team() == TEAM_SPECTATOR then return end
+        if not v:Alive() then v:Spawn() end
+        v:AddStatPoints('RoundsPlayed', 1)
+    end
     
     -- Start the round after a short cooldown
     timer.Simple(2, function() GAMEMODE:StartRound() end )
@@ -63,6 +74,7 @@ function GM:EndRound(reason)
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
     local msg = "The round has ended!"
+    winners, msg = GAMEMODE:HandleEndRound(reason)
     
     -- Send the result to the players
     net.Start('EndRound')
@@ -76,6 +88,7 @@ function GM:EndRound(reason)
     -- Move to next round
     SetGlobalString( 'RoundState', 'EndRound' )
     hook.Call('RoundEnd')
+    GAMEMODE:EndModifier()
     
     -- No cooldown in this gamemode
     timer.Simple(2, function() GAMEMODE:PreStartRound() end)
@@ -83,17 +96,6 @@ end
 
 function GM:EndModifier()
     for k,v in pairs(player.GetAll()) do
-        if v.Spectating and v:Team() != TEAM_SPECTATOR then
-            v.Spectating = false
-            v:UnSpectate()
-            v:KillSilent()
-        end
-        if v:Team() == TEAM_SPECTATOR then return end
-        
-        if not v:Alive() then v:Spawn() end
-        v:AddStatPoints('RoundsPlayed', 1)
-        
-        v.RoundKills = 0
         v:StripWeapons()
         v:StripAmmo()
         v:SetRunSpeed(300)
@@ -125,4 +127,46 @@ function GM:NewModifier()
     end
     
     GAMEMODE:PulseAnnouncementTwoLine(3, modifier.name, modifier.subtext)
+end
+
+--Handles victory conditions for Free for All based gamemodes
+function GM:HandleFFAWin(reason)
+    local winner = nil -- Default: everyone sucks
+    local msg = 'The round has ended!'
+    
+    -- If the time ran out, get the player with the most frags
+    -- Otherwise, the reason is likely the winner entity
+    if reason == 'TimeEnd' then
+        winner = GAMEMODE:GetWinningPlayer()
+    elseif IsEntity(reason) and reason:IsPlayer() then
+        winner = reason
+        winner:AddFrags(5)
+    end
+    
+    if IsValid(winner) then
+        msg = winner:Nick() .. ' wins the round!'
+    else
+        msg = 'Nobody has won the round'
+    end
+    return winner, msg
+end
+
+-- Basic function to get the player with the most frags
+function GM:GetWinningPlayer()
+    -- Doesn't really make sense in Team gamemodes
+    -- if GAMEMODE.TeamBased then return nil end
+    
+    -- Loop through all players and return the one with the most frags
+    local bestscore = 0
+    local bestplayer = nil
+    for k,v in pairs( player.GetAll() ) do
+        local frags = v.RoundScore or 0
+        if frags > bestscore then
+            bestscore = frags
+            bestplayer = v
+        end
+    end
+    
+    -- Return the winner! Yay!
+    return bestplayer
 end
