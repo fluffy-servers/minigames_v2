@@ -1,7 +1,5 @@
 DeriveGamemode('fluffy_mg_base')
 
-include('balls.lua')
-
 GM.Name = 'Dodgeball'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
