@@ -83,10 +83,12 @@ function GM:EndRound(reason)
     winners, msg = GAMEMODE:HandleEndRound(reason)
     
     -- Send the result to the players
-    net.Start('EndRound')
-        net.WriteString( msg )
-        net.WriteString('')
-    net.Broadcast()
+    if type(winners) == 'Player' then
+        net.Start('EndRound')
+            net.WriteString(msg)
+            net.WriteString('')
+        net.Broadcast()
+    end
     
     -- STATS: Add round wins
     GAMEMODE:StatsRoundWin(winners)
