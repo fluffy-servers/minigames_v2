@@ -112,13 +112,10 @@ local ammo_circle_shadow = draw.CirclePoly(ScrW() - c_pos+3, ScrH() - c_pos+3, r
 -- This used to be important before, but now the arcs barely drop the frame rates
 local fast_hud = CreateClientConVar("minigames_fast_hud", "0", true, false, "Set to 1 to stop drawing arcs")
 
--- Draw the state of the round, including time and round number
+-- Draw the state of the round, including time and round number etc.
 -- This is in the top left corner
 function GM:DrawRoundState()
-    -- Get round information
     local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
-    local RoundTime = GetGlobalFloat('RoundStart')
-    
     -- Only draw this if the game hasn't yet started
     if GAME_STATE == 'GameNotStarted' then
         draw.SimpleText( 'Waiting For Players...', "FS_40", 4+2, 4+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
@@ -130,6 +127,24 @@ function GM:DrawRoundState()
     if LocalPlayer():Team() == TEAM_SPECTATOR then
         draw.SimpleTextOutlined( 'You are a spectator', "FS_32", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
     end
+    
+    if not GAMEMODE.HUDStyle or GAMEMODE.HUDStyle == 1 then
+        GAMEMODE:RoundStateDefault()
+    elseif GAMEMODE.HUDStyle == 2 then
+        GAMEMODE:RoundStateWithTimer()
+    elseif GAMEMODE.HUDStyle == 3 then
+        GAMEMODE:RoundStateTimerOnly()
+    elseif GAMEMODE.HUDStyle == 4 then
+        GAMEMODE:RoundStateTimerTeamScore()
+    end
+end
+
+-- Default round state
+-- Includes a countdown timer for each round + round number indicator
+function GM:RoundStateDefault()
+    -- Get round information
+    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local RoundTime = GetGlobalFloat('RoundStart')
     
     -- Draw the cool round timer
     if !RoundTime then return end
@@ -178,13 +193,160 @@ function GM:DrawRoundState()
     
     -- Draw the round information
 	if round == rmax then
-        draw.SimpleText( 'Final Round!', "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
-		draw.SimpleText( 'Final Round!', "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
+		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	else
-        draw.SimpleText( "Round " .. round .. " / " .. rmax, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
-		draw.SimpleText( "Round " .. round .. " / " .. rmax, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
+		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 end
+
+-- Display the game timer instead of the round number indicator
+function GM:RoundStateWithTimer()
+    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
+    
+    -- Get round information
+    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local RoundTime = GetGlobalFloat('RoundStart')
+    local GameTime = GetGlobalFloat('GameStartTime')
+
+    -- Draw the cool round timer
+    if !RoundTime then return end
+    if !GameTime then return end
+    if GAME_STATE == 'EndRound' then return end
+    
+    -- Get some information about the rounds
+	local tmax = GAMEMODE.RoundTime or 60
+	if GAME_STATE == 'PreRound' then tmax = GAMEMODE.RoundCooldown or 5 end
+    
+    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    local round = GetGlobalInt('RoundNumber') or 1
+	local rmax = GAMEMODE.RoundNumber or 5
+	
+    -- Draw the circle shadow
+    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.DrawPoly(round_circle_shadow)
+    
+    -- Calculate the size of the text to adapt the box
+    local round_message = string.FormattedTime(time_left, '%02i:%02i')
+    if time_left < 1 then round_message = "Overtime!" end
+    surface.SetFont('FS_24')
+    local w = 64
+    
+    -- Draw the box with sizing information determined above
+    local rect_height = 32
+    local rect_width = w + 64
+    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height + 3 )
+    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height )
+    
+    -- Draw the top layer of the circle
+    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.DrawPoly(round_circle)
+    
+    -- Calculate time remaining
+	local t = tmax - (CurTime() - RoundTime)
+	if t < 0 then t = 0 end
+    
+    -- Draw the arc (if applicable)
+    if !fast_hud:GetBool() and t != 0 then
+        draw.Arc( c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1 )
+    end
+    
+    -- Draw the time text
+    draw.SimpleText( math.floor(t), "FS_40", c_pos+1, c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+	draw.SimpleText( math.floor(t), "FS_40", c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    
+    -- Draw the round information
+	if round == rmax then
+        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
+		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	else
+        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
+		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+	end
+end
+
+-- Totally redesigned to display the game timer only
+-- Uses a square instead of a circle
+-- If timed, adds a smaller box underneath to indicate the Round number (no limit)
+function GM:RoundStateTimerOnly()
+    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
+    
+    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GameTime = GetGlobalFloat('GameStartTime')
+    
+    if !GameTime then return end
+    if GAME_STATE == 'EndRound' then return end
+    
+    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    local round_message = string.FormattedTime(time_left, '%02i:%02i')
+    
+    -- Draw the box
+    draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48+3, GAMEMODE.FCol3)
+    draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.FCol2)
+    
+    if time_left > 0 then
+        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    else
+        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+    
+    if GAMEMODE.RoundType == 'timed' then
+        -- Draw the box
+        draw.RoundedBoxEx(8, c_pos-48, c_pos-3, 128, 32+3, GAMEMODE.FCol3, false, false, true, true)
+        draw.RoundedBoxEx(8, c_pos-48, c_pos-2, 128, 32, GAMEMODE.FCol2, false, false, true, true)
+        
+        local round = GetGlobalInt('RoundNumber') or 1
+        draw.SimpleText( 'Round ' .. round, "FS_24", c_pos + 16, c_pos + 15, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+end
+
+-- Similar to the above
+function GM:RoundStateTimerTeamScore()
+    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
+    
+    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GameTime = GetGlobalFloat('GameStartTime')
+    
+    if !GameTime then return end
+    if GAME_STATE == 'EndRound' then return end
+    
+    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    local round_message = string.FormattedTime(time_left, '%02i:%02i')
+    
+    -- Draw the box
+    draw.RoundedBoxEx(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.FCol2, true, true, false, false)
+    
+    if time_left > 0 then
+        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    else
+        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    end
+    
+    -- Draw the team boxes
+    local red_col = team.GetColor(TEAM_RED)
+    local blue_col = team.GetColor(TEAM_BLUE)
+    local red_shadow = Color(red_col.r - 35, red_col.g - 35, red_col.b - 35)
+    local blue_shadow = Color(blue_col.r - 35, blue_col.g - 35, blue_col.b - 35)
+    local score_h = 36
+    draw.RoundedBoxEx(8, c_pos-48, c_pos, 64, score_h+2, red_shadow, false, false, true, false)
+    draw.RoundedBoxEx(8, c_pos-48, c_pos, 64, score_h, red_col, false, false, true, false)
+    draw.RoundedBoxEx(8, c_pos+16, c_pos, 64, score_h+2, blue_shadow, false, false, false, true)
+    draw.RoundedBoxEx(8, c_pos+16, c_pos, 64, score_h, blue_col, false, false, false, true)
+    
+    draw.SimpleText( team.GetScore(TEAM_RED), "FS_40", c_pos-48+32, c_pos + score_h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+    draw.SimpleText( team.GetScore(TEAM_RED), "FS_40", c_pos-48+32, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    
+    draw.SimpleText( team.GetScore(TEAM_BLUE), "FS_40", c_pos+16+32, c_pos + score_h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
+    draw.SimpleText( team.GetScore(TEAM_BLUE), "FS_40", c_pos+16+32, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+end
+
 
 -- Draw the health bar
 -- Armor is not included -> is there any gamemode that actually uses armor?
