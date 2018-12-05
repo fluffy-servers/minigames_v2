@@ -122,7 +122,7 @@ function GM:StartRound()
     
     -- End the round after a certain time
     -- Does not apply to endless round types
-    if GAMEMODE.RoundType != 'timed_endless' then
+    if GAMEMODE.RoundType != 'timed_endless' and GAMEMODE.RoundTime > 0 then
         timer.Create('GamemodeTimer', GAMEMODE.RoundTime, 0, function()
             GAMEMODE:EndRound('TimeEnd')
         end )
