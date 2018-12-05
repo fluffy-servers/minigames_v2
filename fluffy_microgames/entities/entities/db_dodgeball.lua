@@ -24,12 +24,6 @@ function ENT:OnTakeDamage( dmg )
 	self.Entity:TakePhysicsDamage( dmg ) 
 end
 
-function ENT:OnRemove()
-    -- if anything happens to the ball, spawn a new one
-    if CLIENT then return end
-    GAMEMODE:SpawnBall()
-end
- 
 function ENT:PhysicsUpdate()
 end
 
