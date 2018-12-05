@@ -2,5 +2,5 @@
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Microgames"
-    "maps"	"^chaos_"
+    "maps"	"^micro_"
 }

@@ -1,6 +1,6 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Microgames - Chaos'
+GM.Name = 'Microgames'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
     description pending
