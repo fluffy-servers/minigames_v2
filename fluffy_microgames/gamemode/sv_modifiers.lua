@@ -6,7 +6,7 @@ end
 
 random_weapons['smg'] = function(p)
     p:Give('weapon_smg1')
-    p:GiveAmmo(60, 'SMG1')
+    p:GiveAmmo(100, 'SMG1')
 end
 
 random_weapons['ar2'] = function(p)
@@ -49,6 +49,15 @@ local function SurvivalBonus(victim, attacker, dmg)
         
         v:AddFrags(1)
     end
+end
+
+local function CrowbarKnockback(ent, dmg)
+    if not ent:IsPlayer() then return true end
+    if not dmg:GetAttacker():IsPlayer() then return end
+    
+    dmg:SetDamage(0)
+    local v = dmg:GetDamageForce()
+    ent:SetVelocity(v * 100)
 end
 
 GM.Modifiers = {}
@@ -137,6 +146,9 @@ GM.Modifiers['mini'] = {
         ply:SetHullDuck(Vector(-16, -16, 0), Vector(16, 16, 36))
         ply:SetViewOffset(Vector(0, 0, 64))
         ply:SetViewOffsetDucked(Vector(0, 0, 28))
+        
+        -- prevent getting stuck in walls
+        if ply:Alive() and not ply.Spectating then ply:Spawn() end
     end,
 }
 
@@ -145,6 +157,7 @@ GM.Modifiers['rocketjump'] = {
     subtext = 'Do not use the rockets to jump.',
     func_player = function(ply)
         ply:Give('weapon_rpg')
+        ply:GiveAmmo(10, 'RPG_Round')
         ply:SetRunSpeed(1)
         ply:SetWalkSpeed(1)
         ply:SetJumpPower(500)
@@ -161,6 +174,7 @@ GM.Modifiers['oitc'] = {
         ply:GetWeapon('weapon_357'):SetClip1(1)
         ply:SetMaxHealth(1)
         ply:SetHealth(1)
+        ply:Give('weapon_mg_knife')
     end,
     
     hooks = {
@@ -237,6 +251,7 @@ GM.Modifiers['rollermines'] = {
     func_player = function(ply)
         ply:SetMaxHealth(1)
         ply:SetHealth(1)
+        ply:Give('weapon_crowbar')
     end,
     
     func_check = function(ply)
@@ -245,7 +260,7 @@ GM.Modifiers['rollermines'] = {
         end
     end,
     
-    hooks = {DoPlayerDeath = SurvivalBonus}
+    hooks = {DoPlayerDeath = SurvivalBonus, EntityTakeDamage = CrowbarKnockback}
 }
 
 GM.Modifiers['hacks'] = {
@@ -264,6 +279,7 @@ GM.Modifiers['hacks'] = {
     func_player = function(ply)
         ply:SetMaxHealth(10)
         ply:SetHealth(10)
+        ply:Give('weapon_crowbar')
     end,
     
     func_check = function(ply)
@@ -272,7 +288,7 @@ GM.Modifiers['hacks'] = {
         end
     end,
     
-    hooks = {DoPlayerDeath = SurvivalBonus}
+    hooks = {DoPlayerDeath = SurvivalBonus, EntityTakeDamage = CrowbarKnockback}
 }
 
 GM.Modifiers['dodgeball'] = {
@@ -285,6 +301,7 @@ GM.Modifiers['dodgeball'] = {
             local ball = ents.Create('db_dodgeball')
             ball:SetPos(spawns[i]:GetPos() + Vector(0, 0, 32))
             ball:Spawn()
+            ball:SetNWVector('RColor', Vector(1, 1, 1))
         end
     end,
     
@@ -339,7 +356,7 @@ GM.Modifiers['crate'] = {
     
     hooks = {
         EntityTakeDamage = function(ent, dmg)
-            if ent:IsPlayer() then return false end
+            if ent:IsPlayer() then return true end
         end,
         
         PropBreak = function(ply)
@@ -352,6 +369,11 @@ GM.Modifiers['climb'] = {
     name = 'Climb',
     subtext = 'Get on a prop!',
     time = 10,
+    
+    func_player = function(ply)
+        ply:Give('weapon_crowbar')
+    end,
+    
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
         local number = math.Clamp(player.GetCount() + math.random(-3, 2), 3, #spawns)
@@ -376,4 +398,6 @@ GM.Modifiers['climb'] = {
             ply:AddFrags(2)
         end
     end,
+    
+    hooks = {EntityTakeDamage = CrowbarKnockback}
 }
