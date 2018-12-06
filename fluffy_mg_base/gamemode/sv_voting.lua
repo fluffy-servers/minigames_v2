@@ -26,7 +26,7 @@ GM.VoteGamemodes = {
     
     {'fluffy_tiles', 'Pitfall 2', 'FFA'},
     {'fluffy_microgames', 'Microgames', 'FFA'},
-    --{'fluffy_ctf', 'CTF', 'Team DM'},
+    {'fluffy_ctf', 'CTF', 'Team DM'},
 }
 
 -- List of maps in rotation
@@ -53,6 +53,7 @@ GM.VoteMaps = {
     fluffy_gungame = pvp_maps_team,
     fluffy_fortwars = {'fw_battlefield'},
     fluffy_microgames = {'prototype_microgames'},
+    fluffy_ctf = {'ctf_4corners'},
 }
 
 -- Variables to keep track of voting
