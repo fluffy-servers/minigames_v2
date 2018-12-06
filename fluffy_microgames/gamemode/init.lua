@@ -57,9 +57,11 @@ function GM:StartRound()
     -- yay hooks
     hook.Call('RoundStart')
     
+    local roundtime = GAMEMODE.CurrentModifier.time or GAMEMODE.RoundTime
+    
     -- End the round after a certain time
     -- Does not apply to endless round types
-    timer.Create('GamemodeTimer', GAMEMODE.RoundTime, 0, function()
+    timer.Create('GamemodeTimer', roundtime, 0, function()
         GAMEMODE:EndRound('TimeEnd')
     end )
 end
@@ -74,6 +76,10 @@ function GM:EndRound(reason)
         for k,v in pairs(player.GetAll()) do
             GAMEMODE.CurrentModifier.func_check(v)
         end
+    end
+    
+    if GAMEMODE.CurrentModifier.func_cleanup then
+        GAMEMODE.CurrentModifier.func_cleanup()
     end
     
     -- The end of each round is honestly the painful part
@@ -181,6 +187,16 @@ end
 function GM:GetWinningPlayer()
     -- Doesn't really make sense in Team gamemodes
     -- if GAMEMODE.TeamBased then return nil end
+    
+    -- Check again that there isn't just one player alive
+    -- Useful for survival gamemodes
+    if GAMEMODE:GetLivingPlayers() <= 1 then
+        for k,v in pairs( player.GetAll() ) do
+            if v:Alive() and not v.Spectating then
+                return v
+            end
+        end
+    end
     
     -- Loop through all players and return the one with the most frags
     local bestscore = 0

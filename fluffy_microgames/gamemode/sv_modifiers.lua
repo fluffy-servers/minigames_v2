@@ -200,6 +200,7 @@ GM.Modifiers['crowbar'] = {
 GM.Modifiers['snipers'] = {
     name = 'Sniper Wars',
     subtext = 'Hope you\'re good at dodging!',
+    time = 10,
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_ground'))
         local number = math.Clamp(player.GetCount() + math.random(-2, 2), 2, #spawns)
@@ -208,6 +209,12 @@ GM.Modifiers['snipers'] = {
             sniper:SetAngles(Angle(0, math.random(360), 0))
             sniper:SetPos(spawns[i]:GetPos())
             sniper:Spawn()
+        end
+    end,
+    
+    func_check = function(ply)
+        if ply:Alive() and not ply.Spectating then
+            ply:AddFrags(2)
         end
     end,
     
@@ -232,6 +239,12 @@ GM.Modifiers['rollermines'] = {
         ply:SetHealth(1)
     end,
     
+    func_check = function(ply)
+        if ply:Alive() and not ply.Spectating then
+            ply:AddFrags(2)
+        end
+    end,
+    
     hooks = {DoPlayerDeath = SurvivalBonus}
 }
 
@@ -251,6 +264,12 @@ GM.Modifiers['hacks'] = {
     func_player = function(ply)
         ply:SetMaxHealth(10)
         ply:SetHealth(10)
+    end,
+    
+    func_check = function(ply)
+        if ply:Alive() and not ply.Spectating then
+            ply:AddFrags(2)
+        end
     end,
     
     hooks = {DoPlayerDeath = SurvivalBonus}
@@ -311,7 +330,9 @@ GM.Modifiers['crate'] = {
     
     func_check = function(ply)
         if not ply.BrokeCrate then
-            if not v.Spectating and v:Alive() then ply:Kill() end
+            if not ply.Spectating and ply:Alive() then ply:Kill() end
+        elseif ply:Alive() and not ply.Spectating then
+            ply:AddFrags(2)
         end
         ply.BrokeCrate = nil
     end,
@@ -330,6 +351,7 @@ GM.Modifiers['crate'] = {
 GM.Modifiers['climb'] = {
     name = 'Climb',
     subtext = 'Get on a prop!',
+    time = 10,
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
         local number = math.Clamp(player.GetCount() + math.random(-3, 2), 3, #spawns)
@@ -349,7 +371,9 @@ GM.Modifiers['climb'] = {
         })
         
         if not IsValid(tr.Entity) or tr.HitWorld then
-            if not v.Spectating and v:Alive() then ply:Kill() end
+            if not ply.Spectating and ply:Alive() then ply:Kill() end
+        elseif ply:Alive() and not ply.Spectating then
+            ply:AddFrags(2)
         end
     end,
 }
