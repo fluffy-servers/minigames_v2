@@ -99,12 +99,18 @@ end )
 -- Maximum of 100XP in one round
 -- Maximum of 20XP for any given source (except round wins)
 
-function GM:AddStatConversion(type, nicename, value)
+-- Add a stat conversion type
+-- Note that this WILL override if already exists - use this for good not evil please
+function GM:AddStatConversion(type, nicename, value, max)
     if not GAMEMODE.StatConversions then GAMEMODE.StatConversions = {} end
-    GAMEMODE.StatConversions[type] = {nicename, value}
+    GAMEMODE.StatConversions[type] = {nicename, value, max or nil}
 end
 
 hook.Add('Initialize', 'AddBaseStatConversions', function()
+    hook.Call('RegisterStatsConversions')
+end)
+
+hook.Add('RegisterStatsConversions', 'AddBaseStatConversions', function()
     GAMEMODE:AddStatConversion('RoundWins', 'Rounds Won', 0)
     GAMEMODE:AddStatConversion('RoundsPlayed', 'Thanks for playing!', 1.5)
     GAMEMODE:AddStatConversion('kills', 'Kills', 1)
@@ -117,16 +123,25 @@ function GM:ConvertStat(name, points)
     if not GAMEMODE.StatConversions[name] then return end
     
     if name == 'RoundWins' then
+        -- Adjust round value based on some factors
+        local value = 8
+        if GAMEMODE.RoundValue then
+            value = GAMEMODE.RoundValue
+        elseif GAMEMODE.TeamBased then
+            value = 5
+        end
+        
         if not GAMEMODE.TeamBased then
-            local score = math.Clamp(points*8, 0, 40)
+            local score = math.Clamp(points*value, 0, 40)
             return {'Rounds Won', points, score}
         elseif GAMEMODE.TeamBased then
-            local score = math.Clamp(points*5, 0, 20)
+            local score = math.Clamp(points*value, 0, 40)
             return {'Rounds Won', points, score}
         end
     else
         local t = GAMEMODE.StatConversions[name]
-        local score = math.Clamp(math.floor(points * t[2]), 0, 20)
+        local max = t[3] or 25
+        local score = math.Clamp(math.floor(points * t[2]), 0, max)
         return {t[1], points, score}
     end
 end
