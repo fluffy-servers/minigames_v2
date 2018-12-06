@@ -19,15 +19,19 @@ GM.VoteGamemodes = {
 	  {'fluffy_oitc', 'One in the Chamber', 'Team DM'},
     --{'fluffy_balloons', 'Balloons', 'Free For All'},
     --{'fluffy_shootingrange', 'Shooting Range', 'Team DM'},
-    --{'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
+    {'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
     {'fluffy_gungame', 'Gun Game', 'FFA'},
-    --{'fluffy_kingmaker', 'Kingmaker', 'FFA'},
+    {'fluffy_kingmaker', 'Kingmaker', 'FFA'},
     --{'fluffy_fortwars', 'Fort Wars', 'Team DM'},
+    
+    {'fluffy_tiles', 'Pitfall 2', 'FFA'},
+    {'fluffy_microgames', 'Microgames', 'FFA'},
+    --{'fluffy_ctf', 'CTF', 'Team DM'},
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2'}
-local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2'}
+local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2', 'pvp_4corners', 'pvp_canals', 'pvp_crossfire', 'pvp_warehouse_v2'}
+local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_4corners', 'pvp_canals'}
 
 GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v2'},
@@ -48,6 +52,7 @@ GM.VoteMaps = {
     fluffy_kingmaker = pvp_maps,
     fluffy_gungame = pvp_maps_team,
     fluffy_fortwars = {'fw_battlefield'},
+    fluffy_microgames = {'prototype_microgames'},
 }
 
 -- Variables to keep track of voting
