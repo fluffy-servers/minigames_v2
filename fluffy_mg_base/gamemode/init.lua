@@ -282,23 +282,6 @@ function GM:CleanUpDMStuff()
     end
 end
 
--- [[ Default functions for round stuff ]] --
-function GM:CheckRoundEnd()
-    if GAMEMODE.TeamBased then
-        return GAMEMODE:CheckTeamElimination()
-    else
-        return GAMEMODE:CheckFFAElimination()
-    end
-end
-
-function GM:HandleEndRound(reason)
-    if GAMEMODE.TeamBased then
-        return GAMEMODE:HandleTeamWin(reason)
-    else
-        return GAMEMODE:HandleFFAWin(reason)
-    end
-end
-
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important

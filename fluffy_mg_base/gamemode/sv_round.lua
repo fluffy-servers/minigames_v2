@@ -314,3 +314,20 @@ function GM:CheckTeamElimination()
         end
     end
 end
+
+-- [[ Default functions for round stuff ]] --
+function GM:CheckRoundEnd()
+    if GAMEMODE.TeamBased then
+        return GAMEMODE:CheckTeamElimination()
+    else
+        return GAMEMODE:CheckFFAElimination()
+    end
+end
+
+function GM:HandleEndRound(reason)
+    if GAMEMODE.TeamBased then
+        return GAMEMODE:HandleTeamWin(reason)
+    else
+        return GAMEMODE:HandleFFAWin(reason)
+    end
+end
