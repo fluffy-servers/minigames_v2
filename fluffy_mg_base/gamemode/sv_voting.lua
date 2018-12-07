@@ -37,7 +37,7 @@ GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v2'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
     fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_nolookingback_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
-    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_darkwood_b3', 'sb_killingrooms', 'sb_storage_v3'},
+    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3'},
     fluffy_dodgeball = {'db_arena_t1', 'db_terminus_v3'},
     fluffy_pitfall = {'pf_ocean', 'pf_midnight_v1'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
@@ -54,6 +54,7 @@ GM.VoteMaps = {
     fluffy_fortwars = {'fw_battlefield'},
     fluffy_microgames = {'prototype_microgames'},
     fluffy_ctf = {'ctf_4corners'},
+    fluffy_tiles = {'til_pit', 'til_pyramid', 'pf_ocean'}
 }
 
 -- Variables to keep track of voting
