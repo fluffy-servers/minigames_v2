@@ -220,10 +220,11 @@ function GM:GetRandomPlayer(num, forcetable)
     
     -- Return one player for compatibility
     if num == 1 and not forcetable then
-        return table.Random(GAMEMODE:GetLivingPlayers())
+        local players = GAMEMODE:GetLivingPlayers()
+        return players[math.random(1, #players)]
     end
     
-    local players = table.Shuffle(player.GetAll())
+    local players = table.Shuffle(table.Copy(player.GetAll()))
     local output = {}
     local i = 1
     while #output < num do
