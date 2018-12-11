@@ -37,6 +37,7 @@ util.AddNetworkString('EndRound')
 util.AddNetworkString('MinigamesGameEnd')
 util.AddNetworkString('SendExperienceTable')
 util.AddNetworkString('MinigamesAnnouncement')
+util.AddNetworkString('CoolTransition')
 
 -- Called each time a player spawns
 function GM:PlayerSpawn( ply )

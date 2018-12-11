@@ -105,3 +105,20 @@ function GM:CalcView(ply, pos, angles, fov)
         return self.BaseClass:CalcView(ply,pos,angles,fov)
     end  
 end
+
+net.Receive('CoolTransition', function()
+    local tbl = net.ReadTable()
+    if not tbl.pos then
+        if not tbl.ent then
+            return
+        else
+            tbl.pos = Vector(0, 0, 0)
+        end
+    end
+    
+    GAMEMODE:StartCoolTransition(tbl)
+        
+    timer.Simple(tbl.duration or 5, function()
+        GAMEMODE:EndCoolTransition()
+    end)
+end)

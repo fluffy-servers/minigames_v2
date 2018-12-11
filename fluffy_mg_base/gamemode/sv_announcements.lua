@@ -60,3 +60,25 @@ function GM:PlayerOnlyAnnouncement(ply, duration, text, size, sound)
         net.WriteTable(tbl)
     net.Send(ply)
 end
+
+-- Send an entity camera announcement
+function GM:EntityCameraAnnouncement(ent, duration, offset, distance)
+    local tbl = {
+        ent = ent,
+        duration = duration or 5,
+        pos = offset,
+        dist = distance,
+    }
+    
+    net.Start('CoolTransition')
+        net.WriteTable(tbl)
+    net.Broadcast()
+end
+
+-- Send a cool transition table
+-- No checking on this side - be careful!
+function GM:CoolTransitionTable(tbl)
+    net.Start('CoolTransition')
+        net.WriteTable(tbl)
+    net.Broadcast()
+end
