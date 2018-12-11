@@ -33,11 +33,10 @@ function ENT:Touch(ent)
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
     
-    if self.HasPowerup and ent.ActivePowerup == nil then
-        GAMEMODE:PowerUpApply(ent, self.Powerup)
-        GAMEMODE:PlayerOnlyAnnouncement(ent, 3, GAMEMODE.PowerUps[self.Powerup].Text, 1)
-        self.Powerup = nil
-        self.HasPowerup = false
+    if self.HasPowerUp and ent.ActivePowerUp == nil then
+        GAMEMODE:PowerUpApply(ent, self.PowerUp, true)
+        self.PowerUp = nil
+        self.HasPowerUp = false
         self:AddDamage(0)
     end
     
@@ -45,8 +44,8 @@ function ENT:Touch(ent)
 end
 
 function ENT:AddPowerUp(type)
-    self.HasPowerup = true
-    self.Powerup = type
+    self.HasPowerUp = true
+    self.PowerUp = type
     
     self:SetColor( Color(0, 255, 150) )
 end
@@ -69,12 +68,12 @@ function ENT:AddDamage(amount)
     self.MyHealth = self.MyHealth - amount
     local scale = math.Clamp(self.MyHealth/100, 0, 1)
     
-    if not self.HasPowerup then
+    if not self.HasPowerUp then
         local r,g,b = (255), (scale*255), (scale*255)
         self:SetColor( Color( r, g, b ) )
     end
     
-    if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerup then
+    if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerUp then
         self.Dropped = true
         self:EmitSound(table.Random(self.ActivateSounds), 33, math.random(70, 130))
         
