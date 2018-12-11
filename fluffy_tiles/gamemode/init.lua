@@ -19,7 +19,7 @@ GM.BlockOptions = {
 }
 
 hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
-    GM:RegisterPowerUp('shotgun', {
+    GAMEMODE:RegisterPowerUp('shotgun', {
         Time = 10,
         OnCollect = function(ply)
             ply:Give('weapon_shotgun')

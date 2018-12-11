@@ -1,7 +1,8 @@
 function GM:RegisterPowerUp(key, tbl)
-    if not GAMEMODE.PowerUps then GAMEMODE.PowerUps = {}
+    if not GAMEMODE.PowerUps then GAMEMODE.PowerUps = {} end
     if not GAMEMODE.PowerUpTypes then GAMEMODE.PowerUpTypes = {} end
     GAMEMODE.PowerUps[key] = tbl
+    table.insert(GAMEMODE.PowerUpTypes, key)
 end
 
 function GM:GetPowerUp(key)
@@ -51,17 +52,23 @@ GM.PowerUpTypes = {'shotgun', 'flight'}
 --]]
 
 function GM:PowerUpExpire(ply)
+    if not GAMEMODE.PowerUps then return end
     if not ply.ActivePowerUp then return end
     local type = ply.ActivePowerUp
     GAMEMODE.PowerUps[type].OnFinish(ply)
     ply.ActivePowerUp = nil
 end
 
-function GM:PowerUpApply(ply, type)
+function GM:PowerUpApply(ply, type, announce)
+    if not GAMEMODE.PowerUps then return end
     if not GAMEMODE.PowerUps[type] then return end
     ply.ActivePowerUp = type
     
     GAMEMODE.PowerUps[type].OnCollect(ply)
+    
+    if announce then
+        GAMEMODE:PlayerOnlyAnnouncement(ply, 3, GAMEMODE.PowerUps[type].Text, 1)
+    end
     
     timer.Simple(GAMEMODE.PowerUps[type].Time, function()
         GAMEMODE:PowerUpExpire(ply)
