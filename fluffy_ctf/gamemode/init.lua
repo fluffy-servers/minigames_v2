@@ -2,8 +2,6 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
-util.AddNetworkString('CTFCameraTrigger')
-
 function GM:PlayerLoadout( ply )
     ply:SetWalkSpeed( 350 )
     ply:SetRunSpeed( 360 )
@@ -79,9 +77,7 @@ function GM:ScoreGoal(team)
         GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
     end
     
-    net.Start('CTFCameraTrigger')
-        net.WriteEntity(GAMEMODE:GetFlagEntity())
-    net.Broadcast()
+    GM:EntityCameraAnnouncement(GAMEMODE:GetFlagEntity(), GAMEMODE.RoundCooldown or 5)
 end
 
 function GM:GravGunOnPickedUp(ply, ent)
