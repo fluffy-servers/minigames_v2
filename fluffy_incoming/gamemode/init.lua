@@ -56,7 +56,13 @@ end )
 
 -- Randomly pick a group of props
 hook.Add('PreRoundStart', 'IncomingPropsChange', function()
-    local category = table.Random( table.GetKeys( GAMEMODE.DefaultProps ) )
+    -- If the map has a category restriction, pay attention to that
+    local category
+    if GAMEMODE.MapInfo[game.GetMap()].categories then
+        category = table.Random(GAMEMODE.MapInfo[game.GetMap()].categories)
+    else
+        category = table.Random( table.GetKeys( GAMEMODE.DefaultProps ) )
+    end
     GAMEMODE.CurrentPropsCategory = category
     
     for k,v in pairs(player.GetAll()) do
