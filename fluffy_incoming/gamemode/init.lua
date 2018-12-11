@@ -115,6 +115,8 @@ function GM:IncomingVictory(ply)
     ply:AddFrags(3)
     ply.BestDistance = 1
     GAMEMODE:EndRound(ply)
+    
+    GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5, Vector(0, 0, 72))
 end
 
 -- Network resources
