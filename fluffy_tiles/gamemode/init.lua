@@ -1,7 +1,6 @@
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
-include('sv_powerups.lua')
 
 -- Backwards compatibility for Pitfall maps
 GM.PlatformPositions = {}
@@ -20,7 +19,7 @@ GM.BlockOptions = {
 }
 
 hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
-    GM:RegisterPowerup('shotgun', {
+    GM:RegisterPowerUp('shotgun', {
         Time = 10,
         OnCollect = function(ply)
             ply:Give('weapon_shotgun')
@@ -88,13 +87,13 @@ hook.Add('PreRoundStart', 'CreatePlatforms', function()
     GAMEMODE:SpawnPlatforms()
 end )
 
-hook.Add('Think', 'PowerupThink', function()
+hook.Add('Think', 'PowerUpThink', function()
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
-    --if not GAMEMODE.NextPowerup then GAMEMODE.NextPowerup = CurTime() + 5 return end
+    if not GAMEMODE.NextPowerUp then GAMEMODE.NextPowerUp = CurTime() + 5 return end
     
-    if GAMEMODE.NextPowerup < CurTime() then
+    if GAMEMODE.NextPowerUp < CurTime() then
         GAMEMODE:AddPowerUp()
-        GAMEMODE.NextPowerup = CurTime() + 20
+        GAMEMODE.NextPowerUp = CurTime() + 20
     end
 end)
 
@@ -164,7 +163,7 @@ function GM:SpawnPlatform(pos, addspawn)
 end
 
 function GM:AddPowerUp()
-    local t = table.Random(GAMEMODE.PowerUpTypes)
+    local t = table.Random(GAMEMODE:GetPowerUpTypes())
     local target = false
     local platforms = ents.FindByClass('til_tile')
     while not target do
