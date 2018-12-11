@@ -18,30 +18,37 @@ function GM:EndingPoint()
     return GAMEMODE.MapInfo[game.GetMap()].endpos
 end
 
-CurrentPropsCategory = 'Both'
+GM.CurrentPropsCategory = 'Both'
 
 -- Prop
 INCPropSpawnTimer = 0
-local Delay = 2
+
 hook.Add("Tick", "TickPropSpawn", function()
     if GetGlobalString('RoundState') != 'InRound' then return end
-    local Props = GAMEMODE.DefaultProps[ CurrentPropsCategory ]
+    local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
+    local props = data.models
+    local delay = data.delay or 2
 	if ( INCPropSpawnTimer < CurTime() ) then
 		for k, v in pairs( ents.FindByClass('inc_prop_spawner') ) do
-			INCPropSpawnTimer = CurTime() + Delay
-			local Ent = ents.Create( "prop_physics" )
-			Ent:SetModel( Props[ math.random( 1, #Props ) ] )
-			Ent:SetPos( v:GetPos() )
-			Ent:Spawn()
-			Ent:GetPhysicsObject():SetMass( 40000 )
+			local ent = ents.Create( "prop_physics" )
+			ent:SetModel(props[math.random(1, #props)])
+			ent:SetPos( v:GetPos() )
+			ent:Spawn()
+			ent:GetPhysicsObject():SetMass( 40000 )
+            
+            if data.func then
+                data.func(ent)
+            end
 		end
+        
+        INCPropSpawnTimer = CurTime() + delay
 	end
 end )
 
 -- Randomly pick a group of props
 hook.Add('PreRoundStart', 'IncomingPropsChange', function()
     local category = table.Random( table.GetKeys( GAMEMODE.DefaultProps ) )
-    CurrentPropsCategory = category
+    GAMEMODE.CurrentPropsCategory = category
     
     for k,v in pairs(player.GetAll()) do
         v.BestDistance = nil
