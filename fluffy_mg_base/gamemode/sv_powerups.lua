@@ -1,11 +1,25 @@
-function GM:RegisterPowerup(key, tbl)
+function GM:RegisterPowerUp(key, tbl)
     if not GAMEMODE.PowerUps then GAMEMODE.PowerUps = {}
     if not GAMEMODE.PowerUpTypes then GAMEMODE.PowerUpTypes = {} end
     GAMEMODE.PowerUps[key] = tbl
 end
 
+function GM:GetPowerUp(key)
+    if not GAMEMODE.PowerUps then return false end
+    if not GAMEMODE.PowerUpTypes then return false end
+    return GAMEMODE.PowerUps[key]
+end
+
+function GM:GetPowerUpTypes()
+    if not GAMEMODE.PowerUpTypes then 
+        return {}
+    else
+        return GAMEMODE.PowerUpTypes
+    end
+end
+
 hook.Add('Initialize', 'InitCallPowerUps', function()
-    hook.Call('RegisterPowerups')
+    hook.Call('RegisterPowerUps')
 end)
 
 --[[
@@ -37,15 +51,15 @@ GM.PowerUpTypes = {'shotgun', 'flight'}
 --]]
 
 function GM:PowerUpExpire(ply)
-    if not ply.ActivePowerup then return end
-    local type = ply.ActivePowerup
+    if not ply.ActivePowerUp then return end
+    local type = ply.ActivePowerUp
     GAMEMODE.PowerUps[type].OnFinish(ply)
-    ply.ActivePowerup = nil
+    ply.ActivePowerUp = nil
 end
 
 function GM:PowerUpApply(ply, type)
     if not GAMEMODE.PowerUps[type] then return end
-    ply.ActivePowerup = type
+    ply.ActivePowerUp = type
     
     GAMEMODE.PowerUps[type].OnCollect(ply)
     
@@ -54,10 +68,10 @@ function GM:PowerUpApply(ply, type)
     end)
 end
 
-hook.Add('PlayerDeath', 'RemovePowerupsOnDeath', function(ply)
-    if ply.ActivePowerup then
-        local type = ply.ActivePowerup
+hook.Add('PlayerDeath', 'RemovePowerUpsOnDeath', function(ply)
+    if ply.ActivePowerUp then
+        local type = ply.ActivePowerUp
         GAMEMODE.PowerUps[type].OnFinish(ply)
-        ply.ActivePowerup = nil
+        ply.ActivePowerUp = nil
     end
 end)
