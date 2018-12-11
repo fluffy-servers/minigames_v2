@@ -291,7 +291,7 @@ function GM:CheckFFAElimination()
             end
             GAMEMODE:EndRound(nil)
         end
-    else
+    elseif GAMEMODE.Elimination then
         if GAMEMODE:GetLivingPlayers() == 0 then
             GAMEMODE:EndRound(nil)
         end
