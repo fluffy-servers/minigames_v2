@@ -101,6 +101,24 @@ GM.DefaultProps['Both'] = {
     }
 }
 
+--[[
+GM.DefaultProps['Spheres'] = {
+    models = {
+        'models/hunter/misc/sphere025x025.mdl',
+        'models/hunter/misc/sphere075x075.mdl',
+        'models/hunter/misc/sphere175x175.mdl',
+        'models/hunter/misc/sphere1x1.mdl',
+        'models/hunter/misc/sphere2x2.mdl',
+        'models/hunter/misc/sphere375x375.mdl',
+    },
+    
+    func = function(e)
+        local c = HSVToColor(math.random(360), 1, 1)
+        e:SetColor(c)
+    end,
+}
+--]]
+
 GM.MapInfo = {}
 GM.MapInfo['inc_duo'] = {
     endpos = Vector( -1650, 5950, 6656 ),
