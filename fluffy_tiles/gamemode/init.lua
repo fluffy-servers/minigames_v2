@@ -19,6 +19,20 @@ GM.BlockOptions = {
     --'props',
 }
 
+hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
+    GM:RegisterPowerup('shotgun', {
+        Time = 10,
+        OnCollect = function(ply)
+            ply:Give('weapon_shotgun')
+        end,
+        
+        OnFinish = function(ply)
+            ply:StripWeapon('weapon_shotgun')
+        end,
+        Text = 'Shotgun!',
+    })
+end)
+
 function GM:PlayerLoadout( ply )
     ply:Give( 'weapon_platformbreaker' )
     ply:SetWalkSpeed( 350 )
