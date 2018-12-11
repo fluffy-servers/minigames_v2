@@ -76,6 +76,8 @@ end
 -- Functions below this comment are for backwards-compatibility with Pitfall maps
 -- This includes platform spawning, etc.
 hook.Add('PreRoundStart', 'CreatePlatforms', function()
+    GAMEMODE.NextPowerUp = CurTime() + 5
+    
     local map = game.GetMap()
     if string.StartWith(map, 'til_') then return end
     
@@ -84,7 +86,6 @@ hook.Add('PreRoundStart', 'CreatePlatforms', function()
     
     GAMEMODE:ClearLevel()
     GAMEMODE:SpawnPlatforms()
-    GAMEMODE.NextPowerup = CurTime() + 5
 end )
 
 hook.Add('Think', 'PowerupThink', function()
