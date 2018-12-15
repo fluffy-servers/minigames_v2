@@ -1,22 +1,16 @@
 function GM:RegisterPowerUp(key, tbl)
     if not GAMEMODE.PowerUps then GAMEMODE.PowerUps = {} end
-    if not GAMEMODE.PowerUpTypes then GAMEMODE.PowerUpTypes = {} end
     GAMEMODE.PowerUps[key] = tbl
-    table.insert(GAMEMODE.PowerUpTypes, key)
 end
 
 function GM:GetPowerUp(key)
     if not GAMEMODE.PowerUps then return false end
-    if not GAMEMODE.PowerUpTypes then return false end
     return GAMEMODE.PowerUps[key]
 end
 
 function GM:GetPowerUpTypes()
-    if not GAMEMODE.PowerUpTypes then 
-        return {}
-    else
-        return GAMEMODE.PowerUpTypes
-    end
+    if not GAMEMODE.PowerUps then return false end
+    return table.GetKeys(GAMEMODE.PowerUps)
 end
 
 hook.Add('Initialize', 'InitCallPowerUps', function()
@@ -47,8 +41,6 @@ GM.PowerUps['flight'] = {
     end,
     Text = 'Flight!',
 }
-
-GM.PowerUpTypes = {'shotgun', 'flight'}
 --]]
 
 function GM:PowerUpExpire(ply)
