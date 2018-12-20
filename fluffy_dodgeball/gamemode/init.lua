@@ -81,6 +81,17 @@ function GM:GravGunOnPickedUp(ply, ent)
     end
 end
 
+function GM:GravGunPunt(ply, ent)
+    if ply:Team() != TEAM_BLUE and ply:Team() != TEAM_RED then return end
+    
+    if ent:GetClass() == 'db_dodgeball' then
+        GAMEMODE:CollectBall(ent, ply:Team())
+        ent.LastTime = CurTime()
+        ent.LastHolder = ply
+        return true
+    end
+end
+
 function GM:EntityTakeDamage(target, dmginfo)
     if target:IsPlayer() then
         local inflictor = dmginfo:GetInflictor()
