@@ -157,6 +157,7 @@ function GM:RoundStateDefault()
 	local rmax = GAMEMODE.RoundNumber or 5
 	
     -- Draw the circle shadow
+    draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.FCol3)
     surface.DrawPoly(round_circle_shadow)
     
@@ -175,6 +176,7 @@ function GM:RoundStateDefault()
     surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height )
     
     -- Draw the top layer of the circle
+    draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.FCol2)
     surface.DrawPoly(round_circle)
     
@@ -224,6 +226,7 @@ function GM:RoundStateWithTimer()
 	local rmax = GAMEMODE.RoundNumber or 5
 	
     -- Draw the circle shadow
+    draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.FCol3)
     surface.DrawPoly(round_circle_shadow)
     
@@ -242,6 +245,7 @@ function GM:RoundStateWithTimer()
     surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height )
     
     -- Draw the top layer of the circle
+    draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.FCol2)
     surface.DrawPoly(round_circle)
     
