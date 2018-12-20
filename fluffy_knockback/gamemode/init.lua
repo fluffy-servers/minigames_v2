@@ -32,3 +32,7 @@ function GM:EntityTakeDamage(target, dmg)
         return true
     end
 end
+
+function GM:GetFallDamage()
+    return 0
+end
