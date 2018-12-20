@@ -1,3 +1,4 @@
+-- Information & help panel at the start of a game
 function GM:CreateHelpPanel()
     if IsValid(GAMEMODE.MinigamesHelpPanel) then return end
     
@@ -74,6 +75,7 @@ function GM:CreateHelpPanel()
     GAMEMODE.MinigamesHelpPanel = f
 end
 
+-- Bind the above panel to a concommand
 concommand.Add('minigames_info', function()
     GAMEMODE:CreateHelpPanel()
 end)

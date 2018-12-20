@@ -55,6 +55,8 @@ function GM:GetStatWinner(stat)
     return {winning_player, highest_score}
 end
 
+-- Meta functions for player stats
+-- Call the corresponding functions above - see those for more information
 local meta = FindMetaTable("Player")
 function meta:GetStat(stat)
     return GAMEMODE:GetStat(self, stat)

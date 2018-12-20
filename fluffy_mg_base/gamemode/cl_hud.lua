@@ -485,6 +485,8 @@ function GM:DrawAmmo()
     -- Todo: add a check for 'infinite' ammo (I think this is done)
 end
 
+-- Create the round end panel with information
+-- This a popup at the top of the screen
 function GM:CreateRoundEndPanel(message, tagline)
     surface.PlaySound( 'friends/friend_join.wav' )
     if IsValid(GAMEMODE.RoundEndPanel) then
@@ -529,10 +531,13 @@ net.Receive( 'EndRound', function()
     GAMEMODE:CreateRoundEndPanel(msg, tagline)
 end )
 
+-- Function to determine the variable of the scoring pane
+-- Override in gamemodes
 function GM:ScoringPaneScore(ply)
 	return ply:Frags()
 end
 
+-- Sort the scoring pane so the top player is first in the list etc.
 function GM:ScoreRefreshSort()
     if !ScorePane then return end
     local scores = {}
@@ -556,6 +561,7 @@ function GM:ScoreRefreshSort()
     end
 end
 
+-- Create the scoring pane
 function GM:CreateScoringPane()
     local Frame = vgui.Create('DPanel')
     Frame:SetSize( ScrW() * 0.5, 96 )
@@ -587,6 +593,8 @@ function GM:CreateScoringPane()
 	end)
 end
 
+-- Used for targetID drawing
+-- Has a circle with healthbar and avatar
 GM.PlayerPanels = {}
 function GM:GetPlayerInfoPanel(ply)
     if GAMEMODE.PlayerPanels[ply] then return GAMEMODE.PlayerPanels[ply] end
@@ -641,6 +649,7 @@ function GM:GetPlayerInfoPanel(ply)
     return panel
 end
 
+-- Hook to call the above function when a player is looked at
 function GM:HUDDrawTargetID()
 	local tr = util.GetPlayerTrace( LocalPlayer() )
 	local trace = util.TraceLine( tr )

@@ -82,10 +82,12 @@ function GM:TransitionView(ply, origin, angles, fov)
     
     local distance = GAMEMODE.CoolTransition.dist or 80
     
+    -- Calculate the goal position and angles based on the table
     local goalangles = GAMEMODE.CoolTransition.ang or Angle(0, math.fmod(CurTime() * 20, 360, 0))
     local goalpos = targetpos + (goalangles:Forward() * -distance)
     local goalfov = GAMEMODE.CoolTransition.fov or fov
     
+    -- Smoothly transition the view
     local view = {}
     view.origin = origin + (goalpos - origin) * smooth
     view.angles = angles + (goalangles - angles) * smooth
@@ -106,6 +108,7 @@ function GM:CalcView(ply, pos, angles, fov)
     end  
 end
 
+-- Net receiver for cool camera transitions
 net.Receive('CoolTransition', function()
     local tbl = net.ReadTable()
     if not tbl.pos then

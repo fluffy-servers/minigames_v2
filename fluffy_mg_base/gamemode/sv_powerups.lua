@@ -1,18 +1,23 @@
+-- Register a powerup to the powerups table
+-- See sections below for powerup examples
 function GM:RegisterPowerUp(key, tbl)
     if not GAMEMODE.PowerUps then GAMEMODE.PowerUps = {} end
     GAMEMODE.PowerUps[key] = tbl
 end
 
+-- Get the power up table for a given type
 function GM:GetPowerUp(key)
     if not GAMEMODE.PowerUps then return false end
     return GAMEMODE.PowerUps[key]
 end
 
+-- Get a list of all currently registered powerup types
 function GM:GetPowerUpTypes()
     if not GAMEMODE.PowerUps then return false end
     return table.GetKeys(GAMEMODE.PowerUps)
 end
 
+-- Hook to register powerups on server initialization
 hook.Add('Initialize', 'InitCallPowerUps', function()
     hook.Call('RegisterPowerUps')
 end)
@@ -43,6 +48,7 @@ GM.PowerUps['flight'] = {
 }
 --]]
 
+-- Applied to a player when a powerup expires
 function GM:PowerUpExpire(ply)
     if not GAMEMODE.PowerUps then return end
     if not ply.ActivePowerUp then return end
@@ -51,6 +57,7 @@ function GM:PowerUpExpire(ply)
     ply.ActivePowerUp = nil
 end
 
+-- Apply a certain powerup to a player
 function GM:PowerUpApply(ply, type, announce)
     if not GAMEMODE.PowerUps then return end
     if not GAMEMODE.PowerUps[type] then return end
@@ -67,6 +74,7 @@ function GM:PowerUpApply(ply, type, announce)
     end)
 end
 
+-- Hook to remove powerups when a player dies
 hook.Add('PlayerDeath', 'RemovePowerUpsOnDeath', function(ply)
     if ply.ActivePowerUp then
         local type = ply.ActivePowerUp
