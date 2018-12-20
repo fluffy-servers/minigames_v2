@@ -72,6 +72,8 @@ function GM:TransitionView(ply, origin, angles, fov)
     camprogress = math.min(camprogress + FrameTime(), 1)
     local smooth = math.EaseInOut(camprogress, 0.5, 0.5)
     
+    if not GAMEMODE.CoolTransition then return end
+    
     local targetpos = GAMEMODE.CoolTransition.pos
     if GAMEMODE.CoolTransition.ent then
         if not IsValid(GAMEMODE.CoolTransition.ent) then
