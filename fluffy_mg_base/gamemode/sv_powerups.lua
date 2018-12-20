@@ -22,6 +22,37 @@ hook.Add('Initialize', 'InitCallPowerUps', function()
     hook.Call('RegisterPowerUps')
 end)
 
+-- Register a few 'default' powerup types
+-- Not called automatically! Use in RegisterPowerUps hook in gamemodes
+function GM:RegisterDefaultPowerUps()
+    GAMEMODE:RegisterPowerUp('speed', {
+        Text = 'Super Speed!',
+        Time = 10,
+        OnCollect = function(ply)
+            ply.PrevWalkSpeed = ply:GetWalkSpeed()
+            ply.PrevRunSpeed = ply:GetRunSpeed()
+            
+            ply:SetWalkSpeed(ply.PrevWalkSpeed * 2)
+            ply:SetRunSpeed(ply.PrevRunSpeed * 3)
+        end,
+        OnFinish = function(ply)
+            ply:SetWalkSpeed(ply.PrevWalkSpeed)
+            ply:SetRunSpeed(ply.PrevRunSpeed)
+        end,
+    })
+    
+    GAMEMODE:RegisterPowerUp('lowgrav', {
+        Text = 'Low Gravity!',
+        Time = 15,
+        OnCollect = function(ply)
+            ply:SetGravity(0.25)
+        end,
+        OnFinish = function(ply)
+            ply:SetGravity(1)
+        end,
+    })
+end
+
 --[[
 GM.PowerUps['shotgun'] = {
     Time = 10,
