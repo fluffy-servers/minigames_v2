@@ -74,14 +74,14 @@ function ENT:Touch(ent)
         self:AddDamage(0)
     end
     
-    self:AddDamage(FrameTime() * 80)
+    self:AddDamage(FrameTime() * 45)
 end
 
 function ENT:AddPowerUp(type)
     self.HasPowerUp = true
     self.PowerUp = type
     
-    self:SetColor( Color(0, 255, 150) )
+    self:SetColor( Color(255, 140, 0) )
 end
 
 function ENT:OnTakeDamage(attacker, weapon)
