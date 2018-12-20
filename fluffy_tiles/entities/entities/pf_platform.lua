@@ -1,6 +1,6 @@
-AddCSLuaFile( "cl_init.lua" )
-AddCSLuaFile( "shared.lua" )
-include( "shared.lua" )
+AddCSLuaFile()
+ENT.Type = 'anim'
+ENT.Base = 'base_anim'
 
 local mixedmodels = {
     "models/hunter/blocks/cube2x2x025.mdl",
@@ -23,7 +23,7 @@ local gametypefunctions = {}
 gametypefunctions['square'] = function(p) p:SetModel("models/hunter/blocks/cube2x2x025.mdl") end
 gametypefunctions['circle'] = function(p) p:SetModel("models/hunter/tubes/circle2x2.mdl") end
 gametypefunctions['mixed'] = function(p) p:SetModel( table.Random( mixedmodels ) ); p:SetAngles( Angle(0, math.random(360), 0 ) ) end
- 
+
 function ENT:Initialize()
     local mode = GetGlobalString( 'PitfallType', 'square' )
 	self:SetModel("models/hunter/blocks/cube2x2x025.mdl")
@@ -55,19 +55,14 @@ function ENT:OnTakeDamage( dmg )
 	--local damageamount = dmg:GetDamage()
     
     local tmod = CurTime() - self.CreationTime
-    
     local damageamount = 5 + 20*(tmod/120)
-    
-    
 	self.MyHealth = self.MyHealth - damageamount
 	
 	local scale = math.Clamp( self.MyHealth / 100, 0, 1 )
 	local r,g,b = (255 - scale * 255), (30 + scale * 200), (200)
-    
 	self:SetColor( Color( r, g, b ) )
 
-	if( self.MyHealth <= 0 ) then
-	
+	if self.MyHealth <= 0 then
 		self.LastAttacker = attacker
         if IsValid(self.LastAttacker) and self.LastAttacker:IsPlayer() then
             self.LastAttacker:AddStatPoints('platforms_broken', 1)
@@ -87,27 +82,8 @@ function ENT:OnTakeDamage( dmg )
 			end
 		end
 	end
-    
 end
 
 function ENT:GetCenter()
 	return self:LocalToWorld( self:OBBCenter() )
-end
- 
-function ENT:Think()
-end
- 
-function ENT:PhysicsUpdate()
-end
-
-function ENT:Touch( hitEnt )
-	if IsValid( hitEnt ) and hitEnt:IsPlayer() then
-		hitEnt.LastPlatformTouched = self
-	end
-end
-
-function ENT:EndTouch( hitEnt )
-	if IsValid( hitEnt ) and hitEnt:IsPlayer() then
-		hitEnt.LastPlatformTouched = self
-	end
 end
