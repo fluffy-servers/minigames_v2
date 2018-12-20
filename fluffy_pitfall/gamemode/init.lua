@@ -1,22 +1,42 @@
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
-
 include('shared.lua')
 
-PlatformPositions = {}
-PlatformPositions['pf_ocean'] = Vector(0, 0, 1500)
-PlatformPositions['pf_ocean_d'] = Vector(0, 0, 1500)
-PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
-PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
-PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)
-PlatformPositions['pf_test1'] = Vector(0, 0, 0)
-PlatformPositions['pf_volcanic'] = Vector(0, 0, 0)
-PlatformPositions['pf_volcanic2'] = Vector(0, 0, 0)
+-- Backwards compatibility for Pitfall maps
+GM.PlatformPositions = {}
+GM.PlatformPositions['pf_ocean'] = Vector(0, 0, 1500)
+GM.PlatformPositions['pf_ocean_d'] = Vector(0, 0, 1500)
+GM.PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
+GM.PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
+GM.PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)
+
+GM.BlockOptions = {
+    'circle',
+    'square',
+    --'triangle',
+    'mixed',
+    --'props',
+}
+
+hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
+    GAMEMODE:RegisterPowerUp('shotgun', {
+        Time = 10,
+        OnCollect = function(ply)
+            ply:Give('weapon_shotgun')
+        end,
+        
+        OnFinish = function(ply)
+            ply:StripWeapon('weapon_shotgun')
+        end,
+        Text = 'Shotgun!',
+    })
+end)
 
 function GM:PlayerLoadout( ply )
     ply:Give( 'weapon_platformbreaker' )
     ply:SetWalkSpeed( 350 )
     ply:SetRunSpeed( 360 )
+    ply:SetJumpPower(200)
 end
 
 function GM:PlayerSelectSpawn( pl )
@@ -35,21 +55,47 @@ function GM:GetFallDamage( ply, vel )
     return vel/7
 end
 
-local blockoptions = {
-    'circle',
-    'square',
-    --'triangle',
-    'mixed',
-    --'props',
-}
+function GM:DoPlayerDeath( ply, attacker, dmginfo )
+    -- Always make the ragdoll
+    ply:CreateRagdoll()
+    
+    -- Do not count deaths unless in round
+    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    ply:AddDeaths(1)
+    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
+    
+    -- Every living players earns a point
+    for k,v in pairs(player.GetAll()) do
+        if !v:Alive() or v == ply then continue end
+        v:AddFrags(1)
+        GAMEMODE:AddStatPoints(v, 'pitfall_score', 1)
+    end
+end
 
+-- Functions below this comment are for backwards-compatibility with Pitfall maps
+-- This includes platform spawning, etc.
 hook.Add('PreRoundStart', 'CreatePlatforms', function()
-    local gametype = table.Random( blockoptions )
-    SetGlobalString( 'PitfallType', gametype )
+    GAMEMODE.NextPowerUp = CurTime() + 5
+    
+    local map = game.GetMap()
+    if string.StartWith(map, 'til_') then return end
+    
+    local gametype = table.Random(GAMEMODE.BlockOptions)
+    SetGlobalString('PitfallType', gametype)
     
     GAMEMODE:ClearLevel()
     GAMEMODE:SpawnPlatforms()
 end )
+
+hook.Add('Think', 'PowerUpThink', function()
+    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if not GAMEMODE.NextPowerUp then GAMEMODE.NextPowerUp = CurTime() + 5 return end
+    
+    if GAMEMODE.NextPowerUp < CurTime() then
+        GAMEMODE:AddPowerUp()
+        GAMEMODE.NextPowerUp = CurTime() + 20
+    end
+end)
 
 function GM:ClearLevel()
 	for k,v in pairs(ents.FindByClass( "pf_platform" )) do
@@ -70,8 +116,19 @@ function GM:ClearLevel()
 end
 
 function GM:SpawnPlatforms()
-    local pos = PlatformPositions[ game.GetMap() ]
-    if !pos then return end
+    local pos = GAMEMODE.PlatformPositions[game.GetMap()]
+    if !pos then
+        -- Check if this is a Trembling Tiles map
+        if #ents.FindByClass('til_tile') > 0 then return end
+        -- Check if we have markers defined
+        local p = ents.FindByClass('pf_marker')
+        if p and #p > 0 then
+            GAMEMODE:MarkerPlatforms(p)
+        end
+    else
+        GAMEMODE:RandomPlatforms(pos)
+    end
+    --[[
     local players = #player.GetAll()
     players = math.ceil( players/3 )
     local num = 3 + (players*2)
@@ -92,12 +149,60 @@ function GM:SpawnPlatforms()
         px = px + size
         py = pos.y - (size*num)/2
     end
+    --]]
+end
+
+function GM:RandomPlatforms(pos)
+    local rows = math.random(2, 5)
+    local columns = math.random(2, 5)
+    local levels = math.random(1, 3)
+    if math.random() > 0.5 then levels = levels + 1 end
     
+    while (rows*columns) < player.GetCount() do
+        rows = rows + 1
+    end
+    
+    local size = math.random(120, 200)
+    local px = pos.x - (size*rows)/2
+    local py = pos.y - (size*columns)/2
+    local pz = pos.z
+    
+    for level = 1,levels do
+        for row = 1, rows do
+            for col = 1, columns do
+                self:SpawnPlatform( Vector(px, py, pz), (level == 1) )
+                py = py + size
+            end
+            
+            px = px + size
+            py = pos.y - (size*columns)/2
+        end
+        
+        pz = pz - 150
+        px = pos.x - (size*rows)/2
+        py = pos.y - (size*columns)/2
+    end
+end
+
+function GM:MarkerPlatforms(ents)
+    local levels = math.random(1, 3)
+    if math.random() > 0.5 then levels = levels + 1 end
+    
+    local size = math.random(1, 5)
+    
+    for k,v in pairs(ents) do
+        if size > v.Size then continue end
+        
+        for level = 1,levels do
+            if level > v.MaxLevels then break end
+            self:SpawnPlatform( v:GetPos(), (level == 1) )
+        end
+    end
 end
 
 function GM:SpawnPlatform(pos, addspawn)
 	local prop = ents.Create( "pf_platform" )
-	if ( !prop ) then return end
+	if not IsValid(prop) then return end
 	prop:SetAngles( Angle( 0, 0, 0 ) )
 	prop:SetPos( pos )
 	prop:Spawn()
@@ -117,19 +222,17 @@ function GM:SpawnPlatform(pos, addspawn)
     end
 end
 
-function GM:DoPlayerDeath( ply, attacker, dmginfo )
-    -- Always make the ragdoll
-    ply:CreateRagdoll()
-    
-    -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
-    ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
-    
-    -- Every living players earns a point
-    for k,v in pairs(player.GetAll()) do
-        if !v:Alive() or v == ply then continue end
-        v:AddFrags(1)
-        GAMEMODE:AddStatPoints(v, 'pitfall_score', 1)
+function GM:AddPowerUp()
+    local t = table.Random(GAMEMODE:GetPowerUpTypes())
+    local target = false
+    local platforms = ents.FindByClass('til_tile')
+    if not platforms or #platforms < 1 then
+        platforms = ents.FindByClass('pf_platform')
+    end
+    while not target do
+        local ent = table.Random(platforms)
+        if ent.HasPowerUp then continue end
+        ent:AddPowerUp(t)
+        target = true
     end
 end

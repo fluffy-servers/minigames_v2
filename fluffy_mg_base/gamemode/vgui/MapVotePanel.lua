@@ -35,6 +35,7 @@ function PANEL:AddChildren(width, height)
         if p.Options then
             gamemode = p.Options[2] or 'gamemode'
             map = p.Options[4] or 'map'
+            map = string.Split(map, '_')[2]
         end
         draw.SimpleText(gamemode, "FS_B24", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         draw.SimpleText(gamemode, "FS_B24", w - 4, h - 28 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)

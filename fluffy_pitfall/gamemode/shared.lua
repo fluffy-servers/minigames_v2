@@ -20,6 +20,9 @@ GM.WinBySurvival = true
 
 GM.RoundNumber = 10      -- How many rounds?
 GM.RoundTime = 90      -- Seconds each round lasts for
+GM.RoundType = 'timed'
+GM.GameTime = 600
+GM.HUDStyle = 2
 
 GM.ThirdpersonEnabled = true
 

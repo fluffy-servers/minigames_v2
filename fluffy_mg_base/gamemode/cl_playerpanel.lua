@@ -1,3 +1,4 @@
+-- Information & help panel at the start of a game
 function GM:CreateHelpPanel()
     if IsValid(GAMEMODE.MinigamesHelpPanel) then return end
     
@@ -6,8 +7,8 @@ function GM:CreateHelpPanel()
     f:SetSize(480, 640)
     f:Center()
     function f:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, 64, Color(47, 54, 64))
-        draw.RoundedBox(0, 0, 64, w, h-64, Color(53, 59, 72))
+        draw.RoundedBox(0, 0, 0, w, 64, GAMEMODE.FCol2)
+        draw.RoundedBox(0, 0, 64, w, h-64, Color(150, 150, 160))--Color(53, 59, 72))
         draw.SimpleText(GAMEMODE.Name, 'FS_B64', 4, 0, GAMEMODE.FCol1)
     end
     f:MakePopup()
@@ -63,7 +64,7 @@ function GM:CreateHelpPanel()
         play:SetTextColor(GAMEMODE.FCol1)
         play:SetFont('FS_B40')
         function play:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, Color(76, 209, 55))
+            draw.RoundedBox(0, 0, 0, w, h, GAMEMODE.FCol3)
         end
         
         function play:DoClick()
@@ -74,6 +75,7 @@ function GM:CreateHelpPanel()
     GAMEMODE.MinigamesHelpPanel = f
 end
 
+-- Bind the above panel to a concommand
 concommand.Add('minigames_info', function()
     GAMEMODE:CreateHelpPanel()
 end)

@@ -72,17 +72,25 @@ function GM:TransitionView(ply, origin, angles, fov)
     camprogress = math.min(camprogress + FrameTime(), 1)
     local smooth = math.EaseInOut(camprogress, 0.5, 0.5)
     
+    if not GAMEMODE.CoolTransition then return end
+    
     local targetpos = GAMEMODE.CoolTransition.pos
     if GAMEMODE.CoolTransition.ent then
+        if not IsValid(GAMEMODE.CoolTransition.ent) then
+            GAMEMODE:EndCoolTransition()
+        end
+        if not GAMEMODE.CoolTransition then return end
         targetpos = targetpos + GAMEMODE.CoolTransition.ent:GetPos()
     end
     
     local distance = GAMEMODE.CoolTransition.dist or 80
     
+    -- Calculate the goal position and angles based on the table
     local goalangles = GAMEMODE.CoolTransition.ang or Angle(0, math.fmod(CurTime() * 20, 360, 0))
     local goalpos = targetpos + (goalangles:Forward() * -distance)
     local goalfov = GAMEMODE.CoolTransition.fov or fov
     
+    -- Smoothly transition the view
     local view = {}
     view.origin = origin + (goalpos - origin) * smooth
     view.angles = angles + (goalangles - angles) * smooth
@@ -102,3 +110,21 @@ function GM:CalcView(ply, pos, angles, fov)
         return self.BaseClass:CalcView(ply,pos,angles,fov)
     end  
 end
+
+-- Net receiver for cool camera transitions
+net.Receive('CoolTransition', function()
+    local tbl = net.ReadTable()
+    if not tbl.pos then
+        if not tbl.ent then
+            return
+        else
+            tbl.pos = Vector(0, 0, 0)
+        end
+    end
+    
+    GAMEMODE:StartCoolTransition(tbl)
+        
+    timer.Simple(tbl.duration or 5, function()
+        GAMEMODE:EndCoolTransition()
+    end)
+end)

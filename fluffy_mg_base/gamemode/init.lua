@@ -37,6 +37,7 @@ util.AddNetworkString('EndRound')
 util.AddNetworkString('MinigamesGameEnd')
 util.AddNetworkString('SendExperienceTable')
 util.AddNetworkString('MinigamesAnnouncement')
+util.AddNetworkString('CoolTransition')
 
 -- Called each time a player spawns
 function GM:PlayerSpawn( ply )
@@ -132,24 +133,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
-    
-    if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
-    if attacker == ply then return end -- Suicides aren't important
-
-    -- Track team kills for each round as well
-    if GAMEMODE.TeamBased then
-        -- Create the table if it does not exist
-        if !GAMEMODE.TeamKills then 
-            GAMEMODE.TeamKills = {}
-            GAMEMODE.TeamKills[1] = 0
-            GAMEMODE.TeamKills[2] = 0
-        end
-        
-        -- Add the kill to the team
-        local team = attacker:Team()
-        if team == TEAM_SPECTATOR or team == TEAM_UNASSIGNED then return end
-        GAMEMODE.TeamKills[team] = GAMEMODE.TeamKills[team] + 1
-    end
 end
 
 -- Basic function to get the player with the most frags
@@ -238,10 +221,11 @@ function GM:GetRandomPlayer(num, forcetable)
     
     -- Return one player for compatibility
     if num == 1 and not forcetable then
-        return table.Random(GAMEMODE:GetLivingPlayers())
+        local players = GAMEMODE:GetLivingPlayers()
+        return players[math.random(1, #players)]
     end
     
-    local players = table.Shuffle(player.GetAll())
+    local players = table.Shuffle(table.Copy(player.GetAll()))
     local output = {}
     local i = 1
     while #output < num do
@@ -300,23 +284,6 @@ function GM:CleanUpDMStuff()
     end
 end
 
--- [[ Default functions for round stuff ]] --
-function GM:CheckRoundEnd()
-    if GAMEMODE.TeamBased then
-        return GAMEMODE:CheckTeamElimination()
-    else
-        return GAMEMODE:CheckFFAElimination()
-    end
-end
-
-function GM:HandleEndRound(reason)
-    if GAMEMODE.TeamBased then
-        return GAMEMODE:HandleTeamWin(reason)
-    else
-        return GAMEMODE:HandleFFAWin(reason)
-    end
-end
-
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
@@ -325,7 +292,18 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     attacker:AddFrags(GAMEMODE.KillValue)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
     
-    if not GAMEMODE.TeamBased then
+    if GAMEMODE.TeamBased then
+        if !GAMEMODE.TeamKills then 
+            GAMEMODE.TeamKills = {}
+            GAMEMODE.TeamKills[1] = 0
+            GAMEMODE.TeamKills[2] = 0
+        end
+        
+        -- Add the kill to the team
+        local team = attacker:Team()
+        if team == TEAM_SPECTATOR or team == TEAM_UNASSIGNED then return end
+        GAMEMODE.TeamKills[team] = GAMEMODE.TeamKills[team] + 1
+    else
         if not attacker.FFAKills then attacker.FFAKills = 0 end
         attacker.FFAKills = attacker.FFAKills + 1
     end
@@ -334,6 +312,7 @@ end
 hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
     local wep = dmg:GetInflictor()
     if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
+    if not IsValid(wep) then return end
     if wep:GetClass() == "weapon_shotgun" then
         dmg:ScaleDamage(2)
     end
@@ -346,5 +325,6 @@ include('sv_round.lua')
 include('sv_voting.lua')
 include('sv_player.lua')
 include('sv_levels.lua')
+include('sv_powerups.lua')
 include('sv_announcements.lua')
 include('gametype_hunter.lua')

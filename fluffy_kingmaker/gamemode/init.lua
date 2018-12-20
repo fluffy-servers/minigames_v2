@@ -47,7 +47,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
     
     -- If the King dies accidentally, make King up for grabs
-    if attacker:GetNWBool('IsKing', false) and (attacker == ply or !attacker:IsValid() or !attacker:IsPlayer()) then
+    if ply:GetNWBool('IsKing', false) and (attacker == ply or !attacker:IsValid() or !attacker:IsPlayer()) then
         ply:SetNWBool('IsKing', false)
         GAMEMODE:PulseAnnouncement(2, 'Nobody is King!', 1)
         GAMEMODE.CurrentKing = nil
@@ -61,7 +61,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     if ply:GetNWBool('IsKing', false) then
         ply:SetNWBool('IsKing', false)
         attacker:SetNWBool('IsKing', true)
-        attacker:SetNWInt('KingPoints', ply:GetNWInt('KingPoints', 0) + 1)
+        attacker:SetNWInt('KingPoints', attacker:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
         attacker:AddStatPoints('KingPoints', 1)
         attacker:AddStatPoints('KingEliminations', 1)
@@ -74,7 +74,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Similar to above, any kills with no king become king
     if not IsValid(GAMEMODE.CurrentKing) then
         attacker:SetNWBool('IsKing', true)
-        attacker:SetNWInt('KingPoints', ply:GetNWInt('KingPoints', 0) + 1)
+        attacker:SetNWInt('KingPoints', attacker:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
         attacker:AddStatPoints('KingPoints', 1)
         GAMEMODE:MakeKing(attacker)

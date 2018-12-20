@@ -1,0 +1,6 @@
+"minigames"
+{
+	"base"	"fluffy_base"
+	"title"	"Knockback"
+    "maps"	"^kb_"
+}
