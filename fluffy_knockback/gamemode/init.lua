@@ -7,7 +7,7 @@ include('shared.lua')
 function GM:PlayerLoadout( ply )
     ply:StripWeapons()
     ply:StripAmmo()
-    ply:Give('weapon_crowbar')
+    ply:Give('weapon_stunstick')
     
     -- Health goes the opposite way to normal in this gamemode
     -- 500HP = WHOA
