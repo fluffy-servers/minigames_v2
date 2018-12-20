@@ -445,6 +445,7 @@ function GM:DrawAmmo()
     -- Check the ammo table is valid
     if !ammo then return end
     if ammo['PrimaryClip'] == -1 then return end
+    if ammo['PrimaryClip'] == 0 and ammo['PrimaryAmmo'] == 0 then return end
     
     -- Draw the shadow & circle
     draw.NoTexture()
