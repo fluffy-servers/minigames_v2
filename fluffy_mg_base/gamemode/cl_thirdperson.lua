@@ -79,6 +79,7 @@ function GM:TransitionView(ply, origin, angles, fov)
         if not IsValid(GAMEMODE.CoolTransition.ent) then
             GAMEMODE:EndCoolTransition()
         end
+        if not GAMEMODE.CoolTransition then return end
         targetpos = targetpos + GAMEMODE.CoolTransition.ent:GetPos()
     end
     
