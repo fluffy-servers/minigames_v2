@@ -166,6 +166,9 @@ function GM:AddPowerUp()
     local t = table.Random(GAMEMODE:GetPowerUpTypes())
     local target = false
     local platforms = ents.FindByClass('til_tile')
+    if not platforms or #platforms < 1 then
+        platforms = ents.FindByClass('pf_platform')
+    end
     while not target do
         local ent = table.Random(platforms)
         if ent.HasPowerUp then continue end
