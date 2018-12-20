@@ -90,6 +90,6 @@ if CLIENT then
         lcolor.z = c.b * ( math.Clamp( lcolor.z, 0, 1 ) + 0.5 ) * 255
         
         local size = self.Size
-        render.DrawSprite(pos, size, size, Color( lcolor.x, lcolor.y, lcolor.z, 255 ))
+        render.DrawSprite(pos, size, size, Color( lcolor.x, lcolor.y, lcolor.z, 225 ))
     end
 end
