@@ -116,8 +116,19 @@ function GM:ClearLevel()
 end
 
 function GM:SpawnPlatforms()
-    local pos = GAMEMODE.PlatformPositions[ game.GetMap() ]
-    if !pos then return end
+    local pos = GAMEMODE.PlatformPositions[game.GetMap()]
+    if !pos then
+        -- Check if this is a Trembling Tiles map
+        if #ents.FindByClass('til_tile') > 0 then return end
+        -- Check if we have markers defined
+        local p = ents.FindByClass('pf_marker')
+        if p and #p > 0 then
+            GAMEMODE:MarkerPlatforms(p)
+        end
+    else
+        GAMEMODE:RandomPlatforms(pos)
+    end
+    --[[
     local players = #player.GetAll()
     players = math.ceil( players/3 )
     local num = 3 + (players*2)
@@ -138,11 +149,60 @@ function GM:SpawnPlatforms()
         px = px + size
         py = pos.y - (size*num)/2
     end
+    --]]
+end
+
+function GM:RandomPlatforms(pos)
+    local rows = math.random(2, 5)
+    local columns = math.random(2, 5)
+    local levels = math.random(1, 3)
+    if math.random() > 0.5 then levels = levels + 1 end
+    
+    while (rows*columns) < player.GetCount() do
+        rows = rows + 1
+    end
+    
+    local size = math.random(120, 200)
+    local px = pos.x - (size*rows)/2
+    local py = pos.y - (size*columns)/2
+    local pz = pos.z
+    
+    for level = 1,levels do
+        for row = 1, rows do
+            for col = 1, columns do
+                self:SpawnPlatform( Vector(px, py, pz), (level == 1) )
+                py = py + size
+            end
+            
+            px = px + size
+            py = pos.y - (size*columns)/2
+        end
+        
+        pz = pz - 150
+        px = pos.x - (size*rows)/2
+        py = pos.y - (size*columns)/2
+    end
+end
+
+function GM:MarkerPlatforms(ents)
+    local levels = math.random(1, 3)
+    if math.random() > 0.5 then levels = levels + 1 end
+    
+    local size = math.random(1, 5)
+    
+    for k,v in pairs(ents) do
+        if size > v.Size then continue end
+        
+        for level = 1,levels do
+            if level > v.MaxLevels then break end
+            self:SpawnPlatform( v:GetPos(), (level == 1) )
+        end
+    end
 end
 
 function GM:SpawnPlatform(pos, addspawn)
 	local prop = ents.Create( "pf_platform" )
-	if ( !prop ) then return end
+	if not IsValid(prop) then return end
 	prop:SetAngles( Angle( 0, 0, 0 ) )
 	prop:SetPos( pos )
 	prop:Spawn()
