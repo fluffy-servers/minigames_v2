@@ -77,7 +77,7 @@ function GM:ScoreGoal(team)
         GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
     end
     
-    GM:EntityCameraAnnouncement(GAMEMODE:GetFlagEntity(), GAMEMODE.RoundCooldown or 5)
+    GAMEMODE:EntityCameraAnnouncement(GAMEMODE:GetFlagEntity(), GAMEMODE.RoundCooldown or 5)
 end
 
 function GM:GravGunOnPickedUp(ply, ent)
