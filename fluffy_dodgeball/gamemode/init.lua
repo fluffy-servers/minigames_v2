@@ -60,10 +60,10 @@ function GM:CollectBall(ball, team)
     local c = Vector(1, 1, 1)
     local name = 'none'
     if team == TEAM_RED then
-        c = Vector(1, 0, 0)
+        c = Vector(1, 0.3, 0.3)
         name = 'red'
     elseif team == TEAM_BLUE then
-        c = Vector(0, 0, 1)
+        c = Vector(0.3, 0.3, 1)
         name = 'blue'
     end
 

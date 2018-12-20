@@ -1,24 +1,21 @@
 AddCSLuaFile()
 ENT.Type 			= "anim"
 ENT.Base 			= "base_anim"
+
 ENT.RespawnTime     = 10
+ENT.LastTime = -1
+
+ENT.Size = 32
+ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 function ENT:Initialize()
     if CLIENT then return end
-	self.Entity:SetModel( "models/fw/fw_flag.mdl" )
-	self.Entity:PhysicsInit( SOLID_VPHYSICS )
-	self.Entity:SetMoveType( MOVETYPE_VPHYSICS )
-	self.Entity:SetSolid( SOLID_VPHYSICS )  
+	self:SetModel( "models/Combine_Helicopter/helicopter_bomb01.mdl" )
 	
-    self.Entity:PhysicsInitSphere(16, "metal_bouncy")
-	local phys = self.Entity:GetPhysicsObject()
-	if phys:IsValid() then
-        phys:EnableMotion(true)
-        phys:EnableGravity(false)
-	end
-    
-    self.LastTime = -1
-    if math.random() > 0.2 then self:SetNWBool('Explosive', true) end
+    local size = self.Size
+    self:PhysicsInitSphere(size, "metal_bouncy")
+    self:SetCollisionBounds(Vector(-size, -size, -size), Vector(size, size, size))
+    self:PhysWake()
 end
 
 function ENT:OnTakeDamage( dmg )
@@ -80,62 +77,19 @@ end
 
 if CLIENT then
     killicon.AddFont("db_dodgeball", "HL2MPTypeDeath", "8", Color( 255, 80, 0, 255 ))
-    local mat = Material( "models/fw/flaginner" )
-    local boom_mat = Material('phoenix_storms/stripes')
-    ENT.col = Vector( 0, 0, 0 )
-    ENT.progress = 0
-    ENT.changing = false
-    
-    function ENT:Think()
-        local thinktime = 1/45
-        if self:GetNWBool('explosive', false) then
-            self:SetMaterial(boom_mat, true)
-        else
-            local goalcol = self:GetNWVector( "RColor", Vector( 1, 1, 1 ) ) //R from Refract!
-            
-            if self.col != goalcol then
-                if !changing then
-                    self.progress = 0
-                    self.changing = true
-                end
-            else
-                self.changing = false
-            end
-            
-            if self.changing then
-                self.progress = self.progress + FrameTime()*2
-                if self.progress >= 1 then
-                    self.progress = 1
-                    self.changing = false
-                    self.col = goalcol
-                end
-                self.col = LerpVector(self.progress, self.col, goalcol )
-            else
-                self.col = goalcol
-                thinktime = 1/15
-            end
-            
-            mat:SetVector( "$refracttint", self.col )
-            local size = 256
-        end
-        
-        local dlight = DynamicLight( self:EntIndex() )
-        if dlight then
-            dlight.Pos = self:GetPos()
-            dlight.r = self.col.x * 127
-            dlight.g = self.col.y * 127
-            dlight.b = self.col.z * 127
-            dlight.Brightness = 3
-            dlight.Size = size
-            dlight.Decay = 100
-            dlight.DieTime = CurTime() + 1
-        end
-        
-        self.Entity:NextThink( CurTime() + thinktime )
-        return true
-    end
-    
+    local ball_mat = Material("sprites/sent_ball")
     function ENT:Draw()
-        self.Entity:DrawModel()
+        render.SetMaterial(ball_mat)
+        
+        local pos = self:GetPos()
+        local lcolor = render.ComputeLighting( pos, Vector( 0, 0, 1 ) )
+        local c = self:GetNWVector('RColor', Vector(1, 1, 1))
+        
+        lcolor.x = c.r * ( math.Clamp( lcolor.x, 0, 1 ) + 0.5 ) * 255
+        lcolor.y = c.g * ( math.Clamp( lcolor.y, 0, 1 ) + 0.5 ) * 255
+        lcolor.z = c.b * ( math.Clamp( lcolor.z, 0, 1 ) + 0.5 ) * 255
+        
+        local size = self.Size
+        render.DrawSprite(pos, size, size, Color( lcolor.x, lcolor.y, lcolor.z, 255 ))
     end
 end
