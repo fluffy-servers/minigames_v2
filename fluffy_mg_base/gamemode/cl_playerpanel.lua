@@ -35,7 +35,7 @@ function GM:CreateHelpPanel()
             local teamp = vgui.Create('DButton', team_panel)
             teamp:SetSize(tw, 64)
             teamp:Dock(LEFT)
-            teamp:SetText(team.GetName(id))
+            teamp:SetText('')
             teamp:SetTextColor(GAMEMODE.FCol1)
             teamp:SetFont('FS_B40')
             local c = team.GetColor(id)
@@ -45,6 +45,10 @@ function GM:CreateHelpPanel()
             
             function teamp:Paint(w, h)
                 draw.RoundedBox(0, 0, 0, w, h, c)
+                local name = team.GetName(id) or ''
+                draw.SimpleText(name, 'FS_B40', w/2, h/2 - 6, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                local num = team.NumPlayers(id) or 0
+                draw.SimpleText(num .. ' players', 'FS_B24', w/2, h/2 + 16, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             end
             
             function teamp:DoClick()
