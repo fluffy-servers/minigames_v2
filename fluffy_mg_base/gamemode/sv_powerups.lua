@@ -84,8 +84,14 @@ function GM:PowerUpExpire(ply)
     if not GAMEMODE.PowerUps then return end
     if not ply.ActivePowerUp then return end
     local type = ply.ActivePowerUp
-    GAMEMODE.PowerUps[type].OnFinish(ply)
+    
+    if GAMEMODE.PowerUps[type].OnFinish then
+        GAMEMODE.PowerUps[type].OnFinish(ply)
+    end
+    
     ply.ActivePowerUp = nil
+    
+    timer.Remove(tostring(ply:SteamID())..'poweruptimer')
 end
 
 -- Apply a certain powerup to a player
@@ -94,11 +100,13 @@ function GM:PowerUpApply(ply, type, announce)
     if not GAMEMODE.PowerUps[type] then return end
     ply.ActivePowerUp = type
     
-    GAMEMODE.PowerUps[type].OnCollect(ply)
+    if GAMEMODE.PowerUps[type].OnCollect then
+        GAMEMODE.PowerUps[type].OnCollect(ply)
+    end
     
     -- Announce the powerup to the player
     if announce then
-        GAMEMODE:PlayerOnlyAnnouncement(ply, 3, GAMEMODE.PowerUps[type].Text, 1)
+        GAMEMODE:PlayerOnlyAnnouncement(ply, 3, GAMEMODE.PowerUps[type].Text or 'Power Up!', 1)
     end
     
     -- Expire some powerups instantly
@@ -108,15 +116,19 @@ function GM:PowerUpApply(ply, type, announce)
     end
     
     -- Queue expiry function after given time
-    timer.Simple(GAMEMODE.PowerUps[type].Time, function()
+    timer.Create(tostring(ply:SteamID())..'poweruptimer', GAMEMODE.PowerUps[type].Time or 5, 1, function()
         GAMEMODE:PowerUpExpire(ply)
     end)
 end
 
+hook.Add('DoPlayerDeath', 'RemovePlayerPowerUps', function(ply)
+    GAMEMODE:PowerUpExpire(ply)
+end)
+
 -- Can a player get a new powerup
-function GAMEMODE:CanHavePowerUp(ply)
+function GM:CanHavePowerUp(ply)
     if not GAMEMODE.PowerUps then return false end
-    return (ply.ActivePowerUp == nil)
+    if ply.ActivePowerUp then return false else return true end
 end
 
 -- Hook to remove powerups when a player dies
@@ -139,5 +151,5 @@ function meta:PowerUpExpire()
 end
 
 function meta:CanHavePowerUp()
-    GAMEMODE:CanHavePowerUp(self)
+    return GAMEMODE:CanHavePowerUp(self)
 end
