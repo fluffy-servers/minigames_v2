@@ -29,20 +29,20 @@ GM.VoteGamemodes = {
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2', 'pvp_4corners', 'pvp_canals', 'pvp_crossfire', 'pvp_warehouse_v2'}
-local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_4corners', 'pvp_canals'}
+local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2', 'pvp_4corners', 'pvp_canals_v2', 'pvp_crossfire_v2', 'pvp_warehouse_v2'}
+local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_4corners', 'pvp_canals_v2'}
 
 GM.VoteMaps = {
-    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v2'},
+    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
-    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_nolookingback_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
+    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
     fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3'},
     fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4'},
     fluffy_pitfall = {'pf_ocean', 'pf_midnight_v1_fix'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
     fluffy_bombtag = {'bt_diamond', 'bt_rainbow', 'bt_plaza_v2', 'bt_museum'},
     fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test'},
-	fluffy_cratewars = {'cw_spaceslide', 'cw_bricks'},
+	fluffy_cratewars = {'cw_bricks', 'cw_nonagon'},
 	fluffy_balls = pvp_maps,
 	fluffy_oitc = pvp_maps,
     fluffy_balloons = {'bl_skyoasis', 'bl_spaceage', 'bl_cloudy'},
