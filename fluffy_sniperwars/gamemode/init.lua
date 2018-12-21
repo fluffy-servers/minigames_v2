@@ -50,3 +50,31 @@ function GM:HandleTeamWin(reason)
     
     return winners, msg
 end
+
+hook.Add('RegisterPowerUps', 'SniperWarsPowerUps', function()
+    GAMEMODE:RegisterPowerUp('give_shotgun', {
+        Time = 0,
+        OnCollect = function(ply)
+            ply:Give('weapon_shotgun')
+            ply:GiveAmmo(12, 'BuckShot')
+        end,
+        Text = 'Shotgun!',
+    })
+    
+    GAMEMODE:RegisterPowerUp('give_revolver', {
+        Time = 0,
+        OnCollect = function(ply)
+            ply:Give('weapon_357')
+            ply:GiveAmmo(10, '357')
+        end,
+        Text = 'Revolver!',
+    })
+    
+    GAMEMODE:RegisterPowerUp('give_rpg', {
+        Time = 0,
+        OnCollect = function(ply)
+            ply:Give('weapon_rpg')
+        end,
+        Text = 'Revolver!',
+    })
+end)
