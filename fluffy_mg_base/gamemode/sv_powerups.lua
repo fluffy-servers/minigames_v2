@@ -105,6 +105,12 @@ function GM:PowerUpApply(ply, type, announce)
     end)
 end
 
+-- Can a player get a new powerup
+function GAMEMODE:CanHavePowerUp(ply)
+    if not GAMEMODE.PowerUps then return false end
+    return (ply.ActivePowerUp == nil)
+end
+
 -- Hook to remove powerups when a player dies
 hook.Add('PlayerDeath', 'RemovePowerUpsOnDeath', function(ply)
     if ply.ActivePowerUp then
@@ -113,3 +119,17 @@ hook.Add('PlayerDeath', 'RemovePowerUpsOnDeath', function(ply)
         ply.ActivePowerUp = nil
     end
 end)
+
+-- Player metatable versions of some above functions
+local meta = FindMetaTable("Player")
+function meta:PowerUpApply(type, announce)
+    GAMEMODE:PowerUpApply(self, type, announce)
+end
+
+function meta:PowerUpExpire()
+    GAMEMODE:PowerUpExpire(self)
+end
+
+function meta:CanHavePowerUp()
+    GAMEMODE:CanHavePowerUp(self)
+end
