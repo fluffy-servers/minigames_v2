@@ -96,10 +96,18 @@ function GM:PowerUpApply(ply, type, announce)
     
     GAMEMODE.PowerUps[type].OnCollect(ply)
     
+    -- Announce the powerup to the player
     if announce then
         GAMEMODE:PlayerOnlyAnnouncement(ply, 3, GAMEMODE.PowerUps[type].Text, 1)
     end
     
+    -- Expire some powerups instantly
+    if GAMEMODE.PowerUps[type].Time == 0 then
+        GAMEMODE:PowerUpExpire(ply)
+        return
+    end
+    
+    -- Queue expiry function after given time
     timer.Simple(GAMEMODE.PowerUps[type].Time, function()
         GAMEMODE:PowerUpExpire(ply)
     end)
