@@ -33,7 +33,7 @@ local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2', 'pvp_4corn
 local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_4corners', 'pvp_canals_v2'}
 
 GM.VoteMaps = {
-    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic'},
+    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
     fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
     fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3'},
@@ -51,7 +51,7 @@ GM.VoteMaps = {
     fluffy_kingmaker = pvp_maps,
     fluffy_gungame = pvp_maps_team,
     fluffy_fortwars = {'fw_battlefield'},
-    fluffy_microgames = {'prototype_microgames'},
+    fluffy_microgames = {'micro_basic'},
     --fluffy_ctf = {'ctf_4corners'},
     --fluffy_tiles = {'til_pit', 'til_pyramid', 'pf_ocean'}
 }
