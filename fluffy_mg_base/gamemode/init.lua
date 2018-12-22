@@ -25,7 +25,6 @@ AddCSLuaFile('vgui/Screen_Scoreboard.lua')
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
 AddCSLuaFile('sh_levels.lua')
-AddCSLuaFile('shop/sh_init.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
