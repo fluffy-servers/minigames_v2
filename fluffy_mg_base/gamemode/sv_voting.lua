@@ -25,7 +25,7 @@ GM.VoteGamemodes = {
     --{'fluffy_fortwars', 'Fort Wars', 'Team DM'},
     --{'fluffy_tiles', 'Pitfall 2', 'FFA'},
     {'fluffy_microgames', 'Microgames', 'FFA'},
-    {'fluffy_ctf', 'CTF', 'Team DM'},
+    --{'fluffy_ctf', 'CTF', 'Team DM'},
 }
 
 -- List of maps in rotation
