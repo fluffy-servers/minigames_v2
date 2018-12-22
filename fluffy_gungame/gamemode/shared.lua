@@ -2,6 +2,12 @@ DeriveGamemode('fluffy_mg_base')
 
 GM.Name = 'Gun Game'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    Free for all deathmatch with constantly changing weapons
+    Every 2 kills you get a new weapon!
+    
+    First person to complete every weapon wins the round
+]]
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?
 GM.Elimination = false

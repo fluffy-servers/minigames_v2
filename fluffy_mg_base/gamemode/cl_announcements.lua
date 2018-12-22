@@ -148,6 +148,44 @@ function GM:PulseAnnouncement(duration, text, size, sound)
     end
 end
 
+-- Creates a pulse announcement
+-- Simple announcement that zooms in before zooming out quickly
+-- This variation has a larger line followed by a smaller line
+function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, sound)
+    if sound then surface.PlaySound(sound) end
+    local test = vgui.Create("DPanel")
+    test:SetSize(ScrW(), ScrH())
+    test:Center()
+    test:NoClipping(true)
+    local starttime = CurTime()
+    local midtime = starttime + duration/2
+    local scale = 1
+    function test:GetScalingInfo()
+        if CurTime() < midtime then
+            scale = size - (midtime - CurTime())/duration
+        else
+            scale = size + (midtime - CurTime())*4
+        end
+        
+        if scale < 0 then
+            self:Remove()
+            return
+        end
+    end
+    
+    function test:Paint(w, h)
+        self:GetScalingInfo()
+        
+        local x = w/2
+        local y = h/2 - 32
+        drawScaledText(x+2, y+2, text, "FS_64", GAMEMODE.FColShadow, scale)
+        drawScaledText(x, y, text, "FS_64", GAMEMODE.FCol1, scale)
+        
+        drawScaledText(x+2, y+48, subtext, "FS_32", GAMEMODE.FColShadow, scale)
+        drawScaledText(x, y+46, subtext, "FS_32", GAMEMODE.FCol1, scale)
+    end
+end
+
 -- Net handler to parse announcements
 net.Receive('MinigamesAnnouncement', function()
     local tbl = net.ReadTable()
@@ -158,5 +196,8 @@ net.Receive('MinigamesAnnouncement', function()
         if not tbl.text then return end
         local duration = tbl.duration or 5
         GAMEMODE:PulseAnnouncement(duration, tbl.text, tbl.size or 1.5, tbl.sound)
+    elseif tbl.type == 'pulse_subtext' then
+        if not tbl.text then return end
+        GAMEMODE:PulseAnnouncementTwoLine(tbl.length or 5, tbl.text, tbl.subtext or '', tbl.size or 1.25, tbl.sound)
     end
 end)

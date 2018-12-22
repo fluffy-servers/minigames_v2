@@ -13,8 +13,10 @@ function GM:PlayerLoadout( ply )
         
         ply:SetWalkSpeed( 200 )
         ply:SetRunSpeed( 250 )
+        ply:SetBloodColor(BLOOD_COLOR_RED)
     elseif ply:Team() == TEAM_RED then
 		-- Make sure that barrels have no weapons
+        ply:SetBloodColor(DONT_BLEED)
         ply:StripWeapons()
         ply.NextTaunt = CurTime() + 1
         ply.NextBoom = CurTime() + 2

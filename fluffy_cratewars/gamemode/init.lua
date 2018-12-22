@@ -31,16 +31,22 @@ function GM:StartBattlePhase()
 	end
 end
 
-hook.Add('RoundStart', 'PrepareCratePhase', function()
+hook.Add('PreRoundStart', 'PrepareCratePhase', function()
 	for k,v in pairs(player.GetAll()) do
 		v.SmashedCrates = 0
+        v:SetNWInt('Crates', 0)
 	end
 	
 	GAMEMODE.CratePhase = true
-	
+    if #ents.FindByClass('crate_spawner') > 0 then
+        GAMEMODE.SpawnCrates = true
+    else
+        GAMEMODE.SpawnCrates = false
+    end
+    
     local time = math.random(40, 60)
     timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!") end)
-	timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
+    timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
 end )
 
 hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
@@ -57,6 +63,7 @@ local Delay = 0.5
 hook.Add("Tick", "TickCrateSpawn", function()
     if GetGlobalString('RoundState') != 'InRound' then return end
 	if !GAMEMODE.CratePhase then return end
+    if !GAMEMODE.SpawnCrates then return end
 	
 	if CrateSpawnTimer < CurTime() then
 		CrateSpawnTimer = CurTime() + Delay

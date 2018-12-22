@@ -2,5 +2,5 @@
 {
 	"base"	"fluffy_mg_base"
 	"title"	"Pitfall"
-    "maps"	"^pf_"
+    "maps"	"^til_, ^pf_"
 }

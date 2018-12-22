@@ -14,6 +14,11 @@ hook.Add('Think', 'MinigamesRoundThink', function()
     -- Check if the game is ready to start
     if state == 'GameNotStarted' then
         if GAMEMODE:CanRoundStart() then
+            -- Store the starting time of the game for TIMED gamemodes
+            -- Timed gamemodes don't have a fixed number of rounds
+            if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
+                SetGlobalFloat('GameStartTime', CurTime())
+            end
             GAMEMODE:PreStartRound()
         end
     elseif state == 'InRound' then
@@ -27,7 +32,7 @@ function GM:CanRoundStart()
     -- If team based, check there is at least player on each team
     -- ( Override this function if there is ever a four-team gamemode )
     -- ( Hopefully there won't be but that'll be pretty cool )
-    if self.TeamBased and !self.TeamSurvival then
+    if GAMEMODE.TeamBased and !GAMEMODE.TeamSurvival then
         if #team.GetPlayers(1) >= 1 and #team.GetPlayers(2) >= 1 then
             return true
         else
@@ -50,12 +55,31 @@ function GM:PreStartRound()
     -- Reset stuff
     game.CleanUpMap()
     
-    -- End the game if enough rounds have been played
-    if round >= GAMEMODE.RoundNumber then
-        GAMEMODE:EndGame()
-        return
+    -- End the game if needed
+    -- Different gamemode round types have different logic
+    if GAMEMODE.RoundType == 'default' then
+        -- End the game once all the rounds have been played
+        if round >= GAMEMODE.RoundNumber then
+            GAMEMODE:EndGame()
+            return
+        end
+    elseif GAMEMODE.RoundType == 'timed' then
+        -- End the game if the game has exceeded the time limit
+        local gametime = GetGlobalFloat('GameStartTime', -1)
+        if gametime > -1 and gametime + GAMEMODE.GameTime < CurTime() then
+            GAMEMODE:EndGame()
+            return
+        end
+    elseif GAMEMODE.RoundType == 'timed_endless' then
+        -- This gamemode should only have one round
+        -- Timing is handled in the Think hook - see below
+        if round >= 1 then
+            GAMEMODE:EndGame()
+            return
+        end
     end
     
+    -- Probably bugged
     if GAMEMODE.TeamBased then
         GAMEMODE.TeamKills = nil
     end
@@ -97,9 +121,12 @@ function GM:StartRound()
     hook.Call('RoundStart')
     
     -- End the round after a certain time
-    timer.Create('GamemodeTimer', GAMEMODE.RoundTime, 0, function()
-        self:EndRound('TimeEnd')
-    end )
+    -- Does not apply to endless round types
+    if GAMEMODE.RoundType != 'timed_endless' and GAMEMODE.RoundTime > 0 then
+        timer.Create('GamemodeTimer', GAMEMODE.RoundTime, 0, function()
+            GAMEMODE:EndRound('TimeEnd')
+        end )
+    end
 end
 
 --[[ End the round ]]--
@@ -118,6 +145,7 @@ function GM:EndRound(reason)
     -- Send the result to the players
     net.Start('EndRound')
         net.WriteString( msg )
+        net.WriteString('')
     net.Broadcast()
     
     -- STATS: Add round wins
@@ -142,6 +170,30 @@ function GM:EndGame()
     -- Start the mapvote process
     GAMEMODE:StartVoting()
 end
+
+-- Make sure that Timed gamemodes end at the right time
+hook.Add('Think', 'TimedGamemodeThink', function()
+    if GAMEMODE.RoundType == 'default' then return end
+    if not GAMEMODE.EndOnTimeOut then return end
+    if GAMEMODE.RoundType == 'timed' and GAMEMODE.EndOnTimeOut then
+        -- End the gamemode if EndOnTimeOut is enabled
+        -- This does not have a countdown announcement - possible future addition?
+        local gametime = GetGlobalFloat('GameStartTime', -1)
+        if gametime > -1 and gametime + GAMEMODE.GameTime < CurTime() then
+            GAMEMODE:EndRound('TimeEnd')
+        end
+    elseif GAMEMODE.RoundType == 'timed_endless' then
+        -- End the gamemode if the time has been exceeded
+        -- This also has a 5-second countdown announcement
+        local gametime = GetGlobalFloat('GameStartTime', -1)
+        if gametime > -1 and gametime + GAMEMODE.GameTime < CurTime() then
+            GAMEMODE:EndRound('TimeEnd')
+        elseif gametime > -1 and gametime + GAMEMODE.GameTime - 5 < CurTime() and not GAMEMODE.CountdownStarted then
+            GAMEMODE.CountdownStarted = true
+            GAMEMODE:CountdownAnnouncement(5)
+        end
+    end
+end)
 
 --[[ STATS: Give round win points ]]--
 function GM:StatsRoundWin(winners)
@@ -239,7 +291,7 @@ function GM:CheckFFAElimination()
             end
             GAMEMODE:EndRound(nil)
         end
-    else
+    elseif GAMEMODE.Elimination then
         if GAMEMODE:GetLivingPlayers() == 0 then
             GAMEMODE:EndRound(nil)
         end
@@ -260,5 +312,22 @@ function GM:CheckTeamElimination()
         if GAMEMODE:GetTeamLivingPlayers( GAMEMODE.SurvivorTeam ) == 0 then
             GAMEMODE:EndRound( GAMEMODE.HunterTeam )
         end
+    end
+end
+
+-- [[ Default functions for round stuff ]] --
+function GM:CheckRoundEnd()
+    if GAMEMODE.TeamBased then
+        return GAMEMODE:CheckTeamElimination()
+    else
+        return GAMEMODE:CheckFFAElimination()
+    end
+end
+
+function GM:HandleEndRound(reason)
+    if GAMEMODE.TeamBased then
+        return GAMEMODE:HandleTeamWin(reason)
+    else
+        return GAMEMODE:HandleFFAWin(reason)
     end
 end

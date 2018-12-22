@@ -10,6 +10,10 @@ include('shop/sh_init.lua')
 
 GM.Name = 'Minigames'
 GM.Author = 'FluffyXVI'
+GM.HelpText = [[
+    There doesn't appear to be any help text for this gamemode.
+    Report this to the creator.
+]]
 
 GM.TeamBased = false    -- Is the gamemode team based, or is it FFA?
 GM.Elimination = false  -- Should players stay dead, or should they respawn?
@@ -17,6 +21,10 @@ GM.Elimination = false  -- Should players stay dead, or should they respawn?
 GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?
+
+GM.RoundType = 'default'    -- What system should be used for game/round logic?
+GM.GameTime = 600           -- If not using rounds, how long should the game go for?
+GM.EndOnTimeOut = true      -- If using 'timed' RoundType, should this cut off the middle of a round?
 
 GM.CanSuicide = true            -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
@@ -72,34 +80,20 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"}) 
 end
 
--- Valid playermodels
-GM.ValidModels = {
-    male01 = "models/player/Group01/male_01.mdl",
-    male02 = "models/player/Group01/male_02.mdl",
-    male03 = "models/player/Group01/male_03.mdl",
-    male04 = "models/player/Group01/male_04.mdl",
-    male05 = "models/player/Group01/male_05.mdl",
-    male06 = "models/player/Group01/male_06.mdl",
-    male07 = "models/player/Group01/male_07.mdl",
-    male08 = "models/player/Group01/male_08.mdl",
-    male09 = "models/player/Group01/male_09.mdl",
-    
-    female01 = "models/player/Group01/female_01.mdl",
-    female02 = "models/player/Group01/female_02.mdl",
-    female03 = "models/player/Group01/female_03.mdl",
-    female04 = "models/player/Group01/female_04.mdl",
-    female05 = "models/player/Group01/female_05.mdl",
-    female06 = "models/player/Group01/female_06.mdl",
-}
-
--- Convert the playermodel name into a model
-function GM:TranslatePlayerModel(name, ply)
-    if GAMEMODE.ValidModels[name] != nil then
-        return GAMEMODE.ValidModels[name]
-    elseif ply.TemporaryModel then
-        return ply.TemporaryModel
+-- Function to toggle displaying cosmetics
+-- Obviously, cosmetic items shouldn't be displayed on barrels etc.
+function GM:ShouldDrawCosmetics(ply)
+    if GAMEMODE.TeamSurvival then
+        -- Cosmetics shouldn't show for the Hunter Team (in most cases)
+        -- Override in some cases
+        if ply:Team() == GAMEMODE.HunterTeam then
+            return false
+        else
+            return true
+        end
     else
-        ply.TemporaryModel = table.Random(GAMEMODE.ValidModels)
-        return ply.TemporaryModel
+        -- Should be okay in most cases
+        -- Override in others
+        return true
     end
 end

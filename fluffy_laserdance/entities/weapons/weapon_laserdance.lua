@@ -23,8 +23,9 @@ end
 
 SWEP.ViewModelFOV	= 62
 SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/weapons/v_357.mdl"
+SWEP.ViewModel		= "models/weapons/c_357.mdl"
 SWEP.WorldModel		= "models/weapons/w_357.mdl"
+SWEP.UseHands       = true
 SWEP.AnimPrefix		= "python"
 
 SWEP.Spawnable			= false
@@ -111,4 +112,14 @@ function SWEP:ShootBullet( damage, num_bullets, aimcone )
 	
 	self:ShootEffects()
 	
+end
+
+function SWEP:DoImpactEffect( tr, nDamageType )
+	if (tr.HitSky) then return end
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin(tr.HitPos + tr.HitNormal)
+	effectdata:SetNormal(tr.HitNormal)
+	util.Effect("AR2Impact", effectdata)
+    return true
 end

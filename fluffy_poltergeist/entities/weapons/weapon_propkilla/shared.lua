@@ -150,3 +150,12 @@ function SWEP:ShootBullets( damage, numbullets, aimcone, tracer )
 	self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK )
 end
 
+function SWEP:DoImpactEffect( tr, nDamageType )
+	if (tr.HitSky) then return end
+
+	local effectdata = EffectData()
+	effectdata:SetOrigin(tr.HitPos + tr.HitNormal)
+	effectdata:SetNormal(tr.HitNormal)
+	util.Effect("AR2Impact", effectdata)
+    return true
+end

@@ -24,8 +24,8 @@ SWEP.Primary.Automatic = false
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
-SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
+SWEP.ViewModel = "models/weapons/c_357.mdl"
+SWEP.WorldModel = "models/weapons/w_357.mdl"
 SWEP.Primary.Sound = Sound("Weapon_357.Single")
 
 function SWEP:PrimaryAttack()

@@ -13,13 +13,14 @@ SWEP.Base						= "weapon_base"
 SWEP.HoldType					= "pistol"
 SWEP.Purpose					= "Use this to kill those damn barrels."
  
-SWEP.ViewModel					= Model("models/weapons/v_pistol.mdl")
-SWEP.WorldModel					= Model("models/weapons/w_pistol.mdl") 
+SWEP.ViewModel					= Model("models/weapons/c_pistol.mdl")
+SWEP.WorldModel					= Model("models/weapons/w_pistol.mdl")
+SWEP.UseHands                   = true
 
 SWEP.Primary.Sound				= Sound( "Weapon_Pistol.Single" )
-SWEP.Primary.Recoil				= 3.5
+SWEP.Primary.Recoil				= 0
 SWEP.Primary.Damage				= 1000
-SWEP.Primary.Cone				= 0.01
+SWEP.Primary.Cone				= 0
 SWEP.Primary.Automatic			= false
 SWEP.Primary.ClipSize			= 1
 SWEP.Primary.Ammo				= "pistol";
@@ -36,10 +37,10 @@ end
 function SWEP:PrimaryAttack()
 	if !self:CanPrimaryAttack() then return end
 
-	self.Weapon:EmitSound( self.Primary.Sound )
-	self:ShootBullet( self.Primary.Damage, 1, self.Primary.Cone )
-	self:TakePrimaryAmmo( 1 )
-	self.Owner:ViewPunch( Angle( -self.Primary.Recoil, 0, 0 ) )
+	self.Weapon:EmitSound(self.Primary.Sound)
+	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+	self:TakePrimaryAmmo(1)
+	self.Owner:ViewPunch(Angle(-self.Primary.Recoil, 0, 0 ))
 end
 
 function SWEP:SecondaryAttack()

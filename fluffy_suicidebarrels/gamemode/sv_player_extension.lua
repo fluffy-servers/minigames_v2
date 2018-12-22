@@ -7,7 +7,7 @@ hook.Add('PlayerDeath', 'SuicideBarrelsDeath', function( ply )
         boom:SetPos( ply:GetPos() ) 
         boom:SetOwner( ply )
         boom:Spawn()
-        boom:SetKeyValue( "iMagnitude", "150" ) 
+        boom:SetKeyValue( "iMagnitude", "125" ) 
         boom:Fire( "Explode", 0, 0 ) 
     end
 end )
@@ -20,6 +20,7 @@ hook.Add('KeyPress', 'SuicideBarrelBoom', function( ply, key )
 		
         if ply.NextBoom and CurTime() >= ply.NextBoom then
             ply.NextBoom = nil
+            ply:SetWalkSpeed(215)
             
 			-- Play blip sounds then explode
 			-- This should probably be improved
