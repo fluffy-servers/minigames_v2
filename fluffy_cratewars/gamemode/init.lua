@@ -13,7 +13,7 @@ GM.WeaponOptions = {
     weapon_shotgun = {'Shotgun', 'Buckshot', 6},
 }
 
-GM.BonusPercentage = 0.1
+GM.BonusPercentage = 0.06
 
 function GM:PlayerLoadout( ply )
     ply:StripAmmo()
