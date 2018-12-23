@@ -73,8 +73,44 @@ hook.Add('RegisterPowerUps', 'SniperWarsPowerUps', function()
     GAMEMODE:RegisterPowerUp('give_rpg', {
         Time = 0,
         OnCollect = function(ply)
-            ply:Give('weapon_rpg')
+            if ply:HasWeapon('weapon_rpg') then
+                ply:Give('weapon_rpg')
+            else
+                ply:Give('RPG_Round', 1)
+            end
         end,
-        Text = 'Revolver!',
+        Text = 'RPG!',
+    })
+    
+    GAMEMODE:RegisterPowerUp('give_slam', {
+        Time = 0,
+        OnCollect = function(ply)
+            ply:Give('weapon_slam')
+            ply:GiveAmmo('slam', 1)
+        end,
+        Text = 'Slams!',
     })
 end)
+
+hook.Add('Think', 'PowerUpThink', function()
+    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if not GAMEMODE.NextPowerUp then GAMEMODE.NextPowerUp = CurTime() + 30 return end
+    
+    if GAMEMODE.NextPowerUp < CurTime() then
+        GAMEMODE:SpawnPowerUp()
+        GAMEMODE.NextPowerUp = CurTime() + 60
+    end
+end)
+
+function GM:SpawnPowerUp()
+    if #ents.FindByClass('mg_powerup_crate') >= 2 then return end
+    local spawns = ents.FindByClass('mg_powerup_spawnpoint')
+    if not spawns then return end
+    local spawn = table.Random(spawns)
+    
+    local crate = ents.Create('mg_powerup_crate')
+    crate:SetPos(spawn:GetPos())
+    crate:Spawn()
+    crate:SetPowerUp(table.Random(GAMEMODE:GetPowerUpTypes()))
+    crate:SetMeleeOnly(true)
+end
