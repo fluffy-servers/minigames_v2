@@ -6,6 +6,7 @@
 -- Prepare some prepared queries to make database stuff faster and more secure
 hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
 	local db = GAMEMODE:CheckDBConnection()
+    if not db then return end
 	GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
 	GAMEMODE.MinigamesPQueries['addnewlevel'] = db:prepare("INSERT INTO minigames_xp VALUES(?, 0, 0);")
 	GAMEMODE.MinigamesPQueries['updatelevel'] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
@@ -74,6 +75,8 @@ function meta:UpdateLevelToDB()
     if level == 0 and xp == 0 then return end
     
     local q = GAMEMODE.MinigamesPQueries['updatelevel']
+    if not q then return end
+    
     q:setNumber(1, level)
     q:setNumber(2, xp)
     q:setString(3, self:SteamID64())
