@@ -32,7 +32,6 @@ function ENT:OnTakeDamage(dmg)
     if not attacker:IsPlayer() then attacker = dmg:GetInflictor() end
     if not attacker:IsPlayer() then return end
 
-    print(attacker, attacker:CanHavePowerUp())
     if attacker:CanHavePowerUp() then
         attacker:PowerUpApply(self.PowerUp, true)
         

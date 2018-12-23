@@ -1,6 +1,5 @@
 AddCSLuaFile()
 ENT.Type = "point"
-print('aaa')
 
 function ENT:Initialize()
 

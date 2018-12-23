@@ -106,7 +106,6 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:Trace()
-    print('Attempting trace')
 	if CLIENT then return end
 	
 	local pos = self.Owner:GetShootPos()
