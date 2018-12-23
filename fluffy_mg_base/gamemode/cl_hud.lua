@@ -432,8 +432,8 @@ function GM:DrawAmmo()
     local ammo = {}
     ammo['PrimaryClip'] = wep:Clip1()
     ammo['SecondaryClip'] = wep:Clip2()
-    ammo['PrimaryAmmo'] = LocalPlayer():GetAmmoCount( wep:GetPrimaryAmmoType() )
-    ammo['SecondaryAmmo'] = LocalPlayer():GetAmmoCount( wep:GetSecondaryAmmoType() )
+    ammo['PrimaryAmmo'] = LocalPlayer():GetAmmoCount(wep:GetPrimaryAmmoType())
+    ammo['SecondaryAmmo'] = LocalPlayer():GetAmmoCount(wep:GetSecondaryAmmoType())
     ammo['MaxPrimaryClip'] = wep:GetMaxClip1()
     ammo['MaxSecondaryClip'] = wep:GetMaxClip2()
     
@@ -444,7 +444,7 @@ function GM:DrawAmmo()
     
     -- Check the ammo table is valid
     if !ammo then return end
-    if ammo['PrimaryClip'] == -1 and ammo['PrimaryAmmo'] < 1 then return end
+    if ammo['PrimaryClip'] == -1 and (ammo['PrimaryAmmo'] or -1) < 1 then return end
     if ammo['PrimaryClip'] == 0 and ammo['PrimaryAmmo'] == 0 then return end
     
     -- Draw the shadow & circle
