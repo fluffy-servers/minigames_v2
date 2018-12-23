@@ -69,7 +69,12 @@ function SHOP.OpenInventory()
     frame:SetTitle('')
     
     function frame:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, Color(53, 59, 72))
+        DisableClipping(true)
+        local bs = 4
+        draw.RoundedBox(16, -bs, 4, w+(bs*2), h+(bs*2), SHOP.Color4)
+        draw.RoundedBox(16, -bs, -bs, w+(bs*2), h+(bs*2), SHOP.Color3)
+        DisableClipping(false)
+        draw.RoundedBox(16, 0, 0, w, h, SHOP.Color1)
     end
     
     -- Create the mirror -> see vgui/ShopMirror.lua
@@ -85,21 +90,23 @@ function SHOP.OpenInventory()
     tabs:SetPos(320, 0)
     tabs:GetVBar():SetVisible(false)
     function tabs:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, h, Color(47, 54, 64))
+        draw.RoundedBox(0, 0, 0, w, h, SHOP.Color3)
     end
+    
+    local button_height = 40
     
     -- Create buttons for all shop categories
     for k, cat in pairs(shop_categories) do
         local cat_button = vgui.Create('DButton', tabs)
-        cat_button:SetSize(128, 48)
+        cat_button:SetSize(128, button_height)
         cat_button:SetFont('FS_B32')
         cat_button:SetText(cat[1])
         cat_button:SetTextColor(color_white)
         cat_button:Dock(TOP)
         function cat_button:Paint(w, h)
-            local c = Color(47, 54, 64)
+            local c = SHOP.Color3
             if self.Selected or self:IsHovered() then
-                c = Color(37, 44, 54)
+                c = SHOP.Color4
             end
             draw.RoundedBox(0, 0, 0, w, h, c)
         end

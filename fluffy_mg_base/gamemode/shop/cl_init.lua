@@ -18,3 +18,8 @@ surface.CreateFont('FS_I48', {
     size = 48,
     weight = 800,
 })
+
+SHOP.Color1 = Color(245, 246, 250)
+SHOP.Color2 = Color(220, 221, 225)
+SHOP.Color3 = Color(0, 168, 255)
+SHOP.Color4 = Color(0, 151, 230)

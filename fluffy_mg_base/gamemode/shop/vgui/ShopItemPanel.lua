@@ -164,7 +164,7 @@ end
 
 -- Dark background
 function PANEL:Paint(w, h)
-    draw.RoundedBox(8, 0, 0, w, h, Color(47, 54, 64))
+    draw.RoundedBox(8, 0, 0, w, h, SHOP.Color2)
 end
 
 -- Name bar & relevant icons
@@ -175,7 +175,7 @@ function PANEL:PaintOver(w, h)
     -- Draw the name bar
     local color = rarity_colors[ITEM.Rarity or 1]
     draw.RoundedBoxEx(8, 0, h-24, w, 24, color, false, false, true, true)
-    draw.SimpleText(ITEM.Name or '?', "FS_I16", w/2, h - (24/2), Color(236, 240, 241), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(ITEM.Name or '?', "FS_I16", w/2, h - (24/2) - 1, Color(236, 240, 241), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw any icons
     local yy = 2
