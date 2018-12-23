@@ -14,19 +14,12 @@ local shop_categories = {
 }
 
 local test_inventory = {
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol', Type='crate', Rarity=3},
-    {Name = 'lol trail', Type='trail', Rarity=4, Material='trails/lol'},
-    {Name = 'lol trail g', Type='trail', Rarity=2, Material='trails/lol', Color=Color(0, 255, 100)},
-    {Name = 'i\'m already', Type='tracer'},
+    {Name = 'Cool Crate', Type='crate', Rarity=3},
+    {Name = 'Cooler Crate', Type='crate', Rarity=3},
+    {Name = 'Coolest Crate', Type='crate', Rarity=3},
+    {Name = 'Laugh Out Loud', Type='trail', Rarity=4, Material='trails/lol'},
+    {Name = 'Laugh Out Loud', Type='trail', Rarity=2, Material='trails/lol', Color=Color(0, 255, 100)},
+    {Name = 'I\'m already...', Type='tracer'},
 }
 
 function SHOP.PopulateInventory(category)
@@ -35,7 +28,6 @@ function SHOP.PopulateInventory(category)
     display:Clear()
     
     for key,ITEM in pairs(test_inventory) do
-        print(ITEM.Name)
         if category then
             if not ITEM.Type then continue end
             if ITEM.Type != category then continue end
@@ -46,6 +38,18 @@ function SHOP.PopulateInventory(category)
         panel.ITEM = ITEM
         panel:Ready()
     end
+end
+
+function SHOP.PopulateEquipped()
+    if not IsValid(SHOP.InventoryPanel) then return end
+    local display = SHOP.InventoryPanel.display
+    display:Clear()
+end
+
+function SHOP.PopulateSettings()
+    if not IsValid(SHOP.InventoryPanel) then return end
+    local display = SHOP.InventoryPanel.display
+    display:Clear()
 end
 
 function SHOP.OpenInventory()
@@ -137,6 +141,72 @@ function SHOP.OpenInventory()
             SHOP.PopulateInventory(cat[3])
         end
     end
+    
+    -- Create the equipped button
+    local equipped_button = vgui.Create('DButton', tabs)
+    equipped_button:SetSize(128, button_height)
+    equipped_button:SetFont('FS_B32')
+    equipped_button:SetTextColor(color_white)
+    equipped_button:SetText('Equipped')
+    equipped_button:Dock(TOP)
+    function equipped_button:Paint(w, h)
+        local c = SHOP.Color3
+        if self.Selected or self:IsHovered() then
+            c = SHOP.Color4
+        end
+        draw.RoundedBox(0, 0, 0, w, h, c)
+    end
+    
+    function equipped_button:DoClick()
+        mirror:TransitionCamera(default_cam.x, default_cam.y, default_cam.z, 0.5)
+        if self.Selected then
+            SHOP.InventoryPanel.Category = nil
+            self.Selected = false
+            SHOP.PopulateInventory()
+            return
+        end
+        
+        local buttons = tabs:GetChild(0):GetChildren()
+        for k,v in pairs(buttons) do
+            v.Selected = (v == self)
+        end
+        
+        SHOP.InventoryPanel.Category = 'Equipped'
+        SHOP.PopulateEquipped()
+    end
+    
+    local settings_button = vgui.Create('DButton', tabs)
+    settings_button:SetSize(128, button_height)
+    settings_button:SetFont('FS_B32')
+    settings_button:SetTextColor(color_white)
+    settings_button:SetText('Settings')
+    settings_button:Dock(TOP)
+    function settings_button:Paint(w, h)
+        local c = SHOP.Color3
+        if self.Selected or self:IsHovered() then
+            c = SHOP.Color4
+        end
+        draw.RoundedBox(0, 0, 0, w, h, c)
+    end
+    
+    function settings_button:DoClick()
+        mirror:TransitionCamera(default_cam.x, default_cam.y, default_cam.z, 0.5)
+        if self.Selected then
+            SHOP.InventoryPanel.Category = nil
+            self.Selected = false
+            SHOP.PopulateInventory()
+            return
+        end
+        
+        local buttons = tabs:GetChild(0):GetChildren()
+        for k,v in pairs(buttons) do
+            v.Selected = (v == self)
+        end
+        
+        SHOP.InventoryPanel.Category = 'Settings'
+        SHOP.PopulateSettings()
+    end
+    
     
     -- Create the scrollable inventory display
     local scroll = vgui.Create('DScrollPanel', frame)
