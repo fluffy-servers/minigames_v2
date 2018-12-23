@@ -2,6 +2,8 @@ AddCSLuaFile()
 ENT.Type = 'anim'
 ENT.Base = 'base_anim'
 
+ENT.MeleeOnly = false
+
 function ENT:Initialize()
     if CLIENT then return end
 	self:SetModel("models/Items/item_item_crate.mdl")
@@ -25,13 +27,22 @@ function ENT:SetPowerUp(type)
     self.PowerUp = type
 end
 
+function ENT:SetMeleeOnly(bool)
+    self.MeleeOnly = bool
+end
+
 function ENT:OnTakeDamage(dmg)
     if not self.PowerUp then return end
     local attacker = dmg:GetAttacker()
     if not attacker or not IsValid(attacker) then return end
     if not attacker:IsPlayer() then attacker = dmg:GetInflictor() end
     if not attacker:IsPlayer() then return end
-
+    
+    if self.MeleeOnly then
+        local distsqr = self:GetPos():DistToSqr(attacker:GetPos())
+        if distsqr > 250000 then return end
+    end
+    
     if attacker:CanHavePowerUp() then
         attacker:PowerUpApply(self.PowerUp, true)
         
