@@ -82,20 +82,8 @@ end
 
 -- Function to toggle displaying cosmetics
 -- Obviously, cosmetic items shouldn't be displayed on barrels etc.
-function GM:ShouldDrawCosmetics(ply)
-    if GAMEMODE.TeamSurvival then
-        -- Cosmetics shouldn't show for the Hunter Team (in most cases)
-        -- Override in some cases
-        if ply:Team() == GAMEMODE.HunterTeam then
-            return false
-        else
-            return true
-        end
-    else
-        -- Should be okay in most cases
-        -- Override in others
-        return true
-    end
+function GM:ShouldDrawCosmetics(ply, ITEM)
+    return hook.Run('ShouldDrawCosmetics', ply, ITEM)
 end
 
 -- Valid playermodels
