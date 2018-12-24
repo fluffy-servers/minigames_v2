@@ -24,6 +24,19 @@ function SHOP:ParseVanillaItem(key)
     end
 end
 
+-- Strip any unneeded information from a table
+function SHOP:StripVanillaItem(ITEM)
+    if type(ITEM) == 'string' then
+        return {VanillaID = ITEM}
+    else
+        local ret = {}
+        ret.VanillaID = ITEM.VanillaID
+        if ITEM.Color then ret.Color = ITEM.Color end
+        
+        return ret
+    end
+end
+
 -- Registration functions for adding items into the master table
 function SHOP:RegisterHat(ITEM)
 	ITEM.Type = 'Hat'
