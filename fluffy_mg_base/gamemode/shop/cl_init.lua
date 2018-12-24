@@ -1,4 +1,5 @@
 include('cl_inventory.lua')
+include('cl_render.lua')
 include('vgui/ShopMirror.lua')
 include('vgui/ShopItemPanel.lua')
 
