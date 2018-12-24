@@ -83,7 +83,7 @@ end
 -- Function to toggle displaying cosmetics
 -- Obviously, cosmetic items shouldn't be displayed on barrels etc.
 function GM:ShouldDrawCosmetics(ply, ITEM)
-    return hook.Run('ShouldDrawCosmetics', ply, ITEM)
+    return hook.Run('DrawCosmeticsCheck', ply, ITEM) or true
 end
 
 -- Valid playermodels
