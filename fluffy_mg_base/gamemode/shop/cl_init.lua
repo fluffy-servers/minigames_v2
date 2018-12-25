@@ -30,18 +30,27 @@ SHOP.Color4 = Color(0, 151, 230)
 
 -- Handle equips broadcast from the server
 net.Receive('SHOP_BroadcastEquip', function()
+    local ITEM = net.ReadTable()
+    ITEM = SHOP:ParseVanillaItem(ITEM)
+    
     local ply = net.ReadEntity()
     if not IsValid(ply) or not ply:IsPlayer() then return end
     
-    local ITEM = net.ReadTable()
-    ITEM = SHOP:ParseVanillaItem(ITEM)
+    local state = net.ReadBool()
     
     if ITEM.Type == 'Hat' then
         -- See cl_render
         -- Passes off to cosmetic rendering engine
-        SHOP:EquipCosmetic(ITEM, ply)
+        if state then
+            SHOP:EquipCosmetic(ITEM, ply)
+        else
+            SHOP:UnequipCosmetic(ITEM, ply)
+        end
     elseif ITEM.Type == 'Tracer' then
-        -- Unfinished
-        ply.TracerEffect = ITEM.Effect
+        if state then
+            ply.TracerEffect = ITEM.Effect
+        else
+            ply.TracerEffect = nil
+        end
     end
 end)

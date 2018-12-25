@@ -9,6 +9,7 @@ include('sv_inventory.lua')
 util.AddNetworkString('SHOP_RequestItemAction')
 util.AddNetworkString('SHOP_NetworkInventory')
 util.AddNetworkString('SHOP_BroadcastEquip')
+util.AddNetworkString('SHOP_NetworkEquipped')
 
 -- Open the shop on client when F4 is pressed
 function GM:ShowSpare2(ply)

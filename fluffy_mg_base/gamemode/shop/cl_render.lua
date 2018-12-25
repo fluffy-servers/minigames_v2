@@ -93,14 +93,3 @@ function SHOP:UnequipCosmetic(ITEM, ply)
         SHOP.ClientModels[ply][ITEM.VanillaID] = nil
     end
 end
-
-net.Receive('SHOP_BroadcastEquip', function()
-    local ITEM = net.ReadTable()
-    local ply = net.ReadEntity()
-    local state = net.ReadBool()
-    if state then
-        SHOP:EquipCosmetic(ITEM, ply)
-    else
-        SHOP:UnequipCosmetic(ITEM, ply)
-    end
-end)

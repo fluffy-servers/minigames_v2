@@ -13,6 +13,9 @@ local shop_categories = {
     {'Trails', default_cam, 'trail'},
 }
 
+SHOP.InventoryTable = {}
+SHOP.InventoryEquipped = {}
+
 function SHOP:VerifyInventory()
     net.Start('SHOP_NetworkInventory')
         net.WriteString(SHOP:HashTable(SHOP.InventoryTable))
@@ -25,6 +28,10 @@ net.Receive('SHOP_NetworkInventory', function()
     if IsValid(SHOP.InventoryPanel) then
         SHOP:PopulateInventory()
     end
+end)
+
+net.Receive('SHOP_NetworkEquipped', function()
+    SHOP.InventoryEquipped = net.ReadTable()
 end)
 
 function SHOP:PopulateInventory(category)
