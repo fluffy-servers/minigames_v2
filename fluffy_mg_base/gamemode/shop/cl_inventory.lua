@@ -13,21 +13,13 @@ local shop_categories = {
     {'Trails', default_cam, 'trail'},
 }
 
-local test_inventory = {
-    {Name = 'Cool Crate', Type='crate', Rarity=3},
-    {Name = 'Cooler Crate', Type='crate', Rarity=3},
-    {Name = 'Coolest Crate', Type='crate', Rarity=3},
-    {Name = 'Laugh Out Loud', Type='trail', Rarity=4, Material='trails/lol'},
-    {Name = 'Laugh Out Loud', Type='trail', Rarity=2, Material='trails/lol', Color=Color(0, 255, 100)},
-    {Name = 'I\'m already...', Type='tracer'},
-}
-
-function SHOP.PopulateInventory(category)
+function SHOP:PopulateInventory(category)
     if not IsValid(SHOP.InventoryPanel) then return end
     local display = SHOP.InventoryPanel.display
     display:Clear()
     
-    for key,ITEM in pairs(test_inventory) do
+    if not SHOP.InventoryTable then return end
+    for key,ITEM in pairs(SHOP.InventoryTable) do
         if category then
             if not ITEM.Type then continue end
             if ITEM.Type != category then continue end
@@ -40,19 +32,19 @@ function SHOP.PopulateInventory(category)
     end
 end
 
-function SHOP.PopulateEquipped()
+function SHOP:PopulateEquipped()
     if not IsValid(SHOP.InventoryPanel) then return end
     local display = SHOP.InventoryPanel.display
     display:Clear()
 end
 
-function SHOP.PopulateSettings()
+function SHOP:PopulateSettings()
     if not IsValid(SHOP.InventoryPanel) then return end
     local display = SHOP.InventoryPanel.display
     display:Clear()
 end
 
-function SHOP.OpenInventory()
+function SHOP:OpenInventory()
     if IsValid(SHOP.InventoryPanel) then return end
     if not SHOP.InventoryTable then
         -- Request the table from the server
@@ -233,7 +225,7 @@ end
 
 -- Concommand to open the shop
 concommand.Add('minigames_shop', function()
-    SHOP.OpenInventory()
+    SHOP:OpenInventory()
 end)
 
 -- Request functions for server interfacing
