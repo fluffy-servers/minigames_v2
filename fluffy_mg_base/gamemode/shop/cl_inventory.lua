@@ -131,7 +131,7 @@ function SHOP:OpenInventory()
             if self.Selected then
                 self.Selected = false
                 mirror:TransitionCamera(default_cam.x, default_cam.y, default_cam.z, 0.5)
-                SHOP.PopulateInventory()
+                SHOP:PopulateInventory()
                 SHOP.InventoryPanel.Category = nil
                 return
             end
@@ -149,7 +149,7 @@ function SHOP:OpenInventory()
             
             -- Repopulate
             SHOP.InventoryPanel.Category = cat[1]
-            SHOP.PopulateInventory(cat[3])
+            SHOP:PopulateInventory(cat[3])
         end
     end
     
@@ -173,7 +173,7 @@ function SHOP:OpenInventory()
         if self.Selected then
             SHOP.InventoryPanel.Category = nil
             self.Selected = false
-            SHOP.PopulateInventory()
+            SHOP:PopulateInventory()
             return
         end
         
@@ -205,7 +205,7 @@ function SHOP:OpenInventory()
         if self.Selected then
             SHOP.InventoryPanel.Category = nil
             self.Selected = false
-            SHOP.PopulateInventory()
+            SHOP:PopulateInventory()
             return
         end
         
@@ -239,7 +239,7 @@ function SHOP:OpenInventory()
     
     SHOP.InventoryPanel = frame
     SHOP.InventoryPanel.display = display
-    SHOP.PopulateInventory()
+    SHOP:PopulateInventory()
 end
 
 -- Concommand to open the shop
@@ -258,3 +258,14 @@ function SHOP:RequestEquip(key)
         net.WriteInt(key, 16)
     net.SendToServer()
 end
+
+net.Receive('SHOP_InventoryChange', function()
+    local mode = net.ReadString()
+    if mode == 'ADD' then
+        local ITEM = net.ReadTable()
+        table.insert(SHOP.InventoryTable, ITEM)
+    elseif mode == 'REMOVE' then
+        local key = net.ReadInt(16)
+        table.remove(SHOP.InventoryTable, key)
+    end
+end)

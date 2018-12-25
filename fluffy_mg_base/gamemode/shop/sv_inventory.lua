@@ -6,20 +6,56 @@ local test_inventory = {
     {VanillaID = 'coolcrate', Name='Coolest Crate', Type='crate', Rarity=3},
 }
 
+-- Function to generate a default inventory
+-- This should return a table
 function SHOP:DefaultInventory()
     return test_inventory
 end
 
+-- Load a player's inventory
+function SHOP:LoadInventory(ply, callback)
+    SHOP.PlayerInventories[ply] = SHOP:DefaultInventory()
+    
+    local inventory = SHOP.PlayerInventories[ply]
+    callback(inventory)
+end
+
+-- Transmit the equipped table to the clients
+-- This makes sure the server & client about what items are equipped
 function SHOP:NetworkEquipped(ply)
     net.Start('SHOP_NetworkEquipped')
         net.WriteTable(SHOP.PlayerEquipped[ply])
     net.Send(ply)
 end
 
+-- Network the entire inventory to the client
+-- Only use this when needed
 function SHOP:NetworkInventory(ply)
     net.Start('SHOP_NetworkInventory')
         net.WriteTable(SHOP.PlayerInventories[ply])
     net.Send(ply)
+end
+
+-- Add an item to the inventory
+function SHOP:AddItem(ITEM, ply)
+    if type(ITEM) != 'table' then
+        ITEM = {VanillaID = ITEM}
+    end
+    if not SHOP.VanillaItems[ITEM.VanillaID] then return end
+    
+    if not SHOP.PlayerInventories[ply] then return end
+    table.insert(SHOP.PlayerInventories[ply], ITEM)
+    
+    -- Network change to the client
+    net.Start('SHOP_InventoryChange')
+        net.WriteString('ADD')
+        net.WriteTable(ITEM)
+    net.Send(ply)
+end
+
+-- Remove an item from the inventory
+function SHOP:RemoveItem(key, ply)
+    if not SHOP.PlayerInventories[ply] then return end
 end
 
 hook.Add('PlayerInitialSpawn', 'LoadShopInventory', function(ply)
@@ -41,8 +77,9 @@ net.Receive('SHOP_NetworkInventory', function(len, ply)
     ply.LastVerification = CurTime()
     
     local check = net.ReadString()
-    if not SHOP.PlayerInventories[ply] then 
-        SHOP.PlayerInventories[ply] = SHOP:DefaultInventory()
+    if not SHOP.PlayerInventories[ply] then
+        SHOP:LoadInventory(ply, function() SHOP:NetworkInventory(ply) end)
+        return
     end
     
     if check != SHOP:HashTable(SHOP.PlayerInventories[ply]) then
