@@ -11,7 +11,12 @@ end
 -- Get a hashed version of the table
 -- This should not be used for security, only for verification
 function SHOP:HashTable(tbl)
-    return util.CRC(table.ToString(tbl))
+    if not tbl or type(tbl) != 'table' then
+        -- different results on state to ensure mismatch
+        if CLIENT then return 'NULL-TABLE-CLIENT' elseif SERVER then return 'NULL-TABLE-SERVER' end
+    else
+        return util.CRC(table.ToString(tbl))
+    end
 end
 
 -- Given a key (or information table), grab the rest of the item data
@@ -19,8 +24,12 @@ function SHOP:ParseVanillaItem(key)
     if type(key) == 'string' then
         return SHOP.VanillaItems[key]
     elseif type(key) == 'table' then
-        local k = key.key
-        return table.Merge(SHOP.VanillaItems[k], key)
+        local k = key.VanillaID
+        if SHOP.VanillaItems[k] then
+            return table.Merge(SHOP.VanillaItems[k], key)
+        else
+            if key.Type then return key else return nil end
+        end
     end
 end
 

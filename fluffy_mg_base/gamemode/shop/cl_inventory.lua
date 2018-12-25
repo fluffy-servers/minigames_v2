@@ -13,6 +13,20 @@ local shop_categories = {
     {'Trails', default_cam, 'trail'},
 }
 
+function SHOP:VerifyInventory()
+    net.Start('SHOP_NetworkInventory')
+        net.WriteString(SHOP:HashTable(SHOP.InventoryTable))
+    net.SendToServer()
+end
+
+net.Receive('SHOP_NetworkInventory', function()
+    SHOP.InventoryTable = net.ReadTable()
+    print('Updated local inventory with copy from server')
+    if IsValid(SHOP.InventoryPanel) then
+        SHOP:PopulateInventory()
+    end
+end)
+
 function SHOP:PopulateInventory(category)
     if not IsValid(SHOP.InventoryPanel) then return end
     local display = SHOP.InventoryPanel.display
@@ -46,9 +60,7 @@ end
 
 function SHOP:OpenInventory()
     if IsValid(SHOP.InventoryPanel) then return end
-    if not SHOP.InventoryTable then
-        -- Request the table from the server
-    end
+    SHOP:VerifyInventory()
     
     -- Scaling stuff
     local sw = math.floor(ScrW()/256) - 1

@@ -4,6 +4,7 @@ AddCSLuaFile('vgui/ShopItemPanel.lua')
 AddCSLuaFile('vgui/ShopMirror.lua')
 
 include('sv_equip.lua')
+include('sv_inventory.lua')
 
 util.AddNetworkString('SHOP_RequestItemAction')
 util.AddNetworkString('SHOP_NetworkInventory')
