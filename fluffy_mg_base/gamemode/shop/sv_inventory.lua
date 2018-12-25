@@ -3,7 +3,8 @@ SHOP.PlayerEquipped = SHOP.PlayerEquipped or {}
 
 local test_inventory = {
     {VanillaID = 'boogleballoon'},
-    {VanillaID = 'coolcrate', Name='Coolest Crate', Type='crate', Rarity=3},
+    {VanillaID = 'coolcrate', Name='Coolest Crate', Type='Crate', Rarity=3},
+    {VanillaID = 'testtrail', Name='Hilarious', Rarity=2, Type='Trail', Paintable=true, Material='trails/lol.vmt'}, 
 }
 
 -- Function to generate a default inventory

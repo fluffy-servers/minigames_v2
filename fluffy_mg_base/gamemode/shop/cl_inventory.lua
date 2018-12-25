@@ -7,10 +7,10 @@ local shop_categories = {
     {'Glasses', Vector(64, 16, 0), 'eyes'},
     {'Headgear', Vector(64, 24, 0), 'hat'},
     
-    {'Crates', default_cam, 'crate'},
-    {'Paint', default_cam, 'paint'},
-    {'Tracers', default_cam, 'tracer'},
-    {'Trails', default_cam, 'trail'},
+    {'Crates', default_cam, 'Crate'},
+    {'Paint', default_cam, 'Paint'},
+    {'Tracers', default_cam, 'Tracer'},
+    {'Trails', default_cam, 'Trail'},
 }
 
 SHOP.InventoryTable = {}

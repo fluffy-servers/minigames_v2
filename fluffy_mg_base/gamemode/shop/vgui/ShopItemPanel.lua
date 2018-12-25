@@ -38,13 +38,13 @@ function PANEL:Ready()
     self.ITEM = ITEM
     
     -- Decide what function to use
-    if ITEM.Type == 'crate' then
+    if ITEM.Type == 'Crate' then
         self:CrateIcon(ITEM)
-    elseif ITEM.Type == 'paint' then
+    elseif ITEM.Type == 'Paint' then
         self:PaintIcon(ITEM)
-    elseif ITEM.Type == 'tracer' then
+    elseif ITEM.Type == 'Tracer' then
         self:TracerIcon(ITEM)
-    elseif ITEM.Type == 'trail' then
+    elseif ITEM.Type == 'Trail' then
         self:TrailIcon(ITEM)
     else
         self:WearableIcon(ITEM)
