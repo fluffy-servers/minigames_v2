@@ -30,8 +30,12 @@ function PANEL:Ready()
     local ITEM = self.ITEM
     if not ITEM then
         -- uh oh
-        
+        return
     end
+    
+    -- Parse the item and store
+    ITEM = SHOP:ParseVanillaItem(ITEM)
+    self.ITEM = ITEM
     
     -- Decide what function to use
     if ITEM.Type == 'crate' then
@@ -123,8 +127,83 @@ function PANEL:TrailIcon(ITEM)
 	end
 end
 
-function PANEL:WearableIcon(ITEM)
+function PANEL:WearableRender(ITEM, ent, CSModel)
+    -- Search for the attachment and calculate the position & angles
+    if not ITEM.Attachment then return end
+    local attach_id = ent:LookupAttachment(ITEM.Attachment)
+	if not attach_id then return end
+	local attach = ent:GetAttachment(attach_id)
+	if not attach then return end
+	local pos = attach.Pos
+	local ang = attach.Ang
+    if not pos or not ang then return end
+    
+    -- Apply any modifications
+    if ITEM.Modify then
+        -- Scale modification
+        if ITEM.Modify.scale then
+            CSModel:SetModelScale(ITEM.Modify.scale, 0)
+        end
+        
+        -- Offset modification
+        if ITEM.Modify.offset then
+            local offset = ITEM.Modify.offset
+            pos = pos + (ang:Forward() * offset.x) + (ang:Right() * offset.y) + (ang:Up() * offset.z)
+        end
+        
+        -- Rotation modification
+        if ITEM.Modify.angle then
+            local rotation = ITEM.Modify.angle
+            ang:RotateAroundAxis(ang:Right(), rotation.p)
+            ang:RotateAroundAxis(ang:Forward(), rotation.r)
+            ang:RotateAroundAxis(ang:Up(), rotation.y)
+        end
+    end
+    
+    -- Apply custom colours
+    if ITEM.Paintable and ITEM.Color then
+        -- to do
+    end
+    
+    -- Apply override material
+    if ITEM.MaterialOverride then
+        -- to do
+    end
+    
+    -- Draw the model!
+    CSModel:SetPos(pos)
+    CSModel:SetAngles(ang)
+    CSModel:DrawModel()
+end
 
+function PANEL:WearableIcon(ITEM)
+    self.icon = vgui.Create("DModelPanel", self )
+	self.icon:Dock(FILL)
+	self.icon:SetModel( LocalPlayer():GetModel() )
+	self.icon:SetAnimated( false )
+    self.icon.Entity:SetPlaybackRate(0)
+    
+    local shift = Vector(0, 0, 0)
+    if ITEM.IconShift then shift = ITEM.IconShift end
+    self.icon:SetCamPos( Vector(0, 0, -12) + shift)
+    self.icon:SetLookAt( Vector(-50, 0, -12) + shift)
+    self.icon:SetFOV(26)
+    self.icon.panel = self
+    
+    if !IsValid(self.icon.Entity) then return end
+    self.icon.Entity:SetPos( Vector(-50, 0, -75) )
+    
+	function self.icon:LayoutEntity() return end
+    function self.icon.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
+    
+    self.icon.CSModel = ClientsideModel(ITEM.Model, RENDERGROUP_OPAQUE)
+    function self.icon:OnRemove()
+        SafeRemoveEntity(self.CSModel)
+    end
+    
+    function self.icon:PostDrawModel(ent)
+        self.panel:WearableRender(self.panel.ITEM, ent, self.CSModel)
+    end
 end
 
 -- Clicking handler to open up the menu
