@@ -83,7 +83,7 @@ function PANEL:Think()
 end
 
 function PANEL:PostDrawModel(ent)
-
+    SHOP:RenderCosmetics(ent, LocalPlayer(), true)
 end
 
 vgui.Register("ShopMirror", PANEL, "DModelPanel")
