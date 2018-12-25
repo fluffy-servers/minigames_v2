@@ -58,12 +58,13 @@ function SHOP:RenderCosmetics(ent, ply, force)
     end
 end
 
+-- Hook to draw player cosmetics
+-- This calls the above function
 hook.Add('PostPlayerDraw', 'DrawPlayerCosmetics', function(ply)
     if not ply:Alive() then return end
     if ply == LocalPlayer() and GetViewEntity():GetClass() == 'player' then return end
     
     -- This renders the players cosmetics onto the player entity
-    --print(ply, 'drawing in PostPlayerDraw')
     SHOP:RenderCosmetics(ply, ply)
 end)
 
@@ -81,9 +82,18 @@ function SHOP:EquipCosmetic(ITEM, ply)
 	end
     
     ITEM.ent = ent
-    table.insert(SHOP.ClientModels[ply], ITEM)
-    print('Registered ITEM successfully!')
+    SHOP.ClientModels[ply][ITEM.VanillaID] = ITEM
 end
+
+-- Unequip a cosmetic
+function SHOP:UnequipCosmetic(ITEM, ply)
+    if not SHOP.ClientModels[ply] then return end
+    if SHOP.ClientModels[ply][ITEM.VanillaID] then
+        SafeRemoveEntity(SHOP.ClientModels[ply][ITEM.VanillaID].ent)
+        SHOP.ClientModels[ply][ITEM.VanillaID] = nil
+    end
+end
+
 net.Receive('SHOP_BroadcastEquip', function()
     local ITEM = net.ReadTable()
     local ply = net.ReadEntity()
