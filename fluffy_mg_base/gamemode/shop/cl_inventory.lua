@@ -237,10 +237,13 @@ concommand.Add('minigames_shop', function()
 end)
 
 -- Request functions for server interfacing
-function SHOP.RequestUnbox()
+function SHOP:RequestUnbox(key)
 
 end
 
-function SHOP.RequestEquip()
-
+function SHOP:RequestEquip(key)
+    net.Start('SHOP_RequestItemAction')
+        net.WriteString('EQUIP')
+        net.WriteInt(key, 16)
+    net.SendToServer()
 end
