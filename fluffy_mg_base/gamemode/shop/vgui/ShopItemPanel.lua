@@ -146,17 +146,17 @@ function PANEL:DoClick()
     
     if ITEM.Type == 'crate' then
         -- Add unbox button
-        Menu:AddOption("Unbox", function() SHOP.RequestUnbox(key) end ):SetIcon("icon16/box.png")
+        Menu:AddOption("Unbox", function() SHOP:RequestUnbox(key) end ):SetIcon("icon16/box.png")
     elseif ITEM.Type == 'paint' then
         -- Add no buttons :(
     else
         -- Add equip button
-        Menu:AddOption("Equip", function() SHOP.RequestEquip(key) end ):SetIcon("icon16/wrench.png")
+        Menu:AddOption("Equip", function() SHOP:RequestEquip(key) end ):SetIcon("icon16/wrench.png")
     end
     
     -- Add paint button
     if ITEM.Paintable then
-        Menu:AddOption("Select Paint", function() SHOP.OpenPaintBox(key) end ):SetIcon("icon16/palette.png")
+        Menu:AddOption("Select Paint", function() SHOP:OpenPaintBox(key) end ):SetIcon("icon16/palette.png")
     end
     
     Menu:Open()
