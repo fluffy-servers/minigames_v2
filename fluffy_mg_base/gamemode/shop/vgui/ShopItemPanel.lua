@@ -225,17 +225,19 @@ function PANEL:DoClick()
     
     if ITEM.Type == 'crate' then
         -- Add unbox button
-        Menu:AddOption("Unbox", function() SHOP:RequestUnbox(key) end ):SetIcon("icon16/box.png")
+        Menu:AddOption("Unbox", function() SHOP:RequestUnbox(self.key) end ):SetIcon("icon16/box.png")
     elseif ITEM.Type == 'paint' then
         -- Add no buttons :(
     else
         -- Add equip button
-        Menu:AddOption("Equip", function() SHOP:RequestEquip(key) end ):SetIcon("icon16/wrench.png")
+        local text = "Equip"
+        if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] == true then text = "Unequip" end
+        Menu:AddOption(text, function() SHOP:RequestEquip(self.key) end ):SetIcon("icon16/wrench.png")
     end
     
     -- Add paint button
     if ITEM.Paintable then
-        Menu:AddOption("Select Paint", function() SHOP:OpenPaintBox(key) end ):SetIcon("icon16/palette.png")
+        Menu:AddOption("Select Paint", function() SHOP:OpenPaintBox(self.key) end ):SetIcon("icon16/palette.png")
     end
     
     Menu:Open()
@@ -258,6 +260,27 @@ function PANEL:PaintOver(w, h)
     
     -- Draw any icons
     local yy = 2
+    	surface.SetDrawColor( Color(255, 255, 255) )
+	
+    -- Draw tick mark if equipped
+	if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] == true then
+		surface.SetMaterial(icons['equipped'])
+		surface.DrawTexturedRect( w - 16, yy, 16, 16 )
+		yy = yy + 16
+	end
+    
+    -- Draw easel or color if paintable
+	if ITEM.Paintable then
+		if ITEM.Color then
+			surface.SetDrawColor(ITEM.Color)	
+			surface.DrawRect( w - 18, yy, 16, 16 )
+			yy = yy + 16
+		else
+			surface.SetMaterial(icons['paintable'])
+			surface.DrawTexturedRect( w - 18, yy, 16, 16 )
+			yy = yy + 16
+		end
+	end
 end
 
 vgui.Register("ShopItemPanel", PANEL, "DButton")
