@@ -75,6 +75,6 @@ hook.Add('RegisterPowerUps', 'SniperWarsPowerUps', function()
         OnCollect = function(ply)
             ply:Give('weapon_rpg')
         end,
-        Text = 'Revolver!',
+        Text = 'RPG!',
     })
 end)
