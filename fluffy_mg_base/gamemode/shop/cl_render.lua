@@ -62,8 +62,7 @@ end
 -- This calls the above function
 hook.Add('PostPlayerDraw', 'DrawPlayerCosmetics', function(ply)
     if not ply:Alive() then return end
-    if ply == LocalPlayer() and GetViewEntity():GetClass() == 'player' then return end
-    
+    if ply == LocalPlayer() and (GetViewEntity():GetClass() == 'player' and not LocalPlayer().Thirdperson) then return end
     -- This renders the players cosmetics onto the player entity
     SHOP:RenderCosmetics(ply, ply)
 end)
