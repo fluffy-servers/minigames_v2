@@ -125,7 +125,8 @@ function GM:DrawRoundState()
     
     -- Draw spectating message on bottom (very rare)
     if LocalPlayer():Team() == TEAM_SPECTATOR then
-        draw.SimpleTextOutlined( 'You are a spectator', "FS_32", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color( 0, 0, 0 ) )
+        draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2+2, ScrH() - 32+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
+		draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     end
     
     if not GAMEMODE.HUDStyle or GAMEMODE.HUDStyle == 1 then
