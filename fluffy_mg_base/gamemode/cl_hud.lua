@@ -118,14 +118,14 @@ function GM:DrawRoundState()
     local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
     -- Only draw this if the game hasn't yet started
     if GAME_STATE == 'GameNotStarted' then
-        draw.SimpleText( 'Waiting For Players...', "FS_40", 4+2, 4+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
+        draw.SimpleText( 'Waiting For Players...', "FS_40", 4+1, 4+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
 		draw.SimpleText( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
     
     -- Draw spectating message on bottom (very rare)
     if LocalPlayer():Team() == TEAM_SPECTATOR then
-        draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2+2, ScrH() - 32+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
+        draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
 		draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     end
     
