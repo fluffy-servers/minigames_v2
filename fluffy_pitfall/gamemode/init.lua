@@ -18,6 +18,7 @@ GM.BlockOptions = {
     --'props',
 }
 
+-- Register the powerups using the base powerups library
 hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
     GAMEMODE:RegisterPowerUp('shotgun', {
         Time = 10,
@@ -32,6 +33,7 @@ hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
     })
 end)
 
+-- Players start with a platform breaker weapon
 function GM:PlayerLoadout( ply )
     ply:Give( 'weapon_platformbreaker' )
     ply:SetWalkSpeed( 350 )
@@ -39,6 +41,7 @@ function GM:PlayerLoadout( ply )
     ply:SetJumpPower(200)
 end
 
+-- Handle spawns slightly differently due to the random platforms
 function GM:PlayerSelectSpawn( pl )
     local spawns = ents.FindByClass( "info_player_start" )
     if(#spawns <= 0) then return false end
@@ -51,10 +54,13 @@ function GM:PlayerSelectSpawn( pl )
     return selected
 end
 
+-- Alter fall damage calculation
 function GM:GetFallDamage( ply, vel )
     return vel/7
 end
 
+-- Handle player death
+-- It's hard to track kills in this gamemode
 function GM:DoPlayerDeath( ply, attacker, dmginfo )
     -- Always make the ragdoll
     ply:CreateRagdoll()
@@ -77,16 +83,18 @@ end
 hook.Add('PreRoundStart', 'CreatePlatforms', function()
     GAMEMODE.NextPowerUp = CurTime() + 5
     
+	-- Tiles maps already have platforms
     local map = game.GetMap()
     if string.StartWith(map, 'til_') then return end
     
+	-- Clear the level then randomly place platforms
     local gametype = table.Random(GAMEMODE.BlockOptions)
     SetGlobalString('PitfallType', gametype)
-    
     GAMEMODE:ClearLevel()
     GAMEMODE:SpawnPlatforms()
 end )
 
+-- Add platforms to the platforms at random intervals
 hook.Add('Think', 'PowerUpThink', function()
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     if not GAMEMODE.NextPowerUp then GAMEMODE.NextPowerUp = CurTime() + 5 return end
@@ -97,6 +105,7 @@ hook.Add('Think', 'PowerUpThink', function()
     end
 end)
 
+-- Remove any leftover entities when the level is cleared
 function GM:ClearLevel()
 	for k,v in pairs(ents.FindByClass( "pf_platform" )) do
 		v:Remove()
@@ -115,6 +124,7 @@ function GM:ClearLevel()
 	end
 end
 
+-- Spawn the platforms
 function GM:SpawnPlatforms()
     local pos = GAMEMODE.PlatformPositions[game.GetMap()]
     if !pos then
@@ -152,6 +162,7 @@ function GM:SpawnPlatforms()
     --]]
 end
 
+-- Generate a grid of platforms
 function GM:RandomPlatforms(pos)
     local rows = math.random(2, 5)
     local columns = math.random(2, 5)
@@ -184,23 +195,29 @@ function GM:RandomPlatforms(pos)
     end
 end
 
+-- Certain maps have platform positions predefined
+-- In this case, spawn the platforms at these markers
 function GM:MarkerPlatforms(ents)
     local levels = math.random(1, 3)
     if math.random() > 0.5 then levels = levels + 1 end
     
     local size = math.random(1, 5)
     
+	-- Level is randomly assigned between a certain amount
+	-- Each marker has a 'level' - higher levels = more platforms?
     for k,v in pairs(ents) do
         if size > v.Size then continue end
         
         for level = 1,levels do
             if level > v.MaxLevels then break end
-            self:SpawnPlatform( v:GetPos(), (level == 1) )
+            self:SpawnPlatform(v:GetPos(), (level == 1))
         end
     end
 end
 
+-- Spawn a platform at a given position
 function GM:SpawnPlatform(pos, addspawn)
+	-- Create the platform entity
 	local prop = ents.Create( "pf_platform" )
 	if not IsValid(prop) then return end
 	prop:SetAngles( Angle( 0, 0, 0 ) )
@@ -208,12 +225,14 @@ function GM:SpawnPlatform(pos, addspawn)
 	prop:Spawn()
 	prop:Activate()
     
+	--- Add a spawn if required
     local spawn
     if addspawn then
         spawn = ents.Create("info_player_start")
-        if ( !spawn ) then return end
+        if not IsValid(spawn) then return end
 	end
     
+	-- Make sure the platform origin is perfect
 	local center = prop:GetCenter()
 	center.z = center.z + 24
     if addspawn then
@@ -222,6 +241,7 @@ function GM:SpawnPlatform(pos, addspawn)
     end
 end
 
+-- Award powerups to players randomly when triggered
 function GM:AddPowerUp()
     local t = table.Random(GAMEMODE:GetPowerUpTypes())
     local target = false
