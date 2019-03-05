@@ -1,3 +1,4 @@
+-- Define tables of random weapons
 local random_weapons = {}
 random_weapons['shotgun'] = function(p)
     p:Give('weapon_shotgun')
@@ -32,6 +33,7 @@ end
 local cache_seed = nil
 local cache = nil
 
+-- Pick a number of random weapons from the above list
 local function PickRandomWeapons(seed, num)
     if cache_seed and seed == cache_seed then
         return cache
@@ -42,6 +44,7 @@ local function PickRandomWeapons(seed, num)
     end
 end
 
+-- Award survival bonuses to any living players
 local function SurvivalBonus(victim, attacker, dmg)
     for k,v in pairs(player.GetAll()) do
         if v == victim then continue end
@@ -51,6 +54,7 @@ local function SurvivalBonus(victim, attacker, dmg)
     end
 end
 
+-- Make crowbars knock players back instead of doing damage
 local function CrowbarKnockback(ent, dmg)
     if not ent:IsPlayer() then return true end
     if not dmg:GetAttacker():IsPlayer() then return end
@@ -60,6 +64,8 @@ local function CrowbarKnockback(ent, dmg)
     ent:SetVelocity(v * 100)
 end
 
+-- Shotguns
+-- Simple FFA deathmatch with shotguns
 GM.Modifiers = {}
 GM.Modifiers['shotguns'] = {
     name = 'Shotguns',
@@ -70,6 +76,8 @@ GM.Modifiers['shotguns'] = {
     end
 }
 
+-- Combine Balls
+-- Utilises the alt-fire of the AR2 weapon
 GM.Modifiers = {}
 GM.Modifiers['combineballs'] = {
     name = 'Combine Balls',
@@ -83,6 +91,8 @@ GM.Modifiers['combineballs'] = {
     end
 }
 
+-- Flight
+-- Random weapons with 0 gravity
 GM.Modifiers['flight'] = {
     name = 'Flight',
     subtext = 'Gravity is on lunch break',
@@ -92,6 +102,8 @@ GM.Modifiers['flight'] = {
     end
 }
 
+-- Speedy
+-- Random weapons with faster movement speed
 GM.Modifiers['speedy'] = {
     name = 'Speedy',
     subtext = 'Think fast. Move faster.',
@@ -102,6 +114,8 @@ GM.Modifiers['speedy'] = {
     end
 }
 
+-- Sticky Grenades
+-- Players are stuck and must throw grenades to eliminate opponents
 GM.Modifiers['grenades'] = {
     name = 'Sticky Grenades',
     subtext = 'Just to clarify: the grenades aren\'t sticky.',
@@ -114,6 +128,8 @@ GM.Modifiers['grenades'] = {
     end
 }
 
+-- Glass Cannon
+-- Random weapons with 1HP
 GM.Modifiers['glass'] = {
     name = 'Glass Cannon',
     subtext = 'One shot. One kill.',
@@ -124,9 +140,12 @@ GM.Modifiers['glass'] = {
     end 
 }
 
+-- Mini Me
+-- Random weapons with smaller playermodels
 GM.Modifiers['mini'] = {
     name = 'Mini Me',
     subtext = 'Good things come in small packages',
+	-- Make the player really small
     func_player = function(ply)
         PickRandomWeapons(CurTime(), 1)(ply)
         
@@ -140,6 +159,7 @@ GM.Modifiers['mini'] = {
         ply:SetHealth(30)
     end,
     
+	-- Reset the player to a normal size
     func_finish = function(ply)
         ply:SetModelScale(1)
         ply:SetHull(Vector(-16, -16, 0), Vector(16, 16, 72))
@@ -152,6 +172,8 @@ GM.Modifiers['mini'] = {
     end,
 }
 
+-- Rocket Jump
+-- Players can only move by jumping
 GM.Modifiers['rocketjump'] = {
     name = 'Rocket Jump',
     subtext = 'Do not use the rockets to jump.',
@@ -164,6 +186,8 @@ GM.Modifiers['rocketjump'] = {
     end
 }
 
+-- One In The Chamber
+-- Players start with 1 bullet and get +1 bullet for each kill
 GM.Modifiers['oitc'] = {
     name = 'One In The Chamber',
     subtext = 'Use it wisely.',
@@ -177,6 +201,7 @@ GM.Modifiers['oitc'] = {
         ply:Give('weapon_mg_knife')
     end,
     
+	-- Award extra bullet on kill
     hooks = {
         DoPlayerDeath = function(victim, attacker, dmg)
             if not attacker:IsPlayer() then return end
@@ -186,6 +211,8 @@ GM.Modifiers['oitc'] = {
     }
 }
 
+-- This is the Police
+-- Players get a police playermodel and a stun baton
 GM.Modifiers['stunstick'] = {
     name = 'This is the Police',
     subtext = 'It\'s beating time!',
@@ -195,6 +222,8 @@ GM.Modifiers['stunstick'] = {
     end,
 }
 
+-- Knife Battle
+-- Simple deathmatch with knives
 GM.Modifiers['knife'] = {
     name = 'Knife Battle',
     subtext = 'Stabby stab stab!',
@@ -203,6 +232,8 @@ GM.Modifiers['knife'] = {
     end,
 }
 
+-- Crowbar Wars
+-- Simple deathmatch with crowbars
 GM.Modifiers['crowbar'] = {
     name = 'Crowbar Wars',
     subtext = 'The red colour hides the blood',
@@ -211,10 +242,13 @@ GM.Modifiers['crowbar'] = {
     end,
 }
 
+-- Sniper Wars
+-- Spawns NPC sniper entities, players win by surviving
 GM.Modifiers['snipers'] = {
     name = 'Sniper Wars',
     subtext = 'Hope you\'re good at dodging!',
     time = 10,
+	-- Spawn a random amount of sniper NPCs
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_ground'))
         local number = math.Clamp(player.GetCount() + math.random(-2, 2), 2, #spawns)
@@ -226,18 +260,21 @@ GM.Modifiers['snipers'] = {
         end
     end,
     
+	-- Award a bonus to survivors
     func_check = function(ply)
         if ply:Alive() and not ply.Spectating then
             ply:AddFrags(2)
         end
     end,
-    
     hooks = {DoPlayerDeath = SurvivalBonus}
 }
 
+-- Roller Mines
+-- Spawns NPC rollermines, players win by surviving
 GM.Modifiers['rollermines'] = {
     name = 'Roller Mines',
     subtext = 'Rolling balls of DEATH',
+	-- Spawn a random amount of rollermines
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_ground'))
         local number = math.Clamp(player.GetCount() + math.random(1, 3), 2, #spawns)
@@ -248,24 +285,28 @@ GM.Modifiers['rollermines'] = {
         end
     end,
     
+	-- Players have 1HP
     func_player = function(ply)
         ply:SetMaxHealth(1)
         ply:SetHealth(1)
         ply:Give('weapon_crowbar')
     end,
     
+	-- Award a bonus to survivors
     func_check = function(ply)
         if ply:Alive() and not ply.Spectating then
             ply:AddFrags(2)
         end
     end,
-    
     hooks = {DoPlayerDeath = SurvivalBonus, EntityTakeDamage = CrowbarKnockback}
 }
 
+-- Stop Hacking!
+-- Spawns NPC manhacks, players win by surviving
 GM.Modifiers['hacks'] = {
     name = 'Stop Hacking!',
     subtext = 'Watch the skies!',
+	-- Spawn a random amount of manhacks
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
         local number = math.floor(math.Clamp(player.GetCount()*1.5 + math.random(1, 3), 4, #spawns))
@@ -276,24 +317,28 @@ GM.Modifiers['hacks'] = {
         end
     end,
     
+	-- Players have 10HP
     func_player = function(ply)
         ply:SetMaxHealth(10)
         ply:SetHealth(10)
         ply:Give('weapon_crowbar')
     end,
     
+	-- Award a bonus to survivors
     func_check = function(ply)
         if ply:Alive() and not ply.Spectating then
             ply:AddFrags(2)
         end
     end,
-    
     hooks = {DoPlayerDeath = SurvivalBonus, EntityTakeDamage = CrowbarKnockback}
 }
 
+-- Dodgeball
+-- Players must kill each other with physics dodgeballs
 GM.Modifiers['dodgeball'] = {
     name = 'Dodgeball',
     subtext = 'Physics based death',
+	-- Spawn a random amount of dodgeballs
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_ground'))
         local number = math.Clamp(player.GetCount() + math.random(-3, 0), math.random(1, 2), #spawns)
@@ -305,6 +350,7 @@ GM.Modifiers['dodgeball'] = {
         end
     end,
     
+	-- Give players the gravity gun
     func_player = function(ply)
         ply:Give('weapon_physcannon')
     end,
@@ -326,9 +372,13 @@ GM.Modifiers['dodgeball'] = {
     }
 }
 
+-- Crate Time
+-- Players must break a crate or lose
 GM.Modifiers['crate'] = {
     name = 'Crate Time',
     subtext = 'Break a crate OR DIE',
+	time = 20,
+	-- Spawn a random number of crates
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
         local number = math.Clamp(player.GetCount() + math.random(-1, 3), 3, #spawns)
@@ -340,11 +390,13 @@ GM.Modifiers['crate'] = {
         end
     end,
     
+	-- Players get a crowbar
     func_player = function(ply)
         ply:Give('weapon_crowbar')
         ply.BrokeCrate = false
     end,
     
+	-- Players win if and only if they have broken a crate
     func_check = function(ply)
         if not ply.BrokeCrate then
             if not ply.Spectating and ply:Alive() then ply:Kill() end
@@ -354,6 +406,7 @@ GM.Modifiers['crate'] = {
         ply.BrokeCrate = nil
     end,
     
+	-- Check for crate breaking
     hooks = {
         EntityTakeDamage = function(ent, dmg)
             if ent:IsPlayer() then return true end
@@ -365,6 +418,8 @@ GM.Modifiers['crate'] = {
     }
 }
 
+-- Climb
+-- Players must climb onto a prop to survive
 GM.Modifiers['climb'] = {
     name = 'Climb',
     subtext = 'Get on a prop!',
@@ -374,6 +429,7 @@ GM.Modifiers['climb'] = {
         ply:Give('weapon_crowbar')
     end,
     
+	-- Spawn a random number of washing machines
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
         local number = math.Clamp(player.GetCount() + math.random(-3, 2), 3, #spawns)
@@ -384,7 +440,8 @@ GM.Modifiers['climb'] = {
             crate:Spawn()
         end
     end,
-
+	
+	-- Verify a player is standing on a prop
     func_check = function(ply)
         local tr = util.TraceLine({
             start = ply:GetPos(),
