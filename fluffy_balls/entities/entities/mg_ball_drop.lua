@@ -1,33 +1,35 @@
+--[[
+	Ball pickup entity
+	Heavily based off the default Sandbox ball entity
+]]--
+
 AddCSLuaFile()
-
 DEFINE_BASECLASS("base_anim")
-
 ENT.PrintName = "Ball"
 
 ENT.MinSize = 24
 ENT.MaxSize = 64
 ENT.LifeTime = 15
 
+-- Setup networked variables
 function ENT:SetupDataTables()
-	self:NetworkVar( "Float", 0, "BallSize", { KeyName = "ballsize", Edit = { type = "Float", min = self.MinSize, max = self.MaxSize, order = 1 } } )
-	self:NetworkVar( "Vector", 0, "BallColor", { KeyName = "ballcolor", Edit = { type = "VectorColor", order = 2 } } )
+	self:NetworkVar("Float", 0, "BallSize", { KeyName = "ballsize", Edit={type="Float", min=self.MinSize, max=self.MaxSize, order=1}})
+	self:NetworkVar("Vector", 0, "BallColor", { KeyName = "ballcolor", Edit={type="VectorColor", order = 2}})
 
-	self:NetworkVarNotify( "BallSize", self.OnBallSizeChanged )
+	self:NetworkVarNotify("BallSize", self.OnBallSizeChanged)
 end
 
+-- Create the ball with spherical physics
 function ENT:Initialize()
 	if CLIENT then return end
 	
+	-- Approximate the ball with spherical physics
 	self:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
 	self:RebuildPhysics()
 	
-    -- Should be overriden in the gamemode
-	self:SetBallColor( table.Random( {
-		Vector( 1, 0.3, 0.3 ),
-		Vector( 0.3, 1, 0.3 ),
-		Vector( 1, 1, 0.3 ),
-		Vector( 0.2, 0.3, 1 ),
-	} ) )
+    -- This is overriden in the gamemode
+	-- When a player dies, they drop balls that match their colour
+	self:SetBallColor(Vector(1, 1, 1))
     
     -- Remove balls that have lived for too long
     timer.Simple(self.LifeTime, function()
@@ -37,9 +39,8 @@ function ENT:Initialize()
     end)
 end
 
+-- Borrowed from Sandbox implementation
 function ENT:RebuildPhysics( value )
-	-- This is necessary so that the vphysics.dll will not crash when attaching constraints to the new PhysObj after old one was destroyed
-	-- TODO: Somehow figure out why it happens and/or move this code/fix to the constraint library
 	self.ConstraintSystem = nil
 
 	local size = math.Clamp( value or self:GetBallSize(), self.MinSize, self.MaxSize ) / 2.1
@@ -49,41 +50,39 @@ function ENT:RebuildPhysics( value )
 	self:PhysWake()
 end
 
-function ENT:OnBallSizeChanged( varname, oldvalue, newvalue )
-	-- Do not rebuild if the size wasn't changed
-	if ( oldvalue == newvalue ) then return end
-
+-- Rebuild the ball if the size was changed
+function ENT:OnBallSizeChanged(varname, oldvalue, newvalue)
+	if oldvalue == newvalue then return end
 	self:RebuildPhysics( newvalue )
 end
 
+-- Bouncing 
 local BounceSound = Sound( "garrysmod/balloon_pop_cute.wav" )
-
-function ENT:PhysicsCollide( data, physobj )
+function ENT:PhysicsCollide(data, physobj)
 	-- Play sound on bounce
-	if ( data.Speed > 60 && data.DeltaTime > 0.2 ) then
-
-		local pitch = 32 + 128 - math.Clamp( self:GetBallSize(), self.MinSize, self.MaxSize )
-		sound.Play( BounceSound, self:GetPos(), 75, math.random( pitch - 10, pitch + 10 ), math.Clamp( data.Speed / 150, 0, 1 ) )
-
+	if data.Speed > 60 and data.DeltaTime > 0.2then
+		local pitch = 32 + 128 - math.Clamp(self:GetBallSize(), self.MinSize, self.MaxSize)
+		sound.Play(BounceSound, self:GetPos(), 75, math.random(pitch - 10, pitch + 10), math.Clamp(data.Speed / 150, 0, 1))
 	end
 
-	-- Bounce like a crazy bitch
-	local LastSpeed = math.max( data.OurOldVelocity:Length(), data.Speed )
+	-- Make the ball bouncier
+	local LastSpeed = math.max(data.OurOldVelocity:Length(), data.Speed)
 	local NewVelocity = physobj:GetVelocity()
 	NewVelocity:Normalize()
 
-	LastSpeed = math.max( NewVelocity:Length(), LastSpeed )
+	LastSpeed = math.max(NewVelocity:Length(), LastSpeed)
 
 	local TargetVelocity = NewVelocity * LastSpeed * 0.9
 
-	physobj:SetVelocity( TargetVelocity )
+	physobj:SetVelocity(TargetVelocity)
 end
 
-function ENT:OnTakeDamage( dmginfo )
-	-- React physically when shot/getting blown
-	self:TakePhysicsDamage( dmginfo )
+-- Use physics to react to damage
+function ENT:OnTakeDamage(dmginfo)
+	self:TakePhysicsDamage(dmginfo)
 end
 
+-- Collect the ball when a player uses it
 function ENT:Use( activator, caller )
 	self:Remove()
 
@@ -96,6 +95,7 @@ if ( SERVER ) then return end -- We do NOT want to execute anything below in thi
 
 local matBall = Material( "sprites/sent_ball" )
 
+-- Render the ball as a 2D sprite
 function ENT:Draw()
 	render.SetMaterial( matBall )
 
