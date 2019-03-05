@@ -2,12 +2,13 @@ AddCSLuaFile()
 ENT.Type 			= "anim"
 ENT.Base 			= "base_anim"
 
-ENT.RespawnTime     = 10
+ENT.RespawnTime = 10
 ENT.LastTime = -1
 
 ENT.Size = 32
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
+-- Initialize the ball as a basic sphere
 function ENT:Initialize()
     if CLIENT then return end
 	self:SetModel( "models/Combine_Helicopter/helicopter_bomb01.mdl" )
@@ -18,15 +19,18 @@ function ENT:Initialize()
     self:PhysWake()
 end
 
+-- Destroy the ball if damaged by trigger_hurt entities, otherwise apply physics damage
 function ENT:OnTakeDamage( dmg )
     -- Remove if in contact with a trigger hurt
     if dmg:GetInflictor():GetClass() == 'trigger_hurt' or dmg:GetAttacker():GetClass() == 'trigger_hurt' then
         self:Remove()
         return
     end
+	-- Physically react to the damage
 	self.Entity:TakePhysicsDamage( dmg ) 
 end
 
+-- Respawn the ball when removed
 function ENT:OnRemove()
     -- if anything happens to the ball, spawn a new one
     if CLIENT then return end
@@ -34,6 +38,7 @@ function ENT:OnRemove()
     GAMEMODE:RespawnBall(self.Number)
 end
 
+-- Respawn balls if not touched for a long time
 function ENT:Think()
     if self.LastTime == -1 then return end
     
@@ -41,13 +46,18 @@ function ENT:Think()
         self:Remove()
     end
 end
- 
+
+-- Custom physics movement
 function ENT:PhysicsUpdate( phys )
 	vel = Vector( 0, 0, ( ( -9.81 * phys:GetMass() ) * 0.65 ) )
 	phys:ApplyForceCenter( vel )
 end 
 
+-- Custom physics bouncing
 function ENT:PhysicsCollide( data, physobj )
+	-- Damage checks for player damage
+	-- Verify the speed is fine
+	-- Make sure teamkilling is disallowed
     if data.HitEntity:IsPlayer() and data.Speed > 50 then
         local ply = data.HitEntity
         if (self:GetNWString('CurrentTeam') == 'blue' and ply:Team() == TEAM_RED) or (self:GetNWString('CurrentTeam') == 'red' and ply:Team() == TEAM_BLUE) then
@@ -60,13 +70,15 @@ function ENT:PhysicsCollide( data, physobj )
         end
     end
     
+	-- Play sounds or explode
     if data.Speed > 150 and self.Explosive then
         self:Remove()
 	elseif data.Speed > 70 then
 		self:EmitSound( "Rubber.BulletImpact" )
 	end
 	
-	// Bounce like a crazy bitch
+	-- Bouncing code
+	-- Stolen from the Sandbox ball
 	local LastSpeed = math.max( data.OurOldVelocity:Length(), data.Speed )
 	local NewVelocity = physobj:GetVelocity()
 	NewVelocity:Normalize()
@@ -78,6 +90,8 @@ end
 if CLIENT then
     killicon.AddFont("db_dodgeball", "HL2MPTypeDeath", "8", Color( 255, 80, 0, 255 ))
     local ball_mat = Material("sprites/sent_ball")
+	
+	-- Render the ball as a 2D sprite
     function ENT:Draw()
         render.SetMaterial(ball_mat)
         

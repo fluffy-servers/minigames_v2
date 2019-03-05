@@ -10,6 +10,7 @@ function GM:PlayerLoadout( ply )
     ply:Give('weapon_physcannon')
 end
 
+-- Add a new ball to the field
 function GM:SpawnBall()
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     
@@ -21,6 +22,7 @@ function GM:SpawnBall()
     return GAMEMODE:RespawnBall(GAMEMODE.BallNumber)
 end
 
+-- Create a ball entity at a position
 function GM:RespawnBall(number)
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     
@@ -34,6 +36,7 @@ function GM:RespawnBall(number)
     return ball
 end
 
+-- Reset the ball counter on round start
 hook.Add('RoundStart', 'InitialSpawnFlag', function()
     GAMEMODE.BallNumber = 0
     GAMEMODE.SpawnQueue = table.Shuffle(ents.FindByClass('db_ballspawn'))
@@ -43,7 +46,7 @@ hook.Add('RoundStart', 'InitialSpawnFlag', function()
     GAMEMODE.NextSpawn = CurTime() + 5
 end )
 
--- Ball Spawn
+-- Add a new ball to the field every 20 seconds
 hook.Add("Think", "ThinkBallSpawn", function()
     if GetGlobalString('RoundState') != 'InRound' then return end
     if not GAMEMODE.NextSpawn then return end
@@ -54,9 +57,11 @@ hook.Add("Think", "ThinkBallSpawn", function()
 	end
 end )
 
+-- Change color and team when a ball is picked up
 function GM:CollectBall(ball, team)
     if ball:GetClass() != 'db_dodgeball' then return end
     
+	-- Determine the new colour
     local c = Vector(1, 1, 1)
     local name = 'none'
     if team == TEAM_RED then
@@ -71,6 +76,7 @@ function GM:CollectBall(ball, team)
     ball:SetNWVector('RColor', c)
 end
 
+-- Handle collection when the gravity gun picks up a ball
 function GM:GravGunOnPickedUp(ply, ent)
     if ply:Team() != TEAM_BLUE and ply:Team() != TEAM_RED then return end
     
@@ -81,6 +87,7 @@ function GM:GravGunOnPickedUp(ply, ent)
     end
 end
 
+-- Make punting dodgeballs still switch the ball to the team
 function GM:GravGunPunt(ply, ent)
     if ply:Team() != TEAM_BLUE and ply:Team() != TEAM_RED then return end
     
@@ -92,6 +99,7 @@ function GM:GravGunPunt(ply, ent)
     end
 end
 
+-- Dissolve players that get hit by dodgeballs
 function GM:EntityTakeDamage(target, dmginfo)
     if target:IsPlayer() then
         local inflictor = dmginfo:GetInflictor()
