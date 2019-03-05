@@ -1,13 +1,18 @@
 --[[
     Robert A Fraser 2018
     Minigames Reborn
+	
+	Base file for the gamemode which is loaded on both client and server
 ]]--
 
+-- Load the other shared files
 DeriveGamemode('base')
 include('sound_tables.lua')
 include('sh_levels.lua')
 include('shop/sh_init.lua')
 
+-- These variables should be altered in each sub gamemode's shared.lua file
+-- If not defined, they will return to these values here
 GM.Name = 'Minigames'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
@@ -37,7 +42,8 @@ GM.SurvivorTeam = TEAM_BLUE	-- Survivor team
 GM.HunterTeam = TEAM_RED	-- Hunter team
 
 function GM:Initialize()
-
+	-- Gamemode crashes without this function so don't remove it
+	-- There's nothing that needs to be handled here, hence the blank
 end
 
 --[[

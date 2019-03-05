@@ -1,5 +1,6 @@
 --[[
     Useful functions that are used for TeamSurvival gamemodes
+	Examples: Suicide Barrels
 --]]
 
 -- Make new players join the Hunter team on connection

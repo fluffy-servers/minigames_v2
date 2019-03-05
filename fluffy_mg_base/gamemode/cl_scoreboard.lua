@@ -1,9 +1,10 @@
-include('vgui/avatar_circle.lua')
-
 --[[
     This file was originally not part of the gamemode
     It has not been adapted to use GM: functions yet
+	This file is a bit of messy
+	I'll get around to reworking it one day I promise
 --]]
+include('vgui/avatar_circle.lua')
 
 -- Cache icons
 local fs_icons = {}

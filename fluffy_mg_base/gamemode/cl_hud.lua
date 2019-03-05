@@ -1,10 +1,10 @@
-include('drawarc.lua')
 
 --[[
     Welcome to the Minigames HUD v2!
     This file has been pretty much completely made for lots of improvements around the board!
     Note: this HUD isn't the most efficient thing ever created, but the latest updates have improved framerates significantly.
 --]]
+include('drawarc.lua')
 
 -- Hide default HUD components
 local hide = {

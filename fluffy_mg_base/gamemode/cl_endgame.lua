@@ -1,3 +1,12 @@
+--[[
+	This file is in charge of the end game panel
+	The end game panel is currently a bit of a disaster
+	The key parts of the panel are:
+	 - Experience and level up display
+	 - Map vote screen
+	 - Stats / leaderboard overview
+--]]
+
 -- Open up the end of game panel
 -- This is a pretty complicated thing -> maybe split into more functions one day?
 -- I blame derma personally
@@ -34,8 +43,6 @@ function GM:CreateMapVotePanel()
             
             draw.RoundedBox(16, 0, 0, w, h, GAMEMODE.FCol1)
             draw.RoundedBox(0, 16, 16, image_w, image_w, GAMEMODE.FCol2)
-            
-
         end
         
         if GAMEMODE.CurrentVote and GAMEMODE.CurrentVote == i then

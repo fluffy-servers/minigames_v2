@@ -55,8 +55,8 @@ function GM:ThirdPersonView(ply, pos, angles, fov)
     return view
 end
 
-local camprogress = 0
 -- Functions for starting/stopping cool transition modes
+local camprogress = 0
 function GM:StartCoolTransition(table)
     camprogress = 0
     GAMEMODE.CoolTransition = table
