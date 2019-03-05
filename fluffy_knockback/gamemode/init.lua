@@ -16,6 +16,7 @@ function GM:PlayerLoadout( ply )
     ply:SetMaxHealth(500)
 end
 
+-- Apply knockback proportional to health when damaged
 function GM:EntityTakeDamage(target, dmg)
     if target:IsPlayer() and dmg:GetAttacker():IsPlayer() then
         local hp = target:Health()
@@ -33,6 +34,7 @@ function GM:EntityTakeDamage(target, dmg)
     end
 end
 
+-- Disable fall damage
 function GM:GetFallDamage()
     return 0
 end
