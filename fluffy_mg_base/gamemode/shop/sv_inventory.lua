@@ -5,7 +5,7 @@ SHOP.PlayerEquippedSlots = SHOP.PlayerEquippedSlots or {}
 
 -- Default inventory for testing purposes
 local test_inventory = {
-    {VanillaID = 'coolcrate', Name='Coolest Crate', Type='Crate', Rarity=3},
+    {VanillaID = 'unbox_test'},
     {VanillaID = 'testtrail', Name='Hilarious', Rarity=2, Type='Trail', Paintable=true, Material='trails/lol.vmt'},
 	{VanillaID = 'testtrail', Name='Hilarious', Rarity=2, Type='Trail', Paintable=true, Material='trails/lol.vmt'},
     {VanillaID = 'bewaredog'},
@@ -200,5 +200,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 		if reequip then
 			SHOP:EquipItem(key, ply, true)
 		end
+	elseif action == 'UNBOX' then
+		SHOP:OpenUnbox(key, ply)
 	end
 end)

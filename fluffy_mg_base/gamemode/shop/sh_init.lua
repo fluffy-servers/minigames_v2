@@ -55,6 +55,11 @@ function SHOP:RegisterTracer(ITEM)
 	SHOP.VanillaItems[ITEM.VanillaID] = ITEM
 end
 
+function SHOP:RegisterUnbox(ITEM)
+	ITEM.Type = 'Unbox'
+	SHOP.VanillaItems[ITEM.VanillaID] = ITEM
+end
+
 -- Load all the files
 function SHOP:LoadResources()
     local path = 'fluffy_mg_base/gamemode/shop/item/'

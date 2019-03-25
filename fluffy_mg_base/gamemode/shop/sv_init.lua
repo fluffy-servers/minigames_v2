@@ -12,6 +12,7 @@ util.AddNetworkString('SHOP_NetworkInventory')
 util.AddNetworkString('SHOP_BroadcastEquip')
 util.AddNetworkString('SHOP_NetworkEquipped')
 util.AddNetworkString('SHOP_InventoryChange')
+util.AddNetworkString('SHOP_AnnounceUnbox')
 
 -- Open the shop on client when F4 is pressed
 function GM:ShowSpare2(ply)
