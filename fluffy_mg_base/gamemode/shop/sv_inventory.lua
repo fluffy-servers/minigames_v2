@@ -53,13 +53,15 @@ function SHOP:AddItem(ITEM, ply)
     if not SHOP.VanillaItems[ITEM.VanillaID] then return end
     
     if not SHOP.PlayerInventories[ply] then return end
-    table.insert(SHOP.PlayerInventories[ply], ITEM)
+    local key = table.insert(SHOP.PlayerInventories[ply], ITEM)
     
     -- Network change to the client
     net.Start('SHOP_InventoryChange')
         net.WriteString('ADD')
         net.WriteTable(ITEM)
     net.Send(ply)
+	
+	return key
 end
 
 -- Remove an item from the inventory
