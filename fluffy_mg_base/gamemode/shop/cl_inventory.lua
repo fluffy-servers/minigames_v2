@@ -342,4 +342,8 @@ net.Receive('SHOP_InventoryChange', function()
 		local ITEM = net.ReadTable()
 		SHOP.InventoryTable[key] = ITEM
 	end
+	
+	if IsValid(SHOP.InventoryPanel) then
+        SHOP:PopulateInventory()
+    end
 end)
