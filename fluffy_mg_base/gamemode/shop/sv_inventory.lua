@@ -143,5 +143,16 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
     elseif action == 'PAINT' then
 		-- Handle painting of items
 		local paintcan = net.ReadInt(16)
+		
+		-- Verify the item can be painted
+		local ITEM = SHOP.PlayerInventories[ply][key]
+		ITEM = SHOP:ParseVanillaItem(ITEM)
+		if not ITEM.Paintable then return end
+		
+		local PAINT = SHOP.PlayerInventories[ply][paintcan]
+		if PAINT.Type != 'Paint' then return end
+		
+		SHOP.PlayerInventories[ply][key].Color = PAINT.Color
+		SHOP:RemoveItem(paintcan)
 	end
 end)
