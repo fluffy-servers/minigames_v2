@@ -16,28 +16,29 @@ local function PickWeightedRandom( tbl )
 end
 
 function SHOP:PrepareUnbox(cratekey, ply)
-	if not SHOP.Inventory[ply] then return end
-	if not SHOP.Inventory[ply][crate] then return end
+	if not SHOP.PlayerInventories[ply] then return end
+	if not SHOP.PlayerInventories[ply][cratekey] then return end
 	
-	local unbox = SHOP:ParseVanillaItem(SHOP.Inventory[ply][crate])
+	local unbox = SHOP:ParseVanillaItem(SHOP.PlayerInventories[ply][cratekey])
 	if !unbox.Items then return end
 	
-	return unbox.Items
+	return unbox.Items, unbox.Chances
 end
 
 function SHOP:OpenUnbox(cratekey, ply)
-	local items = SHOP:PrepareUnbox(cratekey, ply)
-	if !items then return end
+	local items, chances = SHOP:PrepareUnbox(cratekey, ply)
+	if !items or !chances then return end
 	
 	-- Generate a queue of 50 items
 	local queue = {}
 	for i=1,50 do
-		table.insert(queue, PickWeightedRandom(unbox.Chances))
+		table.insert(queue, PickWeightedRandom(chances))
 	end
 	
 	-- Take the 24th item in the queue
 	-- Why 24th? I have no idea it's a nice number ok
-	local result = items[queue[24]]
+	local item = items[queue[24]]
+	print(item)
 	if type(item) == 'string' then item = {VanillaID = item} end
 	
 	-- Add the item to the inventory
@@ -47,12 +48,12 @@ function SHOP:OpenUnbox(cratekey, ply)
 	local ITEM = SHOP:ParseVanillaItem(item)
 	timer.Simple(10, function()
 		if !IsValid(ply) then return end
-		local rarity = SHOP.RarityColors[item.Rarity]
+		local rarity = SHOP.RarityColors[ITEM.Rarity or 1]
 		rarity = {r=rarity.r, g=rarity.g, b=rarity.b}
 		
 		net.Start('SHOP_AnnounceUnbox')
 			net.WriteString(ply:Nick() or 'Somebody')
-			net.WriteString(item.Name)
+			net.WriteString(ITEM.Name)
 			net.WriteString('unboxed')
 			net.WriteTable(rarity)
 		net.Broadcast()

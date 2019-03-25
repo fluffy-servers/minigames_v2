@@ -1,9 +1,9 @@
 UNBOX = {}
 UNBOX.VanillaID = 'unbox_test'
 UNBOX.Items = {
-	{ id='roadsign2'},
-	{ id='roadsign7' },
-	{ id='tracer_rainbow' },
+	'roadsign2',
+	'roadsign7',
+	'tracer_rainbow',
 }
 
 UNBOX.Name='Test Box'

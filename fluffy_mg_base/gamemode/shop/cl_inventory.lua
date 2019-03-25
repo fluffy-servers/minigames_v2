@@ -329,6 +329,13 @@ function SHOP:RequestPaint(itemkey, paintkey)
 	net.SendToServer()
 end
 
+function SHOP:RequestUnbox(key)
+    net.Start('SHOP_RequestItemAction')
+        net.WriteString('UNBOX')
+        net.WriteInt(key, 16)
+    net.SendToServer()
+end
+
 net.Receive('SHOP_InventoryChange', function()
     local mode = net.ReadString()
     if mode == 'ADD' then
