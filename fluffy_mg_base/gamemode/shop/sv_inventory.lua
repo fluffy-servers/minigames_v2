@@ -7,6 +7,7 @@ local test_inventory = {
     {VanillaID = 'bewaredog'},
     {VanillaID = 'gmanonhead'},
     {VanillaID = 'camera'},
+	SHOP.PaintList['blueberry'],
 }
 
 -- Function to generate a default inventory
