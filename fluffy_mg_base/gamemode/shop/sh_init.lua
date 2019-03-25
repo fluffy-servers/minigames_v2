@@ -1,12 +1,5 @@
-SHOP = {}
+SHOP = SHOP or {}
 SHOP.VanillaItems = {}
-
-if SERVER then
-    AddCSLuaFile('cl_init.lua')
-    include('sv_init.lua')
-else
-    include('cl_init.lua')
-end
 
 -- Get a hashed version of the table
 -- This should not be used for security, only for verification
@@ -78,4 +71,12 @@ function SHOP:LoadResources()
 	if SERVER then AddCSLuaFile('fluffy_mg_base/gamemode/shop/item/paint_master.lua') end
 	include('fluffy_mg_base/gamemode/shop/item/paint_master.lua')
 end
+
 SHOP:LoadResources()
+
+if SERVER then
+    AddCSLuaFile('cl_init.lua')
+    include('sv_init.lua')
+else
+    include('cl_init.lua')
+end
