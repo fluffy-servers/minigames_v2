@@ -92,3 +92,14 @@ function SHOP:UnequipCosmetic(ITEM, ply)
         SHOP.ClientModels[ply][ITEM.VanillaID] = nil
     end
 end
+
+-- Clientside tracer effect
+hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
+	if !ent:IsPlayer() then return end
+	local effect = ent:GetNWString('ShopTracerEffect')
+	if not effect then return end
+	
+	data.Tracer = 1
+	data.TracerName = effect
+	return true
+end )

@@ -48,6 +48,7 @@ end
 -- Equip a tracer
 function SHOP:EquipTracer(ITEM, ply)
 	ply:SetNWString('ShopTracerEffect', ITEM.Effect)
+	return true
 end
 
 -- Unequip a tracer
@@ -66,3 +67,14 @@ hook.Add('DoPlayerDeath', 'RemoveEquippedTrail', function(ply)
         SafeRemoveEntity(ply.TrailEntity)
     end
 end)
+
+-- Serverside tracer effect
+hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
+	if !ent:IsPlayer() then return end
+	local effect = ent:GetNWString('ShopTracerEffect')
+	if not effect then return end
+	
+	data.Tracer = 1
+	data.TracerName = effect
+	return true
+end )
