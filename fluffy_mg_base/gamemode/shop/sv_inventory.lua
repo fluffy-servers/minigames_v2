@@ -133,5 +133,8 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
                 SHOP:NetworkEquipped(ply)
             end
         end
-    end
+    elseif action == 'PAINT' then
+		-- Handle painting of items
+		local paintcan = net.ReadInt(16)
+	end
 end)

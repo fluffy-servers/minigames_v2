@@ -242,6 +242,68 @@ function SHOP:OpenInventory()
     SHOP:PopulateInventory()
 end
 
+-- Open up the paint selection frame
+function SHOP:OpenPaintBox(topaint)
+	if not IsValid(SHOP.InventoryPanel) then return end
+	SHOP.InventoryPanel:SetMouseInputEnabled(false)
+	
+	local frame = vgui.Create('DFrame')
+	
+	-- Scaling stuff
+    local sw = math.floor(ScrW()/256) - 1
+    local margin = ScrW() - sw*256
+    local xx = sw*256 - 32
+    local yy = ScrH() - margin - 32
+	frame:SetSize(xx, yy)
+	frame:Center()
+	frame:MakePopup()
+	frame:SetDraggable(false)
+	frame:SetTitle('')
+	frame.OnClose = function(self)
+		SHOP.InventoryPanel:SetMouseInputEnabled(true)
+	end
+	
+	function frame:Paint(w, h)
+        DisableClipping(true)
+        local bs = 4
+        draw.RoundedBox(16, -bs, 4, w+(bs*2), h+(bs*2), SHOP.Color4)
+        draw.RoundedBox(16, -bs, -bs, w+(bs*2), h+(bs*2), SHOP.Color3)
+        DisableClipping(false)
+        draw.RoundedBox(16, 0, 0, w, h, SHOP.Color1)
+    end
+	
+    -- Create the scrollable inventory display
+    local scroll = vgui.Create('DScrollPanel', frame)
+    scroll:SetSize(xx, yy - 24)
+    scroll:SetPos(0, 24)
+    
+    -- Sizing for the display
+    local display = vgui.Create('DIconLayout', scroll)
+	display:DockMargin(16, 0, 16, 0)
+    display:Dock(FILL)
+    display:SetPos(32, 0)
+    display:SetSpaceX(8)
+    display:SetSpaceY(8)
+    display:SetBorder(0)
+    display:Layout()
+	
+	-- Populate the list of paints
+	for key,ITEM in pairs(SHOP.InventoryTable) do
+		if ITEM.Type != 'Paint' then continue end
+		
+        local panel = display:Add('ShopItemPanel')
+        panel.key = key
+        panel.ITEM = ITEM
+        panel:Ready()
+		
+		panel.DoClick = function()
+			-- Send to the esrver
+			
+			frame:Close()
+		end
+    end
+end
+
 -- Concommand to open the shop
 concommand.Add('minigames_shop', function()
     SHOP:OpenInventory()
@@ -257,6 +319,14 @@ function SHOP:RequestEquip(key)
         net.WriteString('EQUIP')
         net.WriteInt(key, 16)
     net.SendToServer()
+end
+
+function SHOP:RequestPaint(item, paintkey)
+	net.Start('SHOP_RequestItemAction')
+		net.WriteString('PAINT')
+		net.WriteInt(itemkey, 16)
+		net.WriteInt(paintkey, 16)
+	net.SendToServer()
 end
 
 net.Receive('SHOP_InventoryChange', function()
