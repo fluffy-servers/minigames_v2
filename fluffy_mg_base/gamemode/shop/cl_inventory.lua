@@ -337,5 +337,9 @@ net.Receive('SHOP_InventoryChange', function()
     elseif mode == 'REMOVE' then
         local key = net.ReadInt(16)
         table.remove(SHOP.InventoryTable, key)
-    end
+    elseif mode == 'MODIFY' then
+		local key = net.ReadInt(16)
+		local ITEM = net.ReadTable()
+		SHOP.InventoryTable[key] = ITEM
+	end
 end)
