@@ -1,6 +1,20 @@
 SHOP = SHOP or {}
 SHOP.VanillaItems = {}
 
+SHOP.RarityColors = {}
+SHOP.RarityColors[1] = Color(52, 152, 219)
+SHOP.RarityColors[2] = Color(0, 119, 181)
+SHOP.RarityColors[3] = Color(150, 70, 165)
+SHOP.RarityColors[4] = Color(200, 65, 50)
+SHOP.RarityColors[5] = Color(220, 150, 0)
+
+SHOP.RarityNames = {}
+SHOP.RarityNames[1] = "Common"
+SHOP.RarityNames[2] = "Uncommon"
+SHOP.RarityNames[3] = "Rare"
+SHOP.RarityNames[4] = "Epic"
+SHOP.RarityNames[5] = "Legendary"
+
 -- Get a hashed version of the table
 -- This should not be used for security, only for verification
 function SHOP:HashTable(tbl)
@@ -56,7 +70,7 @@ function SHOP:RegisterTracer(ITEM)
 end
 
 function SHOP:RegisterUnbox(ITEM)
-	ITEM.Type = 'Unbox'
+	ITEM.Type = 'Crate'
 	SHOP.VanillaItems[ITEM.VanillaID] = ITEM
 end
 
