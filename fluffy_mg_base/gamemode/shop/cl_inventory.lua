@@ -298,7 +298,7 @@ function SHOP:OpenPaintBox(topaint)
 		
 		panel.DoClick = function()
 			-- Send to the esrver
-			
+			SHOP:RequestPaint(topaint, key)
 			frame:Close()
 		end
     end
@@ -321,7 +321,7 @@ function SHOP:RequestEquip(key)
     net.SendToServer()
 end
 
-function SHOP:RequestPaint(item, paintkey)
+function SHOP:RequestPaint(itemkey, paintkey)
 	net.Start('SHOP_RequestItemAction')
 		net.WriteString('PAINT')
 		net.WriteInt(itemkey, 16)
