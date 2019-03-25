@@ -223,10 +223,10 @@ function PANEL:DoClick()
 		draw.RoundedBox( 0, 1, 1, w-2, 21, rarity_color )
 	end
     
-    if ITEM.Type == 'crate' then
+    if ITEM.Type == 'Crate' then
         -- Add unbox button
         Menu:AddOption("Unbox", function() SHOP:RequestUnbox(self.key) end ):SetIcon("icon16/box.png")
-    elseif ITEM.Type == 'paint' then
+    elseif ITEM.Type == 'Paint' then
         -- Add no buttons :(
     else
         -- Add equip button
