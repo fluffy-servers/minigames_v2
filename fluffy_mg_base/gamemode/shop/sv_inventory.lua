@@ -60,6 +60,13 @@ end
 -- Remove an item from the inventory
 function SHOP:RemoveItem(key, ply)
     if not SHOP.PlayerInventories[ply] then return end
+	if not SHOP.PlayerInventories[ply][key] then return end
+	
+	table.remove(SHOP.PlayerInventories[ply], key)
+	net.Start('SHOP_InventoryChange')
+		net.WriteString('REMOVE')
+		net.WriteInt(key)
+	net.Send(ply)
 end
 
 hook.Add('PlayerInitialSpawn', 'LoadShopInventory', function(ply)
