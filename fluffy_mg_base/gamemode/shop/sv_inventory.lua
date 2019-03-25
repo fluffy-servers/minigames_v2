@@ -61,12 +61,64 @@ end
 function SHOP:RemoveItem(key, ply)
     if not SHOP.PlayerInventories[ply] then return end
 	if not SHOP.PlayerInventories[ply][key] then return end
-	
 	table.remove(SHOP.PlayerInventories[ply], key)
+	
+	-- Network changes
 	net.Start('SHOP_InventoryChange')
 		net.WriteString('REMOVE')
-		net.WriteInt(key)
+		net.WriteInt(key, 16)
 	net.Send(ply)
+	SHOP:NetworkEquipped(ply)
+end
+
+function SHOP:EquipItem(key, ply, state)
+    -- Handle equipping/unequipping of items
+    if not SHOP.PlayerEquipped[ply] then SHOP.PlayerEquipped[ply] = {} end
+	
+	-- Determine whether to equip or not
+	local equip = false
+	if state == nil then
+		equip = !SHOP.PlayerEquipped[ply][key]
+	else
+		equip = state
+	end
+	
+    if equip then
+		print('Equipping', key)
+        -- Equip the item
+        local ITEM = SHOP.PlayerInventories[ply][key]
+        ITEM = SHOP:ParseVanillaItem(ITEM)
+    
+        local equipped = false
+        if ITEM.Type == 'Hat' then
+            equipped = SHOP:EquipCosmetic(ITEM, ply)
+        elseif ITEM.Type == 'Tracer' then
+            equipped = SHOP:EquipTracer(ITEM, ply)
+        elseif ITEM.Type == 'Trail' then
+            equipped = SHOP:EquipTrail(ITEM, ply)
+        end
+    
+        if equipped then
+            SHOP.PlayerEquipped[ply][key] = true
+            SHOP:NetworkEquipped(ply)
+        end
+    else
+		print('Unequipping', key)
+		-- Unequip the item
+        local ITEM = SHOP.PlayerInventories[ply][key]
+        ITEM = SHOP:ParseVanillaItem(ITEM)
+    
+        if ITEM.Type == 'Hat' then
+            SHOP:UnequipCosmetic(ITEM, ply)
+        elseif ITEM.Type == 'Tracer' then
+            SHOP:UnequipTracer(ITEM, ply)
+        elseif ITEM.Type == 'Trail' then
+            SHOP:UnequipTrail(ply)
+        end
+        
+        SHOP.PlayerEquipped[ply][key] = nil
+        SHOP:NetworkEquipped(ply)
+    end
 end
 
 hook.Add('PlayerInitialSpawn', 'LoadShopInventory', function(ply)
@@ -104,42 +156,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
     local key = net.ReadInt(16)
     
     if action == 'EQUIP' then
-        -- Handle equipping/unequipping of items
-        if not SHOP.PlayerEquipped[ply] then SHOP.PlayerEquipped[ply] = {} end
-        if SHOP.PlayerEquipped[ply][key] then
-            -- Unequip the item
-            local ITEM = SHOP.PlayerInventories[ply][key]
-            ITEM = SHOP:ParseVanillaItem(ITEM)
-        
-            if ITEM.Type == 'Hat' then
-                SHOP:UnequipCosmetic(ITEM, ply)
-            elseif ITEM.Type == 'Tracer' then
-                SHOP:UnequipTracer(ITEM, ply)
-            elseif ITEM.Type == 'Trail' then
-                SHOP:UnequipTrail(ITEM, ply)
-            end
-            
-            SHOP.PlayerEquipped[ply][key] = nil
-            SHOP:NetworkEquipped(ply)
-        else
-            -- Equip the item
-            local ITEM = SHOP.PlayerInventories[ply][key]
-            ITEM = SHOP:ParseVanillaItem(ITEM)
-        
-            local equipped = false
-            if ITEM.Type == 'Hat' then
-                equipped = SHOP:EquipCosmetic(ITEM, ply)
-            elseif ITEM.Type == 'Tracer' then
-                equipped = SHOP:EquipTracer(ITEM, ply)
-            elseif ITEM.Type == 'Trail' then
-                equipped = SHOP:EquipTrail(ITEM, ply)
-            end
-    
-            if equipped then
-                SHOP.PlayerEquipped[ply][key] = true
-                SHOP:NetworkEquipped(ply)
-            end
-        end
+		SHOP:EquipItem(key, ply)
     elseif action == 'PAINT' then
 		-- Handle painting of items
 		local paintcan = net.ReadInt(16)
@@ -152,7 +169,19 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 		local PAINT = SHOP.PlayerInventories[ply][paintcan]
 		if PAINT.Type != 'Paint' then return end
 		
+		local reequip = false
+		-- Unequip the item if it's already equipped
+		if SHOP.PlayerEquipped[ply][key] then
+			SHOP:EquipItem(key, ply, false)
+			reequip = true
+		end
+		
 		SHOP.PlayerInventories[ply][key].Color = PAINT.Color
-		SHOP:RemoveItem(paintcan)
+		SHOP:RemoveItem(paintcan, ply)
+		
+		-- Reequip the item automagically
+		if reequip then
+			SHOP:EquipItem(key, ply, true)
+		end
 	end
 end)
