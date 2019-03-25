@@ -54,3 +54,13 @@ net.Receive('SHOP_BroadcastEquip', function()
         end
     end
 end)
+
+-- Announce unboxes
+net.Receive('SHOP_AnnounceUnbox', function()
+	local name = net.ReadString()
+	local prize = net.ReadString()
+    local joiner = net.ReadString()
+	local color = net.ReadTable()
+	color = Color(color.r, color.g, color.b)
+    chat.AddText(Color(241, 196, 15), name, Color(255, 255, 255), ' ', joiner, ' ', color, prize)
+end )
