@@ -74,5 +74,8 @@ function SHOP:LoadResources()
             include(path .. v .. '/' .. item)
         end
     end
+	
+	if SERVER then AddCSLuaFile('fluffy_mg_base/gamemode/shop/item/paint_master.lua') end
+	include('fluffy_mg_base/gamemode/shop/item/paint_master.lua')
 end
 SHOP:LoadResources()
