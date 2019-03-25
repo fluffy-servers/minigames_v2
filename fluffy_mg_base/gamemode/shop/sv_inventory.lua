@@ -1,12 +1,17 @@
+-- Global shop tables to keep track of player inventories
 SHOP.PlayerInventories = SHOP.PlayerInventories or {}
 SHOP.PlayerEquipped = SHOP.PlayerEquipped or {}
+SHOP.PlayerEquippedSlots = SHOP.PlayerEquippedSlots or {}
 
+-- Default inventory for testing purposes
 local test_inventory = {
     {VanillaID = 'coolcrate', Name='Coolest Crate', Type='Crate', Rarity=3},
     {VanillaID = 'testtrail', Name='Hilarious', Rarity=2, Type='Trail', Paintable=true, Material='trails/lol.vmt'},
+	{VanillaID = 'testtrail', Name='Hilarious', Rarity=2, Type='Trail', Paintable=true, Material='trails/lol.vmt'},
     {VanillaID = 'bewaredog'},
     {VanillaID = 'gmanonhead'},
     {VanillaID = 'camera'},
+	{VanillaID = 'tracer_disco'},
 	SHOP.PaintList['blueberry'],
 }
 
@@ -74,6 +79,7 @@ end
 function SHOP:EquipItem(key, ply, state)
     -- Handle equipping/unequipping of items
     if not SHOP.PlayerEquipped[ply] then SHOP.PlayerEquipped[ply] = {} end
+	if not SHOP.PlayerEquippedSlots[ply] then SHOP.PlayerEquippedSlots[ply] = {} end
 	
 	-- Determine whether to equip or not
 	local equip = false
@@ -84,10 +90,14 @@ function SHOP:EquipItem(key, ply, state)
 	end
 	
     if equip then
-		print('Equipping', key)
         -- Equip the item
         local ITEM = SHOP.PlayerInventories[ply][key]
         ITEM = SHOP:ParseVanillaItem(ITEM)
+		
+		-- Check the slot is empty
+		local slot = ITEM.Slot or ITEM.Type
+		print(slot)
+		if SHOP.PlayerEquippedSlots[ply][slot] then return end
     
         local equipped = false
         if ITEM.Type == 'Hat' then
@@ -98,25 +108,30 @@ function SHOP:EquipItem(key, ply, state)
             equipped = SHOP:EquipTrail(ITEM, ply)
         end
     
+		-- If equip was successful, store the change
         if equipped then
             SHOP.PlayerEquipped[ply][key] = true
+			SHOP.PlayerEquippedSlots[ply][slot] = true
             SHOP:NetworkEquipped(ply)
         end
     else
-		print('Unequipping', key)
 		-- Unequip the item
         local ITEM = SHOP.PlayerInventories[ply][key]
         ITEM = SHOP:ParseVanillaItem(ITEM)
+		
+		local slot = ITEM.Slot or ITEM.Type
     
         if ITEM.Type == 'Hat' then
             SHOP:UnequipCosmetic(ITEM, ply)
         elseif ITEM.Type == 'Tracer' then
-            SHOP:UnequipTracer(ITEM, ply)
+            SHOP:UnequipTracer(ply)
         elseif ITEM.Type == 'Trail' then
             SHOP:UnequipTrail(ply)
         end
         
+		-- Clear the table
         SHOP.PlayerEquipped[ply][key] = nil
+		SHOP.PlayerEquippedSlots[ply][slot] = nil
         SHOP:NetworkEquipped(ply)
     end
 end
