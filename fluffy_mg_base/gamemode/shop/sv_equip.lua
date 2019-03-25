@@ -45,6 +45,16 @@ function SHOP:WearTrail(ply)
     end
 end
 
+-- Equip a tracer
+function SHOP:EquipTracer(ITEM, ply)
+	ply:SetNWString('ShopTracerEffect', ITEM.Effect)
+end
+
+-- Unequip a tracer
+function SHOP:UnequipTracer(ply)
+	ply:SetNWString('ShopTracerEffect', nil)
+end
+
 -- Add equipped trails on player spawn
 hook.Add('PlayerSpawn', 'AddEquippedTrail', function(ply)
     SHOP:WearTrail(ply)
