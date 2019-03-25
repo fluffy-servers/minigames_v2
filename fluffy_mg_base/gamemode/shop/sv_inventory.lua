@@ -18,8 +18,7 @@ end
 -- Load a player's inventory
 function SHOP:LoadInventory(ply, callback)
     SHOP.PlayerInventories[ply] = SHOP:DefaultInventory()
-    PrintTable(SHOP.PlayerInventories[ply])
-	
+    
     local inventory = SHOP.PlayerInventories[ply]
     callback(inventory)
 end
