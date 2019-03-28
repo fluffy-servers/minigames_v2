@@ -222,7 +222,11 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 		ITEM = SHOP:ParseVanillaItem(ITEM)
 		if ITEM.Locked then return end
 		
+		-- Verify the giftee is a player
 		local giftee = net.ReadEntity()
+		if not IsValid(giftee) then return end
+		if not giftee:IsPlayer() then return end
+		
 		SHOP:AddItem(ITEM, giftee)
 		SHOP:RemoveItem(key, ply)
 	end
