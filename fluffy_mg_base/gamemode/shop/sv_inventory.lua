@@ -13,6 +13,7 @@ local test_inventory = {
     {VanillaID = 'camera'},
 	{VanillaID = 'tracer_disco'},
 	SHOP.PaintList['blueberry'],
+	{VanillaID = 'tracer_lol', Locked = true}
 }
 
 -- Function to generate a default inventory
@@ -32,6 +33,8 @@ end
 -- Transmit the equipped table to the clients
 -- This makes sure the server & client about what items are equipped
 function SHOP:NetworkEquipped(ply)
+	if not SHOP.PlayerEquipped[ply] then return end
+	
     net.Start('SHOP_NetworkEquipped')
         net.WriteTable(SHOP.PlayerEquipped[ply])
     net.Send(ply)
@@ -173,6 +176,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
     local key = net.ReadInt(16)
     
     if action == 'EQUIP' then
+		-- Handle equipping of items
 		SHOP:EquipItem(key, ply)
     elseif action == 'PAINT' then
 		-- Handle painting of items
@@ -188,7 +192,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 		
 		local reequip = false
 		-- Unequip the item if it's already equipped
-		if SHOP.PlayerEquipped[ply][key] then
+		if SHOP.PlayerEquipped[ply] and SHOP.PlayerEquipped[ply][key] then
 			SHOP:EquipItem(key, ply, false)
 			reequip = true
 		end
@@ -201,6 +205,25 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 			SHOP:EquipItem(key, ply, true)
 		end
 	elseif action == 'UNBOX' then
+		-- Handle unboxing of items
 		SHOP:OpenUnbox(key, ply)
+	elseif action == 'GIFT' then
+		-- Handle deletion of items
+		-- Verify the item isn't locked
+		local ITEM = SHOP.PlayerInventories[ply][key]
+		ITEM = SHOP:ParseVanillaItem(ITEM)
+		if ITEM.Locked then return end
+		
+		SHOP:RemoveItem(key, ply)
+	elseif action == 'GIFT' then
+		-- Handle gifting of items
+		-- Verify the item isn't locked
+		local ITEM = SHOP.PlayerInventories[ply][key]
+		ITEM = SHOP:ParseVanillaItem(ITEM)
+		if ITEM.Locked then return end
+		
+		local giftee = net.ReadEntity()
+		SHOP:AddItem(ITEM, giftee)
+		SHOP:RemoveItem(key, ply)
 	end
 end)
