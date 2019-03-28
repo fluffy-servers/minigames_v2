@@ -207,7 +207,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 	elseif action == 'UNBOX' then
 		-- Handle unboxing of items
 		SHOP:OpenUnbox(key, ply)
-	elseif action == 'GIFT' then
+	elseif action == 'DELETE' then
 		-- Handle deletion of items
 		-- Verify the item isn't locked
 		local ITEM = SHOP.PlayerInventories[ply][key]
