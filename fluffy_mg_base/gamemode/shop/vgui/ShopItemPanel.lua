@@ -243,7 +243,17 @@ function PANEL:DoClick()
 	-- If the item is locked, the player cannot get rid of it
 	if not ITEM.Locked then
 		Menu:AddOption("Delete", function() SHOP:RequestDelete(self.key) end):SetIcon("icon16/delete.png")
-		Menu:AddOption("Gift to...", function() SHOP:RequestGift(self.key) end):SetIcon("icon16/package_go.png")
+		
+		-- Generate the gifting submenu
+		if #player.GetHumans() > 1 then
+			local submenu, parent = Menu:AddSubMenu("Gift to...")
+			parent:SetIcon("icon16/package_go.png")
+			for k,v in pairs(player.GetHumans()) do
+				if !IsValid(v) then continue end
+				if v == LocalPlayer() then continue end
+				submenu:AddOption(v:Nick(), function() SHOP:RequestGift(key, v) end)
+			end
+		end
 	end
     
     Menu:Open()
