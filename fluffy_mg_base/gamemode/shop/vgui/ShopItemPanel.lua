@@ -1,8 +1,7 @@
-print('aa')
-
 local icons = {}
 icons['paintable'] = Material('icon16/palette.png')
 icons['equipped'] = Material('icon16/tick.png')
+icons['locked'] = Material('icon16/lock.png')
 
 local rarity_colors = {}
 rarity_colors[1] = Color(52, 152, 219)
@@ -239,6 +238,13 @@ function PANEL:DoClick()
     if ITEM.Paintable then
         Menu:AddOption("Select Paint", function() SHOP:OpenPaintBox(self.key) end ):SetIcon("icon16/palette.png")
     end
+	
+	-- Add remove / gift buttons
+	-- If the item is locked, the player cannot get rid of it
+	if not ITEM.Locked then
+		Menu:AddOption("Delete", function() SHOP:RequestDelete(self.key) end):SetIcon("icon16/delete.png")
+		Menu:AddOption("Gift to...", function() SHOP:RequestGift(self.key) end):SetIcon("icon16/package_go.png")
+	end
     
     Menu:Open()
 end
@@ -260,12 +266,18 @@ function PANEL:PaintOver(w, h)
     
     -- Draw any icons
     local yy = 2
-    	surface.SetDrawColor( Color(255, 255, 255) )
+    surface.SetDrawColor(Color(255, 255, 255))
+	
+	if ITEM.Locked then
+		surface.SetMaterial(icons['locked'])
+		surface.DrawTexturedRect(w - 16, yy, 16, 16)
+		yy = yy + 16
+	end
 	
     -- Draw tick mark if equipped
 	if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] == true then
 		surface.SetMaterial(icons['equipped'])
-		surface.DrawTexturedRect( w - 16, yy, 16, 16 )
+		surface.DrawTexturedRect(w - 16, yy, 16, 16)
 		yy = yy + 16
 	end
     
@@ -273,11 +285,11 @@ function PANEL:PaintOver(w, h)
 	if ITEM.Paintable then
 		if ITEM.Color then
 			surface.SetDrawColor(ITEM.Color)	
-			surface.DrawRect( w - 18, yy, 16, 16 )
+			surface.DrawRect(w - 18, yy, 16, 16)
 			yy = yy + 16
 		else
 			surface.SetMaterial(icons['paintable'])
-			surface.DrawTexturedRect( w - 18, yy, 16, 16 )
+			surface.DrawTexturedRect(w - 18, yy, 16, 16)
 			yy = yy + 16
 		end
 	end
