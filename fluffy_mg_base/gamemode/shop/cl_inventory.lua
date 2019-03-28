@@ -336,6 +336,21 @@ function SHOP:RequestUnbox(key)
     net.SendToServer()
 end
 
+function SHOP:RequestDelete(key)
+    net.Start('SHOP_RequestItemAction')
+        net.WriteString('DELETE')
+        net.WriteInt(key, 16)
+    net.SendToServer()
+end
+
+function SHOP:RequestGift(key, giftee)
+    net.Start('SHOP_RequestItemAction')
+        net.WriteString('GIFT')
+        net.WriteInt(key, 16)
+		net.WriteEntity(giftee)
+    net.SendToServer()
+end
+
 net.Receive('SHOP_InventoryChange', function()
     local mode = net.ReadString()
     if mode == 'ADD' then
