@@ -365,7 +365,9 @@ net.Receive('SHOP_InventoryChange', function()
 		SHOP.InventoryTable[key] = ITEM
 	end
 	
-	if IsValid(SHOP.InventoryPanel) then
-        SHOP:PopulateInventory()
-    end
+	timer.Simple(0.1, function()
+		if IsValid(SHOP.InventoryPanel) then
+			SHOP:PopulateInventory()
+		end
+	end)
 end)
