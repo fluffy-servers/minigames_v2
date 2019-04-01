@@ -1,5 +1,6 @@
 --[[
     Useful functions that are used for TeamSurvival gamemodes
+	Examples: Suicide Barrels
 --]]
 
 -- Make new players join the Hunter team on connection
@@ -66,5 +67,18 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
         local name = string.sub(last_player:Nick(), 1, 10)
         GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8)
         last_player:AddStatPoints('LastSurvivor', 1)
+    end
+end)
+
+-- Disable cosmetics
+hook.Add('ShouldDrawCosmetics', 'HideHunterCosmetics', function(ply, ITEM)
+    if GAMEMODE.TeamSurvival then
+        -- Cosmetics shouldn't show for the Hunter Team (in most cases)
+        -- Override in some cases
+        if ply:Team() == GAMEMODE.HunterTeam then
+            return false
+        else
+            return true
+        end
     end
 end)

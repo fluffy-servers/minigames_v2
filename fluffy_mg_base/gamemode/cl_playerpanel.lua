@@ -1,3 +1,7 @@
+--[[
+	This file defines the info panel that appears at the start of each map
+--]]
+
 -- Information & help panel at the start of a game
 function GM:CreateHelpPanel()
     if IsValid(GAMEMODE.MinigamesHelpPanel) then return end

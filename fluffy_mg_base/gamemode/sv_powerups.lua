@@ -1,3 +1,9 @@
+--[[
+	Powerups library
+	This is used to handle consistent powerups across gamemodes
+	Also includes a few 'default' powerups that can be imported
+--]]
+
 -- Register a powerup to the powerups table
 -- See sections below for powerup examples
 function GM:RegisterPowerUp(key, tbl)
