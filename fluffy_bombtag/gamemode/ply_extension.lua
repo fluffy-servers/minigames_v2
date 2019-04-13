@@ -4,12 +4,12 @@ if (!meta) then return end
 
 -- Set whether this player is the carrier or not
 -- Adjusts movement speed accordingly
-function meta:SetCarrier( bool )
+function meta:SetCarrier(bool)
 	self:SetNWBool("Carrier", bool)
 	
 	if bool then
-		self:SetWalkSpeed(400)
-		self:SetRunSpeed(400)
+		self:SetWalkSpeed(500)
+		self:SetRunSpeed(500)
 		self:SetJumpPower(400)
 	else
 		self:SetWalkSpeed(300)

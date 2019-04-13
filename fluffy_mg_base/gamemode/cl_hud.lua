@@ -433,8 +433,8 @@ function GM:DrawAmmo()
     local ammo = {}
     ammo['PrimaryClip'] = wep:Clip1()
     ammo['SecondaryClip'] = wep:Clip2()
-    ammo['PrimaryAmmo'] = LocalPlayer():GetAmmoCount( wep:GetPrimaryAmmoType() )
-    ammo['SecondaryAmmo'] = LocalPlayer():GetAmmoCount( wep:GetSecondaryAmmoType() )
+    ammo['PrimaryAmmo'] = LocalPlayer():GetAmmoCount(wep:GetPrimaryAmmoType())
+    ammo['SecondaryAmmo'] = LocalPlayer():GetAmmoCount(wep:GetSecondaryAmmoType())
     ammo['MaxPrimaryClip'] = wep:GetMaxClip1()
     ammo['MaxSecondaryClip'] = wep:GetMaxClip2()
     
@@ -445,7 +445,7 @@ function GM:DrawAmmo()
     
     -- Check the ammo table is valid
     if !ammo then return end
-    if ammo['PrimaryClip'] == -1 then return end
+    if ammo['PrimaryClip'] == -1 and (ammo['PrimaryAmmo'] or -1) < 1 then return end
     if ammo['PrimaryClip'] == 0 and ammo['PrimaryAmmo'] == 0 then return end
     
     -- Draw the shadow & circle
@@ -474,17 +474,20 @@ function GM:DrawAmmo()
     
     -- If there is a 'reserve' value for this gun, draw clip & ammo
     -- Otherwise, just draw the clip
-    if ammo['PrimaryAmmo'] and ammo['PrimaryAmmo'] > -1 then
+    if ammo['PrimaryAmmo'] and ammo['PrimaryAmmo'] > -1 and ammo['PrimaryAmmo'] < 1000 and ammo['PrimaryClip'] > -1 then
         -- Clip & ammo
         draw.SimpleText( ammo['PrimaryClip'], "FS_40", ScrW() - c_pos+1, ScrH() - c_pos+2 - 4, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
         draw.SimpleText( ammo['PrimaryClip'], "FS_40", ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
         
         draw.SimpleText( ammo['PrimaryAmmo'] or 72, "FS_16", ScrW() - c_pos+1, ScrH() - c_pos+2 + 16, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
         draw.SimpleText( ammo['PrimaryAmmo'] or 72, "FS_16", ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    else
+    elseif ammo['PrimaryClip'] != -1 then
         -- Clip1 only
         draw.SimpleText( ammo['PrimaryClip'], "FS_60", ScrW() - c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
         draw.SimpleText( ammo['PrimaryClip'], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    elseif ammo['PrimaryAmmo'] > 0 then
+        draw.SimpleText( ammo['PrimaryAmmo'], "FS_60", ScrW() - c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
+        draw.SimpleText( ammo['PrimaryAmmo'], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
     end
     
     -- What about secondary ammo?? :(

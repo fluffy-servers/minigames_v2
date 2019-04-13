@@ -32,6 +32,7 @@ GM.EndOnTimeOut = true      -- If using 'timed' RoundType, should this cut off t
 
 GM.CanSuicide = true            -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
+GM.SpawnProtection = false      -- Should players have brief spawn protection?
 
 GM.DeathSounds = true	-- Should voicelines play on player death?
 GM.KillValue = 1        -- How many points should be awarded for a kill?

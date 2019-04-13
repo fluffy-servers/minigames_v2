@@ -14,12 +14,11 @@ end
 
 -- Add laser trails to players that spawn
 hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
-    if ply:Team() == TEAM_SPECTATOR then return end
-    
 	-- Don't duplicate the laser trail
     if IsValid(ply.LaserTrail) then
         SafeRemoveEntity(ply.LaserTrail)
     end
+    if ply:Team() == TEAM_SPECTATOR then return end
     
 	-- Assign the trail based on the player (or team?) colour
     local c = Color(255, 255, 255, 255)

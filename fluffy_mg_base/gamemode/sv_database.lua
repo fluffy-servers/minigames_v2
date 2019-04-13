@@ -3,9 +3,11 @@
 include('db_config.lua')
 
 GM.MinigamesPQueries = {}
+CreateConVar('mg_db_enabled', 1, FCVAR_NONE, 'Should the Minigames DB be enabled?')
 
 function GM:CheckDBConnection()
 	if not GAMEMODE then return end
+    if not GetConVar('mg_db_enabled'):GetBool() then return end
 	
     if !GAMEMODE.MinigamesDB then
         if !mysqloo then print('no mysqloo? oh no') return end

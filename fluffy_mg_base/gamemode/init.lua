@@ -70,6 +70,14 @@ function GM:PlayerSpawn( ply )
     -- Exit out of spectate
     ply:UnSpectate()
     ply.Spectating = false
+    
+    -- Spawn protection
+    if GAMEMODE.SpawnProtection then
+        ply:GodEnable()
+        timer.Simple(3, function()
+            if IsValid(ply) then ply:GodDisable() end
+        end)
+    end
 end
 
 -- Open up team menu
