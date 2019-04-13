@@ -1,3 +1,9 @@
+--[[
+    Clientside core file
+	This mostly just registers fonts and colors
+	Most other HUD stuff is in the other client files
+--]]
+
 -- Include useful files
 include('shared.lua')
 include('cl_endgame.lua')
@@ -14,9 +20,7 @@ include('vgui/Screen_Experience.lua')
 include('vgui/Screen_Maps.lua')
 include('vgui/Screen_Scoreboard.lua')
 
---[[
-    Universal Fonts
-]]--
+-- Register universal fonts
 surface.CreateFont( "FS_16", {
 	font = "Coolvetica",
 	size = 20,

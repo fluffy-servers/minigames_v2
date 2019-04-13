@@ -2,6 +2,7 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
+-- Players are given a shotgun and an SMG
 function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:StripWeapons()
@@ -11,6 +12,7 @@ function GM:PlayerLoadout(ply)
 	ply:GiveAmmo(512, "Buckshot", true)
 end
 
+-- Called when a player picks up a ball
 function GM:CollectBall(ply)
 	local balls = ply:GetNWInt("Balls", 0)
 	ply:SetNWInt("Balls", balls+1)
@@ -66,17 +68,15 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     if attacker == ply then return end -- Suicides aren't important
 end
 
+-- Reset the player balls count at the start at each round
 hook.Add('RoundStart', 'ResetBalls', function()
 	for k,v in pairs(player.GetAll()) do
 		v:SetNWInt("Balls", 0)
 	end
 end )
 
--- Basic function to get the player with the most frags
+-- The winning player is the player with the most balls at the end of a round
 function GM:GetWinningPlayer()
-    -- Doesn't really make sense in Team gamemodes
-    -- if GAMEMODE.TeamBased then return nil end
-    
     -- Loop through all players and return the one with the most balls
     local bestscore = 0
     local bestplayer = nil

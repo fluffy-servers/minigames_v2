@@ -1,5 +1,6 @@
 include('shared.lua')
 
+-- If marker entities exist, draw them
 hook.Add('HUDPaint', 'DrawFlagMarkers', function()
     if not GAMEMODE.FlagMarkers or #GAMEMODE.FlagMarkers < 1 then
         GAMEMODE.FlagMarkers = ents.FindByClass('ctf_*_marker')

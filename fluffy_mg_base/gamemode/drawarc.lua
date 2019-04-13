@@ -1,3 +1,5 @@
+-- drawArc by Bobblehead
+-- https://forum.facepunch.com/f/gmoddev/nycb/draw-Arc-Version-2-0/1/
 function draw.Arc(cx,cy,radius,thickness,startang,endang,roughness,color)
 	surface.SetDrawColor(color)
 	surface.DrawArc(surface.PrecacheArc(cx,cy,radius,thickness,startang,endang,roughness))

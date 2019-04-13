@@ -2,6 +2,7 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
+-- Define the progression of weapons
 GunGame_Progression = {
     'weapon_ar2',
     'weapon_rpg',
@@ -15,6 +16,7 @@ GunGame_Progression = {
     'weapon_crowbar',
 }
 
+-- Players get a weapon according to how many kills they have so far
 function GM:PlayerLoadout( ply )
     local stage = math.floor( ply:GetNWInt('GG_Progress', 0 ) / 2 ) + 1
     local kill = nil
@@ -49,13 +51,15 @@ function GM:PlayerLoadout( ply )
     end
 end
 
+-- Reset gungame progression
 hook.Add('PreRoundStart', 'ResetGGRank', function()
     for k,v in pairs( player.GetAll() ) do
         v:SetNWInt('GG_Progress', 0 )
     end
-    SetGlobalString( 'GunGame_Mode', mode )
+    SetGlobalString('GunGame_Mode', mode)
 end )
 
+-- Players increase the weapon progression for every kill
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then 

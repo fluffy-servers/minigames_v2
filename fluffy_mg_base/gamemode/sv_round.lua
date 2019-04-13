@@ -8,7 +8,8 @@
     Some functions regarding winning conditions are designed to be overridden
 --]]
 
---[[ Thinking for round coordination ]]--
+-- Thinking for round coordination
+-- Usually check for round start and end conditions
 hook.Add('Think', 'MinigamesRoundThink', function()
     local state = GetGlobalString('RoundState', 'GameNotStarted')
     -- Check if the game is ready to start
@@ -27,7 +28,7 @@ hook.Add('Think', 'MinigamesRoundThink', function()
     end
 end )
 
---[[ Check if there are enough players to start a round ]]--
+-- Check if there enough players to start a round
 function GM:CanRoundStart()
     -- If team based, check there is at least player on each team
     -- ( Override this function if there is ever a four-team gamemode )
@@ -48,7 +49,8 @@ function GM:CanRoundStart()
     end
 end
 
---[[ Called for round setup time ]]--
+-- Called just before the round starts
+-- Cleans up the map and resets round data
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0 )
     
@@ -86,8 +88,8 @@ function GM:PreStartRound()
     
     -- Set global round data
     SetGlobalInt('RoundNumber', round + 1 )
-    SetGlobalString( 'RoundState', 'PreRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+    SetGlobalString('RoundState', 'PreRound')
+	SetGlobalFloat('RoundStart', CurTime())
     hook.Call('PreRoundStart')
     
     -- Respawn everybody & freeze them until the round actually starts
@@ -103,10 +105,10 @@ function GM:PreStartRound()
     end
     
     -- Start the round after a short cooldown
-    timer.Simple( GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end )
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end)
 end
 
---[[ Start a round ]]--
+-- Start a round
 function GM:StartRound()
     -- Unfreeze all players
     for k,v in pairs( player.GetAll() ) do
@@ -129,7 +131,7 @@ function GM:StartRound()
     end
 end
 
---[[ End the round ]]--
+-- End the round
 function GM:EndRound(reason)
     -- Check that we're in a round
     if GetGlobalString('RoundState') != 'InRound' then return end
@@ -157,7 +159,8 @@ function GM:EndRound(reason)
     timer.Simple( GAMEMODE.RoundCooldown, function() GAMEMODE:PreStartRound() end )
 end
 
---[[ End the game! ]]--
+-- End the game
+-- This occurs at the end of a map
 function GM:EndGame()
     -- Open the end screen on clients
     net.Start('MinigamesGameEnd')
@@ -195,7 +198,7 @@ hook.Add('Think', 'TimedGamemodeThink', function()
     end
 end)
 
---[[ STATS: Give round win points ]]--
+-- STATS: Give round win points
 function GM:StatsRoundWin(winners)
     if IsEntity(winners) then
         if winners:IsPlayer() then
@@ -220,7 +223,7 @@ end
     Example (basic) round end handlers
 ]]--
 
---Handles victory conditions for team based gamemodes
+-- Handles victory conditions for team based gamemodes
 function GM:HandleTeamWin(reason)
     local winners = reason -- Default: set to winning team in certain gamemodes
     local msg = 'The round has ended!'
@@ -258,7 +261,7 @@ function GM:HandleTeamWin(reason)
     return winners, msg
 end
 
---Handles victory conditions for Free for All based gamemodes
+-- Handles victory conditions for Free for All based gamemodes
 function GM:HandleFFAWin(reason)
     local winner = nil -- Default: everyone sucks
     local msg = 'The round has ended!'
@@ -315,7 +318,7 @@ function GM:CheckTeamElimination()
     end
 end
 
--- [[ Default functions for round stuff ]] --
+-- Default functions for round stuff
 function GM:CheckRoundEnd()
     if GAMEMODE.TeamBased then
         return GAMEMODE:CheckTeamElimination()

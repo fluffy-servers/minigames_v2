@@ -1,12 +1,17 @@
 --[[
     Robert A Fraser 2018
     Minigames Reborn
+	
+	Base file for the gamemode which is loaded on both client and server
 ]]--
 
+-- Load the other shared files
 DeriveGamemode('base')
 include('sound_tables.lua')
 include('sh_levels.lua')
 
+-- These variables should be altered in each sub gamemode's shared.lua file
+-- If not defined, they will return to these values here
 GM.Name = 'Minigames'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
@@ -37,7 +42,8 @@ GM.SurvivorTeam = TEAM_BLUE	-- Survivor team
 GM.HunterTeam = TEAM_RED	-- Hunter team
 
 function GM:Initialize()
-
+	-- Gamemode crashes without this function so don't remove it
+	-- There's nothing that needs to be handled here, hence the blank
 end
 
 --[[
@@ -82,18 +88,38 @@ end
 
 -- Function to toggle displaying cosmetics
 -- Obviously, cosmetic items shouldn't be displayed on barrels etc.
-function GM:ShouldDrawCosmetics(ply)
-    if GAMEMODE.TeamSurvival then
-        -- Cosmetics shouldn't show for the Hunter Team (in most cases)
-        -- Override in some cases
-        if ply:Team() == GAMEMODE.HunterTeam then
-            return false
-        else
-            return true
-        end
+function GM:ShouldDrawCosmetics(ply, ITEM)
+    return hook.Run('DrawCosmeticsCheck', ply, ITEM) or true
+end
+
+-- Valid playermodels
+GM.ValidModels = {
+    male01 = "models/player/Group01/male_01.mdl",
+    male02 = "models/player/Group01/male_02.mdl",
+    male03 = "models/player/Group01/male_03.mdl",
+    male04 = "models/player/Group01/male_04.mdl",
+    male05 = "models/player/Group01/male_05.mdl",
+    male06 = "models/player/Group01/male_06.mdl",
+    male07 = "models/player/Group01/male_07.mdl",
+    male08 = "models/player/Group01/male_08.mdl",
+    male09 = "models/player/Group01/male_09.mdl",
+    
+    female01 = "models/player/Group01/female_01.mdl",
+    female02 = "models/player/Group01/female_02.mdl",
+    female03 = "models/player/Group01/female_03.mdl",
+    female04 = "models/player/Group01/female_04.mdl",
+    female05 = "models/player/Group01/female_05.mdl",
+    female06 = "models/player/Group01/female_06.mdl",
+}
+
+-- Convert the playermodel name into a model
+function GM:TranslatePlayerModel(name, ply)
+    if GAMEMODE.ValidModels[name] != nil then
+        return GAMEMODE.ValidModels[name]
+    elseif ply.TemporaryModel then
+        return ply.TemporaryModel
     else
-        -- Should be okay in most cases
-        -- Override in others
-        return true
+        ply.TemporaryModel = table.Random(GAMEMODE.ValidModels)
+        return ply.TemporaryModel
     end
 end

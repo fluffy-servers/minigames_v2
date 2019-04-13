@@ -1,13 +1,17 @@
+--[[
+	Ball pickup entity
+	Heavily based off the default Sandbox ball entity
+]]--
+
 AddCSLuaFile()
-
 DEFINE_BASECLASS("base_anim")
-
 ENT.PrintName = "Ball"
 
 ENT.MinSize = 24
 ENT.MaxSize = 64
 ENT.LifeTime = 15
 
+-- Setup networked variables
 function ENT:SetupDataTables()
 	self:NetworkVar("Float", 0, "BallSize", { KeyName = "ballsize", Edit = { type = "Float", min = self.MinSize, max = self.MaxSize, order = 1 } })
 	self:NetworkVar("Vector", 0, "BallColor", { KeyName = "ballcolor", Edit = { type = "VectorColor", order = 2 } })
@@ -15,12 +19,14 @@ function ENT:SetupDataTables()
 	self:NetworkVarNotify("BallSize", self.OnBallSizeChanged)
 end
 
+-- Create the ball with spherical physics
 function ENT:Initialize()
 	if CLIENT then return end
 	
+	-- Approximate the ball with spherical physics
 	self:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
 	self:RebuildPhysics()
-    self:SetTrigger(true)
+  self:SetTrigger(true)
 	
     -- Should be overriden in the gamemode
 	self:SetBallColor(table.Random({
@@ -38,9 +44,8 @@ function ENT:Initialize()
     end)
 end
 
-function ENT:RebuildPhysics(value)
-	-- This is necessary so that the vphysics.dll will not crash when attaching constraints to the new PhysObj after old one was destroyed
-	-- TODO: Somehow figure out why it happens and/or move this code/fix to the constraint library
+-- Borrowed from Sandbox implementation
+function ENT:RebuildPhysics( value )
 	self.ConstraintSystem = nil
 
 	local size = math.Clamp(value or self:GetBallSize(), self.MinSize, self.MaxSize) / 2.1
@@ -67,7 +72,7 @@ function ENT:PhysicsCollide(data, physobj)
 		sound.Play(BounceSound, self:GetPos(), 75, math.random(pitch - 10, pitch + 10), math.Clamp(data.Speed / 150, 0, 1))
 	end
 
-	-- Bounce like a crazy bitch
+	-- Make the ball bouncier
 	local LastSpeed = math.max(data.OurOldVelocity:Length(), data.Speed)
 	local NewVelocity = physobj:GetVelocity()
 	NewVelocity:Normalize()
@@ -95,6 +100,7 @@ if SERVER then return end -- We do NOT want to execute anything below in this FI
 
 local matBall = Material("sprites/sent_ball")
 
+-- Render the ball as a 2D sprite
 function ENT:Draw()
 	render.SetMaterial(matBall)
 

@@ -1,4 +1,3 @@
-
 AddCSLuaFile( "shared.lua" )
 
 SWEP.Author			= ""
@@ -6,19 +5,18 @@ SWEP.Contact		= ""
 SWEP.Purpose		= ""
 SWEP.Instructions	= ""
 
-if ( CLIENT ) then
-
-SWEP.PrintName			= "Laser Weapon"		// 'Nice' Weapon name (Shown on HUD)	
-SWEP.Slot				= 0						// Slot in the weapon selection menu
-SWEP.SlotPos			= 10					// Position in the slot
-SWEP.DrawAmmo			= false					// Should draw the default HL2 ammo counter
-SWEP.DrawCrosshair		= true 					// Should draw the default crosshair
-SWEP.DrawWeaponInfoBox	= false					// Should draw the weapon info box
-SWEP.BounceWeaponIcon   = false					// Should the weapon icon bounce?
-SWEP.SwayScale			= 1.0					// The scale of the viewmodel sway
-SWEP.BobScale			= 1.0					// The scale of the viewmodel bob
-SWEP.WepSelectIcon		= surface.GetTextureID( "weapons/swep" )
-killicon.AddFont("weapon_propkilla", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
+if CLIENT then
+	SWEP.PrintName			= "Laser Cannon"		-- 'Nice' Weapon name (Shown on HUD)	
+	SWEP.Slot				= 0						-- Slot in the weapon selection menu
+	SWEP.SlotPos			= 10					-- Position in the slot
+	SWEP.DrawAmmo			= false					-- Should draw the default HL2 ammo counter
+	SWEP.DrawCrosshair		= true 					-- Should draw the default crosshair
+	SWEP.DrawWeaponInfoBox	= false					-- Should draw the weapon info box
+	SWEP.BounceWeaponIcon   = false					-- Should the weapon icon bounce?
+	SWEP.SwayScale			= 1.0					-- The scale of the viewmodel sway
+	SWEP.BobScale			= 1.0					-- The scale of the viewmodel bob
+	SWEP.WepSelectIcon		= surface.GetTextureID("weapons/swep")
+	killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
 end
 
 SWEP.ViewModelFOV	= 62
@@ -26,7 +24,6 @@ SWEP.ViewModelFlip	= false
 SWEP.ViewModel		= "models/weapons/c_357.mdl"
 SWEP.WorldModel		= "models/weapons/w_357.mdl"
 SWEP.UseHands       = true
-SWEP.AnimPrefix		= "python"
 
 SWEP.Spawnable			= false
 SWEP.AdminSpawnable		= false

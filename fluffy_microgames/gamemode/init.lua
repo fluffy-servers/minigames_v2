@@ -1,3 +1,10 @@
+--[[
+	This gamemode is significantly more complicated than the other gamemodes
+	This is due to the nature of having smaller 'modifiers' in the gamemode
+	Don't be scared! A lot of this code is just repeated from the base gamemode
+	with slight modifications to call the microgame hooks
+]]--
+
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 
@@ -9,6 +16,7 @@ function GM:GetFallDamage( ply, speed )
     return 0
 end
 
+-- Reset the map before the round starts
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0 )
     
@@ -46,6 +54,7 @@ function GM:PreStartRound()
     timer.Simple(2, function() GAMEMODE:StartRound() end )
 end
 
+-- Pick a new modifier each round
 function GM:StartRound()
     -- Pick new modifier
     GAMEMODE:NewModifier()
@@ -66,18 +75,21 @@ function GM:StartRound()
     end )
 end
 
+-- End a round and check subgame functionality
 function GM:EndRound(reason)
     -- Check that we're in a round
     if GetGlobalString('RoundState') != 'InRound' then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
     
+	-- Call any win condition checks in the subgame
     if GAMEMODE.CurrentModifier.func_check then
         for k,v in pairs(player.GetAll()) do
             GAMEMODE.CurrentModifier.func_check(v)
         end
     end
     
+	-- Call any cleanup conditions in the subgame
     if GAMEMODE.CurrentModifier.func_cleanup then
         GAMEMODE.CurrentModifier.func_cleanup()
     end
@@ -108,6 +120,8 @@ function GM:EndRound(reason)
     timer.Simple(2, function() GAMEMODE:PreStartRound() end)
 end
 
+-- Wind down from a subgame
+-- This resets all the player data to defaults
 function GM:EndModifier()
     local modifier = GAMEMODE.CurrentModifier
     for k,v in pairs(player.GetAll()) do
@@ -121,11 +135,13 @@ function GM:EndModifier()
         v:SetJumpPower(200)
         hook.Call('PlayerSetModel', GAMEMODE, v)
         
+		-- Call any other subgame cleanups
         if modifier.func_finish then
             modifier.func_finish(v)
         end
     end
     
+	-- Remove any subgame hooks
     if modifier.hooks then
         for k,v in pairs(modifier.hooks) do
             hook.Remove(k, modifier.name)
@@ -133,6 +149,7 @@ function GM:EndModifier()
     end
 end
 
+-- Load up a new modifier
 function GM:NewModifier()
     -- Make sure the same modifier doesn't come up twice
     if not GAMEMODE.CurrentModifier then GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers) end
@@ -158,6 +175,7 @@ function GM:NewModifier()
         end
     end
     
+	-- Pulse announcement with the subgame information
     GAMEMODE:PulseAnnouncementTwoLine(3, modifier.name, modifier.subtext)
 end
 

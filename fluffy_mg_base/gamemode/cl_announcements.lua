@@ -4,6 +4,8 @@
     Announcements here are triggered on the server and then displayed here for information
     Currently contains the following announcement types:
         - Countdown
+		- Pulse
+		- Pulse w/ subtext
 --]]
 
 -- Draw text that can be scaled
