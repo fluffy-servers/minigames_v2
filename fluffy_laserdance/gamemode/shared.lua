@@ -20,6 +20,7 @@ GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 120      -- Seconds each round lasts for
 
 GM.ThirdpersonEnabled = true
+GM.SpawnProtection = true
 
 function GM:Initialize()
 
