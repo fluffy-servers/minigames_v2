@@ -15,6 +15,8 @@ function GM:CollectBall(ply)
 	local balls = ply:GetNWInt("Balls", 0)
 	ply:SetNWInt("Balls", balls+1)
 	GAMEMODE:AddStatPoints(ply, 'total_balls', 1)
+    
+    ply:EmitSound('buttons/blip1.wav', 50, math.Clamp(100 + balls*5, 100, 255))
 	
 	local hp = ply:Health()
 	ply:SetHealth(hp + 10)
