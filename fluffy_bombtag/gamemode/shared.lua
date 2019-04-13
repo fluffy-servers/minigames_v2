@@ -21,3 +21,4 @@ GM.RoundNumber = 10     -- How many rounds?
 GM.RoundTime = 120      -- Seconds each round lasts for
 
 GM.ThirdpersonEnabled = true
+GM.CanSuicide = false
