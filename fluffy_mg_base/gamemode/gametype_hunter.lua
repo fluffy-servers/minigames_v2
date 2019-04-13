@@ -30,6 +30,14 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
     end
 end )
 
+-- Stop Hunters from switching back to the other team
+hook.Add('PlayerCanJoinTeam', 'StopHunterSwap', function(ply, team)
+    local current_team = ply:Team()
+    if current_team == GAMEMODE.HunterTeam then
+        return false
+    end 
+end)
+
 -- Assign dead survivors to the hunter team
 hook.Add('PlayerDeath', 'SurvivalDeath', function(ply)
     if ply:Team() == GAMEMODE.SurvivorTeam then
