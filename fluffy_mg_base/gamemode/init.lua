@@ -1,8 +1,7 @@
 --[[
     The big ol' core of the gamemode
-	This mostly contains a lot of miscellaneous tweaks and functions
-	Most functionality is in the other server files
-	Note: includes are at the BOTTOM of this file
+    Probably needs to be split into some more files at this point
+    But this isn't a total mess yet! Go me!
 --]]
 
 -- Send all the required files to the client
@@ -16,13 +15,13 @@ AddCSLuaFile('cl_playerpanel.lua')
 AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
 AddCSLuaFile('cl_announcements.lua')
--- VGUI files
+
 AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
 AddCSLuaFile('vgui/Screen_Experience.lua')
 AddCSLuaFile('vgui/Screen_Maps.lua')
 AddCSLuaFile('vgui/Screen_Scoreboard.lua')
--- Shared files
+
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
 AddCSLuaFile('sh_levels.lua')
@@ -102,6 +101,22 @@ end
 -- Rebind team menu
 function GM:ShowTeam(ply)
     ply:ConCommand("minigames_info")
+end
+
+function GM:PlayerRequestTeam(ply, teamid)
+	if not GAMEMODE.TeamBased then return end
+    
+    -- Stop players joining weird teams
+	if not team.Joinable(teamid) then
+		ply:ChatPrint( "You can't join that team" )
+        return 
+    end
+
+	-- Run the can join hook
+	if not hook.Run('PlayerCanJoinTeam', ply, teamid) then
+        return
+    end
+	GAMEMODE:PlayerJoinTeam(ply, teamid)
 end
 
 -- Disable friendly fire
@@ -293,8 +308,6 @@ function GM:CleanUpDMStuff()
     end
 end
 
--- Handle the death of a player
--- By default tracks some basic kill statistics
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
@@ -320,7 +333,6 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     end
 end
 
--- Shotguns are super weak so this hook increases doubles the damage
 hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
     local wep = dmg:GetInflictor()
     if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end

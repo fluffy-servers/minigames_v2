@@ -33,8 +33,11 @@ end )
 
 -- Stop Hunters from switching back to the other team
 hook.Add('PlayerCanJoinTeam', 'StopHunterSwap', function(ply, team)
+    print(ply)
+    print('trying to change team')
     local current_team = ply:Team()
     if current_team == GAMEMODE.HunterTeam then
+        ply:ChatPrint('You cannot change teams currently')
         return false
     end 
 end)
