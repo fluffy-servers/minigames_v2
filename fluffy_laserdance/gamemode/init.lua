@@ -11,11 +11,10 @@ function GM:GetFallDamage()
 end
 
 hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
-    if ply:Team() == TEAM_SPECTATOR then return end
-    
     if IsValid(ply.LaserTrail) then
         SafeRemoveEntity(ply.LaserTrail)
     end
+    if ply:Team() == TEAM_SPECTATOR then return end
     
     local c = Color(255, 255, 255, 255)
     if GAMEMODE.TeamBased then
