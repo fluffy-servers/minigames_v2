@@ -29,7 +29,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     
-    local balls = ply:GetNWInt("Balls", 0)
+    local balls = math.min(ply:GetNWInt("Balls", 0), 20)
     for i=math.random(-4, 0),balls do
 		local b = ents.Create('mg_ball_drop')
 		local p = ply:GetPos() + Vector(0, 0, 50)
@@ -42,7 +42,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         local c3 = ply:GetPlayerColor()
         b:SetBallColor(c3)
     end
-    ply:SetNWInt("Balls", 0)
+    local new_balls = math.max(ply:GetNWInt("Balls", 0) - balls, 0)
+    ply:SetNWInt("Balls", new_balls)
     
     -- Play a funny death sound
     if GAMEMODE.DeathSounds then
