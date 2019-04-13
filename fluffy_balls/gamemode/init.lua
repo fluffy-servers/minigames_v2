@@ -19,8 +19,8 @@ function GM:CollectBall(ply)
 	local hp = ply:Health()
 	ply:SetHealth(hp + 10)
 	
-	if hp >= 90 then
-		ply:SetHealth(100)
+	if hp >= 140 then
+		ply:SetHealth(150)
 	end
 end
 
