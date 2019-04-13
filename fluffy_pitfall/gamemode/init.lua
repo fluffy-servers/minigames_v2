@@ -90,7 +90,9 @@ hook.Add('PreRoundStart', 'CreatePlatforms', function()
 	-- Clear the level then randomly place platforms
     local gametype = table.Random(GAMEMODE.BlockOptions)
     SetGlobalString('PitfallType', gametype)
+    print('pre round start complete?')
     GAMEMODE:ClearLevel()
+    print('Cleared level')
     GAMEMODE:SpawnPlatforms()
 end )
 
@@ -126,6 +128,7 @@ end
 
 -- Spawn the platforms
 function GM:SpawnPlatforms()
+    print('Starting spawning..')
     local pos = GAMEMODE.PlatformPositions[game.GetMap()]
     if !pos then
         -- Check if this is a Trembling Tiles map
@@ -136,6 +139,7 @@ function GM:SpawnPlatforms()
             GAMEMODE:MarkerPlatforms(p)
         end
     else
+        print('Generating random platforms..')
         GAMEMODE:RandomPlatforms(pos)
     end
     --[[
@@ -196,6 +200,7 @@ function GM:RandomPlatforms(pos)
         px = pos.x - (size*rows)/2
         py = pos.y - (size*columns)/2
     end
+    print('Spawned platforms!')
 end
 
 -- Certain maps have platform positions predefined
