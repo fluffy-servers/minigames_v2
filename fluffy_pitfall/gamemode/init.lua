@@ -164,15 +164,18 @@ end
 
 -- Generate a grid of platforms
 function GM:RandomPlatforms(pos)
-    local rows = math.random(2, 5)
-    local columns = math.random(2, 5)
-    local levels = math.random(1, 3)
+    local levelscale = math.min(math.ceil(player.GetCount() / 4), 5)
+    local rows = math.random(3 + levelscale, 5 + levelscale)
+    local columns = math.random(3 + levelscale, 5 + levelscale)
+    local levels = math.random(1, 3 + math.floor(levelscale/2))
     if math.random() > 0.5 then levels = levels + 1 end
     
+    -- Ensure everybody has a platform to stand on
     while (rows*columns) < player.GetCount() do
         rows = rows + 1
     end
     
+    -- Position the platforms in the middle of the level
     local size = math.random(120, 200)
     local px = pos.x - (size*rows)/2
     local py = pos.y - (size*columns)/2
