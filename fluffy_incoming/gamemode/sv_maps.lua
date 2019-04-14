@@ -101,23 +101,63 @@ GM.DefaultProps['Both'] = {
     }
 }
 
---[[
-GM.DefaultProps['Spheres'] = {
+GM.DefaultProps['Junkyard'] = {
     models = {
-        'models/hunter/misc/sphere025x025.mdl',
-        'models/hunter/misc/sphere075x075.mdl',
+        'models/props_interiors/VendingMachineSoda01a.mdl',
+        'models/props_junk/TrashDumpster01a.mdl',
+        'models/props_wasteland/controlroom_filecabinet002a.mdl',
+        'models/props_wasteland/controlroom_storagecloset001b.mdl',
+        'models/props_wasteland/controlroom_chair001a.mdl',
+        'models/props_c17/FurnitureCouch002a.mdl',
+        'models/props_c17/FurnitureWashingmachine001a.mdl',
+        'models/props_vehicles/tire001a_tractor.mdl',
+        'models/props_vehicles/tire001b_truck.mdl',
+        'models/props_interiors/Furniture_Couch02a.mdl',
+        'models/props_interiors/Furniture_Desk01a.mdl',
+        'models/props_interiors/Radiator01a.mdl',
+        'models/props_wasteland/laundry_dryer002.mdl',
+        'models/props_wasteland/laundry_washer003.mdl',
+        'models/props_wasteland/laundry_washer001a.mdl',
+        'models/props_wasteland/laundry_cart001.mdl',
+        'models/props_wasteland/wheel02b.mdl',
+        'models/props_wasteland/wheel02a.mdl',
+        'models/props_wasteland/wheel01a.mdl',
+        'models/props_vehicles/car002a_physics.mdl',
+        'models/props_wasteland/laundry_basket001.mdl',
+        'models/props_wasteland/rockgranite02a.mdl',
+        'models/props_wasteland/rockgranite02b.mdl',
+        'models/props_wasteland/buoy01.mdl',
+        'models/props_c17/Lockers001a.mdl',
+        'models/props_c17/oildrum001.mdl',
+        'models/props_c17/oildrum001.mdl',
+        'models/props_c17/furnitureStove001a.mdl',
+        'models/props_c17/FurnitureBed001a.mdl'
+    },
+    delay = 1
+}
+
+GM.DefaultProps['CubesAndSpheres'] = {
+    models = {
+        'models/hunter/blocks/cube05x05x05.mdl',
+        'models/hunter/blocks/cube075x075x075.mdl',
+        'models/hunter/blocks/cube1x1x1.mdl',
+        'models/hunter/blocks/cube1x150x1.mdl',
+        'models/hunter/blocks/cube1x6x1.mdl',
+        'models/hunter/blocks/cube2x2x2.mdl',
+        'models/hunter/blocks/cube2x4x1.mdl',
+        'models/hunter/blocks/cube2x6x1.mdl',
+        'models/hunter/blocks/cube4x4x4.mdl',
         'models/hunter/misc/sphere175x175.mdl',
         'models/hunter/misc/sphere1x1.mdl',
         'models/hunter/misc/sphere2x2.mdl',
-        'models/hunter/misc/sphere375x375.mdl',
+        'models/hunter/misc/sphere375x375.mdl'
     },
     
     func = function(e)
         local c = HSVToColor(math.random(360), 1, 1)
         e:SetColor(c)
-    end,
+    end
 }
---]]
 
 GM.MapInfo = {}
 GM.MapInfo['inc_duo'] = {
