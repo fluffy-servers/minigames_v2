@@ -36,7 +36,7 @@ function GM:HUDPaint()
     self:DrawAmmo()
     
     -- Crosshair - account for third person too
-    if GAMEMODE.ThirdPersonEnabled and LocalPlayer().Thirdperson then
+    if LocalPlayer().Thirdperson then
     	local x,y = 0,0
 		local tr = LocalPlayer():GetEyeTrace()
 		x = tr.HitPos:ToScreen().x
@@ -496,6 +496,7 @@ end
 
 -- Create the round end panel with information
 -- This a popup at the top of the screen
+--[[
 function GM:CreateRoundEndPanel(message, tagline)
     surface.PlaySound( 'friends/friend_join.wav' )
     if IsValid(GAMEMODE.RoundEndPanel) then
@@ -530,6 +531,43 @@ function GM:CreateRoundEndPanel(message, tagline)
     p:MoveTo(ScrW()/2 - w/2, 0, 1, 0, -1, function(anim, p)
         p:MoveTo(ScrW()/2 - w/2, -h, 1, GAMEMODE.RoundCooldown - 1, -1, function(anim, p) p:Remove() end)
     end)
+end
+--]]
+
+function GM:CreateRoundEndPanel(message, tagline)
+    surface.PlaySound('friends/friend_join.wav')
+    if IsValid(GAMEMODE.RoundEndPanel) then
+        GAMEMODE.RoundEndPanel:Remove()
+    end
+    
+    local w = ScrW()
+    local h = 160
+    
+    local p = vgui.Create('DPanel')
+    p:SetSize(w, h)
+    p:SetPos(ScrW(), ScrH()/2 - h/2)
+    p.TagLine = tagline or nil
+    if p.TagLine == '' or p.TagLine == ' ' then p.TagLine = nil end
+    p.Message = message
+    
+    function p:Paint(w, h)
+        local c = Color(0, 0, 0, 200)
+        draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, true, true)
+        if self.TagLine then
+            draw.SimpleText(self.Message, 'FS_64', w/2 + 1, h/2 - 22, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.Message, 'FS_64', w/2, h/2 - 24, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.TagLine, 'FS_40', w/2 + 1, h/2 + 34, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.TagLine, 'FS_40', w/2, h/2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        else
+            draw.SimpleText(self.Message, 'FS_64', w/2 + 1, h/2 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(self.Message, 'FS_64', w/2, h/2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        end
+    end
+    
+    p:MoveTo(0, ScrH()/2 - h/2, 0.75, 0, -1, function(anim, p)
+        p:MoveTo(-w, ScrH()/2 - h/2, 0.75, GAMEMODE.RoundCooldown - 1, -1, function(anim, p) p:Remove() end)
+    end)
+    GAMEMODE.RoundEndPanel = p
 end
 
 -- Play a COOL sound when the round ends!
