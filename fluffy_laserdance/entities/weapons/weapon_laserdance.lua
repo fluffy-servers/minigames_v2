@@ -1,114 +1,70 @@
-AddCSLuaFile( "shared.lua" )
-
-SWEP.Author			= ""
-SWEP.Contact		= ""
-SWEP.Purpose		= ""
-SWEP.Instructions	= ""
-
 if CLIENT then
-	SWEP.PrintName			= "Laser Cannon"		-- 'Nice' Weapon name (Shown on HUD)	
-	SWEP.Slot				= 0						-- Slot in the weapon selection menu
-	SWEP.SlotPos			= 10					-- Position in the slot
-	SWEP.DrawAmmo			= false					-- Should draw the default HL2 ammo counter
-	SWEP.DrawCrosshair		= true 					-- Should draw the default crosshair
-	SWEP.DrawWeaponInfoBox	= false					-- Should draw the weapon info box
-	SWEP.BounceWeaponIcon   = false					-- Should the weapon icon bounce?
-	SWEP.SwayScale			= 1.0					-- The scale of the viewmodel sway
-	SWEP.BobScale			= 1.0					-- The scale of the viewmodel bob
-	SWEP.WepSelectIcon		= surface.GetTextureID("weapons/swep")
-	killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
+	-- Define the name and slot clientside
+	SWEP.PrintName = "Laser Dance Cannon"
+	SWEP.Slot = 0
+	SWEP.SlotPos = 0
+	SWEP.IconLetter = "f"
+    killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
 end
 
-SWEP.ViewModelFOV	= 62
-SWEP.ViewModelFlip	= false
-SWEP.ViewModel		= "models/weapons/c_357.mdl"
-SWEP.WorldModel		= "models/weapons/w_357.mdl"
-SWEP.UseHands       = true
+-- Primary fire damage and aim settings
+SWEP.Primary.Damage = 1000
+SWEP.Primary.Delay = 0.5
+SWEP.Primary.Recoil = 0
+SWEP.Primary.Cone = 0
 
-SWEP.Spawnable			= false
-SWEP.AdminSpawnable		= false
+-- Primary ammo settings
+SWEP.Primary.ClipSize = -1
+SWEP.Primary.DefaultClip = -1
+SWEP.Primary.Ammo = "none"
+SWEP.Primary.Automatic = false
 
-SWEP.Primary.ClipSize		= -1				// Size of a clip
-SWEP.Primary.DefaultClip	= -1				// Default number of bullets in a clip
-SWEP.Primary.Automatic		= false				// Automatic/Semi Auto
-SWEP.Primary.Ammo			= "none"
+-- We don't have anything that uses secondary ammo so there's nothing here for it
 
-SWEP.Secondary.ClipSize		= 8					// Size of a clip
-SWEP.Secondary.DefaultClip	= 32				// Default number of bullets in a clip
-SWEP.Secondary.Automatic	= true				// Automatic/Semi Auto
-SWEP.Secondary.Ammo			= "none"
+-- Set the model for the gun
+-- Using hands is preferred
+SWEP.UseHands = true
+SWEP.ViewModel = "models/weapons/c_357.mdl"
+SWEP.ViewModelFOV = 62
+SWEP.WorldModel = "models/weapons/w_357.mdl"
 
-/*---------------------------------------------------------
-   Name: SWEP:PrimaryAttack( )
-   Desc: +attack1 has been pressed
----------------------------------------------------------*/
 function SWEP:PrimaryAttack()
-
-	// Play shoot sound
-	self.Weapon:EmitSound("Weapon_AR2.Single")
-	
-	self:ShootBullet( 50, 1, 0.0 )
-	
-	// Punch the player's view
-	self.Owner:ViewPunch( Angle( -10, 0, 0 ) )
-	
-	self:SetNextPrimaryFire( CurTime() + 0.6 )
-	
-	// Make the player fly backwards..
-	self.Owner:SetGroundEntity( NULL )
-	self.Owner:SetLocalVelocity( self.Owner:GetAimVector() * -1000 )
-		
-
+	self.Weapon:EmitSound('weapons/airboat/airboat_gun_energy1.wav', 75, math.random(100, 160))
+	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    
+    -- Send the player flying backwards
+	self.Owner:ViewPunch(Angle(-10, 0, 0))
+	self.Owner:SetGroundEntity(NULL)
+	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -1000)
 end
 
-
-/*---------------------------------------------------------
-   Name: SWEP:SecondaryAttack( )
-   Desc: +attack2 has been pressed
----------------------------------------------------------*/
 function SWEP:SecondaryAttack()
-
-	// Todo.. increase health..
-
-	self:SetNextSecondaryFire( CurTime() + 0.1 )
-
+	-- Nothing here!
+	-- Make sure this is blank to override the default
 end
 
-/*---------------------------------------------------------
-   Name: SWEP:ShootBullet( )
-   Desc: A convenience function to shoot bullets
----------------------------------------------------------*/
-function SWEP:ShootEffects()
-
-	self.Weapon:SendWeaponAnim( ACT_VM_PRIMARYATTACK ) 		// View model animation
-	self.Owner:MuzzleFlash()								// Crappy muzzle light
-	self.Owner:SetAnimation( PLAYER_ATTACK1 )				// 3rd Person Animation
-
-end
-
-
-/*---------------------------------------------------------
-   Name: SWEP:ShootBullet( )
-   Desc: A convenience function to shoot bullets
----------------------------------------------------------*/
-function SWEP:ShootBullet( damage, num_bullets, aimcone )
-	
+-- Feel free to steal this code for any weapons
+function SWEP:ShootBullet(damage, numbullets, aimcone)
+	-- Setup the bullet table and fire it
+	local scale = aimcone
 	local bullet = {}
-	bullet.Num 		= num_bullets
-	bullet.Src 		= self.Owner:GetShootPos()			// Source
-	bullet.Dir 		= self.Owner:GetAimVector()			// Dir of bullet
-	bullet.Spread 	= Vector( aimcone, aimcone, 0 )		// Aim Cone
-	bullet.Tracer	= 1									// Show a tracer on every x bullets 
-	bullet.Force	= 10								// Amount of force to give to phys objects
-	bullet.Damage	= 100
+	bullet.Num 		= numbullets
+	bullet.Src 		= self.Owner:GetShootPos()			
+	bullet.Dir 		= self.Owner:GetAimVector()			
+	bullet.Spread 	= Vector(scale, scale, 0)		
+	bullet.Force	= math.Round(damage * 2)							
+	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = "Pistol"
-	bullet.HullSize = 2
-	bullet.TracerName = "LaserTracer"
-	
-	self.Owner:FireBullets( bullet )
-	
-	self:ShootEffects()
-	
+    bullet.HullSize = 3
+	bullet.Tracer = 1
+	bullet.TracerName = "ld_tracer"
+	self.Owner:FireBullets(bullet)
+    
+	-- Make the firing look nice
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+	--self.Owner:MuzzleFlash()
+	self.Owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:DoImpactEffect( tr, nDamageType )
