@@ -73,8 +73,16 @@ function GM:PlayerSpawn( ply )
     -- Spawn protection
     if GAMEMODE.SpawnProtection then
         ply:GodEnable()
-        timer.Simple(3, function()
-            if IsValid(ply) then ply:GodDisable() end
+        ply:SetRenderMode(1)
+        ply:SetColor(Color(255, 255, 255, 50))
+        
+        -- Ungodmode after 3 seconds
+        timer.Simple(GAMEMODE.SpawnProtectionTime or 3, function()
+            if IsValid(ply) then 
+                ply:GodDisable()
+                ply:SetRenderMode(0)
+                ply:SetColor(color_white)
+            end
         end)
     end
 end
