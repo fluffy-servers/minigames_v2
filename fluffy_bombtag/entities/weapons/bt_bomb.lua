@@ -109,14 +109,14 @@ function SWEP:Trace()
 	if CLIENT then return end
 	
 	local pos = self.Owner:GetShootPos()
-	local aim = self.Owner:GetAimVector() * 70
+	local aim = self.Owner:GetAimVector() * 96
 	
 	local tr = {}
 	tr.start = pos
 	tr.endpos = pos + aim
 	tr.filter = self.Owner
-	tr.mins = Vector(-16,-16,-16)
-	tr.maxs = Vector(16,16,16)
+	tr.mins = Vector(-32,-32,-32)
+	tr.maxs = Vector(32,32,32)
 
 	local trace = util.TraceHull( tr )
 	local ent = trace.Entity
