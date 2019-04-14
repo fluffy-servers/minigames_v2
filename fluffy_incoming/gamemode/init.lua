@@ -12,7 +12,12 @@ end
 
 -- No weapons
 function GM:PlayerLoadout( ply )
+    --ply:Give('weapon_crowbar')
+end
 
+-- Disable fall damage
+function GM:GetFallDamage()
+    return 0
 end
 
 -- Get the winning position of this map
@@ -93,6 +98,16 @@ end
 -- This is used for better scoring than all-or-nothing
 hook.Add('DoPlayerDeath', 'IncomingDistanceCheck', function(ply)
     GAMEMODE:GetDistanceToEnd(ply)
+end)
+
+hook.Add('EntityTakeDamage', 'CrowbarKnockback', function(ent, dmg)
+    if not ent:IsPlayer() then return true end
+    if not dmg:GetAttacker():IsPlayer() then return end
+    
+    dmg:SetDamage(0)
+    ent:SetGroundEntity(NULL)
+    local v = dmg:GetDamageForce() + Vector(0, 0, 5)
+    ent:SetVelocity(v * 25)
 end)
 
 -- Add scoring based on distance at the end of a round
