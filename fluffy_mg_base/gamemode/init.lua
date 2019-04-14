@@ -76,8 +76,14 @@ function GM:PlayerSpawn( ply )
         ply:SetRenderMode(1)
         ply:SetColor(Color(255, 255, 255, 50))
         
-        -- Ungodmode after 3 seconds
-        timer.Simple(GAMEMODE.SpawnProtectionTime or 3, function()
+        -- Calculate time to be in god mode for
+        local god_time = GAMEMODE.SpawnProtectionTime or 3
+        if GetGlobalString('RoundState') != 'InRound' then 
+            god_time = god_time + GAMEMODE.RoundCooldown
+        end
+        
+        -- Ungodmode after given time
+        timer.Simple(god_time, function()
             if IsValid(ply) then 
                 ply:GodDisable()
                 ply:SetRenderMode(0)
