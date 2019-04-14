@@ -59,6 +59,9 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
     bullet.HullSize = 3
 	bullet.Tracer = 1
 	bullet.TracerName = "ld_tracer"
+    bullet.Callback = function(a, t, dmg)
+        dmg:SetDamageType(DMG_DISSOLVE)
+    end
 	self.Owner:FireBullets(bullet)
     
 	-- Make the firing look nice

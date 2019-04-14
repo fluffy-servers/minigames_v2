@@ -32,3 +32,9 @@ hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
     end
     ply.LaserTrail = util.SpriteTrail(ply, 0, c, true, 32, 4, 10, 0, "trails/plasma.vmt")
 end )
+
+hook.Add('DoPlayerDeath', 'RemoveLaserTrails', function(ply)
+    if IsValid(ply.LaserTrail) then
+        ply.LaserTrail:Remove()
+    end
+end)
