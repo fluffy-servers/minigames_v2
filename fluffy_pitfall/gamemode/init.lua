@@ -54,9 +54,9 @@ function GM:PlayerSelectSpawn( pl )
     return selected
 end
 
--- Alter fall damage calculation
+-- Disable fall damage
 function GM:GetFallDamage( ply, vel )
-    return vel/7
+    return 0
 end
 
 -- Handle player death
