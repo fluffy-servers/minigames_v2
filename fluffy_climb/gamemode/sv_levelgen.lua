@@ -21,11 +21,49 @@ local block_models = {
     'models/hunter/blocks/cube2x2x025.mdl',
 }
 
+local circle_models = {
+    'models/hunter/tubes/circle2x2.mdl',
+    'models/hunter/tubes/circle2x2b.mdl',
+    'models/hunter/tubes/circle2x2c.mdl',
+    'models/hunter/tubes/circle2x2d.mdl',
+    'models/hunter/tubes/circle4x4d.mdl',
+    'models/hunter/tubes/circle2x2.mdl',
+    'models/hunter/tubes/circle2x2b.mdl',
+    'models/hunter/tubes/circle2x2c.mdl',
+    'models/hunter/tubes/circle2x2d.mdl',
+    'models/hunter/tubes/circle4x4d.mdl',
+    'models/hunter/tubes/circle4x4b.mdl',
+    'models/hunter/tubes/circle4x4c.mdl',
+}
+
+local triangle_models = {
+    'models/hunter/geometric/tri1x1eq.mdl',
+    'models/hunter/triangles/2x2.mdl',
+    'models/hunter/triangles/3x3.mdl',
+    'models/hunter/triangles/1x1mirrored.mdl',
+    'models/hunter/triangles/trapezium.mdl',
+    'models/hunter/geometric/para1x1.mdl',
+}
+
+local poly_models = {
+    'models/hunter/plates/plate1x1.mdl',
+    'models/hunter/triangles/trapezium.mdl',
+    'models/hunter/geometric/tri1x1eq.mdl',
+    'models/hunter/geometric/para1x1.mdl',
+    'models/hunter/geometric/pent1x1.mdl',
+    'models/hunter/geometric/hex1x1.mdl',
+}
+
+local crate_models = {
+    'models/props_junk/wood_crate001a.mdl',
+    'models/props_junk/wood_crate002a.mdl',
+}
+
 function GM:SpawnBlob(position, hue, generator)
     -- Create the block
     local block = ents.Create('jump_block')
     if not IsValid(block) then return end
-    block:SetModel(table.Random(block_models))
+    block:SetModel(table.Random(generator.models))
     block:SetColor(HSVToColor(hue, math.random(0.8, 1), math.random(0.8, 1)))
     block:SetPos(position)
     block:SetAngles(Angle(0, math.random(0, 360), 0))
@@ -80,10 +118,17 @@ function GM:GenerateLevel()
     local height = math.abs(mins.z - maxs.z)
     height = math.random(height - 512, height)
     
+    -- Select a random model set
+    local models = block_models
+    if math.random() > 0.6 then
+        models = table.Random({circle_models, circle_models, triangle_models, poly_models, crate_models})
+    end
+    
     local generator = {
         mins = mins,
         maxs = maxs,
         height = height,
+        models = models,
         numStrands = math.random(5, 15),
         minNumBlobs = math.random(20, 40),
         maxNumBlobs = math.random(40, 60),
