@@ -1,5 +1,5 @@
 local mat_beam = Material("trails/laser")
-local mat_light = Material("effects/softglow")
+local mat_light = Material("sprites/light_glow02_add")
 
 function EFFECT:Init(data)
     -- Get data from the weapon
@@ -40,5 +40,5 @@ function EFFECT:Render()
     render.SetMaterial(mat_beam)
     render.DrawBeam(self.StartPos, self.EndPos, 1 + self.Alpha*0.4, texcoord, texcoord + self.Length/(128+self.Alpha), self.Color)
     render.SetMaterial(mat_light)
-    render.DrawSprite(self.EndPos, 24, 24, Color(self.Color.r, self.Color.g, self.Color.b, self.Alpha))
+    render.DrawSprite(self.EndPos, 32, 32, Color(self.Color.r, self.Color.g, self.Color.b, self.Alpha))
 end
