@@ -59,9 +59,14 @@ hook.Add('RoundEnd', 'ClimbHeightPoints', function()
     for k,v in pairs(player.GetAll()) do
         if v.BestHeight then
             local ratio = v.BestHeight/GAMEMODE.CurrentHeight
-            local p = math.Clamp(math.floor(ratio * 100), 0, 1)
+            local p = math.Clamp(math.floor(ratio * 100), 0, 100)
             v:AddStatPoints('ClimbHeight', p)
             v:AddFrags(math.floor(p/10))
+        end
+        
+        if v:Alive() and not v.Spectating then
+            v:AddFrags(1)
+            v:AddStatPoints('SurvivedRounds', 1)
         end
     end
 end)

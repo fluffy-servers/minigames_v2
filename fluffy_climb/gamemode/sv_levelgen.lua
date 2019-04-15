@@ -24,6 +24,7 @@ local block_models = {
 function GM:SpawnBlob(position, hue, generator)
     -- Create the block
     local block = ents.Create('jump_block')
+    if not IsValid(block) then return end
     block:SetModel(table.Random(block_models))
     block:SetColor(HSVToColor(hue, math.random(0.8, 1), math.random(0.8, 1)))
     block:SetPos(position)
@@ -83,7 +84,7 @@ function GM:GenerateLevel()
         mins = mins,
         maxs = maxs,
         height = height,
-        numStrands = math.random(2, 5),
+        numStrands = math.random(5, 15),
         minNumBlobs = math.random(20, 40),
         maxNumBlobs = math.random(40, 60),
         angleIncrement = 40 + 100*math.random(),
@@ -94,8 +95,6 @@ function GM:GenerateLevel()
     }
     
     for i=1,generator.numStrands do
-        GAMEMODE:GenerateStrand(generator)
-        GAMEMODE:GenerateStrand(generator)
         GAMEMODE:GenerateStrand(generator)
     end
     
