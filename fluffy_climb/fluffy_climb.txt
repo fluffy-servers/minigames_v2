@@ -1,0 +1,6 @@
+"minigames"
+{
+	"base"	"fluffy_mg_base"
+	"title"	"Climb!"
+    "maps"	"^climb_"
+}
