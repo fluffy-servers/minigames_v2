@@ -7,10 +7,10 @@ GM.HelpText = [[
 ]]
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?
-GM.Elimination = false
+GM.Elimination = true
 GM.WinBySurvival = true
 
-GM.RoundNumber = 10      -- How many rounds?
+GM.RoundNumber = 25      -- How many rounds?
 GM.RoundTime = 90      -- Seconds each round lasts for
 
 GM.ThirdpersonEnabled = true
@@ -18,4 +18,11 @@ GM.DeathSounds = true
 
 function GM:Initialize()
 
+end
+
+function GM:GetLavaHeight()
+    local t = CurTime() - GetGlobalFloat('RoundStart', 0) - 10
+    if t < 0 then return 96 end
+    
+    return 96 + t*28
 end
