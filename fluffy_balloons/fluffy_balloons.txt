@@ -1,6 +1,0 @@
-"minigames"
-{
-	"base"	"fluffy_mg_base"
-	"title"	"Balloons"
-	"maps"	"^bl_"
-}
