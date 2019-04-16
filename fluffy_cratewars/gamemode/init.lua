@@ -111,12 +111,14 @@ hook.Add("Tick", "TickCrateSpawn", function()
 end )
 
 function GM:EntityTakeDamage(target, dmginfo)
-    if !target:IsPlayer() then return end
-    
     if GAMEMODE.CratePhase then
-        dmginfo:SetDamage(0)
-        local vec = dmginfo:GetDamageForce()
-        target:SetVelocity(vec*10)
+        if target:IsPlayer() then
+            dmginfo:SetDamage(0)
+            local vec = dmginfo:GetDamageForce()
+            target:SetVelocity(vec*10)
+        else
+            dmginfo:SetDamage(500)
+        end
     else
         return
     end
