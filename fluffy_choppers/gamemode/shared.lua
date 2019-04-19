@@ -6,9 +6,14 @@ GM.HelpText = [[
     to do
 ]]
 
-GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundTime = 90
-GM.RoundNumber = 10
+GM.RoundNumber = 20
+
+GM.TeamBased = true
+GM.TeamSurvival = true
+GM.SurvivorTeam = TEAM_BLUE
+GM.HunterTeam = TEAM_RED
+
 
 function GM:Initialize()
 
