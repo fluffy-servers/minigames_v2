@@ -1,6 +1,6 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Choppers'
+GM.Name = 'Airstrike'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
     to do
