@@ -14,8 +14,9 @@ function ENT:Initialize()
 	self:SetModel( "models/Combine_Helicopter/helicopter_bomb01.mdl" )
 	
     local size = self.Size
-    self:PhysicsInitSphere(size, "metal_bouncy")
-    self:SetCollisionBounds(Vector(-size, -size, -size), Vector(size, size, size))
+    local hsize = self.Size/2
+    self:PhysicsInitSphere(hsize, "metal_bouncy")
+    self:SetCollisionBounds(Vector(-hsize, -hsize, -hsize), Vector(hsize, hsize, hsize))
     self:PhysWake()
 end
 
