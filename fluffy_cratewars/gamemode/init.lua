@@ -124,16 +124,29 @@ hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
     end
 end )
 
--- Prop
-CrateSpawnTimer = 0
-local Delay = 0.5
+-- Delay between crate spawns
+-- Scales based on player count
+function GM:GetCrateDelay()
+    local count = player.GetCount()
+    if count < 4 then
+        return 0.6
+    elseif count < 8 then
+        return 0.4
+    else
+        return 0.2
+    end
+end
+
+-- Spawn crates at spawn entities every so often
+-- Note that crates will not spawn if there are over 200 in the map already
+GM.CrateSpawnTimer = 0
 hook.Add("Tick", "TickCrateSpawn", function()
     if !GAMEMODE.SpawnCrates then return end
     if GetGlobalString('RoundState') != 'InRound' then return end
     if !GAMEMODE.CratePhase then return end
     
-    if CrateSpawnTimer < CurTime() then
-        CrateSpawnTimer = CurTime() + Delay
+    if GAMEMODE.CrateSpawnTimer < CurTime() then
+        GAMEMODE.CrateSpawnTimer = CurTime() + GAMEMODE:GetCrateDelay()
         GAMEMODE:SpawnCrate()
     end
 end )
