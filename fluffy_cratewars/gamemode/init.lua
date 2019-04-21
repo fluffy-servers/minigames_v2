@@ -30,6 +30,13 @@ end
 function GM:StartBattlePhase()
     GAMEMODE.CratePhase = false
     
+    -- Find and open specific door entities
+    local doors = ents.FindByName('battle_door')
+    if istable(doors) and #doors > 0 then
+        for k,v in pairs(doors) do
+            v:Fire('Open')
+        end
+    end
     for k,v in pairs(player.GetAll()) do
         if !v:Alive() or v.Spectating then continue end
         v:StripWeapons()
