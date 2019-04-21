@@ -3,6 +3,7 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
+-- Define the weapons that can be awarded from crates
 GM.WeaponOptions = {
     weapon_stunstick = {'Stunstick', nil, 0},
     weapon_357 = {'Revolver', '357', 3},
@@ -13,20 +14,26 @@ GM.WeaponOptions = {
     weapon_shotgun = {'Shotgun', 'Buckshot', 6},
 }
 
+-- Percentage of crates that have bonuses
 GM.BonusPercentage = 0.06
 
+-- Players start with a crowbar
+-- See the StartBattlePhase function for that part of the round
 function GM:PlayerLoadout( ply )
     ply:StripAmmo()
     ply:StripWeapons()
     ply:Give("weapon_crowbar")
 end
 
+-- Spawn a crate at a random spawn entity
 function GM:SpawnCrate()
     local spawnents = ents.FindByClass('crate_spawner')
     if #spawnents == 0 then return end
     table.Random(spawnents):SpawnCrate()
 end
 
+-- Start the Battle Phase of a round
+-- This awards bonuses based on the crates broken
 function GM:StartBattlePhase()
     GAMEMODE.CratePhase = false
     
@@ -37,26 +44,36 @@ function GM:StartBattlePhase()
             v:Fire('Open')
         end
     end
+    
+    -- Award the stuff to all the living players
     for k,v in pairs(player.GetAll()) do
         if !v:Alive() or v.Spectating then continue end
         v:StripWeapons()
+        
+        -- Players get an SMG by default
         v:Give('weapon_smg1')
         v:GiveAmmo(1000, 'SMG1', true)
-        if not v.SmashedCrates then v.SmashedCrates = 1 end
-        v:SetHealth(v.SmashedCrates * 5) -- 5HP per crate
-        v:SetMaxHealth(v.SmashedCrates * 5)
-        v:AddFrags( math.floor(v.SmashedCrates / 10) ) -- 1 point for 10 crates
         
-        if not v.Bonuses then continue end
-        for wep, amount in pairs(v.Bonuses) do
-            local tbl = GAMEMODE.WeaponOptions[wep]
-            v:Give(wep)
-            v:GiveAmmo(tbl[3], tbl[2])
+        -- Award HP and prizes based on what they collected
+        if v.SmashedCrates and v.SmashedCrates > 0 then
+            v:SetHealth(v.SmashedCrates * 5) -- 5HP per crate
+            v:SetMaxHealth(v.SmashedCrates * 5)
+            v:AddFrags(math.floor(v.SmashedCrates / 10)) -- 1 point for 10 crates
+            for wep, amount in pairs(v.Bonuses) do
+                local tbl = GAMEMODE.WeaponOptions[wep]
+                v:Give(wep)
+                v:GiveAmmo(tbl[3], tbl[2], true)
+            end
+        else
+            -- Make sure players have at least some HP
+            v:SetHealth(10)
+            v:SetMaxHealth(10)
         end
     end
 end
 
 hook.Add('PreRoundStart', 'PrepareCratePhase', function()
+    -- Reset the number of smashed crates
     for k,v in pairs(player.GetAll()) do
         v.SmashedCrates = 0
         v.Bonuses = {}
@@ -78,18 +95,22 @@ hook.Add('PreRoundStart', 'PrepareCratePhase', function()
         end
     end
     
+    -- Set a timer for when the battle begins
     local time = math.random(40, 60)
     timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!") end)
     timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
 end )
 
+-- Crate breaking handler
 hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
+    -- Keep track of any crates broken in the crates phase
     if !GAMEMODE.CratePhase then return end
     if !ply.SmashedCrates then return end
     ply.SmashedCrates = ply.SmashedCrates + 1
     ply:SetNWInt("Crates", ply.SmashedCrates)
     ply:AddStatPoints('Crates', 1)
     
+    -- Award bonuses to the player if lucky
     if prop.BonusWeapon then
         if not ply.Bonuses then ply.Bonuses = {} end
         if not ply.Bonuses[prop.BonusWeapon] then 
@@ -117,6 +138,7 @@ hook.Add("Tick", "TickCrateSpawn", function()
     end
 end )
 
+-- During the crate phase, players cannot die
 function GM:EntityTakeDamage(target, dmginfo)
     if !target:IsPlayer() then return end
     
