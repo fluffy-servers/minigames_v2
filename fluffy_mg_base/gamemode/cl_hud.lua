@@ -186,7 +186,7 @@ function GM:RoundStateDefault()
 	if t < 0 then t = 0 end
     
     -- Draw the arc (if applicable)
-    if !fast_hud:GetBool() and t != 0 then
+    if !fast_hud:GetBool() and t != 0 and tmax > 0 then
         draw.Arc( c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1 )
     end
     
@@ -397,7 +397,7 @@ function GM:DrawHealth()
     surface.DrawPoly(health_circle)
     
     -- Draw arc (if applicable)
-    if !fast_hud:GetBool() and hp > 0 then
+    if !fast_hud:GetBool() and hp > 0 and hp_max > 0 then
         local ang = (hp/hp_max) * -360
         if ang % 2 == 1 then ang = ang - 1 end
         draw.Arc( c_pos, ScrH() - c_pos, 42, 10, math.Round(ang+90), 90, 12, GAMEMODE.FCol1 )
@@ -459,9 +459,18 @@ function GM:DrawAmmo()
     if !fast_hud:GetBool() then
         if ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > -1 then
             -- Calculate the percentage with slight interpolation
-            local p = ammo['PrimaryClip'] / ammo['MaxPrimaryClip']
+            
+            -- Make sure the percentage isn't a division by 0
+            local p = 0
+            if ammo['PrimaryClip'] < ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > 0 then
+                p = ammo['PrimaryClip'] / ammo['MaxPrimaryClip']
+            else
+                p = 1
+            end
+            
+            -- Slight animation effect
             if ClipPercentage then
-                ClipPercentage = math.Approach( ClipPercentage, p, FrameTime() )
+                ClipPercentage = math.Approach(ClipPercentage, p, FrameTime())
             else
                 ClipPercentage = p
             end
