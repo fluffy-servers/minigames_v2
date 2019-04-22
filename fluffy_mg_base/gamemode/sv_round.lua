@@ -239,7 +239,7 @@ function GM:HandleTeamWin(reason)
         elseif GAMEMODE.TeamKills[1] > GAMEMODE.TeamKills[2] then
             winners = 1
             msg = team.GetName(1) .. ' win the round!'
-        elseif GAMEMODE.TeamKills[2] < GAMEMODE.TeamKills[1] then
+        elseif GAMEMODE.TeamKills[1] < GAMEMODE.TeamKills[2] then
             winners = 2
             msg = team.GetName(2) .. ' win the round!'
         else
