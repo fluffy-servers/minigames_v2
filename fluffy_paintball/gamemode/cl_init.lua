@@ -20,7 +20,8 @@ hook.Add('RenderScreenspaceEffects', 'GhostEffects', function()
     -- Calculate the % of time left
     local maxtime = LocalPlayer():GetNWFloat('GhostTime')
     local starttime = LocalPlayer():GetNWFloat('GhostStart')
-    local p = math.Clamp((CurTime() - starttime) / maxtime, 0, 1)
+    local timeleft = maxtime - (CurTime() - starttime)
+    local p = 1 - math.Clamp(timeleft/GAMEMODE.LifeTimer, 0, 1)
     
     -- Adjust the colour based on time left
     tab['$pp_colour_brightness'] = -0.15 * p

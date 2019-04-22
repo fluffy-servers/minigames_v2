@@ -98,7 +98,7 @@ function GM:SetPlayerUnGhost(ply)
     -- Reduce the timer as a penalty
     local starttime = ply:GetNWFloat('GhostStart')
     local timetaken = CurTime() - starttime
-    ply.DeathTimer = ply.DeathTimer - 2 - timetaken
+    ply.DeathTimer = (ply.DeathTimer or GAMMEODE.LifeTimer) - 2 - timetaken
     
     -- Ungodmode after given time
     timer.Simple(3, function()
@@ -117,7 +117,7 @@ hook.Add('PreRoundStart', 'ResetPaintball', function()
         -- Clear death data
         v.DeathPos = nil
         v.DeathAng = nil
-        v.DeathTimer = 30
+        v.DeathTimer = GAMEMODE.LifeTimer
         
         -- Clear ghost effects
         v:SetNWBool('IsGhost', false)

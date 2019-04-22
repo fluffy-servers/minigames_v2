@@ -12,6 +12,8 @@ GM.RoundNumber = 10
 GM.Elimination = true
 GM.TeamSurvival = false
 
+GM.LifeTimer = 30
+
 function GM:Initialize()
 
 end
