@@ -31,33 +31,18 @@ SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_stunbaton.mdl"
 
 function SWEP:Initialize()
-    if SERVER then return end
-    local huemin = 0
-    local huemax = 360
-    if self.Owner:Team() == TEAM_RED then
-        huemin = 300
-        huemax = 390
-    elseif self.Owner:Team() == TEAM_BLUE then
-        huemin = 180
-        huemax = 270
-    end
-    
-    local c = HSVToColor(math.random(huemin, huemax) % 360, 1, 1)
-    local v = Vector(c.r/255, c.g/255, c.b/255)
-    self:SetNWVector('WeaponColor', v)
-    
     self:SetWeaponHoldType("knife")
 end
 
 function SWEP:DrawWorldModel()
-    local v = self:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
     render.SetColorModulation(v.x, v.y, v.z)
     self:DrawModel()
     render.SetColorModulation(1, 1, 1)
 end
 
 function SWEP:PreDrawViewModel(vm, wep)
-    local v = self:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
     wep:SetColor(Color(v.x*255, v.y*255, v.z*255))
 end
 
@@ -119,7 +104,7 @@ function SWEP:DoImpactEffect(tr, nDamageType)
     if SERVER then return end
 	if tr.HitSky then return end
     
-    local v = self:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
     c = Color(v.x*255, v.y*255, v.z*255)
     
     local s = 1 + 0.4*math.random()

@@ -40,11 +40,30 @@ function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     ply:Give('paint_pistol')
     ply:Give('paint_baton')
+    ply:Give('paint_bazooka')
+    ply:Give('paint_grenade_wep')
+    ply:Give('paint_shotgun')
     ply:SetBloodColor(DONT_BLEED)
     
     ply:SetRunSpeed(300)
     ply:SetWalkSpeed(200)
     ply:SetJumpPower(160)
+end
+
+function GM:GeneratePlayerColor(ply)
+    local huemin = 0
+    local huemax = 360
+    if ply:Team() == TEAM_RED then
+        huemin = 300
+        huemax = 390
+    elseif ply:Team() == TEAM_BLUE then
+        huemin = 180
+        huemax = 270
+    end
+    
+    local c = HSVToColor(math.random(huemin, huemax) % 360, 1, 1)
+    local v = Vector(c.r/255, c.g/255, c.b/255)
+    ply:SetNWVector('WeaponColor', v)
 end
 
 -- Set the player into ghost mode
@@ -125,6 +144,9 @@ hook.Add('PreRoundStart', 'ResetPaintball', function()
         v:SetRenderMode(0)
         v:SetColor(color_white)
         v:SetMaterial()
+        
+        -- Generate colour for this round
+        GAMEMODE:GeneratePlayerColor(v)
         
         -- Remove ghost timer
         if timer.Exists(v:AccountID() .. 'GHOST') then
