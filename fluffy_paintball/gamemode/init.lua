@@ -40,6 +40,10 @@ function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     ply:Give('paint_pistol')
     ply:SetBloodColor(DONT_BLEED)
+    
+    ply:SetRunSpeed(300)
+    ply:SetWalkSpeed(200)
+    ply:SetJumpPower(160)
 end
 
 -- Set the player into ghost mode
@@ -59,6 +63,11 @@ function GM:SetPlayerGhost(ply)
     ply:GodEnable()
     ply:SetRenderMode(1)
     ply:SetColor(Color(255, 255, 255, 50))
+    
+    -- Mild speed buff
+    ply:SetRunSpeed(400)
+    ply:SetWalkSpeed(400)
+    ply:SetJumpPower(200)
     
     -- Network ghost state
     ply:SetNWBool('IsGhost', true)
