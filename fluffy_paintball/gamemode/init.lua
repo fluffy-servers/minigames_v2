@@ -120,7 +120,7 @@ function GM:SetPlayerUnGhost(ply)
     -- Reduce the timer as a penalty
     local starttime = ply:GetNWFloat('GhostStart')
     local timetaken = CurTime() - starttime
-    ply.DeathTimer = (ply.DeathTimer or GAMMEODE.LifeTimer) - 2 - timetaken
+    ply.DeathTimer = (ply.DeathTimer or GAMEMODE.LifeTimer) - 2 - timetaken
     
     -- Ungodmode after given time
     timer.Simple(3, function()
@@ -160,6 +160,8 @@ end)
 
 -- If killed by another player, enter ghost mode before dying
 hook.Add('PlayerDeath', 'PaintballDeath', function(ply, inflictor, attacker)
+    if GetGlobalString('RoundState') != 'InRound' then return end
+    
     if ply:GetNWBool('IsGhost', false) or not attacker:IsPlayer() then
         ply:SetNWBool('IsGhost', false)
         return 
