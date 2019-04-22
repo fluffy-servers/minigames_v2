@@ -18,6 +18,9 @@ function ENT:Initialize()
     self:SetSolid(SOLID_VPHYSICS)
     self:PhysWake()
     self:SetGravity(0)
+    
+    -- Add a trail
+    self.Trail = util.SpriteTrail(self, 0, team.GetColor(self.Player:Team()) or color_white, false, 24, 2, 4, 1, 'trails/laser')
 end
 
 function ENT:Explode()
@@ -25,7 +28,9 @@ function ENT:Explode()
 	ed:SetOrigin(self:GetPos())
     ed:SetScale(0.1)
 	util.Effect("Explosion", ed, true, true)
-	util.BlastDamage(self.Weapon or self.Player, self.Player, self:GetPos(), 300, 150)
+    local wep = self.Weapon
+    if not IsValid(wep) then wep = self.Player end
+	util.BlastDamage(wep, self.Player, self:GetPos(), 300, 150)
     --self:EmitSound('AlyxEMP.Discharge')
     
     -- stop red message of doom
@@ -38,6 +43,10 @@ function ENT:OnRemove()
         local tr = util.QuickTrace(self:GetPos(), vel*5000, self)
         self:SetPos(tr.HitPos)
         self:PaintSplatter() 
+    else
+        if IsValid(self.Trail) then
+            SafeRemoveEntity(self.Trail)
+        end
     end
 end
 
