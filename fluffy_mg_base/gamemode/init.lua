@@ -134,9 +134,10 @@ function GM:PlayerRequestTeam(ply, teamid)
 end
 
 -- Disable friendly fire
-function GM:PlayerShouldTakeDamage( victim, ply )
+function GM:PlayerShouldTakeDamage(victim, ply)
     if !GAMEMODE.TeamBased then return true end
     if !ply:IsPlayer() then return true end
+    if ply == victim then return true end
     if ply:Team() == victim:Team() then return false end
     return true
 end
