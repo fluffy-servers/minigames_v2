@@ -39,6 +39,7 @@ end
 function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     ply:Give('paint_pistol')
+    ply:Give('paint_baton')
     ply:SetBloodColor(DONT_BLEED)
     
     ply:SetRunSpeed(300)
