@@ -10,7 +10,7 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 25
+SWEP.Primary.Damage = 40
 SWEP.Primary.Delay = 0.4
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0
@@ -74,7 +74,7 @@ function SWEP:PrimaryAttack()
     if IsValid(tr.Entity) or tr.HitWorld then
         self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
         self:EmitSound('Weapon_Crowbar.Melee_Hit')
-        self:DoImpactEffect(tr)
+        self:ShootBullet(-1, 1, 0)
     else
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
         self:EmitSound('Weapon_Crowbar.Single')
@@ -111,13 +111,8 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = "Pistol"
     bullet.HullSize = 8
-	bullet.Tracer = 1
-    bullet.TracerName = 'paintball_tracer'
+	bullet.Tracer = 0
 	self.Owner:FireBullets(bullet)
-    
-    -- Make the firing look nice
-	
-	--self.Owner:MuzzleFlash()
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)
