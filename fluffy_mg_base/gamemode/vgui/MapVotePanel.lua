@@ -37,16 +37,16 @@ function PANEL:AddChildren(width, height)
             map = p.Options[4] or 'map'
             map = string.Split(map, '_')[2]
         end
-        draw.SimpleText(gamemode, "FS_B24", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-        draw.SimpleText(gamemode, "FS_B24", w - 4, h - 28 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(gamemode, "FS_L32", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(gamemode, "FS_L32", w - 4, h - 28 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         
-        draw.SimpleText(map, "FS_B32", w - 3, h - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-        draw.SimpleText(map, "FS_B32", w - 4, h - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(map, "FS_L40", w - 3, h - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(map, "FS_L40", w - 4, h - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         
         --print(GAMEMODE.CurrentVote, p.Index)
         if GAMEMODE.CurrentVote and p.Index and GAMEMODE.CurrentVote == p.Index then
-            draw.SimpleText("✓", "FS_B40", w - 3, h - 56 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-            draw.SimpleText("✓", "FS_B40", w - 4, h - 56 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+            draw.SimpleText("✓", "FS_L40", w - 3, h - 56 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+            draw.SimpleText("✓", "FS_L40", w - 4, h - 56 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         end
     end
     

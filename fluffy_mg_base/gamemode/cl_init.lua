@@ -21,58 +21,86 @@ include('vgui/Screen_Maps.lua')
 include('vgui/Screen_Scoreboard.lua')
 
 -- Register universal fonts
-surface.CreateFont( "FS_16", {
+-- Coolvetica
+surface.CreateFont("FS_16", {
 	font = "Coolvetica",
 	size = 20,
-} )
-surface.CreateFont( "FS_24", {
+})
+surface.CreateFont("FS_24", {
 	font = "Coolvetica",
 	size = 24,
-} )
-surface.CreateFont( "FS_32", {
+})
+surface.CreateFont("FS_32", {
 	font = "Coolvetica",
 	size = 32,
-} )
-surface.CreateFont( "FS_40", {
+})
+surface.CreateFont("FS_40", {
 	font = "Coolvetica",
 	size = 40,
-} )
-surface.CreateFont( "FS_60", {
+})
+surface.CreateFont("FS_60", {
 	font = "Coolvetica",
 	size = 48, -- hmmm
-} )
-surface.CreateFont( "FS_64", {
+})
+surface.CreateFont("FS_64", {
 	font = "Coolvetica",
 	size = 64,
-} )
-surface.CreateFont( "FS_128", {
+})
+surface.CreateFont("FS_128", {
 	font = "Coolvetica",
 	size = 128,
-} )
+})
 
-surface.CreateFont( "FS_B24", {
+-- Bebas Kai
+surface.CreateFont("FS_B24", {
     font = "Bebas Kai",
     size = 24,
 })
 
-surface.CreateFont( "FS_B32", {
+surface.CreateFont("FS_B32", {
     font = "Bebas Kai",
     size = 32,
 })
 
-surface.CreateFont( "FS_B40", {
+surface.CreateFont("FS_B40", {
     font = "Bebas Kai",
     size = 40,
 })
 
-surface.CreateFont( "FS_B64", {
+surface.CreateFont("FS_B64", {
     font = "Bebas Kai",
     size = 64,
 })
 
-surface.CreateFont( "FS_B96", {
+surface.CreateFont("FS_B96", {
     font = "Bebas Kai",
     size = 128,
+})
+
+-- Lemon/Milk
+surface.CreateFont("FS_L24", {
+    font = "Lemon/Milk",
+    size = 24,
+})
+
+surface.CreateFont("FS_L32", {
+    font = "Lemon/Milk",
+    size = 32,
+})
+
+surface.CreateFont("FS_L40", {
+    font = "Lemon/Milk",
+    size = 40,
+})
+
+surface.CreateFont("FS_L48", {
+    font = "Lemon/Milk",
+    size = 48,
+})
+
+surface.CreateFont("FS_L64", {
+    font = "Lemon/Milk",
+    size = 64,
 })
 
 -- Font for CSS Kill Icons

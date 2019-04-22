@@ -13,7 +13,7 @@ function GM:CreateHelpPanel()
     function f:Paint(w, h)
         draw.RoundedBox(0, 0, 0, w, 64, GAMEMODE.FCol2)
         draw.RoundedBox(0, 0, 64, w, h-64, Color(150, 150, 160))--Color(53, 59, 72))
-        draw.SimpleText(GAMEMODE.Name, 'FS_B64', 4, 0, GAMEMODE.FCol1)
+        draw.SimpleText(GAMEMODE.Name, 'FS_L64', 4, 0, GAMEMODE.FCol1)
     end
     f:MakePopup()
     

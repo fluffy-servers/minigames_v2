@@ -28,6 +28,8 @@ AddCSLuaFile('sh_levels.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
+resource.AddFile('resource/fonts/BebasKai.ttf')
+resource.AddFile('resource/fonts/LemonMilk.ttf')
 
 -- Include useful server files
 include('shared.lua')
