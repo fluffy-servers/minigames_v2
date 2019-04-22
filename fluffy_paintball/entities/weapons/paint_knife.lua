@@ -1,7 +1,7 @@
 if CLIENT then
 	-- Define the name and slot clientside
-	SWEP.PrintName = "Paintball Pistol"
-	SWEP.Slot = 1
+	SWEP.PrintName = "Paintbrush"
+	SWEP.Slot = 0
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
     --killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
@@ -10,10 +10,10 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 25
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Damage = 100
+SWEP.Primary.Delay = 0.75
 SWEP.Primary.Recoil = 0
-SWEP.Primary.Cone = 0.02
+SWEP.Primary.Cone = 0
 
 -- Primary ammo settings
 SWEP.Primary.ClipSize = -1
@@ -26,12 +26,26 @@ SWEP.Primary.Automatic = true
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_pistol.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_knife_t.mdl"
 SWEP.ViewModelFOV = 62
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.WorldModel = "models/weapons/w_knife_t.mdl"
 
 function SWEP:Initialize()
-    self:SetHoldType('pistol')
+    self:SetWeaponHoldType("knife")
+end
+
+function SWEP:Holster()
+    self.Owner:SetRunSpeed(300)
+    self.Owner:SetWalkSpeed(200)
+    self.Owner:SetJumpPower(160)
+    return true
+end
+
+function SWEP:Deploy()
+    if not self.Owner:GetNWBool('IsGhost', false) then return end
+    self.Owner:SetRunSpeed(400)
+    self.Owner:SetWalkSpeed(300)
+    self.Owner:SetJumpPower(200)
 end
 
 function SWEP:DrawWorldModel()
@@ -49,8 +63,32 @@ end
 function SWEP:PrimaryAttack()
     --models/debug/debugwhite
     --weapons/357/357_fire2.wav
-	self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
-	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+	--self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
+	--self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+    
+    local startpos = self.Owner:GetShootPos()
+    local endpos = startpos + self.Owner:GetAimVector()*88
+    local tr = util.TraceLine({start=startpos, endpos=endpos, filter=self.Owner, mask=MASK_SHOT_HULL})
+    
+    if IsValid(tr.Entity) or tr.HitWorld then
+        self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+        self:EmitSound('Weapon_Crowbar.Melee_Hit')
+        self:ShootBullet(-1, 1, 0)
+    else
+        self:SendWeaponAnim(ACT_VM_MISSCENTER)
+        self:EmitSound('Weapon_Crowbar.Single')
+    end
+    
+    if IsValid(tr.Entity) and SERVER then
+        local dmg = DamageInfo()
+        dmg:SetDamage(self.Primary.Damage)
+        dmg:SetAttacker(self.Owner)
+        dmg:SetInflictor(self)
+        dmg:SetDamageType(DMG_CLUB)
+        tr.Entity:TakeDamageInfo(dmg)
+    end
+    
+    self.Owner:SetAnimation(PLAYER_ATTACK1)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 end
 
@@ -72,14 +110,8 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = "Pistol"
     bullet.HullSize = 8
-	bullet.Tracer = 1
-    bullet.TracerName = 'paintball_tracer'
+	bullet.Tracer = 0
 	self.Owner:FireBullets(bullet)
-    
-    -- Make the firing look nice
-	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-	--self.Owner:MuzzleFlash()
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)
@@ -89,7 +121,7 @@ function SWEP:DoImpactEffect(tr, nDamageType)
     local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
     c = Color(v.x*255, v.y*255, v.z*255)
     
-    local s = 0.6 + math.random()
+    local s = 0.7 + 0.4*math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)
     
     return true

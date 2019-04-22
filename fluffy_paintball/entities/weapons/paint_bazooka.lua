@@ -1,0 +1,52 @@
+AddCSLuaFile()
+
+SWEP.PrintName = 'Paintzooka'
+SWEP.ViewModel = 'models/weapons/c_rpg.mdl'
+SWEP.WorldModel = 'models/weapons/w_rocket_launcher.mdl'
+SWEP.UseHands = true
+
+SWEP.Slot = 5
+
+function SWEP:Initialize()
+    self:SetHoldType('rpg')
+end
+
+function SWEP:PrimaryAttack()
+    self:Launch()
+    self:SetNextPrimaryFire(CurTime() + 2)
+end
+
+function SWEP:SecondaryAttack()
+    -- nothing
+end
+
+function SWEP:Launch()
+    if CLIENT then return end
+    
+    local ang = self.Owner:EyeAngles()
+    local src = self.Owner:GetShootPos() + (self.Owner:GetAimVector()* 8)
+    
+    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    self.Weapon:EmitSound('Weapon_RPG.Single')
+    self:CreateRocket(src, self.Owner:GetAimVector()*100000)
+    --timer.Simple(0.3, function() self.Weapon:SendWeaponAnim(ACT_VM_DRAW) end)
+end
+
+function SWEP:CreateRocket(pos, velocity)
+    local grenade = ents.Create('paint_rocket')
+    if not IsValid(grenade) then return end
+    
+    grenade.Weapon = self.Weapon
+    grenade.Player = self.Owner
+    grenade:SetPos(pos)
+    grenade:Spawn()
+    grenade:SetAngles(self.Owner:EyeAngles())
+    
+    local phys = grenade:GetPhysicsObject()
+    if IsValid(phys) then
+        phys:SetVelocity(velocity)
+    end
+    
+    return grenade
+end

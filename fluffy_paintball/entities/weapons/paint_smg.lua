@@ -1,7 +1,7 @@
 if CLIENT then
 	-- Define the name and slot clientside
-	SWEP.PrintName = "Paintball Pistol"
-	SWEP.Slot = 1
+	SWEP.PrintName = "Paintball SMG"
+	SWEP.Slot = 2
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
     --killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
@@ -10,8 +10,8 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 25
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Damage = 10
+SWEP.Primary.Delay = 0.15
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0.02
 
@@ -26,12 +26,12 @@ SWEP.Primary.Automatic = true
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_pistol.mdl"
+SWEP.ViewModel = "models/weapons/c_smg1.mdl"
 SWEP.ViewModelFOV = 62
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.WorldModel = "models/weapons/w_smg1.mdl"
 
 function SWEP:Initialize()
-    self:SetHoldType('pistol')
+    self:SetHoldType('smg')
 end
 
 function SWEP:DrawWorldModel()
@@ -89,7 +89,7 @@ function SWEP:DoImpactEffect(tr, nDamageType)
     local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
     c = Color(v.x*255, v.y*255, v.z*255)
     
-    local s = 0.6 + math.random()
+    local s = 0.3 + 0.3*math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)
     
     return true

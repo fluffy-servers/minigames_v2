@@ -1,7 +1,7 @@
 if CLIENT then
 	-- Define the name and slot clientside
-	SWEP.PrintName = "Paintball Pistol"
-	SWEP.Slot = 1
+	SWEP.PrintName = "Paintball Crossbow"
+	SWEP.Slot = 4
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
     --killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
@@ -10,10 +10,10 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 25
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Damage = 200
+SWEP.Primary.Delay = 1.5
 SWEP.Primary.Recoil = 0
-SWEP.Primary.Cone = 0.02
+SWEP.Primary.Cone = 0
 
 -- Primary ammo settings
 SWEP.Primary.ClipSize = -1
@@ -26,12 +26,12 @@ SWEP.Primary.Automatic = true
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_pistol.mdl"
+SWEP.ViewModel = "models/weapons/c_crossbow.mdl"
 SWEP.ViewModelFOV = 62
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
 
 function SWEP:Initialize()
-    self:SetHoldType('pistol')
+    self:SetHoldType('crossbow')
 end
 
 function SWEP:DrawWorldModel()
@@ -49,7 +49,8 @@ end
 function SWEP:PrimaryAttack()
     --models/debug/debugwhite
     --weapons/357/357_fire2.wav
-	self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
+	--self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
+    self.Weapon:EmitSound('Weapon_IRifle.Single')
 	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 end
@@ -57,6 +58,25 @@ end
 function SWEP:SecondaryAttack()
 	-- Nothing here!
 	-- Make sure this is blank to override the default
+    self:ToggleZoom()
+end
+
+function SWEP:ToggleZoom()
+    if self:GetNWBool('Zoom', false) then
+        self.Owner:SetFOV(0, 0.2)
+        self:SetNWBool('Zoom', false)
+    else
+        self.Owner:SetFOV(35, 0.2)
+        self:SetNWBool('Zoom', true)
+    end
+end
+
+function SWEP:AdjustMouseSensitivity()
+    if self:GetNWBool('Zoom', false) then
+        return 0.2
+    else
+        return 1
+    end
 end
 
 -- Feel free to steal this code for any weapons

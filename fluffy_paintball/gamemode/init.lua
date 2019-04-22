@@ -160,7 +160,7 @@ end)
 
 -- If killed by another player, enter ghost mode before dying
 hook.Add('PlayerDeath', 'PaintballDeath', function(ply, inflictor, attacker)
-    if ply:GetNWBool('IsGhost', false) or attacker == ply or not attacker:IsPlayer() then
+    if ply:GetNWBool('IsGhost', false) or not attacker:IsPlayer() then
         ply:SetNWBool('IsGhost', false)
         return 
     end

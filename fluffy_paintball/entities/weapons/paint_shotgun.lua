@@ -1,7 +1,7 @@
 if CLIENT then
 	-- Define the name and slot clientside
-	SWEP.PrintName = "Paintball Pistol"
-	SWEP.Slot = 1
+	SWEP.PrintName = "Paintball Shotgun"
+	SWEP.Slot = 3
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
     --killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
@@ -10,10 +10,10 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 25
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Damage = 10
+SWEP.Primary.Delay = 0.5
 SWEP.Primary.Recoil = 0
-SWEP.Primary.Cone = 0.02
+SWEP.Primary.Cone = 0.1
 
 -- Primary ammo settings
 SWEP.Primary.ClipSize = -1
@@ -26,12 +26,12 @@ SWEP.Primary.Automatic = true
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_pistol.mdl"
+SWEP.ViewModel = "models/weapons/c_shotgun.mdl"
 SWEP.ViewModelFOV = 62
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.WorldModel = "models/weapons/w_shotgun.mdl"
 
 function SWEP:Initialize()
-    self:SetHoldType('pistol')
+    self:SetHoldType('shotgun')
 end
 
 function SWEP:DrawWorldModel()
@@ -50,7 +50,7 @@ function SWEP:PrimaryAttack()
     --models/debug/debugwhite
     --weapons/357/357_fire2.wav
 	self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
-	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+	self:ShootBullet(self.Primary.Damage, 6, self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 end
 
@@ -89,7 +89,7 @@ function SWEP:DoImpactEffect(tr, nDamageType)
     local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
     c = Color(v.x*255, v.y*255, v.z*255)
     
-    local s = 0.6 + math.random()
+    local s = 0.1 + 0.2*math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)
     
     return true
