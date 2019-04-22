@@ -52,7 +52,7 @@ function GM:SetPlayerGhost(ply)
     ply.DeathPos = nil
     ply.DeathAng = nil
     
-    local time = math.Clamp(60 - (ply.NumberDeaths*10), 0, 60)
+    local time = math.Clamp(ply.DeathTimer or 60, 0, 60)
     if time < 1 then
         ply:Kill()
         return
@@ -94,6 +94,11 @@ function GM:SetPlayerUnGhost(ply)
     ply:SetColor(color_white)
     ply:SetMaterial('models/props_combine/portalball001_sheet', true)
     
+    -- Reduce the timer as a penalty
+    local starttime = ply:GetNWFloat('GhostStart')
+    local timetaken = CurTime() - starttime
+    ply.DeathTimer = ply.DeathTimer - 2 - timetaken
+    
     -- Ungodmode after given time
     timer.Simple(3, function()
         if IsValid(ply) then 
@@ -111,7 +116,7 @@ hook.Add('PreRoundStart', 'ResetPaintball', function()
         -- Clear death data
         v.DeathPos = nil
         v.DeathAng = nil
-        v.NumberDeaths = 0
+        v.DeathTimer = 30
         
         -- Clear ghost effects
         v:SetNWBool('IsGhost', false)
@@ -136,7 +141,6 @@ hook.Add('PlayerDeath', 'PaintballDeath', function(ply, inflictor, attacker)
     
     ply.DeathPos = ply:GetPos()
     ply.DeathAng = ply:EyeAngles()
-    ply.NumberDeaths = (ply.NumberDeaths or 0) + 1
 end)
 
 -- Trigger ghost mode if applicable
