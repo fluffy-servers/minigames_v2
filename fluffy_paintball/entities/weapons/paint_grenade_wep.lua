@@ -5,6 +5,12 @@ SWEP.ViewModel = 'models/weapons/c_grenade.mdl'
 SWEP.WorldModel = 'models/weapons/w_grenade.mdl'
 SWEP.UseHands = true
 
+-- Primary ammo settings
+SWEP.Primary.ClipSize = 3
+SWEP.Primary.DefaultClip = 3
+SWEP.Primary.Ammo = "Grenade"
+SWEP.Primary.Automatic = false
+
 SWEP.Slot = 5
 
 function SWEP:Initialize()
@@ -12,17 +18,25 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
+    if not self:CanPrimaryAttack() then return end
+    
     self:Throw(2000)
     self.Weapon:EmitSound('WeaponFrag.Throw')
+    
     self:SetNextPrimaryFire(CurTime() + 1)
     self:SetNextSecondaryFire(CurTime() + 1)
+    self:TakePrimaryAmmo(1)
 end
 
 function SWEP:SecondaryAttack()
+    if not self:CanPrimaryAttack() then return end
+    
     self:Throw(750)
     self.Weapon:EmitSound('WeaponFrag.Roll')
+    
     self:SetNextPrimaryFire(CurTime() + 1)
     self:SetNextSecondaryFire(CurTime() + 1)
+    self:TakePrimaryAmmo(1)
 end
 
 function SWEP:Throw(strength)

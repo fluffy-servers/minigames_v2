@@ -16,9 +16,9 @@ SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0
 
 -- Primary ammo settings
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
-SWEP.Primary.Ammo = "none"
+SWEP.Primary.ClipSize = 5
+SWEP.Primary.DefaultClip = 5
+SWEP.Primary.Ammo = "SniperRound"
 SWEP.Primary.Automatic = true
 
 -- We don't have anything that uses secondary ammo so there's nothing here for it
@@ -47,12 +47,13 @@ function SWEP:PreDrawViewModel(vm, wep)
 end
 
 function SWEP:PrimaryAttack()
-    --models/debug/debugwhite
-    --weapons/357/357_fire2.wav
-	--self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
+    if not self:CanPrimaryAttack() then return end
+    
     self.Weapon:EmitSound('Weapon_IRifle.Single')
 	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    
+    self:TakePrimaryAmmo(1)
 end
 
 function SWEP:SecondaryAttack()

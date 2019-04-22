@@ -25,7 +25,9 @@ function ENT:Explode()
 	ed:SetOrigin(self:GetPos())
     ed:SetScale(0.1)
 	util.Effect("Explosion", ed, true, true)
-	util.BlastDamage(self.Weapon or self.Player, self.Player, self:GetPos(), 300, 150)
+    local wep = self.Weapon
+    if not IsValid(wep) then wep = self.Player end
+	util.BlastDamage(wep, self.Player, self:GetPos(), 300, 150)
     --self:EmitSound('AlyxEMP.Discharge')
     
     -- stop red message of doom
