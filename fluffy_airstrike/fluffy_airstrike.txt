@@ -1,6 +1,6 @@
 "minigames"
 {
 	"base"	"fluffy_mg_base"
-	"title"	"Balloons"
-	"maps"	"^bl_"
+	"title"	"Airstrike"
+    "maps"	"^air_"
 }

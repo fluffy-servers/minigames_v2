@@ -1,6 +1,6 @@
 "minigames"
 {
 	"base"	"fluffy_mg_base"
-	"title"	"Team Tactics"
-	"maps"	"^tt_"
+	"title"	"Stalker"
+    "maps"	"^ts_"
 }

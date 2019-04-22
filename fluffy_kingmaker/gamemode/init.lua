@@ -51,6 +51,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         ply:SetNWBool('IsKing', false)
         GAMEMODE:PulseAnnouncement(2, 'Nobody is King!', 1)
         GAMEMODE.CurrentKing = nil
+        SetGlobalEntity("KingPlayer", NULL)
         return
     end
     
@@ -69,6 +70,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
         GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1)
+        SetGlobalEntity("KingPlayer", attacker)
     end
     
     -- Similar to above, any kills with no king become king
@@ -81,6 +83,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
         GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1)
+        SetGlobalEntity("KingPlayer", attacker)
     end
     
     -- Do not count deaths unless in round
@@ -142,3 +145,10 @@ end
 function GM:GetFallDamage( ply, speed )
     return 0
 end
+
+-- Attempt to help with seeing the King through walls
+hook.Add('SetupPlayerVisibility', 'KingVisible', function(ply)
+    if IsValid(GAMEMODE.CurrentKing) then
+        AddOriginToPVS(GAMEMODE.CurrentKing:GetPos())
+    end
+end )

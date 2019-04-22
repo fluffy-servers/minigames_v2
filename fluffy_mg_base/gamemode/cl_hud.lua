@@ -1,4 +1,3 @@
-
 --[[
     Welcome to the Minigames HUD v2!
     This file has been pretty much completely made for lots of improvements around the board!
@@ -13,9 +12,10 @@ local hide = {
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
     CHudCrosshair = true
-} 
-hook.Add( "HUDShouldDraw", "FluffyHideHUD", function( name )
-	if ( hide[ name ] ) then return false end
+}
+
+hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)
+	if hide[name] then return false end
 end )
 
 -- Main HUD function
@@ -27,6 +27,7 @@ function GM:HUDPaint()
 		if GAMEMODE.ScoringPaneEnabled and IsValid(ScorePane) then
 			ScorePane:Hide()
 		end
+        
 		return 
 	end
     
@@ -59,40 +60,41 @@ function GM:HUDPaint()
 	end
     
     -- Hooks! Yay!
-    hook.Run( "HUDDrawTargetID" )
-	hook.Run( "HUDDrawPickupHistory" )
-    hook.Run( "DrawDeathNotice", 0.85, 0.04 )
+    hook.Run("HUDDrawTargetID")
+	hook.Run("HUDDrawPickupHistory")
+    hook.Run("DrawDeathNotice", 0.85, 0.04)
 end
 
 -- Convenience to draw a circle (uncached)
 -- If the same circle is being drawn a lot - use the cached version below
-function draw.Circle( x, y, radius, seg )
+-- This code originally from the wiki - thanks
+function draw.Circle(x, y, radius, seg)
 	local cir = {}
 
-	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+	table.insert(cir, {x = x, y = y, u = 0.5, v = 0.5})
 	for i = 0, seg do
-		local a = math.rad( ( i / seg ) * -360 )
-		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+		local a = math.rad((i/seg) * -360)
+		table.insert(cir, {x = x + math.sin(a) * radius, y = y + math.cos(a) * radius, u = math.sin(a) / 2 + 0.5, v = math.cos(a) / 2 + 0.5 })
 	end
 
-	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
-	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(cir, {x = x + math.sin(a) * radius, y = y + math.cos(a) * radius, u = math.sin(a) / 2 + 0.5, v = math.cos(a) / 2 + 0.5 })
 
-	surface.DrawPoly( cir )
+	surface.DrawPoly(cir)
 end
 
 -- Cache a circle polygon to draw later
 function draw.CirclePoly(x, y, radius, seg)
 	local cir = {}
 
-	table.insert( cir, { x = x, y = y, u = 0.5, v = 0.5 } )
+	table.insert(cir, {x = x, y = y, u = 0.5, v = 0.5 })
 	for i = 0, seg do
-		local a = math.rad( ( i / seg ) * -360 )
-		table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+		local a = math.rad((i/seg) * -360)
+		table.insert(cir, { x = x + math.sin(a) * radius, y = y + math.cos(a) * radius, u = math.sin(a) / 2 + 0.5, v = math.cos(a) / 2 + 0.5 } )
 	end
 
-	local a = math.rad( 0 ) -- This is needed for non absolute segment counts
-	table.insert( cir, { x = x + math.sin( a ) * radius, y = y + math.cos( a ) * radius, u = math.sin( a ) / 2 + 0.5, v = math.cos( a ) / 2 + 0.5 } )
+	local a = math.rad(0) -- This is needed for non absolute segment counts
+	table.insert(cir, {x = x + math.sin(a) * radius, y = y + math.cos(a) * radius, u = math.sin(a) / 2 + 0.5, v = math.cos(a) / 2 + 0.5 } )
     return cir
 end
 
@@ -100,6 +102,7 @@ end
 local c_pos = 72
 local seg = 36
 local radius = 48
+
 -- Cache the circles
 local round_circle = draw.CirclePoly(c_pos, c_pos, radius, seg)
 local round_circle_shadow = draw.CirclePoly(c_pos+3, c_pos+3, radius, seg)
@@ -118,17 +121,20 @@ function GM:DrawRoundState()
     local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
     -- Only draw this if the game hasn't yet started
     if GAME_STATE == 'GameNotStarted' then
-        draw.SimpleText( 'Waiting For Players...', "FS_40", 4+1, 4+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
-		draw.SimpleText( 'Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText('Waiting For Players...', "FS_40", 4+1, 4+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP) -- shadow
+		draw.SimpleText('Waiting For Players...', "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
     
     -- Draw spectating message on bottom (very rare)
     if LocalPlayer():Team() == TEAM_SPECTATOR then
-        draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP ) -- shadow
-		draw.SimpleText( 'You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText('You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP) -- shadow
+		draw.SimpleText('You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     end
     
+    -- There are four default round state styles
+    -- See the functions below
+    -- Gamemodes can pick a HUDStyle to use
     if not GAMEMODE.HUDStyle or GAMEMODE.HUDStyle == 1 then
         GAMEMODE:RoundStateDefault()
     elseif GAMEMODE.HUDStyle == 2 then
@@ -172,9 +178,9 @@ function GM:RoundStateDefault()
     local rect_height = 32
     local rect_width = w + 64
     surface.SetDrawColor(GAMEMODE.FCol3)
-    surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height + 3 )
+    surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
     surface.SetDrawColor(GAMEMODE.FCol2)
-    surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height )
+    surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height)
     
     -- Draw the top layer of the circle
     draw.NoTexture()
@@ -186,21 +192,21 @@ function GM:RoundStateDefault()
 	if t < 0 then t = 0 end
     
     -- Draw the arc (if applicable)
-    if !fast_hud:GetBool() and t != 0 then
-        draw.Arc( c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1 )
+    if !fast_hud:GetBool() and t != 0 and tmax > 0 then
+        draw.Arc(c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1)
     end
     
     -- Draw the time text
-    draw.SimpleText( math.floor(t), "FS_40", c_pos+1, c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-	draw.SimpleText( math.floor(t), "FS_40", c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText(math.floor(t), "FS_40", c_pos+1, c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+	draw.SimpleText(math.floor(t), "FS_40", c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the round information
 	if round == rmax then
-        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
-		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) -- shadow
+		draw.SimpleText(round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	else
-        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
-		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) -- shadow
+		draw.SimpleText(round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -241,9 +247,9 @@ function GM:RoundStateWithTimer()
     local rect_height = 32
     local rect_width = w + 64
     surface.SetDrawColor(GAMEMODE.FCol3)
-    surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height + 3 )
+    surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
     surface.SetDrawColor(GAMEMODE.FCol2)
-    surface.DrawRect( c_pos, c_pos - rect_height/2, rect_width, rect_height )
+    surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height)
     
     -- Draw the top layer of the circle
     draw.NoTexture()
@@ -256,20 +262,20 @@ function GM:RoundStateWithTimer()
     
     -- Draw the arc (if applicable)
     if !fast_hud:GetBool() and t != 0 then
-        draw.Arc( c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1 )
+        draw.Arc(c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1)
     end
     
     -- Draw the time text
-    draw.SimpleText( math.floor(t), "FS_40", c_pos+1, c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-	draw.SimpleText( math.floor(t), "FS_40", c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText(math.floor(t), "FS_40", c_pos+1, c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+	draw.SimpleText(math.floor(t), "FS_40", c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the round information
 	if round == rmax then
-        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
-		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) -- shadow
+		draw.SimpleText(round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	else
-        draw.SimpleText( round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER ) -- shadow
-		draw.SimpleText( round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(round_message, "FS_24", c_pos+53, c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER) -- shadow
+		draw.SimpleText(round_message, "FS_24", c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 	end
 end
 
@@ -292,21 +298,23 @@ function GM:RoundStateTimerOnly()
     draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48+3, GAMEMODE.FCol3)
     draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.FCol2)
     
+    -- Draw the time text
     if time_left > 0 then
-        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText(round_message, "FS_40", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+        draw.SimpleText(round_message, "FS_40", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     else
-        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText('Overtime!', "FS_24", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+        draw.SimpleText('Overtime!', "FS_24", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     
+    -- Draw the round number (if applicable)
     if GAMEMODE.RoundType == 'timed' then
         -- Draw the box
         draw.RoundedBoxEx(8, c_pos-48, c_pos-3, 128, 32+3, GAMEMODE.FCol3, false, false, true, true)
         draw.RoundedBoxEx(8, c_pos-48, c_pos-2, 128, 32, GAMEMODE.FCol2, false, false, true, true)
         
         local round = GetGlobalInt('RoundNumber') or 1
-        draw.SimpleText( 'Round ' .. round, "FS_24", c_pos + 16, c_pos + 15, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText('Round ' .. round, "FS_24", c_pos + 16, c_pos + 15, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
 end
 
@@ -320,18 +328,20 @@ function GM:RoundStateTimerTeamScore()
     if !GameTime then return end
     --if GAME_STATE == 'EndRound' then return end
     
+    -- Fancy formatting for the time
     local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
     
     -- Draw the box
     draw.RoundedBoxEx(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.FCol2, true, true, false, false)
     
+    -- Draw the time
     if time_left > 0 then
-        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-        draw.SimpleText( round_message, "FS_40", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText(round_message, "FS_40", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+        draw.SimpleText(round_message, "FS_40", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     else
-        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-        draw.SimpleText( 'Overtime!', "FS_24", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText('Overtime!', "FS_24", c_pos + 16, c_pos - 20, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+        draw.SimpleText('Overtime!', "FS_24", c_pos + 16, c_pos - 22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     
     -- Draw the team boxes
@@ -345,11 +355,11 @@ function GM:RoundStateTimerTeamScore()
     draw.RoundedBoxEx(8, c_pos+16, c_pos, 64, score_h+2, blue_shadow, false, false, false, true)
     draw.RoundedBoxEx(8, c_pos+16, c_pos, 64, score_h, blue_col, false, false, false, true)
     
-    draw.SimpleText( team.GetScore(TEAM_RED), "FS_40", c_pos-48+32, c_pos + score_h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-    draw.SimpleText( team.GetScore(TEAM_RED), "FS_40", c_pos-48+32, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
-    
-    draw.SimpleText( team.GetScore(TEAM_BLUE), "FS_40", c_pos+16+32, c_pos + score_h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-    draw.SimpleText( team.GetScore(TEAM_BLUE), "FS_40", c_pos+16+32, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    -- Draw the scores for each team
+    draw.SimpleText(team.GetScore(TEAM_RED), "FS_40", c_pos-48+32, c_pos + score_h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+    draw.SimpleText(team.GetScore(TEAM_RED), "FS_40", c_pos-48+32, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(team.GetScore(TEAM_BLUE), "FS_40", c_pos+16+32, c_pos + score_h/2 + 3, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+    draw.SimpleText(team.GetScore(TEAM_BLUE), "FS_40", c_pos+16+32, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 
@@ -365,7 +375,7 @@ function GM:DrawHealth()
     -- Small animation for the arc
     local hp_max = LocalPlayer():GetMaxHealth() or 100
     if HealthBarHP then
-        HealthBarHP = math.Approach( HealthBarHP, LocalPlayer():Health(), 70*FrameTime() )
+        HealthBarHP = math.Approach(HealthBarHP, LocalPlayer():Health(), 70*FrameTime())
     else
         HealthBarHP = 100
     end
@@ -380,16 +390,16 @@ function GM:DrawHealth()
     
     -- Calculate the size of the team name text
     -- Then draw a rectangle
-    local team_name = team.GetName( LocalPlayer():Team() )
+    local team_name = team.GetName(LocalPlayer():Team())
     if GAMEMODE.TeamBased then
         surface.SetFont('FS_24')
         local w = surface.GetTextSize(team_name)
         local rect_height = 32
         local rect_width = w + 64
         surface.SetDrawColor(GAMEMODE.FCol3)
-        surface.DrawRect( c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height + 3 )
+        surface.DrawRect(c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height + 3)
         surface.SetDrawColor(GAMEMODE.FCol2)
-        surface.DrawRect( c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height )
+        surface.DrawRect(c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height)
     end
     
     -- Draw the top layer of the circle
@@ -397,20 +407,20 @@ function GM:DrawHealth()
     surface.DrawPoly(health_circle)
     
     -- Draw arc (if applicable)
-    if !fast_hud:GetBool() and hp > 0 then
+    if !fast_hud:GetBool() and hp > 0 and hp_max > 0 then
         local ang = (hp/hp_max) * -360
         if ang % 2 == 1 then ang = ang - 1 end
-        draw.Arc( c_pos, ScrH() - c_pos, 42, 10, math.Round(ang+90), 90, 12, GAMEMODE.FCol1 )
+        draw.Arc(c_pos, ScrH() - c_pos, 42, 10, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
     end
     
     -- Draw the health number
-    draw.SimpleText( math.floor(LocalPlayer():Health()), "FS_40", c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) -- shadow
-	draw.SimpleText( math.floor(LocalPlayer():Health()), "FS_40", c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+    draw.SimpleText(math.floor(LocalPlayer():Health()), "FS_40", c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+	draw.SimpleText(math.floor(LocalPlayer():Health()), "FS_40", c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the team name (if applicable)
     if GAMEMODE.TeamBased then
-        draw.SimpleText( team_name, "FS_24", c_pos+53, ScrH() - c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
-        draw.SimpleText( team_name, "FS_24", c_pos+52, ScrH() - c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(team_name, "FS_24", c_pos+53, ScrH() - c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(team_name, "FS_24", c_pos+52, ScrH() - c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 end
 
@@ -425,7 +435,7 @@ function GM:DrawAmmo()
     
     -- Grab the current weapon
     local wep = LocalPlayer():GetActiveWeapon()
-    if !IsValid( wep ) then return end
+    if !IsValid(wep) then return end
     if wep.DrawAmmo == false then return end
     
     -- Get the ammo information from the gun
@@ -459,16 +469,25 @@ function GM:DrawAmmo()
     if !fast_hud:GetBool() then
         if ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > -1 then
             -- Calculate the percentage with slight interpolation
-            local p = ammo['PrimaryClip'] / ammo['MaxPrimaryClip']
+            
+            -- Make sure the percentage isn't a division by 0
+            local p = 0
+            if ammo['PrimaryClip'] < ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > 0 then
+                p = ammo['PrimaryClip'] / ammo['MaxPrimaryClip']
+            else
+                p = 1
+            end
+            
+            -- Slight animation effect
             if ClipPercentage then
-                ClipPercentage = math.Approach( ClipPercentage, p, FrameTime() )
+                ClipPercentage = math.Approach(ClipPercentage, p, FrameTime())
             else
                 ClipPercentage = p
             end
             
             -- Draw the arc
             local ang = ClipPercentage * -360
-            draw.Arc( ScrW() - c_pos, ScrH() - c_pos, 42, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1 )
+            draw.Arc(ScrW() - c_pos, ScrH() - c_pos, 42, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
         end
     end
     
@@ -476,18 +495,18 @@ function GM:DrawAmmo()
     -- Otherwise, just draw the clip
     if ammo['PrimaryAmmo'] and ammo['PrimaryAmmo'] > -1 and ammo['PrimaryAmmo'] < 1000 and ammo['PrimaryClip'] > -1 then
         -- Clip & ammo
-        draw.SimpleText( ammo['PrimaryClip'], "FS_40", ScrW() - c_pos+1, ScrH() - c_pos+2 - 4, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
-        draw.SimpleText( ammo['PrimaryClip'], "FS_40", ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText(ammo['PrimaryClip'], "FS_40", ScrW() - c_pos+1, ScrH() - c_pos+2 - 4, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) --shadow
+        draw.SimpleText(ammo['PrimaryClip'], "FS_40", ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         
-        draw.SimpleText( ammo['PrimaryAmmo'] or 72, "FS_16", ScrW() - c_pos+1, ScrH() - c_pos+2 + 16, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
-        draw.SimpleText( ammo['PrimaryAmmo'] or 72, "FS_16", ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText(ammo['PrimaryAmmo'] or 72, "FS_16", ScrW() - c_pos+1, ScrH() - c_pos+2 + 16, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) --shadow
+        draw.SimpleText(ammo['PrimaryAmmo'] or 72, "FS_16", ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     elseif ammo['PrimaryClip'] != -1 then
         -- Clip1 only
-        draw.SimpleText( ammo['PrimaryClip'], "FS_60", ScrW() - c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
-        draw.SimpleText( ammo['PrimaryClip'], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText(ammo['PrimaryClip'], "FS_60", ScrW() - c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) --shadow
+        draw.SimpleText(ammo['PrimaryClip'], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     elseif ammo['PrimaryAmmo'] > 0 then
-        draw.SimpleText( ammo['PrimaryAmmo'], "FS_60", ScrW() - c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER ) --shadow
-        draw.SimpleText( ammo['PrimaryAmmo'], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER )
+        draw.SimpleText(ammo['PrimaryAmmo'], "FS_60", ScrW() - c_pos+1, ScrH() - c_pos+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) --shadow
+        draw.SimpleText(ammo['PrimaryAmmo'], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     
     -- What about secondary ammo?? :(
@@ -498,21 +517,26 @@ end
 -- This a popup at the top of the screen
 --[[
 function GM:CreateRoundEndPanel(message, tagline)
-    surface.PlaySound( 'friends/friend_join.wav' )
+    surface.PlaySound('friends/friend_join.wav')
     if IsValid(GAMEMODE.RoundEndPanel) then
         GAMEMODE.RoundEndPanel:Remove()
     end
     
+    -- Create the panel
     local w = 288
     local h = 64
     local bar_h = 24
     local p = vgui.Create('DPanel')
     p:SetSize(w, h)
     p:SetPos(ScrW()/2 - w/2, -h)
+    
+    -- Message & tagline handling
+    p.Message = message
     p.TagLine = tagline or nil
     if p.TagLine == '' or p.TagLine == ' ' then p.TagLine = nil end
     
-    p.Message = message
+    -- Paint the message
+    -- Slight sizing changes based on if there is a second line or not
     function p:Paint(w, h)
         if self.TagLine then
             draw.RoundedBoxEx(16, 0, 0, w, h-bar_h, GAMEMODE.FCol2, false, false, false, false)
@@ -528,6 +552,7 @@ function GM:CreateRoundEndPanel(message, tagline)
         end
     end
     
+    -- Slide in, wait, slide out
     p:MoveTo(ScrW()/2 - w/2, 0, 1, 0, -1, function(anim, p)
         p:MoveTo(ScrW()/2 - w/2, -h, 1, GAMEMODE.RoundCooldown - 1, -1, function(anim, p) p:Remove() end)
     end)
@@ -572,11 +597,11 @@ end
 
 -- Play a COOL sound when the round ends!
 -- Also display the EndGameMessage -> update the look of this soon
-net.Receive( 'EndRound', function()
+net.Receive('EndRound', function()
     local msg = net.ReadString()
     local tagline = net.ReadString()
     GAMEMODE:CreateRoundEndPanel(msg, tagline)
-end )
+end)
 
 -- Function to determine the variable of the scoring pane
 -- Override in gamemodes
@@ -587,23 +612,28 @@ end
 -- Sort the scoring pane so the top player is first in the list etc.
 function GM:ScoreRefreshSort()
     if !ScorePane then return end
+    
+    -- Sort the table with default implementation
     local scores = {}
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         local score = GAMEMODE:ScoringPaneScore(v)
-        table.insert( scores, {v, score} )
+        table.insert(scores, {v, score})
     end
-    table.sort( scores, function( a, b ) return a[2] > b[2] end )
+    table.sort(scores, function(a, b) return a[2] > b[2] end)
     
+    -- Clear the current order
     ScorePane:Clear()
-    local count = ScrW()*0.5 / 68
-    count = math.floor( count )
     
-    local n = math.min( #scores, count )
+    -- math stuff
+    local count = ScrW()*0.5 / 68
+    count = math.floor(count)
+    local n = math.min(#scores, count)
     local xx = ScrW()*0.25 - (n*34)
     
+    -- Reorder the players in the score panel
     for k,v in pairs(scores) do
         if k > count then return end
-        ScorePane:CreatePlayer( v[1], xx )
+        ScorePane:CreatePlayer(v[1], xx)
         xx = xx + 68
     end
 end
@@ -611,23 +641,25 @@ end
 -- Create the scoring pane
 function GM:CreateScoringPane()
     local Frame = vgui.Create('DPanel')
-    Frame:SetSize( ScrW() * 0.5, 96 )
-    Frame:SetPos( ScrW() * 0.25, ScrH() - 72 )
+    Frame:SetSize(ScrW() * 0.5, 96 )
+    Frame:SetPos(ScrW() * 0.25, ScrH() - 72)
     
-    function Frame:CreatePlayer( ply, x )
+    -- Function to create a blob for each player
+    -- This includes the score & avatar
+    function Frame:CreatePlayer(ply, x)
         local p = vgui.Create('DPanel', Frame )
-        p:SetPos( x, 0 )
-        p:SetSize( 64, 80 )
+        p:SetPos(x, 0)
+        p:SetSize(64, 80)
         function p:Paint()
             local score = GAMEMODE:ScoringPaneScore(ply) or 0
-            draw.SimpleText(score, 'FS_32', 32 + 2, 40 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER )
-            draw.SimpleText(score, 'FS_32', 32, 40, GAMEMODE.FCol1, TEXT_ALIGN_CENTER )
+            draw.SimpleText(score, 'FS_32', 32 + 2, 40 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER)
+            draw.SimpleText(score, 'FS_32', 32, 40, GAMEMODE.FCol1, TEXT_ALIGN_CENTER)
         end
         
-        local Avatar = vgui.Create('AvatarImage', p )
-        Avatar:SetSize( 36, 36 )
-        Avatar:SetPos( 14, 0 )
-        Avatar:SetPlayer( ply, 64 )
+        local Avatar = vgui.Create('AvatarImage', p)
+        Avatar:SetSize(36, 36)
+        Avatar:SetPos(14, 0)
+        Avatar:SetPlayer(ply, 64)
     end
     
     function Frame:Paint()
@@ -635,6 +667,9 @@ function GM:CreateScoringPane()
     end
     ScorePane = Frame
 	
+    -- Refresh the score panel every 2 seconds
+    -- This is a bit expensive hence the infrequency
+    -- Scores will update instantly, however the order only changes in this function
 	ScoreRefreshPlayers = timer.Create('RefreshPlayers', 2, 0, function()
 		GAMEMODE:ScoreRefreshSort()
 	end)
@@ -648,11 +683,14 @@ function GM:GetPlayerInfoPanel(ply)
     local panel = vgui.Create("DPanel")
     panel:SetSize(160, 64)
     panel:SetPaintedManually(true)
+    
+    -- Create the avatar
     local avatar = vgui.Create('AvatarCircle', panel)
     avatar:SetSize(32, 32)
     avatar:SetPos(16, 16)
     avatar.Avatar:SetPlayer(ply, 32)
     local last_health = ply:GetMaxHealth() or 100
+    
     function panel:Paint(w, h)
         -- Small animation for the arc
         local hp_max = ply:GetMaxHealth() or 100
@@ -667,6 +705,7 @@ function GM:GetPlayerInfoPanel(ply)
         
         draw.NoTexture()
         
+        -- Calculate the color based on team or FFA
         local c = Color(0, 168, 255)
         if GAMEMODE.TeamBased then
             c = team.GetColor(ply:Team())
@@ -675,41 +714,51 @@ function GM:GetPlayerInfoPanel(ply)
             c = Color(pc.r*255, pc.g*255, pc.b*255)
         end
         
+        -- Circle for the avatar + HP arc
         local poly = poly or draw.CirclePoly(32, 32, 26, 24)
         surface.SetDrawColor(c)
         surface.DrawPoly(poly)
         
-        local ang = (hp/hp_max) * -360
-        if ang % 2 == 1 then ang = ang - 1 end
-        draw.Arc(32, 32, 24, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
+        -- HP Arc
+        if hp_max > 0 then
+            local ang = (hp/hp_max) * -360
+            if ang % 2 == 1 then ang = ang - 1 end
+            draw.Arc(32, 32, 24, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
+        end
         
+        -- Draw username
         local name = ply:Nick()
         draw.SimpleText(name, "FS_24", 64 + 1, 24 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(name, "FS_24", 64, 24, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         
+        -- Draw HP number
         hp = math.floor(hp)
         draw.SimpleText(hp .. 'HP', 'FS_24', 64+1, 24+1 + 20, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(hp .. 'HP', 'FS_24', 64, 24 + 20, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
     
+    -- Cache & return this panel
     GAMEMODE.PlayerPanels[ply] = panel
     return panel
 end
 
 -- Hook to call the above function when a player is looked at
 function GM:HUDDrawTargetID()
-	local tr = util.GetPlayerTrace( LocalPlayer() )
-	local trace = util.TraceLine( tr )
+    -- Check if the player is looking at a player
+	local tr = util.GetPlayerTrace(LocalPlayer())
+	local trace = util.TraceLine(tr)
 	if !trace.Hit then return end
 	if !trace.HitNonWorld then return end
-    
     if not trace.Entity:IsPlayer() then return end
+    
+    -- Use the mouse cursor if applicable OR the centre of the screen
     local xx, yy = gui.MousePos()
     if xx == 0 and yy == 0 then
         xx = ScrW()/2
         yy = ScrH()/2
     end
     
+    -- Create an infomation panel using the above function
     local panel = GAMEMODE:GetPlayerInfoPanel(trace.Entity)
     panel:SetPos(xx - panel:GetWide()/2, yy - panel:GetTall()/2)
     panel:PaintManual()
