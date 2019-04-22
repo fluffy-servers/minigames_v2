@@ -13,6 +13,7 @@ GM.Elimination = true
 GM.TeamSurvival = false
 
 GM.LifeTimer = 30
+GM.CanSuicide = false
 
 function GM:Initialize()
 
