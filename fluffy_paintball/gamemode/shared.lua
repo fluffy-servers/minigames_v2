@@ -8,7 +8,7 @@ GM.HelpText = [[
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundTime = 150
-GM.RoundNumber = 10
+GM.RoundNumber = 7
 GM.Elimination = true
 GM.TeamSurvival = false
 
