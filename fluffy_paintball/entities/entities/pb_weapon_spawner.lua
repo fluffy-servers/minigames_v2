@@ -4,7 +4,7 @@ ENT.Type = "anim"
 ENT.Base = "base_anim"
 
 ENT.MinRespawn = 10
-ENT.MaxRespawn = 30
+ENT.MaxRespawn = 20
 
 local weapon_table = {}
 weapon_table['shotgun'] = 'paint_shotgun'
@@ -39,10 +39,10 @@ if SERVER then
         self:PhysicsInit(SOLID_VPHYSICS)
         self:SetMoveType(MOVETYPE_NONE)
         self:SetSolid(SOLID_VPHYSICS)
-        self:SetCollisionGroup(COLLISION_GROUP_WORLD)
+        self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
         self:PhysWake()
         
-        self:SetNWString('WeaponType', 'grenade')
+        --self:SetNWString('WeaponType', 'grenade')
     end
     
     function ENT:Think()
@@ -70,21 +70,35 @@ if SERVER then
             ent:GiveAmmo(ammo_table[type][2], ammo_table[type][1])
         end
         
+        -- Shuffle the type (if applicable)
+        if self.RandomTable then
+            PrintTable(self.RandomTable)
+            self:SetNWString('WeaponType', table.Random(self.RandomTable))
+        end
+        
         -- Reset the timer
         self:SetNWBool('GiftReady', false)
-        self:SetCollisionGroup(COLLISION_GROUP_WORLD)
+        self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
         self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
     end
     
     -- KV properties for mapping data
     function ENT:KeyValue(key, value)
         if key == 'type' then
-            self:SetNWString('WeaponType', value)
+            if string.match(value, ',') then
+                -- List of weapons
+                value = string.Split(value, ',')
+                self.RandomTable = value
+                self:SetNWString('WeaponType', table.Random(self.RandomTable))
+            else
+                -- Single weapon
+                self:SetNWString('WeaponType', value)
+            end
         elseif key == 'minspawn' then
-            self.MinRespawn = value
+            self.MinRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
         elseif key == 'maxspawn' then
-            self.MaxRespawn = value
+            self.MaxRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
         end
     end
@@ -96,7 +110,14 @@ if CLIENT then
         if not self.PreviewModel then
             local type = self:GetNWString('WeaponType', 'shotgun')
             self.PreviewModel = ClientsideModel(models_table[type])
+            self.PreviewType = type
             self.PreviewModel:SetNoDraw(true)
+        end
+        
+        if self.PreviewType != self:GetNWString('WeaponType', 'shotgun') then
+            SafeRemoveEntity(self.PreviewModel)
+            self.PreviewModel = nil
+            return
         end
         
         -- Render the model rotating gently
