@@ -164,8 +164,17 @@ hook.Add('PlayerDeath', 'PaintballDeath', function(ply, inflictor, attacker)
     if GetGlobalString('RoundState') != 'InRound' then return end
     
     if ply:GetNWBool('IsGhost', false) or not attacker:IsPlayer() then
+        GAMEMODE:PulseAnnouncement(2, (ply:Nick() or '?') .. ' has been eliminated', 0.8)
         ply:SetNWBool('IsGhost', false)
-        return 
+        return
+    end
+    
+    if ply == attacker then
+        if IsValid(inflictor) and inflictor == ply then
+            GAMEMODE:PulseAnnouncement(2, (ply:Nick() or '?') .. ' has been eliminated', 0.8)
+            ply:SetNWBool('IsGhost', false)
+            return
+        end
     end
     
     ply.DeathPos = ply:GetPos()
