@@ -64,10 +64,14 @@ if SERVER then
         
         -- Award the player the weapon
         local type = self:GetNWString('WeaponType', 'shotgun')
-        ent:Give(weapon_table[type])
-        -- Award ammo (if applicable)
-        if ammo_table[type] then
-            ent:GiveAmmo(ammo_table[type][2], ammo_table[type][1])
+        local wep = weapon_table[type]
+        if ent:HasWeapon(wep) then
+            -- If they already have the weapon, award ammo instead
+            if ammo_table[type] then
+                ent:GiveAmmo(ammo_table[type][2], ammo_table[type][1])
+            end
+        else
+            ent:Give(wep)
         end
         
         -- Shuffle the type (if applicable)
