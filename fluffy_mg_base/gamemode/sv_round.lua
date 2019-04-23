@@ -83,7 +83,8 @@ function GM:PreStartRound()
     
     -- Probably bugged
     if GAMEMODE.TeamBased then
-        GAMEMODE.TeamKills = nil
+        SetGlobalInt('1TeamKills', 0)
+        SetGlobalInt('2TeamKills', 0)
     end
     
     -- Set global round data
@@ -233,13 +234,10 @@ function GM:HandleTeamWin(reason)
         if GAMEMODE.TeamSurvival then
             winners = GAMEMODE.SurvivorTeam
             msg = team.GetName(GAMEMODE.SurvivorTeam) .. ' win the round!'
-        elseif !GAMEMODE.TeamKills then
-            winners = 0
-            msg = 'Draw! Nobody wins.'
-        elseif GAMEMODE.TeamKills[1] > GAMEMODE.TeamKills[2] then
+        elseif GetGlobalInt('1TeamKills', 0) > GetGlobalInt('2TeamKills', 0) then
             winners = 1
             msg = team.GetName(1) .. ' win the round!'
-        elseif GAMEMODE.TeamKills[1] < GAMEMODE.TeamKills[2] then
+        elseif GetGlobalInt('1TeamKills', 0) < GetGlobalInt('2TeamKills', 0) then
             winners = 2
             msg = team.GetName(2) .. ' win the round!'
         else
