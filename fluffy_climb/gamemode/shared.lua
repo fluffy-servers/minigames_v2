@@ -3,7 +3,10 @@ DeriveGamemode('fluffy_mg_base')
 GM.Name = 'Climb!'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    todo help text
+    Race to the top in this fast-paced climbing gamemode!
+    
+    Platforms are randomly generated. Be careful not to fall!
+    Bright green platforms will launch you into the air.
 ]]
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?
