@@ -66,6 +66,8 @@ function SHOP:PopulateSettings()
 end
 
 function SHOP:OpenInventory()
+    if true then return end -- disable this function for now
+    
     if IsValid(SHOP.InventoryPanel) then return end
     SHOP:VerifyInventory()
     

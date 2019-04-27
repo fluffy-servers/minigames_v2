@@ -10,50 +10,43 @@ GM.VoteGamemodes = {
     {'fluffy_duckhunt', 'Duck Hunt', 'Hunter vs Hunted'},
     {'fluffy_suicidebarrels', 'Suicide Barrels', 'Hunter vs Hunted'},
     {'fluffy_dodgeball', 'Dodgeball', 'Team DM'},
-    --{'fluffy_pitfall', 'Pitfall', 'FFA Elimination'},
+    {'fluffy_pitfall', 'Pitfall', 'FFA Elimination'},
     {'fluffy_incoming', 'Incoming!', 'Free For All'},
     {'fluffy_bombtag', 'Bomb Tag', 'FFA Elimination'},
     {'fluffy_laserdance', 'Laser Dance', 'Free For All'},
 	{'fluffy_balls', 'Ballz', 'Free For All'},
 	{'fluffy_cratewars', 'Crate Wars', 'Free For All'},
 	{'fluffy_oitc', 'One in the Chamber', 'Team DM'},
-    --{'fluffy_balloons', 'Balloons', 'Free For All'},
-    --{'fluffy_shootingrange', 'Shooting Range', 'Team DM'},
-    {'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
     {'fluffy_gungame', 'Gun Game', 'FFA'},
     {'fluffy_kingmaker', 'Kingmaker', 'FFA'},
-    --{'fluffy_fortwars', 'Fort Wars', 'Team DM'},
-    --{'fluffy_tiles', 'Pitfall 2', 'FFA'},
     {'fluffy_microgames', 'Microgames', 'FFA'},
-    --{'fluffy_ctf', 'CTF', 'Team DM'},
+    {'fluffy_paintball', 'Paintball', 'Team DM'},
+    {'fluffy_climb', 'Climb!', 'FFA'},
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_battleground', 'pvp_hexagons', 'pvp_rainbow2', 'pvp_4corners', 'pvp_canals_v2', 'pvp_crossfire_v2', 'pvp_warehouse_v2'}
-local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_4corners', 'pvp_canals_v2'}
+local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_canals_v2', 'pvp_crossfire_v2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2'}
+local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_canals_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_lasertag_arena_v2'}
 
 GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
     fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
-    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3'},
-    fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4'},
-    fluffy_pitfall = {'pf_ocean', 'pf_midnight_v1'},
+    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3', 'sb_pyramid'},
+    fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker', 'db_parkalyptic'},
+    fluffy_pitfall = {'pf_ocean'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
-    fluffy_bombtag = {'bt_diamond', 'bt_rainbow', 'bt_plaza_v2', 'bt_museum'},
-    fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test'},
-	fluffy_cratewars = {'cw_bricks', 'cw_nonagon'},
+    fluffy_bombtag = {'bt_diamond', 'bt_rainbow', 'bt_plaza_v2', 'bt_museum', 'bt_canal', 'bt_yeoldearena', 'bt_laserama'},
+    fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix'},
+	fluffy_cratewars = {'cw_bricks', 'cw_nonagon', 'cw_boxingring', 'cw_spaceconflict'},
 	fluffy_balls = pvp_maps,
 	fluffy_oitc = pvp_maps_team,
-    fluffy_balloons = {'bl_skyoasis', 'bl_spaceage', 'bl_cloudy'},
-    fluffy_shootingrange = {'cb_cylinder', 'cb_split'},
     fluffy_infection = pvp_maps,
     fluffy_kingmaker = pvp_maps,
     fluffy_gungame = pvp_maps,
-    fluffy_fortwars = {'fw_battlefield'},
     fluffy_microgames = {'micro_basic'},
-    --fluffy_ctf = {'ctf_4corners'},
-    --fluffy_tiles = {'til_pit', 'til_pyramid', 'pf_ocean'}
+    fluffy_climb = {'climb_prototype', 'climb_spacejump'},
+    fluffy_paintball = {'pb_ratrun_v1', 'pb_paintballarena_v1'},
 }
 
 -- Variables to keep track of voting

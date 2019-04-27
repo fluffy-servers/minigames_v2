@@ -28,6 +28,8 @@ AddCSLuaFile('sh_levels.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
+resource.AddFile('resource/fonts/BebasKai.ttf')
+resource.AddFile('resource/fonts/LemonMilk.ttf')
 
 -- Include useful server files
 include('shared.lua')
@@ -134,9 +136,10 @@ function GM:PlayerRequestTeam(ply, teamid)
 end
 
 -- Disable friendly fire
-function GM:PlayerShouldTakeDamage( victim, ply )
+function GM:PlayerShouldTakeDamage(victim, ply)
     if !GAMEMODE.TeamBased then return true end
     if !ply:IsPlayer() then return true end
+    if ply == victim then return true end
     if ply:Team() == victim:Team() then return false end
     return true
 end
@@ -331,16 +334,11 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
     
     if GAMEMODE.TeamBased then
-        if !GAMEMODE.TeamKills then 
-            GAMEMODE.TeamKills = {}
-            GAMEMODE.TeamKills[1] = 0
-            GAMEMODE.TeamKills[2] = 0
-        end
-        
         -- Add the kill to the team
         local team = attacker:Team()
         if team == TEAM_SPECTATOR or team == TEAM_UNASSIGNED then return end
-        GAMEMODE.TeamKills[team] = GAMEMODE.TeamKills[team] + 1
+        local team_kills_current = GetGlobalInt(team .. 'TeamKills')
+        SetGlobalInt(team .. 'TeamKills', team_kills_current + 1)
     else
         if not attacker.FFAKills then attacker.FFAKills = 0 end
         attacker.FFAKills = attacker.FFAKills + 1
