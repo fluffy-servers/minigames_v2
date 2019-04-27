@@ -6,6 +6,7 @@ include('ply_extension.lua')
 
 -- Players get the punch weapon by default
 function GM:PlayerLoadout(ply)
+    ply:StripWeapons()
     ply:SetCarrier(false)
     ply:Give('bt_punch')
 end
