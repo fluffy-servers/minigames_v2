@@ -10,8 +10,8 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 10
-SWEP.Primary.Delay = 0.15
+SWEP.Primary.Damage = 15
+SWEP.Primary.Delay = 0.05
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0.02
 
