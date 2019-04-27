@@ -45,7 +45,8 @@ GM.VoteMaps = {
     fluffy_kingmaker = pvp_maps,
     fluffy_gungame = pvp_maps,
     fluffy_microgames = {'micro_basic'},
-    fluffy_climb = {'climb_prototype', 'climb_spacejump'}
+    fluffy_climb = {'climb_prototype', 'climb_spacejump'},
+    fluffy_paintball = {'pb_ratrun_v1', 'pb_paintballarena_v1'},
 }
 
 -- Variables to keep track of voting
