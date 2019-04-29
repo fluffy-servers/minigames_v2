@@ -16,7 +16,7 @@ end
 function GM:CollectBall(ply)
 	local balls = ply:GetNWInt("Balls", 0)
 	ply:SetNWInt("Balls", balls+1)
-	GAMEMODE:AddStatPoints(ply, 'total_balls', 1)
+	GAMEMODE:AddStatPoints(ply, 'Balls Collected', 1)
     
     ply:EmitSound('buttons/blip1.wav', 50, math.Clamp(100 + balls*5, 100, 255))
 	
@@ -91,3 +91,8 @@ function GM:GetWinningPlayer()
     -- Return the winner! Yay!
     return bestplayer
 end
+
+-- Register XP for Balls
+hook.Add('RegisterStatsConversions', 'AddBallsStatConversions', function()
+    GAMEMODE:AddStatConversion('Balls Collected', 'Total Balls', 0.05)
+end)

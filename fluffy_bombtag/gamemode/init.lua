@@ -82,7 +82,7 @@ end)
 function GM:StatsRoundWin(winners)
     for k,v in pairs(player.GetAll()) do
         if v:Alive() and !v.Spectating then
-            GAMEMODE:AddStatPoints(v, 'survived_rounds', 1)
+            GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
         end
     end
 end
@@ -100,6 +100,6 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
     for k,v in pairs(player.GetAll()) do
         if !v:Alive() or v == ply or v.Spectating then continue end
         v:AddFrags(1)
-        GAMEMODE:AddStatPoints(v, 'bombtag_score', 1)
+        --GAMEMODE:AddStatPoints(v, 'bombtag_score', 1)
     end
 end

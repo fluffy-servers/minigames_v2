@@ -51,11 +51,11 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     if attacker:Team() == TEAM_RED then
         -- Barrel killed human
         attacker:AddFrags(5)
-        GAMEMODE:AddStatPoints(attacker, 'humans_killed', 1)
+        GAMEMODE:AddStatPoints(attacker, 'Humans Killed', 1)
     elseif attacker:Team() == TEAM_BLUE then
         -- Human killed barrel
         attacker:AddFrags(1)
-        GAMEMODE:AddStatPoints(attacker, 'barrels_killed', 1)
+        GAMEMODE:AddStatPoints(attacker, 'Barrels Killed', 1)
     end
 end
 
@@ -64,8 +64,14 @@ function GM:StatsRoundWin(winners)
     if winners == TEAM_BLUE then
         for k,v in pairs(team.GetPlayers(TEAM_BLUE)) do
             if v:Alive() then
-                GAMEMODE:AddStatPoints(v, 'survived_rounds', 1)
+                GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
             end
         end
     end
 end
+
+-- Register XP for Suicide Barrels
+hook.Add('RegisterStatsConversions', 'AddSuicideBarrelsStatConversions', function()
+    GAMEMODE:AddStatConversion('Humans Killed', 'Humans Killed', 3)
+    GAMEMODE:AddStatConversion('Barrels Killed', 'Barrels Killed', 0.5)
+end)

@@ -2,11 +2,6 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
-hook.Add('Initialize', 'AddKingmakerStatConversions', function()
-    GAMEMODE:AddStatConversion('KingFrags', 'Kills as King', 0.25)
-    GAMEMODE:AddStatConversion('KingEliminations', 'Regicide', 1)
-end)
-
 function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:StripWeapons()
@@ -152,3 +147,9 @@ hook.Add('SetupPlayerVisibility', 'KingVisible', function(ply)
         AddOriginToPVS(GAMEMODE.CurrentKing:GetPos())
     end
 end )
+
+-- Register XP for Kingmaker
+hook.Add('RegisterStatsConversions', 'AddKingmakerStatConversions', function()
+    GAMEMODE:AddStatConversion('Points', 'King Score', 0.05)
+    GAMEMODE:AddStatConversion('Regicide', 'Regicide', 2)
+end)

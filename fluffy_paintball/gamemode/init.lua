@@ -190,3 +190,8 @@ hook.Add('PostPlayerDeath', 'PaintballSpawnGhost', function(ply)
     ply:SetEyeAngles(ply.DeathAng)
     GAMEMODE:SetPlayerGhost(ply)
 end)
+
+-- Register XP for Paintball
+hook.Add('RegisterStatsConversions', 'AddPaintballStatConversions', function()
+    GAMEMODE:AddStatConversion('Weapons Collected', 'Weapons Collected', 0.25)
+end)

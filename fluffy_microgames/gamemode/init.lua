@@ -47,7 +47,7 @@ function GM:PreStartRound()
         
         if v:Team() == TEAM_SPECTATOR then return end
         if not v:Alive() then v:Spawn() end
-        v:AddStatPoints('RoundsPlayed', 1)
+        v:AddStatPoints('Rounds Played', 1)
     end
     
     -- Start the round after a short cooldown

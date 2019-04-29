@@ -60,13 +60,13 @@ hook.Add('RoundEnd', 'ClimbHeightPoints', function()
         if v.BestHeight then
             local ratio = v.BestHeight/GAMEMODE.CurrentHeight
             local p = math.Clamp(math.floor(ratio * 100), 0, 100)
-            v:AddStatPoints('ClimbHeight', p)
+            v:AddStatPoints('Distance', p)
             v:AddFrags(math.floor(p/10))
         end
         
         if v:Alive() and not v.Spectating then
             v:AddFrags(1)
-            v:AddStatPoints('SurvivedRounds', 1)
+            v:AddStatPoints('Survived Rounds', 1)
         end
     end
 end)
@@ -82,3 +82,8 @@ function GM:ClimbVictory(ply)
     
     GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5, Vector(0, 0, 72))
 end
+
+-- Register XP for Paintball
+hook.Add('RegisterStatsConversions', 'AddClimbStatConversions', function()
+    GAMEMODE:AddStatConversion('Distance', 'Distance Climbed', 0.01)
+end)
