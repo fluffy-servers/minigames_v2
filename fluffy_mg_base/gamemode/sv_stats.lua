@@ -6,6 +6,15 @@
 ]]--
 GM.StatsTracking = {}
 
+-- Prepare some prepared queries to make database stuff faster and more secure
+hook.Add('InitPostEntity', 'PrepareStatsStuff', function()
+	local db = GAMEMODE:CheckDBConnection()
+    if not db then return end
+	GAMEMODE.MinigamesPQueries['getstats'] = db:prepare("SELECT stats FROM stats_minigames WHERE `steamid64` = ? AND `gamemode` = ?;")
+	GAMEMODE.MinigamesPQueries['addnewstats'] = db:prepare('INSERT INTO stats_minigames VALUES(?, ?, "{}");')
+	GAMEMODE.MinigamesPQueries['updatestats'] = db:prepare("UPDATE stats_minigames SET `stats` = ? WHERE `steamid64` = ? AND `gamemode` = ?;")
+end)
+
 -- Add some points to a given statistic
 function GM:AddStatPoints(ply, stat, amount)
     -- Create player index if not there
@@ -68,4 +77,78 @@ end
 
 function meta:AddStatPoints(stat, amount)
     return GAMEMODE:AddStatPoints(self, stat, amount)
+end
+
+function meta:LoadStatsFromDB()
+    if not self:SteamID64() or self:IsBot() then return end
+    local ply = self
+    
+    -- Prepare the query
+    local q = GAMEMODE.MinigamesPQueries['getstats']
+	if not q then return end
+    q:setString(1, self:SteamID64())
+    q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+    
+    -- Success function
+    function q:onSuccess(data)
+        if type(data) == 'table' and #data > 0 then
+            -- Load information from DB
+            ply.GamemodeDBStatsTable = util.JSONToTable(data[1]['stats'])
+        else
+            -- Add new blank row into the table
+            local q = GAMEMODE.MinigamesPQueries['addnewstats']
+            q:setString(1, ply:SteamID64())
+            q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+            function q:onError(err)
+                print(err)
+            end
+            q:start()
+            
+            ply.GamemodeDBStatsTable = {}
+        end
+    end
+    
+    -- Print error if any occur (they shouldn't)
+    function q:onError(err)
+        print(err)
+    end
+    q:start()
+end
+
+function meta:UpdateStatsToDB()
+    if not self:SteamID64() or self:IsBot() then return end
+    local ply = self
+    
+    -- Copy the current gamemode stats table
+    -- Then add any new data to the table
+    if not ply.GamemodeDBStatsTable then return end
+    local new_table = table.Copy(ply.GamemodeDBStatsTable)
+    for k,v in pairs(self:GetStatTable()) do
+        if not new_table[k] then
+            new_table[k] = v
+        else
+            new_table[k] = new_table[k] + v
+        end
+    end
+    
+    -- Convert table to json form
+    local json = util.TableToJSON(new_table, false)
+    
+    -- Prepare the query
+    local q = GAMEMODE.MinigamesPQueries['updatestats']
+	if not q then return end
+    q:setString(1, json)
+    q:setString(2, self:SteamID64())
+    q:setString(3, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+    
+    -- Success function
+    function q:onSuccess(data)
+        -- done
+    end
+    
+    -- Print error if any occur (they shouldn't)
+    function q:onError(err)
+        print(err)
+    end
+    q:start()
 end
