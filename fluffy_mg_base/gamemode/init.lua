@@ -170,7 +170,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
+    GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
@@ -331,7 +331,7 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)
-    GAMEMODE:AddStatPoints(attacker, 'kills', 1)
+    GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
     
     if GAMEMODE.TeamBased then
         -- Add the kill to the team

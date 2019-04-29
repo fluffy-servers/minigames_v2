@@ -101,7 +101,7 @@ function GM:PreStartRound()
         v.FFAKills = 0
         
         if (not GAMEMODE.TeamBased) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
-            v:AddStatPoints('RoundsPlayed', 1)
+            v:AddStatPoints('Rounds Played', 1)
         end
     end
     
@@ -203,19 +203,19 @@ end)
 function GM:StatsRoundWin(winners)
     if IsEntity(winners) then
         if winners:IsPlayer() then
-            winners:AddStatPoints('RoundWins', 1)
+            winners:AddStatPoints('Rounds Won', 1)
         end
     elseif type(winners) == 'number' then
         if winners > 0 then
             for k,v in pairs(team.GetPlayers(winners)) do
-                v:AddStatPoints('RoundWins', 1)
+                v:AddStatPoints('Rounds Won', 1)
             end
         end
     elseif type(winners) == 'table' then
         for k,v in pairs(winners) do
             if not IsEntity(v) then continue end
             if not v:IsPlayer() then continue end
-            v:AddStatPoints('RoundWins', 1)
+            v:AddStatPoints('Rounds Won', 1)
         end
     end
 end
