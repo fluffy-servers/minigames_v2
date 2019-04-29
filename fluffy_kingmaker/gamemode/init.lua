@@ -59,8 +59,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         attacker:SetNWBool('IsKing', true)
         attacker:SetNWInt('KingPoints', attacker:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
-        attacker:AddStatPoints('KingPoints', 1)
-        attacker:AddStatPoints('KingEliminations', 1)
+        attacker:AddStatPoints('Points', 1)
+        attacker:AddStatPoints('Regicide', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
@@ -73,7 +73,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         attacker:SetNWBool('IsKing', true)
         attacker:SetNWInt('KingPoints', attacker:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
-        attacker:AddStatPoints('KingPoints', 1)
+        attacker:AddStatPoints('Points', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
@@ -84,7 +84,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
+    ply:AddStatPoints('Death', 1)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
@@ -108,6 +108,7 @@ hook.Add('Think', 'KingTimer', function()
         if IsValid(GAMEMODE.CurrentKing) then
             GAMEMODE.CurrentKing:AddFrags(1)
             GAMEMODE.CurrentKing:SetNWInt('KingPoints', GAMEMODE.CurrentKing:GetNWInt('KingPoints', 0) + 1)
+            GAMEMODE.CurrentKing:AddStatPoints('Points', 1)
             GAMEMODE.CurrentKing:EmitSound("npc/roller/code2.wav")
             GAMEMODE.LastKingThink = CurTime()
         end
