@@ -111,6 +111,7 @@ function GM:StartVoting()
             net.WriteTable(tbl)
         net.Send(v)
         v:ProcessLevels()
+        v:UpdateStatsToDB()
     end
     
     -- 30 seconds of voting time
