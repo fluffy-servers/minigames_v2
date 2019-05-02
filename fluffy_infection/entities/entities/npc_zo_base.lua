@@ -1,6 +1,10 @@
 AddCSLuaFile()
 ENT.Base = 'base_nextbot'
 
+if CLIENT then
+    language.Add('npc_skeleton_gold', 'Zombie' )
+end
+
 -- Speed
 ENT.Speed = 100
 ENT.WalkSpeedAnimation = 2
@@ -25,7 +29,7 @@ ENT.AttackRange = 60
 ENT.NextAttack = 1.3
 
 -- Model & Animations
-ENT.Model = "models/player/skeleton.mdl"
+ENT.Model = "models/player/zombie_classic.mdl"
 ENT.AttackAnim = (ACT_GMOD_GESTURE_RANGE_ZOMBIE)
 ENT.WalkAnim = (ACT_HL2MP_WALK_ZOMBIE_01) -- { (ACT_HL2MP_RUN_ZOMBIE), (ACT_HL2MP_WALK_ZOMBIE_03) }
 ENT.FlinchAnim = (ACT_HL2MP_ZOMBIE_SLUMP_RISE)
@@ -89,6 +93,12 @@ function ENT:CollisionSetup(side, height, group)
     self.NEXTBOT = true
 end
 
+function ENT:GetPlayerColor()
+    if not self.Color then return end
+    local c = self.Color
+    return Vector(c.r/255, c.g/255, c.b/255)
+end
+
 -- Useful function to set up movement animations
 function ENT:MovementFunctions(type, act, speed, rate)
     if type == 1 then
@@ -133,17 +143,24 @@ end
 
 -- Search for a new enemy for this NPC
 function ENT:FindEnemy()
-    local ents = ents.FindInSphere(self:GetPos(), self.SearchRadius)
-    for k, v in pairs(ents) do
-        if v:IsPlayer() then
-            self:SetEnemy(v)
-            return true
-        end
+    local players = team.GetPlayers(TEAM_BLUE)
+    local distances = {}
+    
+    for k,v in pairs(players) do
+        if v.Spectating then continue end
+        table.insert(distances, {v, self:GetPos():DistToSqr(v:GetPos())})
     end
     
-    -- No players found
-    self:SetEnemy(nil)
-    return false
+    -- Sort players based on distance
+    if distances and #distances >= 1 then
+        table.sort(distances, function(a, b) return a[2] < b[2] end)
+    else
+        self:SetEnemy(nil)
+        return false
+    end
+    
+    self:SetEnemy(distances[1][1])
+    return true
 end
 
 function ENT:DistanceToEnemy(enemy)
@@ -175,7 +192,7 @@ end
 
 -- hi my name is zombie i'm lazy
 function ENT:Idle()
-    self:MovementFunctions(1, ACT_HL2MP_WALK_ZOMBIE_01, 0, 0)
+    self:MovementFunctions(1, self.WalkAnim, 0, 1)
     self:MoveToPos(self:GetPos() + Vector(math.random(-512, 512), math.random(-512, 512), 0), {repath=3, maxage=5})
 end
 
@@ -214,6 +231,11 @@ function ENT:ChaseEnemy()
             end
         end
         
+        -- Check the enemy every so often
+        if math.random() > 0.5 then
+            self:FindEnemy()
+        end
+        
         self:CheckTrace()
         coroutine.yield()
     end
@@ -228,6 +250,18 @@ function ENT:CheckRange(enemy)
     if self:HaveEnemy() and self:GetEnemy():Alive() then
         if distance < self.AttackRange then
             self:Attack()
+        end
+    end
+end
+
+function ENT:OnInjured(info)
+    if not self:HaveEnemy() then return end
+    if info:GetAttacker() == self:GetEnemy() then return end
+    
+    if info:GetAttacker():IsPlayer() then
+        local attacker = info:GetAttacker()
+        if self:GetPos():DistToSqr(attacker:GetPos()) < self:GetPos():DistToSqr(self:GetEnemy():GetPos()) then
+            self:SetEnemy(attacker)
         end
     end
 end
