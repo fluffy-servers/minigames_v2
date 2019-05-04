@@ -18,6 +18,6 @@ ENT.Model = "models/player/skeleton.mdl"
 ENT.BaseHealth = 200
 ENT.Damage = 25
 ENT.ModelScale = 1.25
-ENT.BoldColor = Color(255, 255, 0)
+ENT.BoldColor = Color(212, 175, 55)
 
 ENT.CollisionSide = 10
