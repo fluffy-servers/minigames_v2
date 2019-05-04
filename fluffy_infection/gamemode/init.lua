@@ -18,7 +18,7 @@ function GM:PlayerLoadout( ply )
         ply:GiveAmmo(512, 'Buckshot', true)
         ply:GiveAmmo(1024, 'SMG1', true)
         
-        ply:SetRunSpeed(300)
+        ply:SetRunSpeed(225)
         ply:SetWalkSpeed(200)
         ply:SetBloodColor(BLOOD_COLOR_RED)
     elseif ply:Team() == TEAM_RED then

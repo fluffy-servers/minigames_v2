@@ -6,7 +6,7 @@ if CLIENT then
 end
 
 -- Speed
-ENT.Speed = 100
+ENT.Speed = 200
 ENT.WalkSpeedAnimation = 2
 ENT.Acceleration = 25
 ENT.MoveType = 1
@@ -78,6 +78,8 @@ function ENT:Initialize()
     self:SetHealth(self.BaseHealth)
     self:CollisionSetup(self.CollisionSide, self.CollisionHeight, COLLISION_GROUP_PLAYER)
     self:SetModelScale(self.ModelScale or 1)
+    
+    if self.BoldColor then self:SetColor(self.BoldColor) end
     
     if CLIENT then return end
     self.loco:SetDesiredSpeed(self.Speed)

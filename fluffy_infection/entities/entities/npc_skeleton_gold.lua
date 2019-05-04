@@ -8,7 +8,7 @@ if CLIENT then
 end
 
 -- Speed
-ENT.Speed = 240
+ENT.Speed = 225
 ENT.WalkSpeedAnimation = 0.6
 ENT.Acceleration = 200
 ENT.MoveType = 1
@@ -18,6 +18,6 @@ ENT.Model = "models/player/skeleton.mdl"
 ENT.BaseHealth = 200
 ENT.Damage = 25
 ENT.ModelScale = 1.25
-ENT.Color = Color(255, 255, 0)
+ENT.BoldColor = Color(255, 255, 0)
 
 ENT.CollisionSide = 10
