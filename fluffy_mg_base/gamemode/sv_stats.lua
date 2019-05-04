@@ -64,6 +64,36 @@ function GM:GetStatWinner(stat)
     return {winning_player, highest_score}
 end
 
+-- Generate a table of scores for each stat
+function GM:GenerateStatisticsTable()
+    if not GAMEMODE.StatConversions then return end
+    
+    -- Iterate over all the stat types to generate the table
+    local tbl = {}
+    for stat,_ in pairs(GAMEMODE.StatConversions) do
+        if stat == 'Deaths' or stat == 'Rounds Played' then continue end
+        local passed = false
+        local stat_tbl = {}
+        
+        -- Get the results for each player
+        for k,v in pairs(player.GetAll()) do
+            local value = v:GetStat(stat) or 0
+            table.insert(stat_tbl, {v, value})
+            
+            if value > 0 then
+                passed = true
+            end
+        end
+        
+        -- Sort & store if there is at least one non-zero value
+        if passed then
+            table.sort(stat_tbl, function(a, b) return a[2] > b[2] end)
+            tbl[stat] = stat_tbl
+        end
+    end
+    return tbl
+end
+
 -- Meta functions for player stats
 -- Call the corresponding functions above - see those for more information
 local meta = FindMetaTable("Player")

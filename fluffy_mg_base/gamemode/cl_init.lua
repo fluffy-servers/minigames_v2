@@ -42,6 +42,12 @@ surface.CreateFont("FS_60", {
 	font = "Coolvetica",
 	size = 48, -- hmmm
 })
+
+surface.CreateFont("FS_56", {
+	font = "Coolvetica",
+	size = 56,
+})
+
 surface.CreateFont("FS_64", {
 	font = "Coolvetica",
 	size = 64,

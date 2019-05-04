@@ -28,8 +28,9 @@ AddCSLuaFile('sh_levels.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
-resource.AddFile('resource/fonts/BebasKai.ttf')
-resource.AddFile('resource/fonts/LemonMilk.ttf')
+resource.AddFile('gamemodes/fluffy_mg_base/content/resource/fonts/BebasKai.ttf')
+resource.AddFile('gamemodes/fluffy_mg_base/content/resource/fonts/LemonMilk.ttf')
+resource.AddFile('gamemodes/fluffy_mg_base/content/materials/fluffy/pattern1.png')
 
 -- Include useful server files
 include('shared.lua')
