@@ -122,8 +122,9 @@ end)
 -- Stat Tracking for Zombie kills
 hook.Add('OnNPCKilled', 'ZombieKilledStats', function(npc, attacker, inflictor)
     local class = npc:GetClass() -- not yet relevant
-    if attacker:IsPlayer() then
+    if attacker:IsPlayer() and attacker:Team() == TEAM_BLUE then
         attacker:AddStatPoints('Zombies Killed', 1)
+        attacker:AddFrags(1)
     end
 end)
 
