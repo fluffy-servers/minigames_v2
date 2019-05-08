@@ -69,6 +69,7 @@ ENT.PainSounds = {
     Sound("npc/zombie/zombie_pain5.wav")
 }
 
+-- More sound
 ENT.HitSound = Sound("npc/zombie/claw_strike1.wav")
 ENT.Miss = Sound("npc/zombie/claw_miss1.wav")
 ENT.DoorBreak = Sound("npc/zombie/zombie_pound_door.wav")
@@ -88,6 +89,7 @@ function ENT:Initialize()
     self:SetMaxHealth(self.BaseHealth) -- idk why this isn't clientside but hey, not my fault
 end
 
+-- Create the collisions for this entity
 function ENT:CollisionSetup(side, height, group)
     self:SetCollisionGroup(group)
     self:SetCollisionBounds(Vector(-side, -side, 0), Vector(side, side, height))
@@ -95,6 +97,7 @@ function ENT:CollisionSetup(side, height, group)
     self.NEXTBOT = true
 end
 
+-- Color the playermodel if set
 function ENT:GetPlayerColor()
     if not self.Color then return end
     local c = self.Color
@@ -148,6 +151,7 @@ function ENT:FindEnemy()
     local players = team.GetPlayers(TEAM_BLUE)
     local distances = {}
     
+    -- Get how far away every living player is
     for k,v in pairs(players) do
         if v.Spectating then continue end
         table.insert(distances, {v, self:GetPos():DistToSqr(v:GetPos())})
@@ -161,13 +165,22 @@ function ENT:FindEnemy()
         return false
     end
     
+    -- Target the closest player
     self:SetEnemy(distances[1][1])
     return true
 end
 
 function ENT:DistanceToEnemy(enemy)
+    -- Return the distance to a given enemy
+    -- This is inefficent! See the below functon
     local enemy = enemy or self:GetEnemy()
     return self:GetPos():Distance(enemy:GetPos())
+end
+
+function ENT:DistSqrToEnemy(enemy)
+    -- More efficient distance check
+    local enemy = enemy or self:GetEnemy()
+    return self:GetPos():DistToSqr(enemy:GetPos())
 end
 
 -- Determine what activities to do
@@ -242,10 +255,10 @@ function ENT:ChaseEnemy()
         coroutine.yield()
     end
     
-    print('done chase')
     return true
 end
 
+-- Check if the zombie is close enough to attack the enemy
 function ENT:CheckRange(enemy)
     local distance = self:DistanceToEnemy(enemy)
     
@@ -260,6 +273,9 @@ function ENT:OnInjured(info)
     if not self:HaveEnemy() then return end
     if info:GetAttacker() == self:GetEnemy() then return end
     
+    -- If the person that hurt the zombie is closer than our current enemy
+    -- then target the person that attacked us instead
+    -- This could probably be abused in some way so might need some reworking but it works quite well
     if info:GetAttacker():IsPlayer() then
         local attacker = info:GetAttacker()
         if self:GetPos():DistToSqr(attacker:GetPos()) < self:GetPos():DistToSqr(self:GetEnemy():GetPos()) then
@@ -268,12 +284,16 @@ function ENT:OnInjured(info)
     end
 end
 
+-- Perform a trace to do attacking stuff
 function ENT:CheckTrace()
     if (self.NextAttackTime or 0) > CurTime() then return end
     
     local mins = self:OBBMins()
     local maxs = self:OBBMaxs()
     
+    -- Perform a hull trace about the size of ourselves
+    -- This should reasonably accurately check for obstructions
+    -- allowing the zombie to deal with them quite easily
     local tr = util.TraceHull({
         mins = mins,
         maxs = maxs,
@@ -282,6 +302,8 @@ function ENT:CheckTrace()
         filter = self
     })
     
+    -- Attack anything that stands in our way
+    -- Seperates this into seperate functions based on entity data
     if not tr.Hit or tr.HitWorld then return false end
     local ent = tr.Entity
     if ent:IsPlayer() then
@@ -297,33 +319,45 @@ function ENT:CheckTrace()
     end
 end
 
+-- Attack function for player entities
 function ENT:AttackPlayer(ent)
     if not IsValid(ent) then return end
+    
+    -- Slightly different code for our enemy vs. players that get in our way
     if ent == self:GetEnemy() then
         self:AttackSound()
         self.IsAttacking = true
         self:RestartGesture(self.AttackAnim)
         self:AttackEffect(0.9, self.Enemy, self.Damage, 0)
     else
+        -- Basic attack sound and effect
         self:AttackSound()
         self:AttackEffect(0.9, ent, self.Damage, 0)
     end
+    
+    -- Attack cooldown
     self.NextAttackTime = CurTime() + self.NextAttack
 end
 
+-- Attack function for prop_door_rotating entities
 function ENT:AttackDoor(v)
     if not IsValid(v) then return end
+    
+    -- Assign health to doors
     if v.DoorHealth == nil then
         v.DoorHealth = math.random(50, 100)
     end
     
     if v.DoorHealth > 0 then
+        -- Deal damage to the door with a basic attack
         self:AttackSound()
         self:RestartGesture(self.AttackAnim)  
         self:AttackEffect(0.9, v, self.Damage, 2)
         v:EmitSound(self.DoorBreak)
         v.DoorHealth = v.DoorHealth - self.Damage
     else
+        -- Break the door off the hinges
+        -- This creates a prop_physics that imitates the door
         local door = ents.Create("prop_physics")
         if not door then return end
         door:SetModel(v:GetModel())
@@ -333,21 +367,25 @@ function ENT:AttackDoor(v)
 		door:SetColor(v:GetColor())
         door:Spawn()
         door:EmitSound("Wood_Plank.Break")
-        door:SetCollisionGroup(COLLISION_GROUP_DEBRIS)
+        door:SetCollisionGroup(COLLISION_GROUP_DEBRIS) -- stop collisions
         door.FakeProp = true
         
+        -- Send the door flying
         local phys = door:GetPhysicsObject()
         if phys:IsValid() then phys:ApplyForceCenter(self:GetForward():GetNormalized()*20000 + Vector(0, 0, 2)) end
         SafeRemoveEntity(v)
     end
     
+    -- Attack cooldown
     self.NextAttackTime = CurTime() + self.NextAttack
 end
 
+-- Generic attack function
 function ENT:AttackObject(v)
     if not IsValid(v) then return end
     if v.FakeProp then return end
     
+    -- Basic attack stuff
     self:AttackSound()
     self:RestartGesture(self.AttackAnim)  
     self:AttackEffect(0.9, v, self.Damage, 1)
@@ -355,23 +393,29 @@ function ENT:AttackObject(v)
     self.NextAttackTime = CurTime() + self.NextAttack
     
     if v:Health() > 0 then
+        -- Deal health damage to the entity
         v.Damaged = true
-        v:SetHealth( v:Health() - self.Damage )
+        v:SetHealth(v:Health() - self.Damage)
     else
         if !v.Damaged then
+            -- ?
             v.Damaged = true
             v:SetHealth(50)
         else
-            v:GibBreakClient( Vector(0, 0, 0) )
+            -- Break the entity into gibs
+            v:GibBreakClient(Vector(0, 0, 0))
             v:Remove()
         end
     end
 end
 
+-- Attack function for breakable windows
 function ENT:AttackWindow(ent)
+    -- func_breakable_surf should be shattered
     ent:Fire('shatter', '1 1 1', 0)
 end
 
+-- Basic attack effects - shared between the above functions
 function ENT:AttackEffect(time, ent, dmg, type)
     timer.Simple(time, function()
         if not self:IsValid() then return end
@@ -379,19 +423,25 @@ function ENT:AttackEffect(time, ent, dmg, type)
         
         if not ent:IsValid() then return end
         if self:DistanceToEnemy(ent) < self.AttackRange then
+            -- Apply damage
             ent:TakeDamage(self.Damage, self)
+            
+            -- Emit the player damage sound for living things
             if ent:IsPlayer() or ent:IsNPC() then
                 self:EmitSound(self.HitSound)
             end
             
+            -- View punch the player
             if ent:IsPlayer() then
                 ent:ViewPunch(Angle(math.random(-1, 1)*self.Damage*0.1, math.random(-1, 1)*self.Damage*0.1, math.random(-1, 1)*self.Damage*0.1))
             end
         else
+            -- Missed! Play a miss sound effect
             self:EmitSound(self.Miss)
         end
     end)
     
+    -- Reset the attacking after half a second delay
     timer.Simple(time + 0.5, function()
         if not self:IsValid() then return end
         self.IsAttacking = false
@@ -407,20 +457,20 @@ end
 
 function ENT:AttackSound()
     -- Play an attack sound
-    self:PlaySound( table.Random(self.AttackSounds) )
+    self:PlaySound(table.Random(self.AttackSounds))
 end
 
 function ENT:IdleSound()
     -- Play an idle sound
-    self:PlaySound( table.Random(self.IdleSounds) )
+    self:PlaySound(table.Random(self.IdleSounds))
 end
 
 function ENT:DamageSound()
     -- Play a damage sound
-    self:PlaySound( table.Random(self.PainSounds) )
+    self:PlaySound(table.Random(self.PainSounds))
 end
 
 function ENT:AlertSound()
     -- Play alert sound
-    self:PlaySound( table.Random(self.AlertSounds) )
+    self:PlaySound(table.Random(self.AlertSounds))
 end
