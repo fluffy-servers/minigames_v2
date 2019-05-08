@@ -84,7 +84,7 @@ function ENT:Initialize()
     
     if CLIENT then return end
     self.loco:SetDesiredSpeed(self.Speed)
-    self.loco:SetAcceleration(self.Acceleration)
+    self.loco:SetAcceleration(self.Acceleration * 2)
     self.loco:SetDeceleration(self.Acceleration * 8)
     self:SetMaxHealth(self.BaseHealth) -- idk why this isn't clientside but hey, not my fault
 end
@@ -151,6 +151,8 @@ function ENT:FindEnemy()
     local players = team.GetPlayers(TEAM_BLUE)
     local distances = {}
     
+    --if self:HaveEnemy() and self:DistSqrToEnemy() < 500000 then return true end
+    
     -- Get how far away every living player is
     for k,v in pairs(players) do
         if v.Spectating then continue end
@@ -207,6 +209,7 @@ end
 
 -- hi my name is zombie i'm lazy
 function ENT:Idle()
+    self.loco:SetDesiredSpeed(self.Speed)
     self:MovementFunctions(1, self.WalkAnim, 0, 1)
     self:MoveToPos(self:GetPos() + Vector(math.random(-512, 512), math.random(-512, 512), 0), {repath=3, maxage=5})
 end
@@ -215,10 +218,11 @@ end
 function ENT:ChaseEnemy()
     local enemy = self:GetEnemy()
     local pos = enemy:GetPos()
+    self.loco:SetDesiredSpeed(self.Speed)
     self:MovementFunctions(1, self.WalkAnim, 0, 1)
     
     -- Pathing stuff?
-    local path = Path('Follow')
+    local path = Path('Chase')
     path:SetMinLookAheadDistance(300)
     path:SetGoalTolerance(20)
     local result = path:Compute(self, pos)
@@ -228,7 +232,7 @@ function ENT:ChaseEnemy()
         if path:GetAge() > 1 then
             path:Compute(self, self:GetEnemy():GetPos())
         end
-        path:Update(self)
+        path:Chase(self, self:GetEnemy())
         --path:Draw()
         
         -- Ensure we are not stuck
@@ -247,7 +251,7 @@ function ENT:ChaseEnemy()
         end
         
         -- Check the enemy every so often
-        if math.random() > 0.5 then
+        if math.random() > 0.95 then
             self:FindEnemy()
         end
         
