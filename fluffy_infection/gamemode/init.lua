@@ -26,9 +26,9 @@ function GM:PlayerLoadout( ply )
         -- Initial infected are stronger but slower
         ply:SetBloodColor(BLOOD_COLOR_GREEN)
         ply:Give('weapon_fists')
-        ply:SetMaxHealth(200)
-        ply:SetHealth(200)
-        ply:SetRunSpeed(400)
+        ply:SetMaxHealth(125)
+        ply:SetHealth(125)
+        ply:SetRunSpeed(300)
         ply:SetWalkSpeed(250)
     end
 end
@@ -36,7 +36,7 @@ end
 -- Pick player models
 function GM:PlayerSetModel( ply )
     if ply:Team() == TEAM_RED then
-        ply:SetModel("models/player/zombie_soldier.mdl")
+        ply:SetModel("models/player/zombie_classic.mdl")
     else
         GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
@@ -60,6 +60,9 @@ hook.Add('PreRoundStart', 'InfectionResetPlayers', function()
         if v:Team() == TEAM_SPECTATOR then continue end
         v:SetTeam(TEAM_BLUE)
     end
+    
+    GAMEMODE.WaveNumber = 1
+    GAMEMODE.WaveTimer = 0
 end)
 
 -- Stop Zombies from switching back to the other team

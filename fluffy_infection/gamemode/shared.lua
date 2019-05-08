@@ -21,7 +21,7 @@ TEAM_BLUE = 2
 GM.TeamBased = true
 GM.TeamSurvival = false
 
-GM.RoundNumber = 20 -- How many rounds?
+GM.RoundNumber = 5 -- How many rounds?
 GM.RoundTime = 180 -- How long should each round go for?
 
 GM.CanSuicide = false -- Should players be able to die at will? :(
