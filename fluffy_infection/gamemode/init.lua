@@ -61,7 +61,7 @@ hook.Add('PreRoundStart', 'InfectionResetPlayers', function()
         v:SetTeam(TEAM_BLUE)
     end
     
-    GAMEMODE.WaveNumber = 1
+    GAMEMODE.WaveNumber = 0
     GAMEMODE.WaveTimer = 0
 end)
 

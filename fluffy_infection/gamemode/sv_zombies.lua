@@ -55,11 +55,13 @@ hook.Add('Think', 'ZombieTimer', function()
     if not GAMEMODE.WaveTimer then GAMEMODE.WaveTimer = 0 end
     if not GAMEMODE.WaveNumber then GAMEMODE.WaveNumber = 1 end
     
+    if GAMEMODE.WaveNumber > #GAMEMODE.Waves then return end
+    GAMEMODE.WaveNumber = GAMEMODE.WaveNumber + 1
+    
     if GAMEMODE.WaveTimer < CurTime() then
         GAMEMODE:PulseAnnouncement(2, 'Wave ' .. GAMEMODE.WaveNumber, 1)
 
         GAMEMODE.WaveTimer = CurTime() + 15
-        GAMEMODE.WaveNumber = GAMEMODE.WaveNumber + 1
         local wave = GAMEMODE.Waves[GAMEMODE.WaveNumber]
         local wavescale = GAMEMODE:WaveScaler(GAMEMODE.WaveNumber)
         local playercount = math.Clamp(team.NumPlayers(TEAM_BLUE), 1, 5)
