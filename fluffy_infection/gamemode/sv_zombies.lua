@@ -26,19 +26,51 @@ function GM:CreateZombie(ztype)
     print('made a zombie!')
 end
 
+GM.Waves = {
+    {'npc_zo_base', 'npc_zo_base', 'npc_zo_base'},
+    {'npc_zo_base', 'npc_zo_base', 'npc_zombie_fast', 'npc_skeleton'},
+    {'npc_zo_base', 'npc_zombie_fast', 'npc_zombie_fast', 'npc_skeleton'},
+    {'npc_zombie_fast', 'npc_zombie_boom', 'npc_skeleton', 'npc_skeleton'},
+    {'npc_zombie_boom', 'npc_zombie_corpse', 'npc_skeleton', 'npc_skeleton_mini'},
+    {'npc_zombie_boom', 'npc_zombie_corpse', 'npc_skeleton_mini', 'npc_skeleton_mini'},
+    {'npc_skeleton', 'npc_skeleton', 'npc_skeleton_mini', 'npc_skeleton_gold'},
+    {'npc_zombie_corpse', 'npc_zombie_corpse', 'npc_zombie_boom', 'npc_zombie_shadow'},
+    {'npc_skeleton_gold', 'npc_skeleton_gold', 'npc_zombie_fast', 'npc_zombie_fast'},
+    {'npc_zombie_shadow', 'npc_zombie_shadow', 'npc_skeleton_gold', 'npc_skeleton_gold'},
+}
+
+function GM:WaveScaler(wave)
+    if wave <= 3 then
+        return 3
+    elseif wave <= 6 then
+        return 4
+    else
+        return 6
+    end
+end
+
 hook.Add('Think', 'ZombieTimer', function()
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     
     if not GAMEMODE.WaveTimer then GAMEMODE.WaveTimer = 0 end
+    if not GAMEMODE.WaveNumber then GAMEMODE.WaveNumber = 1 end
+    
     if GAMEMODE.WaveTimer < CurTime() then
-        print('Spawning wave..')
-        GAMEMODE.WaveTimer = CurTime() + math.random(15, 30)
+        GAMEMODE:PulseAnnouncement(2, 'Wave ' .. GAMEMODE.WaveNumber, 1)
+
+        GAMEMODE.WaveTimer = CurTime() + 15
+        GAMEMODE.WaveNumber = GAMEMODE.WaveNumber + 1
+        local wave = GAMEMODE.Waves[GAMEMODE.WaveNumber]
+        local wavescale = GAMEMODE:WaveScaler(GAMEMODE.WaveNumber)
+        local playercount = math.Clamp(team.NumPlayers(TEAM_BLUE), 1, 5)
         
-        for i=1,5 do
-            local type = 'npc_zo_base'
-            local r = math.random()
-            if r > 0.8 then type = 'npc_skeleton_gold' elseif r > 0.5 then type = 'npc_skeleton' end
-            GAMEMODE:CreateZombie(type)
+        for wi=1, wavescale do
+            timer.Simple(wavescale/10, function()
+                for i=1, playercount do
+                    local type = table.Random(wave)
+                    GAMEMODE:CreateZombie(type)
+                end
+            end)
         end
     end
 end)
