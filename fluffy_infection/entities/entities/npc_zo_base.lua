@@ -269,6 +269,7 @@ function ENT:CheckRange(enemy)
     end
 end
 
+-- Handles when the zombie is injured
 function ENT:OnInjured(info)
     if not self:HaveEnemy() then return end
     if info:GetAttacker() == self:GetEnemy() then return end
@@ -282,6 +283,19 @@ function ENT:OnInjured(info)
             self:SetEnemy(attacker)
         end
     end
+end
+
+-- Called when the zombie is killed
+function ENT:OnKilled(info)
+    hook.Run('OnNPCKilled', self, info:GetAttacker(), info:GetInflictor()) -- Run the hook
+    
+    -- Create the ragdoll then remove after 5 seconds
+    local ragdoll = self:BecomeRagdoll(info)
+    timer.Simple(5, function()
+        if IsValid(ragdoll) then
+            ragdoll:Remove()
+        end
+    end)
 end
 
 -- Perform a trace to do attacking stuff
