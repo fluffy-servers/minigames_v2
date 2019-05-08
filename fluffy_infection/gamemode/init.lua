@@ -116,6 +116,19 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivorInfection', function(ply)
     end
 end)
 
+-- Stat Tracking for Zombie kills
+hook.Add('OnNPCKilled', 'ZombieKilledStats', function(npc, attacker, inflictor)
+    local class = npc:GetClass() -- not yet relevant
+    if attacker:IsPlayer() then
+        attacker:AddStatPoints('Zombies Killed', 1)
+    end
+end)
+
+-- 1XP for every 5 zombies defeated
+hook.Add('RegisterStatsConversions', 'AddInfectionStatConversions', function()
+    GAMEMODE:AddStatConversion('Zombies Killed', 'Zombies Killed', 0.2)
+end)
+
 hook.Add('EntityTakeDamage', 'FistsBuff', function(target, dmg)
     local wep = dmg:GetInflictor()
     if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
