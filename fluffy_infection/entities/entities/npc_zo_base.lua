@@ -2,7 +2,7 @@ AddCSLuaFile()
 ENT.Base = 'base_nextbot'
 
 if CLIENT then
-    language.Add('npc_skeleton_gold', 'Zombie' )
+    language.Add('npc_zo_base', 'Basic Zombie' )
 end
 
 -- Speed
