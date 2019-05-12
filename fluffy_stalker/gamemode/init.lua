@@ -78,8 +78,14 @@ function GM:PlayerInitialSpawn(ply)
     ply:SetTeam(TEAM_BLUE)
 end
 
+-- No fall damage
 function GM:GetFallDamage()
     return 0
+end
+
+-- Flashlight enabled for humans only
+function GM:PlayerSwitchFlashlight(ply, state)
+    return (ply:Team() == TEAM_BLUE)
 end
 
 -- Stop any form of team swapping in this gamemode
