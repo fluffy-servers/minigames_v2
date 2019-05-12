@@ -15,6 +15,8 @@ GM.WinBySurvival = true
 
 GM.DeathSounds = true
 
+GM.SpawnProtection = true -- Spawn protection enabled
+
 function GM:Initialize()
 
 end
