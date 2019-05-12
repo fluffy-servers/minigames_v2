@@ -120,8 +120,8 @@ function GM:SetPlayerUnGhost(ply)
     
     -- Reduce the timer as a penalty
     local starttime = ply:GetNWFloat('GhostStart')
-    local timetaken = CurTime() - starttime
-    ply.DeathTimer = (ply.DeathTimer or GAMEMODE.LifeTimer) - 2 - timetaken
+    --local timetaken = CurTime() - starttime
+    ply.DeathTimer = (ply.DeathTimer or GAMEMODE.LifeTimer) - 10--2 - timetaken
     
     -- Ungodmode after given time
     timer.Simple(3, function()
