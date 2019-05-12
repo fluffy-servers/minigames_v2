@@ -8,6 +8,7 @@ include('shared.lua')
 -- Makes the Stalker invisible and sets HP
 function GM:PlayerLoadout(ply)
     ply:StripWeapons()
+    ply:StripAmmo()
     
     if ply:Team() == TEAM_RED then
         -- Stalker loadout here
@@ -39,6 +40,11 @@ function GM:PlayerLoadout(ply)
         else
             ply:Give('weapon_pistol')
         end
+        
+        -- Some (but not a whole heap) of ammo for all the guns
+        ply:GiveAmmo(24, 'Pistol', true)
+        ply:GiveAmmo(60, 'SMG1', true)
+        ply:GiveAmmo(18, 'Buckshot', true)
     end
 end
 
