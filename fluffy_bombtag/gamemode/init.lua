@@ -100,6 +100,12 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
     for k,v in pairs(player.GetAll()) do
         if !v:Alive() or v == ply or v.Spectating then continue end
         v:AddFrags(1)
-        --GAMEMODE:AddStatPoints(v, 'bombtag_score', 1)
+        GAMEMODE:AddStatPoints(v, 'Explosions Survived', 1)
     end
 end
+
+-- Register XP for Bomb Tag
+hook.Add('RegisterStatsConversions', 'AddBombTagStatConversions', function()
+    GAMEMODE:AddStatConversion('Bomb Passes', 'Bomb Tagged', 0.5)
+    GAMEMODE:AddStatConversion('Explosions Survived', 'Explosions Survived', 0.25)
+end)
