@@ -32,13 +32,13 @@ function GM:HandleEndRound(reason)
     elseif type(reason) == 'Player' then
         -- Winning player gets 3 points
         reason:AddFrags(3)
-        GAMEMODE:AddStatPoints(reason, 'RoundWins', 1)
+        GAMEMODE:AddStatPoints(reason, 'Finished First', 1)
         
         -- Other survivors get 1 point
         if reason:Team() == TEAM_BLUE then
             team.AddScore(TEAM_BLUE, 1)
             for k,v in pairs( team.GetPlayers(TEAM_BLUE) ) do
-                GAMEMODE:AddStatPoints(v, 'survived_rounds', 1)
+                GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
                 if v != reason then v:AddFrags(1) end
             end
         end
@@ -52,3 +52,9 @@ end
 function GM:StatsRoundWin()
     -- Handled above
 end
+
+-- Register XP for Duck Hunt
+hook.Add('RegisterStatsConversions', 'AddDuckHuntStatConversions', function()
+    GAMEMODE:AddStatConversion('Finished First', 'Finished First', 5)
+    GAMEMODE:AddStatConversion('Runners Sniped', 'Runners Sniped', 0.5)
+end)
