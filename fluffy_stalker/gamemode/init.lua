@@ -93,7 +93,7 @@ end
 
 -- Flashlight enabled for humans only
 function GM:PlayerSwitchFlashlight(ply, state)
-    return (ply:Team() == TEAM_BLUE)
+    return (ply:Team() == TEAM_BLUE and not ply.Spectating)
 end
 
 -- Stop any form of team swapping in this gamemode
