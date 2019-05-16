@@ -55,9 +55,16 @@ function GM:PlayerSetModel( ply )
     if ply:Team() == TEAM_RED then
         ply:SetModel('models/player/soldier_stripped.mdl')
     else
-        ply:SetModel('models/player/combine_soldier_prisonguard.mdl')
+        ply:SetModel('models/player/police.mdl')
         --GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
+    
+    if not ply.FFAColor then
+        ply.FFAColor = HSVToColor(math.random(360), 1, 1)
+    end
+    
+    local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
+    ply:SetPlayerColor(c)
 end
 
 -- Make everyone start as a human
