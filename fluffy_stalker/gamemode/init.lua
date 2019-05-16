@@ -16,9 +16,9 @@ function GM:PlayerLoadout(ply)
         ply:SetRenderMode(RENDERMODE_TRANSALPHA)
         ply:SetWalkSpeed(500)
         ply:SetRunSpeed(500)
+        ply:SetJumpPower(500)
         
-        
-        local hp = 150 + math.Clamp(team.NumPlayers(TEAM_BLUE), 1, 16) * 10
+        local hp = 150 + math.Clamp(team.NumPlayers(TEAM_BLUE), 1, 16) * 35
         ply:SetHealth(hp)
         ply:SetMaxHealth(hp)
         ply:Give('weapon_fists')
@@ -29,6 +29,7 @@ function GM:PlayerLoadout(ply)
         
         ply:SetWalkSpeed(200)
         ply:SetRunSpeed(300)
+        ply:SetJumpPower(200)
         
         -- Pick from one of three random loadouts
         if math.random() > 0.8 then
@@ -42,9 +43,10 @@ function GM:PlayerLoadout(ply)
         end
         
         -- Some (but not a whole heap) of ammo for all the guns
-        ply:GiveAmmo(24, 'Pistol', true)
-        ply:GiveAmmo(60, 'SMG1', true)
-        ply:GiveAmmo(18, 'Buckshot', true)
+        ply:Give('weapon_stunstick')
+        ply:GiveAmmo(200, 'Pistol', true)
+        ply:GiveAmmo(120, 'SMG1', true)
+        ply:GiveAmmo(32, 'Buckshot', true)
     end
 end
 
@@ -54,7 +56,7 @@ function GM:PlayerSetModel( ply )
         ply:SetModel('models/player/soldier_stripped.mdl')
     else
         ply:SetModel('models/player/combine_soldier_prisonguard.mdl')
-        GAMEMODE.BaseClass:PlayerSetModel(ply)
+        --GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
 end
 
