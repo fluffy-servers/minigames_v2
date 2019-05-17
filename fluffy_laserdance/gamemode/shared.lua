@@ -25,3 +25,9 @@ GM.SpawnProtection = true
 function GM:Initialize()
 
 end
+
+-- Hide all Tracer and Trail cosmetics
+-- Part of the Laser Dance mechanics is the bright lasers everywhere
+hook.Add('ShouldDrawCosmetics', 'HideLaserDanceCosmetics', function(ply, ITEM)
+    if ITEM.Type == 'Tracer' or ITEM.Type == 'Trail' then return false end
+end)

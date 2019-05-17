@@ -29,3 +29,9 @@ function GM:CreateTeams()
 	team.SetUp(TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true)
 	team.SetSpawnPoint(TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_combine" }) 
 end
+
+-- Hide all cosmetics for the Stalker
+-- It'd be a bit sucky for the invisible man to have a very obvious top hat equipped
+hook.Add('ShouldDrawCosmetics', 'HideHunterCosmetics', function(ply, ITEM)
+    if ply:Team() == TEAM_RED then return false end
+end)

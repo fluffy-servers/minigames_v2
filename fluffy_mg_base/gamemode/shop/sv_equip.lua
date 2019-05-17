@@ -41,7 +41,7 @@ end
 function SHOP:WearTrail(ply, force)
     if ply.EquippedTrail then
         local ITEM = ply.EquippedTrail
-        if not GAMEMODE:ShouldDrawCosmetics(ply, ITEM) and not force then return end
+        if not GAMEMODE:DoCosmeticsCheck(ply, ITEM) and not force then return end
         ply.TrailEntity = util.SpriteTrail(ply, 0, ITEM.Color or color_white, false, 20, 2, 2.5, 0.1, ITEM.Material)
     end
 end
@@ -75,7 +75,7 @@ hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
 	local effect = ent:GetNWString('ShopTracerEffect')
 	if not effect then return end
     
-    if not GAMEMODE:ShouldDrawCosmetics(ent, {Type='Tracer'}) then return end
+    if not GAMEMODE:DoCosmeticsCheck(ent, {Type='Tracer'}) then return end
 	
 	data.Tracer = 1
 	data.TracerName = effect
