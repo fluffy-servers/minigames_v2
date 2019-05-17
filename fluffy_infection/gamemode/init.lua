@@ -42,43 +42,10 @@ function GM:PlayerSetModel( ply )
     end
 end
 
--- Humans can stil commit suicide
-function GM:CanPlayerSuicide(ply)
-   if ply:Team() == TEAM_RED then return false end
-   
-   return true
-end
-
--- Make new players join the Hunter team on connection
-function GM:PlayerInitialSpawn(ply)
-    ply:SetTeam(TEAM_RED)
-end
-
 -- Make everyone start as a human
 hook.Add('PreRoundStart', 'InfectionResetPlayers', function()
-    for k,v in pairs(player.GetAll()) do
-        if v:Team() == TEAM_SPECTATOR then continue end
-        v:SetTeam(TEAM_BLUE)
-    end
-    
     GAMEMODE.WaveNumber = 0
     GAMEMODE.WaveTimer = 0
-end)
-
--- Stop Zombies from switching back to the other team
-hook.Add('PlayerCanJoinTeam', 'StopZombieSwap', function(ply, team)
-    local current_team = ply:Team()
-    if current_team == TEAM_RED then
-        ply:ChatPrint('You cannot change teams currently')
-        return false
-    end 
-end)
-
--- Assign dead survivors to the hunter team
-hook.Add('PlayerDeath', 'InfectionDeath', function(ply)
-    if ply:Team() == TEAM_BLUE then
-        ply:SetTeam(TEAM_RED)
-    end
 end)
 
 -- Get the last player on the human team
@@ -105,19 +72,6 @@ function GM:CanRoundStart()
         return false
     end
 end
-
--- Last Survivor gets a message and a stat bonus
-hook.Add('DoPlayerDeath', 'AwardLastSurvivorInfection', function(ply)
-    if ply:Team() != TEAM_BLUE then return end
-    
-    local last_player = GAMEMODE:GetLastPlayer(ply)
-    if IsValid(last_player) and last_player != false then
-        -- Award the last survivor bonus
-        local name = string.sub(last_player:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8)
-        last_player:AddStatPoints('Last Survivor', 1)
-    end
-end)
 
 -- Stat Tracking for Zombie kills
 hook.Add('OnNPCKilled', 'ZombieKilledStats', function(npc, attacker, inflictor)

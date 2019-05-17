@@ -19,7 +19,9 @@ TEAM_BLUE = 2
 
 -- Configure teams for Hunter vs Hunted
 GM.TeamBased = true
-GM.TeamSurvival = false
+GM.TeamSurvival = true
+GM.SurvivorTeam = TEAM_BLUE
+GM.HunterTeam = TEAM_RED
 
 GM.RoundNumber = 5 -- How many rounds?
 GM.RoundTime = 180 -- How long should each round go for?
