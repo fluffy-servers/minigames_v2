@@ -107,10 +107,13 @@ function GM:StartVoting()
     -- Handle the stats queue
     for k,v in pairs(player.GetAll()) do
         local tbl = v:ConvertStatsToExperience()
+        local tbl2 = GAMEMODE:GenerateStatisticsTable()
         net.Start('SendExperienceTable')
             net.WriteTable(tbl)
+            net.WriteTable(tbl2)
         net.Send(v)
         v:ProcessLevels()
+        v:UpdateStatsToDB()
     end
     
     -- 30 seconds of voting time

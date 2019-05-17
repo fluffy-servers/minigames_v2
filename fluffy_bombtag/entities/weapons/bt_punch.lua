@@ -9,6 +9,7 @@ SWEP.ViewModel			= "models/weapons/c_357.mdl"
 SWEP.WorldModel			= "models/weapons/w_357.mdl"
 SWEP.UseHands           = true
 SWEP.Primary.Sound		= Sound( "Weapon_AR2.Single" )
+SWEP.Primary.Delay      = 0.4
 
 function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
@@ -33,9 +34,9 @@ end
 
 function SWEP:PrimaryAttack()
     self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-	self.Weapon:SetNextPrimaryFire( CurTime() + self.Primary.Delay )
+	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
-	self.Weapon:EmitSound(self.Primary.Sound, 100, math.random(110,130) )
+	self.Weapon:EmitSound(self.Primary.Sound, 100, math.random(110,130))
 	self.Weapon:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone)
 end
 

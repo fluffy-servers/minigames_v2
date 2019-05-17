@@ -16,9 +16,6 @@ include('cl_announcements.lua')
 
 include('vgui/avatar_circle.lua')
 include('vgui/MapVotePanel.lua')
-include('vgui/Screen_Experience.lua')
-include('vgui/Screen_Maps.lua')
-include('vgui/Screen_Scoreboard.lua')
 
 -- Register universal fonts
 -- Coolvetica
@@ -42,6 +39,12 @@ surface.CreateFont("FS_60", {
 	font = "Coolvetica",
 	size = 48, -- hmmm
 })
+
+surface.CreateFont("FS_56", {
+	font = "Coolvetica",
+	size = 56,
+})
+
 surface.CreateFont("FS_64", {
 	font = "Coolvetica",
 	size = 64,

@@ -2,11 +2,6 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
-hook.Add('Initialize', 'AddKingmakerStatConversions', function()
-    GAMEMODE:AddStatConversion('KingFrags', 'Kills as King', 0.25)
-    GAMEMODE:AddStatConversion('KingEliminations', 'Regicide', 1)
-end)
-
 function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:StripWeapons()
@@ -64,8 +59,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         attacker:SetNWBool('IsKing', true)
         attacker:SetNWInt('KingPoints', attacker:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
-        attacker:AddStatPoints('KingPoints', 1)
-        attacker:AddStatPoints('KingEliminations', 1)
+        attacker:AddStatPoints('Points', 1)
+        attacker:AddStatPoints('Regicide', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
@@ -78,7 +73,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         attacker:SetNWBool('IsKing', true)
         attacker:SetNWInt('KingPoints', attacker:GetNWInt('KingPoints', 0) + 1)
         attacker:AddFrags(1)
-        attacker:AddStatPoints('KingPoints', 1)
+        attacker:AddStatPoints('Points', 1)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
@@ -89,7 +84,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
+    ply:AddStatPoints('Death', 1)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
@@ -113,6 +108,7 @@ hook.Add('Think', 'KingTimer', function()
         if IsValid(GAMEMODE.CurrentKing) then
             GAMEMODE.CurrentKing:AddFrags(1)
             GAMEMODE.CurrentKing:SetNWInt('KingPoints', GAMEMODE.CurrentKing:GetNWInt('KingPoints', 0) + 1)
+            GAMEMODE.CurrentKing:AddStatPoints('Points', 1)
             GAMEMODE.CurrentKing:EmitSound("npc/roller/code2.wav")
             GAMEMODE.LastKingThink = CurTime()
         end
@@ -152,3 +148,9 @@ hook.Add('SetupPlayerVisibility', 'KingVisible', function(ply)
         AddOriginToPVS(GAMEMODE.CurrentKing:GetPos())
     end
 end )
+
+-- Register XP for Kingmaker
+hook.Add('RegisterStatsConversions', 'AddKingmakerStatConversions', function()
+    GAMEMODE:AddStatConversion('Points', 'King Score', 0.05)
+    GAMEMODE:AddStatConversion('Regicide', 'Regicide', 2)
+end)

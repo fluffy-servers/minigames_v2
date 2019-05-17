@@ -68,13 +68,13 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
     -- Do not count deaths unless in round
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
+    GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
     -- Every living players earns a point
     for k,v in pairs(player.GetAll()) do
         if !v:Alive() or v == ply then continue end
         v:AddFrags(1)
-        GAMEMODE:AddStatPoints(v, 'pitfall_score', 1)
+        --GAMEMODE:AddStatPoints(v, 'pitfall_score', 1)
     end
 end
 

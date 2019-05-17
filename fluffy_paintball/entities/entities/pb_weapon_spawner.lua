@@ -73,6 +73,7 @@ if SERVER then
         else
             ent:Give(wep)
         end
+        ent:AddStatPoints('Weapons Collected', 1)
         
         -- Shuffle the type (if applicable)
         if self.RandomTable then

@@ -86,12 +86,6 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"}) 
 end
 
--- Function to toggle displaying cosmetics
--- Obviously, cosmetic items shouldn't be displayed on barrels etc.
-function GM:ShouldDrawCosmetics(ply, ITEM)
-    return hook.Run('DrawCosmeticsCheck', ply, ITEM) or true
-end
-
 -- Valid playermodels
 GM.ValidModels = {
     male01 = "models/player/Group01/male_01.mdl",

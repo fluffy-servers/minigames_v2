@@ -55,3 +55,8 @@ end
 function GM:PlayerFootstep( ply, pos, foot, sound, volume, rf )
     if ply:Team() == TEAM_RED then return true end
 end
+
+-- Hide all cosmetics for barrels
+hook.Add('ShouldDrawCosmetics', 'HideHunterCosmetics', function(ply, ITEM)
+    if ply:Team() == TEAM_RED then return false end
+end)

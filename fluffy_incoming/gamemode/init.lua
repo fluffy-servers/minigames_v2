@@ -162,7 +162,7 @@ end
 
 -- Equivalent of 1XP for every 100% of distance travelled
 hook.Add('RegisterStatsConversions', 'AddIncomingStatConversions', function()
-    GAMEMODE:AddStatConversion('Distance', 'Slope Distance', 0.01)
+    GAMEMODE:AddStatConversion('Distance', 'Distance Travelled', 0.01)
 end)
 
 IncludeResFolder( "materials/models/clannv/incoming/" )

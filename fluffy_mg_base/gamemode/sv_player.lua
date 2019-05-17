@@ -57,14 +57,12 @@ function GM:PlayerSetModel(ply)
             return
         end
 	else
-        if ply.FFAColor then
-            local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
-            ply:SetPlayerColor(c)
-        else
+        if not ply.FFAColor then
             ply.FFAColor = HSVToColor(math.random(360), 1, 1)
-            local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
-            ply:SetPlayerColor(c)
         end
+        
+        local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
+        ply:SetPlayerColor(c)
     end
 end
 

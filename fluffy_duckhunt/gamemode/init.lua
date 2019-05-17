@@ -8,13 +8,13 @@ function GM:PlayerLoadout( ply )
     if ply:Team() == TEAM_BLUE then
         -- Runners
         ply:StripWeapons()
-        ply:SetWalkSpeed( 325 )
-        ply:SetRunSpeed( 375 )
+        ply:SetWalkSpeed(350)
+        ply:SetRunSpeed(400)
     elseif ply:Team() == TEAM_RED then
         -- Snipers
         ply:Give('sniper_normal')
-        ply:SetWalkSpeed( 425 )
-        ply:SetRunSpeed( 500 )
+        ply:SetWalkSpeed(475)
+        ply:SetRunSpeed(525)
     end
 end
 
@@ -32,13 +32,13 @@ function GM:HandleEndRound(reason)
     elseif type(reason) == 'Player' then
         -- Winning player gets 3 points
         reason:AddFrags(3)
-        GAMEMODE:AddStatPoints(reason, 'RoundWins', 1)
+        GAMEMODE:AddStatPoints(reason, 'Finished First', 1)
         
         -- Other survivors get 1 point
         if reason:Team() == TEAM_BLUE then
             team.AddScore(TEAM_BLUE, 1)
             for k,v in pairs( team.GetPlayers(TEAM_BLUE) ) do
-                GAMEMODE:AddStatPoints(v, 'survived_rounds', 1)
+                GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
                 if v != reason then v:AddFrags(1) end
             end
         end
@@ -52,3 +52,9 @@ end
 function GM:StatsRoundWin()
     -- Handled above
 end
+
+-- Register XP for Duck Hunt
+hook.Add('RegisterStatsConversions', 'AddDuckHuntStatConversions', function()
+    GAMEMODE:AddStatConversion('Finished First', 'Finished First', 5)
+    GAMEMODE:AddStatConversion('Runners Sniped', 'Runners Sniped', 0.5)
+end)

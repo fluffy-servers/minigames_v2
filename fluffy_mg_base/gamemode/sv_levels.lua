@@ -96,6 +96,7 @@ end
 -- Load the player level from database on join
 hook.Add('PlayerInitialSpawn', 'LoadMinigamesLevelData', function(ply)
     ply:LoadLevelFromDB()
+    ply:LoadStatsFromDB()
 end )
 
 -- Complicated methods of converting the various tracked stats to XP below
@@ -114,10 +115,12 @@ hook.Add('Initialize', 'AddBaseStatConversions', function()
 end)
 
 hook.Add('RegisterStatsConversions', 'AddBaseStatConversions', function()
-    GAMEMODE:AddStatConversion('RoundWins', 'Rounds Won', 0)
-    GAMEMODE:AddStatConversion('RoundsPlayed', 'Thanks for playing!', 1.5)
-    GAMEMODE:AddStatConversion('kills', 'Kills', 1)
-    GAMEMODE:AddStatConversion('LastSurvivor', 'Last Survivor Bonus', 5)
+    GAMEMODE:AddStatConversion('Rounds Won', 'Rounds Won', 0)
+    GAMEMODE:AddStatConversion('Rounds Played', 'Thanks for playing!', 1.5)
+    GAMEMODE:AddStatConversion('Kills', 'Kills', 1)
+    GAMEMODE:AddStatConversion('Last Survivor', 'Last Survivor Bonus', 5)
+    GAMEMODE:AddStatConversion('Deaths', 'Deaths', 0)
+    GAMEMODE:AddStatConversion('Survived Rounds', 'Rounds Survived', 1)
 end)
 
 -- Convert a stat name & score to a table with XP

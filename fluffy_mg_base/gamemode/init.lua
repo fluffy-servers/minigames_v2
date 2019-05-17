@@ -18,9 +18,6 @@ AddCSLuaFile('cl_announcements.lua')
 
 AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
-AddCSLuaFile('vgui/Screen_Experience.lua')
-AddCSLuaFile('vgui/Screen_Maps.lua')
-AddCSLuaFile('vgui/Screen_Scoreboard.lua')
 
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
@@ -28,8 +25,9 @@ AddCSLuaFile('sh_levels.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
-resource.AddFile('resource/fonts/BebasKai.ttf')
-resource.AddFile('resource/fonts/LemonMilk.ttf')
+resource.AddFile('gamemodes/fluffy_mg_base/content/resource/fonts/BebasKai.ttf')
+resource.AddFile('gamemodes/fluffy_mg_base/content/resource/fonts/LemonMilk.ttf')
+resource.AddFile('gamemodes/fluffy_mg_base/content/materials/fluffy/pattern1.png')
 
 -- Include useful server files
 include('shared.lua')
@@ -170,7 +168,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'deaths', 1)
+    GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
@@ -331,7 +329,7 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)
-    GAMEMODE:AddStatPoints(attacker, 'kills', 1)
+    GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
     
     if GAMEMODE.TeamBased then
         -- Add the kill to the team
@@ -347,8 +345,11 @@ end
 
 hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
     local wep = dmg:GetInflictor()
+    
+    if not IsValid(wep) then return end
     if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
     if not IsValid(wep) then return end
+    
     if wep:GetClass() == "weapon_shotgun" then
         dmg:ScaleDamage(2)
     end

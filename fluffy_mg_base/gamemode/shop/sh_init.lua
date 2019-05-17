@@ -91,6 +91,13 @@ function SHOP:LoadResources()
 	include('fluffy_mg_base/gamemode/shop/item/paint_master.lua')
 end
 
+-- Add the cosmetics check hook function
+-- This function is hooked into various gamemodes to stop cosmetics from being drawn when they shouldn't be
+-- Key examples of this is to override tracers, hide hats on certain playermodels, etc.
+function GM:DoCosmeticsCheck(ply, ITEM)
+    return hook.Run('ShouldDrawCosmetics', ply, ITEM) or true
+end
+
 SHOP:LoadResources()
 
 if SERVER then

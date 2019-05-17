@@ -47,7 +47,7 @@ function GM:PreStartRound()
         
         if v:Team() == TEAM_SPECTATOR then return end
         if not v:Alive() then v:Spawn() end
-        v:AddStatPoints('RoundsPlayed', 1)
+        v:AddStatPoints('Rounds Played', 1)
     end
     
     -- Start the round after a short cooldown
@@ -154,21 +154,32 @@ function GM:NewModifier()
     -- Make sure the same modifier doesn't come up twice
     if not GAMEMODE.CurrentModifier then GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers) end
     local modifier = GAMEMODE.CurrentModifier
+    
     while modifier == GAMEMODE.CurrentModifier do
         modifier = table.Random(GAMEMODE.Modifiers)
+        
+        -- If the modifier is restricted to certain maps, ensure that the map is valid
+        if modifier.maps then
+            if not modifier.maps[game.GetMap()] then
+                modifier = GAMEMODE.CurrentModifier
+            end
+        end
     end
     GAMEMODE.CurrentModifier = modifier
         
+    -- Call the initialize function for the modifier
     if modifier.func_init then
         modifier.func_init()
     end
     
+    -- Call the player function for the modifier
     if modifier.func_player then
         for k,v in pairs(player.GetAll()) do
             modifier.func_player(v)
         end
     end
     
+    -- Register any hooks related to this modifier
     if modifier.hooks then
         for k,v in pairs(modifier.hooks) do
             hook.Add(k, modifier.name, v)

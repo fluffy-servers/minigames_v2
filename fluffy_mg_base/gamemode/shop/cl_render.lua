@@ -6,7 +6,7 @@ function SHOP:RenderCosmetics(ent, ply, force)
     if not SHOP.ClientModels[ply] then return end
     
     for _, ITEM in pairs(SHOP.ClientModels[ply]) do
-        if not GAMEMODE:ShouldDrawCosmetics(ply, ITEM) and not force then continue end
+        if not GAMEMODE:DoCosmeticsCheck(ply, ITEM) and not force then continue end
         if not ITEM.ent then continue end
         
         -- Search for the attachment and calculate the position & angles

@@ -97,6 +97,7 @@ function SWEP:Trace()
 		ent:SetTime(self.Owner:GetTime())
 		ent:StripWeapons()
         self.Owner:StripWeapon("bt_bomb")
+        self.Owner:AddStatPoints('Bomb Passes', 1)
 		timer.Simple(0.1, function() ent:Give("bt_bomb") end)
 	end
 end

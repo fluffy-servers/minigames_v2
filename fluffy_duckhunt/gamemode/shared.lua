@@ -36,6 +36,7 @@ GM.RoundCooldown = 5 -- How long between each round?
 
 GM.CanSuicide = false -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do with this
+GM.SpawnProtection = true -- Spawn protection enabled
 
 function GM:CreateTeams()
 	if ( !GAMEMODE.TeamBased ) then return end

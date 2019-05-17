@@ -108,7 +108,7 @@ hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
     if !ply.SmashedCrates then return end
     ply.SmashedCrates = ply.SmashedCrates + 1
     ply:SetNWInt("Crates", ply.SmashedCrates)
-    ply:AddStatPoints('Crates', 1)
+    ply:AddStatPoints('Crates Smashed', 1)
     
     -- Award bonuses to the player if lucky
     if prop.BonusWeapon then
@@ -121,6 +121,7 @@ hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
         
         local text = GAMEMODE.WeaponOptions[prop.BonusWeapon][1]
         GAMEMODE:PlayerOnlyAnnouncement(ply, 1, text or 'Bonus!', 1)
+        ply:AddStatPoints('Bonuses Earned', 1)
     end
 end )
 
@@ -165,3 +166,9 @@ function GM:EntityTakeDamage(target, dmginfo)
         return
     end
 end
+
+-- Register XP for Crate Wars
+hook.Add('RegisterStatsConversions', 'AddCrateWarsStatConversions', function()
+    GAMEMODE:AddStatConversion('Crates Smashed', 'Destroyed Crates', 0.1)
+    GAMEMODE:AddStatConversion('Bonuses Earned', 'Bonuses Earned', 0)
+end)
