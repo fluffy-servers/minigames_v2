@@ -18,9 +18,6 @@ AddCSLuaFile('cl_announcements.lua')
 
 AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
-AddCSLuaFile('vgui/Screen_Experience.lua')
-AddCSLuaFile('vgui/Screen_Maps.lua')
-AddCSLuaFile('vgui/Screen_Scoreboard.lua')
 
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')

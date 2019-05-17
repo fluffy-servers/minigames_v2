@@ -16,9 +16,6 @@ include('cl_announcements.lua')
 
 include('vgui/avatar_circle.lua')
 include('vgui/MapVotePanel.lua')
-include('vgui/Screen_Experience.lua')
-include('vgui/Screen_Maps.lua')
-include('vgui/Screen_Scoreboard.lua')
 
 -- Register universal fonts
 -- Coolvetica
