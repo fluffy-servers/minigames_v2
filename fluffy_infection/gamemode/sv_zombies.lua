@@ -91,7 +91,7 @@ hook.Add('Think', 'ZombieTimer', function()
     -- Default values are 0
     if not GAMEMODE.WaveTimer then GAMEMODE.WaveTimer = 0 end
     if not GAMEMODE.WaveNumber then GAMEMODE.WaveNumber = 0 end
-    if GAMEMODE.WaveNumber > GAMEMODE.WaveMax then return end
+    if GAMEMODE.WaveNumber >= GAMEMODE.WaveMax then return end
 
     -- Spawn waves if the timer has hit
     if CurTime() > GAMEMODE.WaveTimer then

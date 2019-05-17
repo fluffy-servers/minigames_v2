@@ -85,7 +85,7 @@ function ENT:Initialize()
     if CLIENT then return end
     self.loco:SetDesiredSpeed(self.Speed)
     self.loco:SetAcceleration(self.Acceleration)
-    self.loco:SetDeceleration(self.Acceleration * 8)
+    self.loco:SetDeceleration(self.Acceleration * 0.2)
     self:SetMaxHealth(self.BaseHealth) -- idk why this isn't clientside but hey, not my fault
 end
 
@@ -216,6 +216,7 @@ function ENT:ChaseEnemy()
     local enemy = self:GetEnemy()
     local pos = enemy:GetPos()
     self:MovementFunctions(1, self.WalkAnim, 0, 1)
+    self.loco:SetDesiredSpeed(self.Speed)
     
     -- Pathing stuff?
     local path = Path('Follow')
@@ -228,7 +229,9 @@ function ENT:ChaseEnemy()
         if path:GetAge() > 1 then
             path:Compute(self, self:GetEnemy():GetPos())
         end
+        self.loco:SetDesiredSpeed(self.Speed)
         path:Update(self)
+        self.loco:SetDesiredSpeed(self.Speed)
         --path:Draw()
         
         -- Ensure we are not stuck
@@ -247,7 +250,7 @@ function ENT:ChaseEnemy()
         end
         
         -- Check the enemy every so often
-        if math.random() > 0.5 then
+        if math.random() > 0.99 then
             self:FindEnemy()
         end
         

@@ -26,10 +26,10 @@ function GM:PlayerLoadout( ply )
         -- Initial infected are stronger but slower
         ply:SetBloodColor(BLOOD_COLOR_GREEN)
         ply:Give('weapon_fists')
-        ply:SetMaxHealth(125)
-        ply:SetHealth(125)
-        ply:SetRunSpeed(300)
-        ply:SetWalkSpeed(250)
+        ply:SetMaxHealth(100)
+        ply:SetHealth(100)
+        ply:SetRunSpeed(250)
+        ply:SetWalkSpeed(225)
     end
 end
 
@@ -91,6 +91,6 @@ hook.Add('EntityTakeDamage', 'FistsBuff', function(target, dmg)
     local wep = dmg:GetInflictor()
     if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
     if wep:GetClass() == "weapon_fists" then
-        dmg:ScaleDamage(3)
+        dmg:ScaleDamage(2)
     end
 end)
