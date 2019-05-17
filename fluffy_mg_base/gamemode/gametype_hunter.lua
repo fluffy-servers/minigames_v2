@@ -80,16 +80,3 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
         last_player:AddStatPoints('LastSurvivor', 1)
     end
 end)
-
--- Disable cosmetics
-hook.Add('ShouldDrawCosmetics', 'HideHunterCosmetics', function(ply, ITEM)
-    if GAMEMODE.TeamSurvival then
-        -- Cosmetics shouldn't show for the Hunter Team (in most cases)
-        -- Override in some cases
-        if ply:Team() == GAMEMODE.HunterTeam then
-            return false
-        else
-            return true
-        end
-    end
-end)
