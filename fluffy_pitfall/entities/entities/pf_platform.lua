@@ -45,7 +45,7 @@ function ENT:Initialize()
 	self:PhysicsInit( SOLID_VPHYSICS )
 	self:SetMoveType( MOVETYPE_NONE )
 	self:SetSolid( SOLID_VPHYSICS )
-	self:SetColor( Color( 0, 255, 0 ) )
+	self:SetColor(GAMEMODE.PColorStart)
 	
 	local phys = self:GetPhysicsObject()
 	if ( phys:IsValid() ) then
@@ -81,7 +81,7 @@ function ENT:AddPowerUp(type)
     self.HasPowerUp = true
     self.PowerUp = type
     
-    self:SetColor( Color(255, 140, 0) )
+    self:SetColor(GAMEMODE.PColorBonus)
 end
 
 function ENT:OnTakeDamage(attacker, weapon)
@@ -102,9 +102,12 @@ function ENT:AddDamage(amount)
     self.MyHealth = self.MyHealth - amount
     local scale = math.Clamp(self.MyHealth/100, 0, 1)
     
+    -- Adjust color based on gamemode
     if not self.HasPowerUp then
-        local r,g,b = (255 - scale * 255), (30 + scale * 200), (200)
-        self:SetColor( Color( r, g, b ) )
+        local r = GAMEMODE.PColorEnd.r - GAMEMODE.PDR*scale
+        local g = GAMEMODE.PColorEnd.g - GAMEMODE.PDG*scale
+        local b = GAMEMODE.PColorEnd.b - GAMEMODE.PDB*scale
+        self:SetColor(Color(r, g, b))
     end
     
     if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerUp then

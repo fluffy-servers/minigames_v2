@@ -10,6 +10,22 @@ GM.PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
 GM.PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
 GM.PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)
 
+-- Color properties
+-- pf_settings can edit these
+GM.PColorStart = Color(0, 255, 128)
+GM.PColorEnd = Color(255, 0, 128)
+GM.PColorBonus = Color(255, 128, 0)
+GM.PDR = GM.PColorEnd.r - GM.PColorStart.r
+GM.PDG = GM.PColorEnd.g - GM.PColorStart.g
+GM.PDB = GM.PColorEnd.b - GM.PColorStart.b
+
+-- Update the above settings
+function GM:UpdatePDColors()
+    GAMEMODE.PDR = GAMEMODE.PColorEnd.r - GAMEMODE.PColorStart.r
+    GAMEMODE.PDG = GAMEMODE.PColorEnd.g - GAMEMODE.PColorStart.g
+    GAMEMODE.PDB = GAMEMODE.PColorEnd.b - GAMEMODE.PColorStart.b
+end
+
 GM.BlockOptions = {
     'circle',
     'square',
