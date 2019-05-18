@@ -103,10 +103,18 @@ function ENT:OnTakeDamage(dmg)
         self.LastAttacker = attacker
     end
     
+    -- Get the weapon that the player is using
     local inflictor = dmg:GetInflictor()
+    if inflictor:IsPlayer() then inflictor = inflictor:GetActiveWeapon() end
+    
     if inflictor:GetClass() == 'weapon_crowbar' then
         -- Instabreak for crowbars
         self:AddDamage(100)
+    elseif inflictor:GetClass() == 'weapon_platformbreaker' then
+        -- pew pew does some damage
+        local scale = CurTime() - self.CreationTime
+        scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
+        self:AddDamage(8 * scale)
     else
         -- Deal damage based on round time
         local scale = CurTime() - self.CreationTime
