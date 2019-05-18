@@ -39,34 +39,41 @@ gametypefunctions['mixed'] = function(p) p:SetModel( table.Random( mixedmodels )
 function ENT:Initialize()
     if CLIENT then return end
     
-    local mode = GetGlobalString( 'PitfallType', 'square' )
+    -- Set the model and data based on the game submode
+    local mode = GetGlobalString('PitfallType', 'square')
 	self:SetModel("models/hunter/blocks/cube2x2x025.mdl")
-    gametypefunctions[mode]( self )
-	self:PhysicsInit( SOLID_VPHYSICS )
-	self:SetMoveType( MOVETYPE_NONE )
-	self:SetSolid( SOLID_VPHYSICS )
-	self:SetColor(GAMEMODE.PColorStart)
+    gametypefunctions[mode](self)
+    self:SetColor(GAMEMODE.PColorStart)
+    
+    -- Initialize physics
+	self:PhysicsInit(SOLID_VPHYSICS )
+	self:SetMoveType(MOVETYPE_NONE)
+	self:SetSolid(SOLID_VPHYSICS)
 	
 	local phys = self:GetPhysicsObject()
-	if ( phys:IsValid() ) then
+	if phys:IsValid() then
 		phys:EnableMotion( false )
 		phys:Sleep()
 	end
 	
+    -- Other variables
 	self.MyHealth = 100
     self.CreationTime = CurTime()
-    
     self:SetTrigger(true)
 end
 
+-- Make platforms take damage when someone is touching them
 function ENT:Touch(ent)
+    -- 3 seconds of spawn protection in rounds
     if GetGlobalString( 'RoundState', 'none' ) != 'InRound' then return end
     if GetGlobalFloat( 'RoundStart', 0 )+3 > CurTime() then return end
     
+    -- Only living players make the platforms fall
     if not IsValid(ent) then return end
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
     
+    -- Apply powerups if applicable
     if self.HasPowerUp and ent.ActivePowerUp == nil then
         GAMEMODE:PowerUpApply(ent, self.PowerUp, true)
         self.PowerUp = nil
@@ -74,9 +81,11 @@ function ENT:Touch(ent)
         self:AddDamage(0)
     end
     
+    -- yay damage
     self:AddDamage(FrameTime() * 45)
 end
 
+-- Add a powerup to this platform
 function ENT:AddPowerUp(type)
     self.HasPowerUp = true
     self.PowerUp = type
@@ -84,21 +93,31 @@ function ENT:AddPowerUp(type)
     self:SetColor(GAMEMODE.PColorBonus)
 end
 
-function ENT:OnTakeDamage(attacker, weapon)
-    if attacker and IsValid(attacker) then
+-- Called when this platform is damaged by an entity
+-- usually when a player hits it with a weapon
+-- See the below damage for more details
+function ENT:OnTakeDamage(dmg)
+    -- Register attackers if applicable
+    local attacker = dmg:GetAttacker()
+    if attacker:IsValid() and attacker:IsPlayer() then
         self.LastAttacker = attacker
     end
     
-    if weapon == 'crowbar' then
+    local inflictor = dmg:GetInflictor()
+    if inflictor:GetClass() == 'weapon_crowbar' then
+        -- Instabreak for crowbars
         self:AddDamage(100)
     else
-        local tmod = CurTime() - self.CreationTime
-        local damageamount = 20 + 35*(tmod/120)
-        self:AddDamage(damageamount)
+        -- Deal damage based on round time
+        local scale = CurTime() - self.CreationTime
+        scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
+        self:AddDamage(dmg:GetDamage() * scale)
     end
 end
 
+-- Apply damage to a platform
 function ENT:AddDamage(amount)
+    -- Reduce health
     self.MyHealth = self.MyHealth - amount
     local scale = math.Clamp(self.MyHealth/100, 0, 1)
     
@@ -110,6 +129,7 @@ function ENT:AddDamage(amount)
         self:SetColor(Color(r, g, b))
     end
     
+    -- Drop the platform after 1 second if applicable
     if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerUp then
         self.Dropped = true
         self:EmitSound(table.Random(self.ActivateSounds), 33, math.random(70, 130))
@@ -122,6 +142,7 @@ function ENT:AddDamage(amount)
     end
 end
 
+-- Make the platform fall
 function ENT:Drop()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
@@ -133,12 +154,14 @@ function ENT:Drop()
         phys:EnableMotion(true)
     end
     
+    -- Remove the platform after one second
     timer.Simple(1, function()
         if not IsValid(self) then return end
         self:Remove()
     end)
 end
 
+-- Get the center of this platform
 function ENT:GetCenter()
     return self:LocalToWorld(self:OBBCenter())
 end
