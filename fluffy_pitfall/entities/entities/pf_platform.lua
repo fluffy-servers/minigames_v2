@@ -109,25 +109,30 @@ function ENT:OnTakeDamage(dmg)
     
     if inflictor:GetClass() == 'weapon_crowbar' then
         -- Instabreak for crowbars
-        self:AddDamage(100)
+        self:AddDamage(100, attacker)
     elseif inflictor:GetClass() == 'weapon_platformbreaker' then
         -- pew pew does some damage
         local scale = CurTime() - self.CreationTime
         scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
-        self:AddDamage(8 * scale)
+        self:AddDamage(8 * scale, attacker)
     else
         -- Deal damage based on round time
         local scale = CurTime() - self.CreationTime
         scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
-        self:AddDamage(dmg:GetDamage() * scale)
+        self:AddDamage(dmg:GetDamage() * scale, attacker)
     end
 end
 
 -- Apply damage to a platform
-function ENT:AddDamage(amount)
+function ENT:AddDamage(amount, ply)
     -- Reduce health
-    self.MyHealth = self.MyHealth - amount
+    local damage = math.Clamp(amount, 0, self.MyHealth)
+    self.MyHealth = self.MyHealth - damage
     local scale = math.Clamp(self.MyHealth/100, 0, 1)
+    
+    if IsValid(ply) and ply:IsPlayer() then
+        ply:AddStatPoints('Platform Damage', math.floor(damage))
+    end
     
     -- Adjust color based on gamemode
     if not self.HasPowerUp then

@@ -276,3 +276,8 @@ function GM:AddPowerUp()
         target = true
     end
 end
+
+-- Register XP for Crate Wars
+hook.Add('RegisterStatsConversions', 'AddPitfallStatConversions', function()
+    GAMEMODE:AddStatConversion('Platform Damage', 'Platform Damage', 0.01)
+end)
