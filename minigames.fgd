@@ -1,0 +1,37 @@
+@include "base.fgd"
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_counterterrorist:
+    "This entity is a CT spawnpoint. For most gamemodes, this is the RED team. " +
+    "Ideally, aim for about 32 spawnpoints in a map."
+[
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_terrorist:
+    "This entity is a T spawnpoint. For most gamemodes, this is the BLUE team. " +
+    "Ideally, aim for about 32 spawnpoints in a map."
+[
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_red:
+    "This is a RED team spawnpoint. This is ONLY supported by Minigames. " +
+    "Ideally, aim for about 32 spawnpoints in a map."
+[
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_blue:
+    "This is a BLUE team spawnpoint. This is ONLY supported by Minigames. " +
+    "Ideally, aim for about 32 spawnpoints in a map."
+[
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_zombie:
+    "This is a zombie spawnpoint for use in INFECTION. This spawns both player and NPC zombies. " +
+    "Try to have these spawnpoints spread out, if possible."
+[
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_survivor:
+    "This is a survivor spawnpoint for use in INFECTION. Consider using info_player_counterterrorist instead. " +
+    "Ideally, aim for about 32 spawnpoints in a map."
+[
+]
