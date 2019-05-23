@@ -25,6 +25,7 @@ function ENT:OnTakeDamage( dmg )
     -- Remove if in contact with a trigger hurt
     if dmg:GetInflictor():GetClass() == 'trigger_hurt' or dmg:GetAttacker():GetClass() == 'trigger_hurt' then
         self:Remove()
+        GAMEMODE:SpawnFlag()
         return
     end
 	self.Entity:TakePhysicsDamage( dmg ) 
