@@ -81,6 +81,10 @@ function GM:TransitionView(ply, origin, angles, fov)
         end
         if not GAMEMODE.CoolTransition then return end
         targetpos = targetpos + GAMEMODE.CoolTransition.ent:GetPos()
+        
+        if GAMEMODE.CoolTransition.ent:IsPlayer() then
+            targetpos = targetpos + Vector(0, 0, 64)
+        end
     end
     
     local distance = GAMEMODE.CoolTransition.dist or 80
