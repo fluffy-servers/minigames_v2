@@ -15,6 +15,12 @@ function ENT:Initialize()
 	end
 end
 
+function ENT:Use(ply)
+    if IsValid(ply) and ply:IsPlayer() then
+        GAMEMODE:CollectFlag(ply)
+    end
+end
+
 function ENT:OnTakeDamage( dmg )
     -- Remove if in contact with a trigger hurt
     if dmg:GetInflictor():GetClass() == 'trigger_hurt' or dmg:GetAttacker():GetClass() == 'trigger_hurt' then
@@ -27,7 +33,7 @@ end
 function ENT:OnRemove()
     -- if anything happens to the flag, spawn a new one
     if CLIENT then return end
-    GAMEMODE:SpawnFlag()
+    --GAMEMODE:SpawnFlag()
 end
  
 function ENT:PhysicsUpdate()
@@ -41,48 +47,28 @@ if CLIENT then
     local changing = false
     
     function ENT:Think()
-        local goalcol = self.Entity:GetNWVector( "RColor", Vector( 1, 1, 1 ) ) //R from Refract!
-        local thinktime = 1/45
+        -- Color the ball based on the holding team
+        local tnum = GetGlobalInt('HoldingTeam', 0)
+        local col = team.GetColor(tnum)
+        if tnum == 0 then col = color_white end
+        local c_norm = Vector(col.r/255, col.g/255, col.b/255)
+        mat:SetVector("$refracttint", c_norm)
         
-        if col != goalcol then
-            if !changing then
-                progress = 0
-                changing = true
-            end
-        else
-            changing = false
-        end
-        
-        if changing then
-            progress = progress + FrameTime()/2
-            if progress >= 1 then
-                progress = 1
-                changing = false
-                col = goalcol
-            end
-            col = LerpVector( progress, col, goalcol )
-        else
-            col = goalcol
-            thinktime = 1/15
-        end
-        
-        mat:SetVector( "$refracttint", col )
-        
+        -- Create a subtle light around the ball
         local size = 256
-        
-        local dlight = DynamicLight( self:EntIndex() )
+        local dlight = DynamicLight(self:EntIndex())
         if dlight then
             dlight.Pos = self:GetPos()
-            dlight.r = col.x * 127
-            dlight.g = col.y * 127
-            dlight.b = col.z * 127
+            dlight.r = col.r / 2
+            dlight.g = col.g / 2
+            dlight.b = col.b / 2
             dlight.Brightness = 3
             dlight.Size = size
             dlight.Decay = 100
             dlight.DieTime = CurTime() + 1
         end
         
-        self.Entity:NextThink( CurTime() + thinktime )
+        self.Entity:NextThink(CurTime() + 1)
         return true
     end
     

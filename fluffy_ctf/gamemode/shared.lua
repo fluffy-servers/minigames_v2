@@ -8,8 +8,11 @@ GM.HelpText = [[
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 
-GM.RoundNumber = 10      -- How many rounds?
-GM.RoundTime = 90      -- Seconds each round lasts for
+GM.RoundType = 'timed'
+GM.RoundTime = 120
+GM.GameTime = 600
+GM.HUDStyle = 4
+GM.RoundCooldown = 3
 
 GM.ThirdpersonEnabled = true
 
