@@ -104,8 +104,11 @@ end)
 
 function GM:SpawnPowerUp()
     if #ents.FindByClass('mg_powerup_crate') >= 2 then return end
+    
     local spawns = ents.FindByClass('mg_powerup_spawnpoint')
     if not spawns then return end
+    if #spawns < 1 then return end
+    
     local spawn = table.Random(spawns)
     
     local crate = ents.Create('mg_powerup_crate')
