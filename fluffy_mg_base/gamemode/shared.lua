@@ -9,6 +9,7 @@
 DeriveGamemode('base')
 include('sound_tables.lua')
 include('sh_levels.lua')
+include('shop/sh_init.lua')
 
 -- These variables should be altered in each sub gamemode's shared.lua file
 -- If not defined, they will return to these values here
