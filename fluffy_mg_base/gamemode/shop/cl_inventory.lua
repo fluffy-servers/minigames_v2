@@ -13,8 +13,8 @@ local shop_categories = {
     {'Trails', default_cam, 'Trail'},
 }
 
-SHOP.InventoryTable = {}
-SHOP.InventoryEquipped = {}
+SHOP.InventoryTable = SHOP.InventoryTable or {}
+SHOP.InventoryEquipped = SHOP.InventoryEquipped or {}
 
 function SHOP:VerifyInventory()
     net.Start('SHOP_NetworkInventory')
@@ -43,8 +43,12 @@ function SHOP:PopulateInventory(category)
     for key,ITEM in pairs(SHOP.InventoryTable) do
         ITEM = SHOP:ParseVanillaItem(ITEM)
         if category then
-            if not ITEM.Type then continue end
-            if (ITEM.Type != category) and (ITEM.Slot != category) then continue end
+            if category == 'Equipped' then
+                if not SHOP.InventoryEquipped[key] then continue end
+            else
+                if not ITEM.Type then continue end
+                if (ITEM.Type != category) and (ITEM.Slot != category) then continue end
+            end
         end
         
         local panel = display:Add('ShopItemPanel')
@@ -60,12 +64,15 @@ function SHOP:PopulateEquipped()
     display:Clear()
 end
 
+-- Populate the settings panel if appropiate to do so
 function SHOP:PopulateSettings()
     if not IsValid(SHOP.InventoryPanel) then return end
     local display = SHOP.InventoryPanel.display
     display:Clear()
 end
 
+-- Main function for opening up the inventory
+-- Large and painful :(
 function SHOP:OpenInventory()
     if not LocalPlayer():IsSuperAdmin() then return end -- disable this function for now
     
@@ -186,9 +193,10 @@ function SHOP:OpenInventory()
         end
         
         SHOP.InventoryPanel.Category = 'Equipped'
-        SHOP.PopulateEquipped()
+        SHOP:PopulateInventory('Equipped')
     end
     
+    -- Create the settings button
     local settings_button = vgui.Create('DButton', tabs)
     settings_button:SetSize(128, button_height)
     settings_button:SetFont('FS_B32')
@@ -313,10 +321,10 @@ concommand.Add('minigames_shop', function()
 end)
 
 -- Request functions for server interfacing
-function SHOP:RequestUnbox(key)
+-- Golden rule: Never trust the client
+-- Anything to do with item interaction goes through the server first
 
-end
-
+-- Send an equip request to the server
 function SHOP:RequestEquip(key)
     net.Start('SHOP_RequestItemAction')
         net.WriteString('EQUIP')
@@ -324,6 +332,7 @@ function SHOP:RequestEquip(key)
     net.SendToServer()
 end
 
+-- Send a paint request to the server
 function SHOP:RequestPaint(itemkey, paintkey)
 	net.Start('SHOP_RequestItemAction')
 		net.WriteString('PAINT')
@@ -332,6 +341,7 @@ function SHOP:RequestPaint(itemkey, paintkey)
 	net.SendToServer()
 end
 
+-- Send an unbox request to the server
 function SHOP:RequestUnbox(key)
     net.Start('SHOP_RequestItemAction')
         net.WriteString('UNBOX')
@@ -339,6 +349,7 @@ function SHOP:RequestUnbox(key)
     net.SendToServer()
 end
 
+-- Send a delete request to the server
 function SHOP:RequestDelete(key)
     net.Start('SHOP_RequestItemAction')
         net.WriteString('DELETE')
@@ -346,6 +357,7 @@ function SHOP:RequestDelete(key)
     net.SendToServer()
 end
 
+-- Send a gift request to the server
 function SHOP:RequestGift(key, giftee)
     net.Start('SHOP_RequestItemAction')
         net.WriteString('GIFT')
@@ -354,20 +366,26 @@ function SHOP:RequestGift(key, giftee)
     net.SendToServer()
 end
 
+-- Network handler for changing inventory handling
+-- This allows adding items, removing items, and modifying items
 net.Receive('SHOP_InventoryChange', function()
     local mode = net.ReadString()
     if mode == 'ADD' then
+        -- An item has been added
         local ITEM = net.ReadTable()
         table.insert(SHOP.InventoryTable, ITEM)
     elseif mode == 'REMOVE' then
+        -- An item has been removed
         local key = net.ReadInt(16)
         table.remove(SHOP.InventoryTable, key)
     elseif mode == 'MODIFY' then
+        -- An item has been modified
 		local key = net.ReadInt(16)
 		local ITEM = net.ReadTable()
 		SHOP.InventoryTable[key] = ITEM
 	end
 	
+    -- Repopulate the display a short time after recieving the data
 	timer.Simple(0.1, function()
 		if IsValid(SHOP.InventoryPanel) then
 			SHOP:PopulateInventory()
