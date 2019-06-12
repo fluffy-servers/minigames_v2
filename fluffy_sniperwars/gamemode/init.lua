@@ -5,10 +5,15 @@ include('shared.lua')
 
 -- Give the player these weapons on loadout
 function GM:PlayerLoadout( ply )
-	ply:Give( "sniper_normal" )
-	ply:Give( "firearm_p228" )
-	--ply:Give( "weapon_translocator" )
-    ply:Give( "weapon_mg_knife" )
+    ply:Give('weapon_cloaker')
+    ply:Give('weapon_mg_knife')
+    ply:Give('sniper_normal')
+    ply:Give('firearm_p228')
+    ply:Give('sw_sniper')
+    
+    ply:SetNoDraw(false)
+    ply:SetRunSpeed(350)
+    ply:SetWalkSpeed(325)
 end
 
 -- Remove fall damage
