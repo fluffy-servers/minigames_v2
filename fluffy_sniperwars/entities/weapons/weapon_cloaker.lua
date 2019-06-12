@@ -1,8 +1,17 @@
 AddCSLuaFile()
 
+if CLIENT then
+    SWEP.IconFont = "CSSelectIcons"
+    SWEP.IconLetter = "H"
+    surface.CreateFont("CSSelectIcons", {font="csd", size=ScreenScale(60)})
+    
+    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
+	end
+end
+
 -- Menu data
 SWEP.PrintName = 'Cloaking Device'
-SWEP.IconLetter = 'H'
 SWEP.Slot = 2
 SWEP.SlotPos = 2
 

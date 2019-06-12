@@ -2,6 +2,14 @@ AddCSLuaFile()
 
 if CLIENT then
     killicon.AddFont('sw_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
+    
+    SWEP.IconFont = "CSSelectIcons"
+    SWEP.IconLetter = "r"
+    surface.CreateFont("CSSelectIcons", {font="csd", size=ScreenScale(60)})
+    
+    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
+	end
 end
 
 -- Model information
@@ -49,6 +57,7 @@ end
 -- Play the deploy animation
 function SWEP:Deploy()
     self:SendWeaponAnim(ACT_VM_DRAW)
+    self:ZoomOut()
 end
 
 function SWEP:Think()
@@ -201,5 +210,10 @@ function SWEP:DrawHUD()
         -- No longer the stupid one from before I'm sorry
         surface.DrawLine(0, h/2, w, h/2)
         surface.DrawLine(w/2, 0, w/2, h)
+        
+        -- Draw the ammo & health on top of the darkness
+        -- This will probably not be great for performance but hey
+        GAMEMODE:DrawAmmo()
+        GAMEMODE:DrawHealth()
     end
 end
