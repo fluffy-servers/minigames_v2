@@ -40,7 +40,6 @@ local function Uncloak(ply)
     if not IsValid(ply) then return end
     if not ply:Alive() then return end
     
-    ply:SetNoDraw(false)
     GAMEMODE:PlayerLoadout(ply)
 end
 
