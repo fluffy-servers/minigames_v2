@@ -9,7 +9,7 @@ if CLIENT then
 	SWEP.ViewModelFOV		= 75
 	SWEP.ViewModelFlip		= false
 	
-	SWEP.PrintName = "Sniper Rifle"
+	SWEP.PrintName = "Sniper Rifle [Old]"
 	SWEP.IconLetter = "r"
 	SWEP.Slot = 0
 	SWEP.Slotpos = 0
