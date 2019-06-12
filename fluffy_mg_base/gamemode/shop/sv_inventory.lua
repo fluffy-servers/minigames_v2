@@ -72,6 +72,16 @@ function SHOP:RemoveItem(key, ply)
     if not SHOP.PlayerInventories[ply] then return end
 	if not SHOP.PlayerInventories[ply][key] then return end
 	table.remove(SHOP.PlayerInventories[ply], key)
+    
+    -- Offset the equipped array
+    for eq,_ in pairs(SHOP.PlayerEquipped[ply]) do
+        if eq == key then
+            SHOP.PlayerEquipped[ply][eq] = nil
+        elseif eq > key then
+            SHOP.PlayerEquipped[ply][eq] = nil
+            SHOP.PlayerEquipped[ply][eq-1] = true
+        end
+    end
 	
 	-- Network changes
 	net.Start('SHOP_InventoryChange')
@@ -101,7 +111,6 @@ function SHOP:EquipItem(key, ply, state)
 		
 		-- Check the slot is empty
 		local slot = ITEM.Slot or ITEM.Type
-		print(slot)
 		if SHOP.PlayerEquippedSlots[ply][slot] then return end
     
         local equipped = false
@@ -160,13 +169,17 @@ net.Receive('SHOP_NetworkInventory', function(len, ply)
     ply.LastVerification = CurTime()
     
     local check = net.ReadString()
+    
+    -- Load the inventory if not loaded yet
     if not SHOP.PlayerInventories[ply] then
         SHOP:LoadInventory(ply, function() SHOP:NetworkInventory(ply) end)
         return
     end
     
+    -- If the check differs from our version, resend all the data
     if check != SHOP:HashTable(SHOP.PlayerInventories[ply]) then
         SHOP:NetworkInventory(ply)
+        SHOP:NetworkEquipped(ply)
     end
 end)
 
