@@ -43,18 +43,23 @@ function SHOP:RenderCosmetics(ent, ply, force)
         
         -- Apply custom colours
         if ITEM.Paintable and ITEM.Color then
-            -- to do
+            render.SetColorModulation(ITEM.Color.r/255, ITEM.Color.g/255, ITEM.Color.b/255)
         end
         
         -- Apply override material
         if ITEM.MaterialOverride then
-            -- to do
+            ITEM.ent:SetMaterial(ITEM.MaterialOverride)
         end
         
         -- Draw the model!
         ITEM.ent:SetPos(pos)
         ITEM.ent:SetAngles(ang)
         ITEM.ent:DrawModel()
+        
+        -- Reset paintable colors
+        if ITEM.Paintable and ITEM.Color then
+            render.SetColorModulation(1, 1, 1)
+        end
     end
 end
 
