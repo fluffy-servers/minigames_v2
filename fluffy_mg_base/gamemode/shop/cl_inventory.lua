@@ -5,7 +5,7 @@ local default_cam = Vector(56, 24, 0)
 local shop_categories = {
     {'Backwear', Vector(48, 24, 180), 'back'},
     {'Glasses', Vector(64, 16, 0), 'eyes'},
-    {'Headgear', Vector(64, 24, 0), 'hat'},
+    {'Headgear', Vector(64, 24, 0), 'face'},
     
     {'Crates', default_cam, 'Crate'},
     {'Paint', default_cam, 'Paint'},
@@ -41,9 +41,10 @@ function SHOP:PopulateInventory(category)
     
     if not SHOP.InventoryTable then return end
     for key,ITEM in pairs(SHOP.InventoryTable) do
+        ITEM = SHOP:ParseVanillaItem(ITEM)
         if category then
             if not ITEM.Type then continue end
-            if ITEM.Type != category then continue end
+            if (ITEM.Type != category) and (ITEM.Slot != category) then continue end
         end
         
         local panel = display:Add('ShopItemPanel')
