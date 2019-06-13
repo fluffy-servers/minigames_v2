@@ -71,20 +71,52 @@ end
 TEAM_RED = 1
 TEAM_BLUE = 2
 
+TEAM_RED_SPAWNS = {"info_player_counterterrorist", "info_player_red"}
+TEAM_BLUE_SPAWNS = {"info_player_terrorist", "info_player_blue"}
+
+-- Extra team colors
+-- These can be selected with mg_team_control
+TEAM_COLORS = {}
+TEAM_COLORS['orange'] = Color(250, 130, 49)
+TEAM_COLORS['red'] = Color(255, 80, 80)
+TEAM_COLORS['blue'] = Color(80, 80, 255)
+TEAM_COLORS['green'] = Color(46, 213, 115)
+TEAM_COLORS['purple'] = Color(165, 94, 234)
+TEAM_COLORS['pink'] = Color(243, 104, 224)
+TEAM_COLORS['cyan'] = Color(72, 219, 251)
+TEAM_COLORS['yellow'] = Color(254, 202, 87)
+
+-- Upsettingly, Garry's Mod by default doesn't provide a way to change the name of teams
+-- This overrides the functions to create global variables for team names
+-- This also caches the old function and then uses it for reverse-compatibility
+local old = team.GetName
+function team.GetName(id)
+    local name = GetGlobalString("Team" .. tostring(id) .. ".GName", "")
+    if name == "" then
+        return old(id)
+    else
+        return name
+    end
+end
+
+function team.SetName(id, name)
+    return SetGlobalString("Team" .. tostring(id) .. ".GName", name)
+end
+
 -- Note that RED is CT and BLUE is T
 -- Not sure why I did this but oh well, way too late to change it
 -- seriously don't change it you'll break a lot of maps
 function GM:CreateTeams()
 	if not GAMEMODE.TeamBased then return end
 	
-	team.SetUp(TEAM_RED, "Red Team", Color( 255, 80, 80 ), true )
-	team.SetSpawnPoint(TEAM_RED, {"info_player_counterterrorist", "info_player_red"})
+	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true )
+	team.SetSpawnPoint(TEAM_RED, TEAM_RED_SPAWNS)
 	
-	team.SetUp(TEAM_BLUE, "Blue Team", Color( 80, 80, 255 ), true )
-	team.SetSpawnPoint(TEAM_BLUE, {"info_player_terrorist", "info_player_blue"})
+	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true )
+	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
 	
 	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
-	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"}) 
+	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"})
 end
 
 -- Valid playermodels
