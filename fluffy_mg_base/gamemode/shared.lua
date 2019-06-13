@@ -103,6 +103,23 @@ function team.SetName(id, name)
     return SetGlobalString("Team" .. tostring(id) .. ".GName", name)
 end
 
+local oldc = team.GetColor
+function team.GetColor(id)
+    local color = GetGlobalVector("Team" .. tostring(id) .. ".GColor", nil)
+    if not color then
+        return oldc(id)
+    else
+        color = Color(color.x, color.y, color.z)
+        return color
+    end
+end
+
+function team.SetColor(id, color)
+    color = Vector(color.r, color.g, color.b)
+    return SetGlobalVector("Team" .. tostring(id) .. ".GColor", color)
+end
+
+
 -- Note that RED is CT and BLUE is T
 -- Not sure why I did this but oh well, way too late to change it
 -- seriously don't change it you'll break a lot of maps

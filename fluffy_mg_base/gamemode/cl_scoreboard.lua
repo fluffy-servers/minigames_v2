@@ -82,15 +82,15 @@ function CreateFluffyScoreboard()
         -- Draw team information if applicable
         -- Todo: maybe display better team scoring information
         if GAMEMODE.TeamBased then
-            draw.RoundedBox( 8, 32, 36, 256, 52, team.GetColor( 1 ) )
-            draw.SimpleText( team.GetName(1), 'FS_32', 40, 36, GAMEMODE.FCol1 )
-            draw.SimpleText( 'Kills: ' .. team.TotalFrags(1), 'FS_16', 40, 60, GAMEMODE.FCol1 )
-            draw.SimpleText( team.GetScore(1), 'FS_60', 284, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
+            draw.RoundedBox( 8, 32, 36, 256, 52, team.GetColor(TEAM_BLUE) )
+            draw.SimpleText( team.GetName(TEAM_BLUE), 'FS_32', 40, 36, GAMEMODE.FCol1 )
+            draw.SimpleText( 'Kills: ' .. team.TotalFrags(TEAM_BLUE), 'FS_16', 40, 60, GAMEMODE.FCol1 )
+            draw.SimpleText( team.GetScore(TEAM_BLUE), 'FS_60', 284, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
             
-            draw.RoundedBox( 8, 412, 36, 256, 52, team.GetColor( 2 ) )
-            draw.SimpleText( team.GetName(2), 'FS_32', 660, 36, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT )
-            draw.SimpleText( 'Kills: ' .. team.TotalFrags(2), 'FS_16', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT )
-            draw.SimpleText( team.GetScore(2), 'FS_60', 416, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
+            draw.RoundedBox( 8, 412, 36, 256, 52, team.GetColor(TEAM_RED) )
+            draw.SimpleText( team.GetName(TEAM_RED), 'FS_32', 660, 36, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT )
+            draw.SimpleText( 'Kills: ' .. team.TotalFrags(TEAM_RED), 'FS_16', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT )
+            draw.SimpleText( team.GetScore(TEAM_RED), 'FS_60', 416, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER )
         end
 	end
 	
@@ -169,12 +169,7 @@ function CreateFluffyScoreboard()
             -- Draw team information
 			if GAMEMODE.TeamBased then
 				local pt = self.Player:Team()
-				local name = 'None'
-                -- WHY DO GOOD PEOPLE DO BAD THINGS WTF
-				if pt == 1 then name = 'Red' end
-				if pt == 2 then name = 'Blue' end
-				if pt == 1002 then name = 'Spec' end
-				draw.SimpleText( name, 'FS_24', 400, 6, team.GetColor(pt), TEXT_ALIGN_CENTER )
+				draw.SimpleText( team.GetShortName(pt), 'FS_24', 400, 6, team.GetColor(pt), TEXT_ALIGN_CENTER )
 				draw.SimpleText( 'Team', 'FS_16', 400, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER )
 			end
 			
