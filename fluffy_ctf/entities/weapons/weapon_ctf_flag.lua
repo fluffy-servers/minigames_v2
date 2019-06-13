@@ -100,7 +100,7 @@ end
 
 function SWEP:TossFlag(strength)
     local ent = ents.Create('ctf_flag')
-    ent:SetPos(self.Owner:EyePos() + (self.Owner:GetAimVector() * 42))
+    ent:SetPos(self.Owner:GetShootPos() + self.Owner:GetAimVector()*40)
     ent:Spawn()
     
     local phys = ent:GetPhysicsObject()
