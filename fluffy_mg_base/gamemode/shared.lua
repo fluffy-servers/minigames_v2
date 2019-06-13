@@ -105,7 +105,7 @@ end
 
 local oldc = team.GetColor
 function team.GetColor(id)
-    local color = GetGlobalVector("Team" .. tostring(id) .. ".GColor", nil)
+    local color = GetGlobalVector("Team" .. tostring(id) .. ".GColor", false)
     if not color then
         return oldc(id)
     else
