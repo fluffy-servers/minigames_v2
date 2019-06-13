@@ -5,6 +5,9 @@ function ENT:Touch(ent)
     if ent:GetClass() == 'ctf_flag' then
         if GetGlobalInt('HoldingTeam') == TEAM_BLUE then
             GAMEMODE:ScoreGoal(TEAM_BLUE, ent)
+        else
+            ent:Remove()
+            GAMEMODE:SpawnFlag()
         end
     elseif ent:IsPlayer() then
         if ent:HasWeapon('weapon_ctf_flag') and ent:Team() == TEAM_BLUE then

@@ -80,7 +80,7 @@ function GM:ScoreGoal(team, entity)
         GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
     end
     
-    GAMEMODE:EntityCameraAnnouncement(entity, GAMEMODE.RoundCooldown or 5)
+    --GAMEMODE:EntityCameraAnnouncement(entity, GAMEMODE.RoundCooldown or 5)
 end
 
 -- Dissolve any players that get killed with the flag
