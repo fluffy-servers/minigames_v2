@@ -64,15 +64,14 @@ if CLIENT then
         mat:SetVector("$refracttint", c_norm)
         
         -- Create a subtle light around the ball
-        local size = 256
         local dlight = DynamicLight(self:EntIndex())
         if dlight then
             dlight.Pos = self:GetPos()
-            dlight.r = col.r / 2
-            dlight.g = col.g / 2
-            dlight.b = col.b / 2
-            dlight.Brightness = 3
-            dlight.Size = size
+            dlight.r = col.r
+            dlight.g = col.g
+            dlight.b = col.b
+            dlight.Brightness = 1
+            dlight.Size = 400
             dlight.Decay = 100
             dlight.DieTime = CurTime() + 1
         end

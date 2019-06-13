@@ -38,6 +38,7 @@ function GM:SpawnFlag()
     flag:SetPos(GAMEMODE.FlagSpawnPosition)
     flag:Spawn()
     flag:SetNWString('CurrentTeam', 'none')
+    SetGlobalInt('HoldingTeam', 0)
     GAMEMODE.FlagEntity = flag
     return flag
 end
@@ -46,7 +47,6 @@ end
 hook.Add('RoundStart', 'InitialSpawnFlag', function()
     timer.Simple(1, function() GAMEMODE:SpawnFlag() end)
     GAMEMODE.LastCarrier = nil
-    SetGlobalInt('HoldingTeam', 0)
 end)
 
 -- Handle when a team takes control of the flag
