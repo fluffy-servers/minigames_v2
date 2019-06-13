@@ -6,8 +6,8 @@ function ENT:Touch(ent)
         if GetGlobalInt('HoldingTeam') == TEAM_RED then
             GAMEMODE:ScoreGoal(TEAM_RED, ent)
         else
+            ent.NoExplode = false
             ent:Remove()
-            GAMEMODE:SpawnFlag()
         end
     elseif ent:IsPlayer() then
         if ent:HasWeapon('weapon_ctf_flag') and ent:Team() == TEAM_RED then

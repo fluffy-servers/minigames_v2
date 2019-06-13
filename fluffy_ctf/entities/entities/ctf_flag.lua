@@ -13,6 +13,7 @@ function ENT:Initialize()
 	if phys:IsValid() then
 		phys:Sleep()
 	end
+    self.NoExplode = true
 end
 
 function ENT:Use(ply)
@@ -24,8 +25,8 @@ end
 function ENT:OnTakeDamage( dmg )
     -- Remove if in contact with a trigger hurt
     if dmg:GetInflictor():GetClass() == 'trigger_hurt' or dmg:GetAttacker():GetClass() == 'trigger_hurt' then
+        self.NoExplode = false
         self:Remove()
-        GAMEMODE:SpawnFlag()
         return
     end
 	self.Entity:TakePhysicsDamage( dmg ) 
@@ -34,7 +35,14 @@ end
 function ENT:OnRemove()
     -- if anything happens to the flag, spawn a new one
     if CLIENT then return end
-    --GAMEMODE:SpawnFlag()
+    if self.NoExplode then return end
+    
+    -- Mild explosion effection
+    local ed = EffectData()
+	ed:SetOrigin(self:GetPos())
+	util.Effect("Explosion", ed, true, true)
+    
+    GAMEMODE:SpawnFlag()
 end
  
 function ENT:PhysicsUpdate()
