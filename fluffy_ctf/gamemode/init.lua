@@ -71,14 +71,16 @@ end
 function GM:ScoreGoal(team, entity)
     if GetGlobalString('RoundState') != 'InRound' then return end
     
-	-- End the round, counting a win for the given team
-    GAMEMODE:EndRound(team)
-    
+    local message = nil
     -- Bonus to the person who scores the capture
     if IsValid(GAMEMODE.LastCarrier) then
         GAMEMODE.LastCarrier:AddFrags(3)
         GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
+        message = GAMEMODE.LastCarrier:Nick() .. ' scored the capture'
     end
+    
+    -- End the round, counting a win for the given team
+    GAMEMODE:EndRound(team, message)
     
     --GAMEMODE:EntityCameraAnnouncement(entity, GAMEMODE.RoundCooldown or 5)
 end
