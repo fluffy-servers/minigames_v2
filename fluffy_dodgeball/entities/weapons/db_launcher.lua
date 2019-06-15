@@ -17,9 +17,9 @@ function SWEP:Deploy()
 end
 
 function SWEP:PrimaryAttack()
-    self:SetNextPrimaryFire(CurTime() + 0.5)
-    self:SetNextSecondaryFire(CurTime() + 0.5)
-    self:EmitSound(self.ShootSound, 100, math.random(80, 115))
+    self:SetNextPrimaryFire(CurTime() + 0.75)
+    self:SetNextSecondaryFire(CurTime() + 0.75)
+    self:EmitSound(self.ShootSound, 50, math.random(80, 115))
     
     if SERVER then
         self:FireBall()
@@ -27,12 +27,13 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-    self:SetNextPrimaryFire(CurTime() + 1)
-    self:SetNextSecondaryFire(CurTime() + 1)
-    self:EmitSound(self.ShootSound, 100, math.random(50, 65))
+    self:SetNextPrimaryFire(CurTime() + 0.75)
+    self:SetNextSecondaryFire(CurTime() + 1.5)
+    self:EmitSound(self.ShootSound, 50, math.random(50, 65))
     
     if SERVER then
-        self:FireBall(2000, 4)
+        local ball = self:FireBall(3000, 4)
+        ball:SetNWInt('Size', 35)
     end
 end
 
@@ -40,9 +41,10 @@ function SWEP:FireBall(velocity, bounces)
     local ball = ents.Create('db_projectile')
     ball:SetPos(self.Owner:GetShootPos() + self.Owner:GetAimVector()*25)
     ball:SetOwner(self.Owner)
-    ball.InitialVelocity = velocity or 1000
+    ball.InitialVelocity = velocity or 2000
     ball.NumBounces = bounces or 3
     ball:Spawn()
+    return ball
 end
 
 function SWEP:CustomAmmoDisplay()

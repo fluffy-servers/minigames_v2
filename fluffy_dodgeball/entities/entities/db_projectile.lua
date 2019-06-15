@@ -7,7 +7,7 @@ ENT.InitialVelocity = 1250
 ENT.NumBounces = 3
 ENT.DieEffect = ""
 ENT.Bounciness = 0.8
-ENT.Damage = 25
+ENT.Damage = 100
 ENT.BounceSound = Sound("Rubber.BulletImpact")
 ENT.DieSound = Sound("physics/plastic/plastic_box_impact_hard1.wav")
 
@@ -45,7 +45,8 @@ function ENT:PhysicsCollide(data, phys)
     -- Damage players
     if IsValid(data.HitEntity) and data.HitEntity:IsPlayer() then
         if data.HitEntity:Team() != self:GetOwner():Team() then
-            data.HitEntity:TakeDamage(self.Damage, self:GetOwner())
+            local damage = self:GetNWInt('Size', 25)
+            data.HitEntity:TakeDamage(damage, self:GetOwner())
             timer.Simple(0, function() self:Remove() end)
             return
         end
@@ -76,6 +77,7 @@ function ENT:Draw()
         end
     end
     
+    local size = self:GetNWInt('Size', 25)
     render.SetMaterial(self.Material)
-    render.DrawSprite(self:GetPos(), 32, 32, self.Color)
+    render.DrawSprite(self:GetPos(), size, size, self.Color)
 end
