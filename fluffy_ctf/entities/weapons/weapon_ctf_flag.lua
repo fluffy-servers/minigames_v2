@@ -172,6 +172,8 @@ if CLIENT then
         m:Remove()
         self.CSModel = nil
         
+        if not IsValid(self.Owner) then return end
+        if not IsValid(self.Owner:GetViewModel()) then return end
         self.Owner:GetViewModel():SetMaterial("")
     end
     
