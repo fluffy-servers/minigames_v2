@@ -26,8 +26,9 @@ SWEP.Primary.Sound = Sound("ambient/machines/teleport3.wav")
 SWEP.Primary.Delay = 1.5
 
 -- Reset utility on player spawn
+-- Players spawn with 50% of the device charged
 hook.Add('PlayerSpawn', 'Utility', function(ply)
-    ply:SetNWFloat('LastUtility', CurTime())
+    ply:SetNWFloat('LastUtility', CurTime() - 10)
     ply:SetNoDraw(false)
 end)
 
@@ -38,7 +39,7 @@ function SWEP:CustomAmmoDisplay()
     self.AmmoDisplay = self.AmmoDisplay or {}
     
     self.AmmoDisplay.Draw = true
-    self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100)
+    self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 5), 0, 100)
     self.AmmoDisplay.MaxPrimaryClip = 100
     
     return self.AmmoDisplay
@@ -67,9 +68,9 @@ function SWEP:Cloak()
     self.Owner:SetWalkSpeed(500)
     self.Owner:SetRunSpeed(500)
     
-    -- Uncloak after 5 seconds
+    -- Uncloak after 8 seconds
     local ply = self.Owner
-    timer.Simple(5, function() Uncloak(ply) end)
+    timer.Simple(8, function() Uncloak(ply) end)
 end
 
 -- Sync weapon and player last utility times
