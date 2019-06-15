@@ -95,6 +95,7 @@ end
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
     
+    self:ZoomOut()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:EmitSound(self.Primary.Sound, 100, math.random(95, 105))
     self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, 1, 'line_tracer')
