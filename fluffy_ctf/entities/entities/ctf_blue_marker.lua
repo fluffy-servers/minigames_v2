@@ -2,7 +2,8 @@ AddCSLuaFile()
 ENT.Base = "base_point"
 ENT.Type = "point"
 if CLIENT then
-    ENT.Icon = Material('icon16/flag_blue.png')
+    ENT.DefendIcon = Material('icon16/shield.png', 'noclamp smooth')
+    ENT.AttackIcon = Material('icon16/bomb.png', 'noclamp smooth')
 end
 
 function ENT:UpdateTransmitState()
@@ -14,12 +15,19 @@ function ENT:Draw()
     
     local center = self:GetPos()
     local p = center:ToScreen()
-    
-    surface.SetDrawColor(color_white)
-    surface.SetMaterial(self.Icon)
-    surface.DrawTexturedRect(p.x - 8, p.y - 8, 16, 16)
-    
+    local size = 24
+
     if LocalPlayer():Team() == TEAM_BLUE then
-        draw.SimpleTextOutlined('Capture here!', 'DermaDefault', p.x, p.y + 16, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+        surface.SetMaterial(self.AttackIcon)
+        draw.SimpleTextOutlined('Capture!', 'DermaDefault', p.x, p.y + size, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+    elseif LocalPlayer():Team() == TEAM_RED then
+        surface.SetMaterial(self.DefendIcon)
+        draw.SimpleTextOutlined('Defend!', 'DermaDefault', p.x, p.y + size, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1, Color(0, 0, 0))
+    else
+        return
     end
+    
+    -- Draw the icon
+    surface.SetDrawColor(color_white)
+    surface.DrawTexturedRect(p.x - size/2, p.y - size/2, size, size)
 end

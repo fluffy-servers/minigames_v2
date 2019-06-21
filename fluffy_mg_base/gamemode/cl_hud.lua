@@ -450,7 +450,10 @@ function GM:DrawAmmo()
     
     -- Some weapons have a custom ammo display function to calculate this table
     if wep.CustomAmmoDisplay then
-        if wep:CustomAmmoDisplay() != nil then ammo = wep:CustomAmmoDisplay() end
+        if wep:CustomAmmoDisplay() != nil then 
+            ammo = wep:CustomAmmoDisplay()
+            if ammo.Draw == false then return end
+        end
     end
     
     -- Check the ammo table is valid

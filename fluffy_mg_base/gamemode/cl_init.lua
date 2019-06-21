@@ -144,6 +144,31 @@ function GM:UpdateColorSet(name)
     GAMEMODE.FCol3 = possible_colors[name][2]
 end
 
+-- Function to adjust a colour strength
+function draw.ShadeColor(c, strength)
+    local strength = strength or 10
+    local r = math.Clamp(c.r + strength, 0, 255)
+    local g = math.Clamp(c.g + strength, 0, 255)
+    local b = math.Clamp(c.b + strength, 0, 255)
+    return Color(r, g, b)
+end
+
+-- Function to adjust a colour strength that doesn't use math.Clamp
+-- Could probably break things if overflow occurs
+function draw.ShadeColorFast(c, strength)
+    local strength = strength or 10
+    return Color(c.r + strength, c.g + strength, c.b + strength)
+end
+
+-- Get a short name for a team
+function team.GetShortName(id)
+    if id == TEAM_SPECTATOR then 
+        return 'Spec' 
+    else
+        return string.Replace(team.GetName(id), " Team", "")
+    end
+end
+
 -- Concommand to update colors! Yay for choice!
 concommand.Add("minigames_hud_color", function( ply, cmd, args )
     GAMEMODE:UpdateColorSet(args[1])

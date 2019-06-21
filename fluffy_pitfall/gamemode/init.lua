@@ -10,6 +10,22 @@ GM.PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
 GM.PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
 GM.PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)
 
+-- Color properties
+-- pf_settings can edit these
+GM.PColorStart = Color(0, 255, 128)
+GM.PColorEnd = Color(255, 0, 128)
+GM.PColorBonus = Color(255, 128, 0)
+GM.PDR = GM.PColorEnd.r - GM.PColorStart.r
+GM.PDG = GM.PColorEnd.g - GM.PColorStart.g
+GM.PDB = GM.PColorEnd.b - GM.PColorStart.b
+
+-- Update the above settings
+function GM:UpdatePDColors()
+    GAMEMODE.PDR = GAMEMODE.PColorEnd.r - GAMEMODE.PColorStart.r
+    GAMEMODE.PDG = GAMEMODE.PColorEnd.g - GAMEMODE.PColorStart.g
+    GAMEMODE.PDB = GAMEMODE.PColorEnd.b - GAMEMODE.PColorStart.b
+end
+
 GM.BlockOptions = {
     'circle',
     'square',
@@ -20,6 +36,7 @@ GM.BlockOptions = {
 
 -- Register the powerups using the base powerups library
 hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
+    -- Shotgun for 10 seconds
     GAMEMODE:RegisterPowerUp('shotgun', {
         Time = 10,
         OnCollect = function(ply)
@@ -31,13 +48,27 @@ hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
         end,
         Text = 'Shotgun!',
     })
+    
+    -- Crowbar for 10 seconds
+    GAMEMODE:RegisterPowerUp('crowbar', {
+        Time = 10,
+        OnCollect = function(ply)
+            ply:Give('weapon_crowbar')
+        end,
+        
+        OnFinish = function(ply)
+            ply:StripWeapon('weapon_crowbar')
+        end,
+        
+        Text = 'Crowbar!',
+    })
 end)
 
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout( ply )
-    ply:Give( 'weapon_platformbreaker' )
-    ply:SetWalkSpeed( 350 )
-    ply:SetRunSpeed( 360 )
+    ply:Give('weapon_platformbreaker')
+    ply:SetWalkSpeed(350)
+    ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
 end
 
@@ -55,18 +86,18 @@ function GM:PlayerSelectSpawn( pl )
 end
 
 -- Disable fall damage
-function GM:GetFallDamage( ply, vel )
+function GM:GetFallDamage(ply, vel)
     return 0
 end
 
 -- Handle player death
 -- It's hard to track kills in this gamemode
-function GM:DoPlayerDeath( ply, attacker, dmginfo )
+function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     
     -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if GetGlobalString('RoundState') != 'InRound' then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
@@ -90,9 +121,7 @@ hook.Add('PreRoundStart', 'CreatePlatforms', function()
 	-- Clear the level then randomly place platforms
     local gametype = table.Random(GAMEMODE.BlockOptions)
     SetGlobalString('PitfallType', gametype)
-    print('pre round start complete?')
     GAMEMODE:ClearLevel()
-    print('Cleared level')
     GAMEMODE:SpawnPlatforms()
 end )
 
@@ -128,46 +157,29 @@ end
 
 -- Spawn the platforms
 function GM:SpawnPlatforms()
-    print('Starting spawning..')
     local pos = GAMEMODE.PlatformPositions[game.GetMap()]
     if !pos then
         -- Check if this is a Trembling Tiles map
         if #ents.FindByClass('til_tile') > 0 then return end
+        
         -- Check if we have markers defined
         local p = ents.FindByClass('pf_marker')
         if p and #p > 0 then
             GAMEMODE:MarkerPlatforms(p)
-        end
-    else
-        print('Generating random platforms..')
-        GAMEMODE:RandomPlatforms(pos)
-    end
-    --[[
-    local players = #player.GetAll()
-    players = math.ceil( players/3 )
-    local num = 3 + (players*2)
-    local size = 200
-    
-    local px = pos.x - (size*num)/2
-    local py = pos.y - (size*num)/2
-    local pz = pos.z
-    
-    for row = 1,num do
-        for col=1,num do
-            self:SpawnPlatform( Vector( px, py, pz ), true )
-            self:SpawnPlatform( Vector( px, py, pz - 160 ), false )
-            self:SpawnPlatform( Vector( px, py, pz - 320 ), false )
-            py = py + size
+            return
         end
         
-        px = px + size
-        py = pos.y - (size*num)/2
+        -- All else fails, just generate them randomly at 0, 0, 0
+        local p = Vector(0, 0, 0)
+        GAMEMODE:RandomPlatforms(pos)
+    else
+        GAMEMODE:RandomPlatforms(pos)
     end
-    --]]
 end
 
 -- Generate a grid of platforms
 function GM:RandomPlatforms(pos)
+    -- Scaling information
     local levelscale = math.min(math.ceil(player.GetCount() / 4), 5)
     local rows = math.random(3 + levelscale, 5 + levelscale)
     local columns = math.random(3 + levelscale, 5 + levelscale)
@@ -264,3 +276,8 @@ function GM:AddPowerUp()
         target = true
     end
 end
+
+-- Register XP for Crate Wars
+hook.Add('RegisterStatsConversions', 'AddPitfallStatConversions', function()
+    GAMEMODE:AddStatConversion('Platform Damage', 'Platform Damage', 0.01)
+end)

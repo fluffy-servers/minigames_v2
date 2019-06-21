@@ -131,7 +131,7 @@ function GM:IncomingVictory(ply)
     ply.BestDistance = 1
     GAMEMODE:EndRound(ply)
     
-    GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5, Vector(0, 0, 72))
+    GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5)
 end
 
 -- Network resources

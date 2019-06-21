@@ -3,13 +3,14 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Players start off with a variety of weapons
-function GM:PlayerLoadout( ply )
-    ply:SetWalkSpeed( 350 )
-    ply:SetRunSpeed( 360 )
+function GM:PlayerLoadout(ply)
+    ply:StripWeapons()
+    ply:StripAmmo()
     
-    ply:Give('weapon_physcannon')
+    ply:SetWalkSpeed(300)
+    ply:SetRunSpeed(320)
+    
     ply:Give('weapon_crowbar')
-    
     ply:Give("weapon_smg1")
 	ply:Give("weapon_shotgun")
     ply:GiveAmmo(512, "SMG1", true)
@@ -20,7 +21,7 @@ end
 function GM:SpawnFlag()
     local flag = ents.Create('ctf_flag')
     if not IsValid(flag) then return end
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if GetGlobalString('RoundState') != 'InRound' then return end
     
 	-- If the spawn position is not yet defined, find it
     if not GAMEMODE.FlagSpawnPosition then
@@ -37,6 +38,7 @@ function GM:SpawnFlag()
     flag:SetPos(GAMEMODE.FlagSpawnPosition)
     flag:Spawn()
     flag:SetNWString('CurrentTeam', 'none')
+    SetGlobalInt('HoldingTeam', 0)
     GAMEMODE.FlagEntity = flag
     return flag
 end
@@ -45,69 +47,59 @@ end
 hook.Add('RoundStart', 'InitialSpawnFlag', function()
     timer.Simple(1, function() GAMEMODE:SpawnFlag() end)
     GAMEMODE.LastCarrier = nil
-end )
-
--- Returns the flag entity or spawns a new flag
-function GM:GetFlagEntity()
-    if not IsValid(GAMEMODE.FlagEntity) then
-        return GAMEMODE:SpawnFlag()
-    else
-        return GAMEMODE.FlagEntity
-    end
-end
+end)
 
 -- Handle when a team takes control of the flag
-function GM:CollectFlag(team)
+function GM:CollectFlag(ply)
 	-- Determine the new colour of the flag
-    local c = Vector(1, 1, 1)
-    local name = 'none'
-    if team == TEAM_RED then
-        c = Vector(1, 0, 0)
-        name = 'red'
-    elseif team == TEAM_BLUE then
-        c = Vector(0, 0, 1)
-        name = 'blue'
-    end
+    local team = ply:Team()
+    SetGlobalInt('HoldingTeam', team)
     
-	-- Set the flag current team & color
-    local flag = GAMEMODE:GetFlagEntity()
-    flag:SetNWString('CurrentTeam', name)
-    flag:SetNWVector('RColor', c)
+    ply:StripWeapons()
+    ply:SetWalkSpeed(375)
+    ply:SetRunSpeed(415)
+    ply:Give('weapon_ctf_flag')
+    GAMEMODE.LastCarrier = ply
+    
+    -- Make sure we only have one flag left
+    for k,v in pairs(ents.FindByClass('ctf_flag')) do
+        v:Remove()
+    end
 end
 
 -- Triggered when a goal is scored
-function GM:ScoreGoal(team)
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+function GM:ScoreGoal(team, entity)
+    if GetGlobalString('RoundState') != 'InRound' then return end
     
-	-- End the round, counting a win for the given team
-    GAMEMODE:EndRound(team)
-    
+    local message = nil
     -- Bonus to the person who scores the capture
     if IsValid(GAMEMODE.LastCarrier) then
         GAMEMODE.LastCarrier:AddFrags(3)
         GAMEMODE.LastCarrier:AddStatPoints('CTFCaptures', 1)
+        message = GAMEMODE.LastCarrier:Nick() .. ' scored the capture'
     end
     
-    GAMEMODE:EntityCameraAnnouncement(GAMEMODE:GetFlagEntity(), GAMEMODE.RoundCooldown or 5)
-end
-
--- Check for when the flag is picked up with the gravity gun
-function GM:GravGunOnPickedUp(ply, ent)
-    if ply:Team() != TEAM_BLUE and ply:Team() != TEAM_RED then return end
-    if not IsValid(GAMEMODE.FlagEntity) then GAMEMODE:SpawnFlag() end
+    -- End the round, counting a win for the given team
+    GAMEMODE:EndRound(team, message)
     
-    if ent == GAMEMODE.FlagEntity then
-        GAMEMODE:CollectFlag(ply:Team())
-        GAMEMODE.LastCarrier = ply
-    end
+    --GAMEMODE:EntityCameraAnnouncement(entity, GAMEMODE.RoundCooldown or 5)
 end
 
 -- Dissolve any players that get killed with the flag
 function GM:EntityTakeDamage(target, dmginfo)
-    if target:IsPlayer() then
-        local inflictor = dmginfo:GetInflictor()
-        if inflictor:GetClass() == "ctf_flag" then
-            dmginfo:SetDamageType(DMG_DISSOLVE)
-        end
+    local inflictor = dmginfo:GetInflictor()
+    if inflictor:GetClass() == 'ctf_flag' then
+        -- Block damage for teammates
+        if target:Team() == GetGlobalInt('HoldingTeam', 0) then return true end
+        dmginfo:SetDamageType(DMG_DISSOLVE)
+        dmginfo:SetAttacker(GAMEMODE.LastCarrier)
     end
+end
+
+function GM:DoPlayerDeath(ply, attacker, inflictor)
+    if ply:HasWeapon('weapon_ctf_flag') then
+        ply:GetWeapon('weapon_ctf_flag'):TossFlag(200)
+    end
+    
+    GAMEMODE.BaseClass:DoPlayerDeath(ply, attacker, inflictor)
 end

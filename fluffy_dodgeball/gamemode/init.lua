@@ -8,6 +8,7 @@ function GM:PlayerLoadout( ply )
     ply:StripWeapons()
     ply:StripAmmo()
     ply:Give('weapon_physcannon')
+    --ply:Give('db_launcher')
 end
 
 -- Add a new ball to the field

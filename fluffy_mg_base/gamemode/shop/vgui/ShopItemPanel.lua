@@ -178,7 +178,13 @@ end
 function PANEL:WearableIcon(ITEM)
     self.icon = vgui.Create("DModelPanel", self )
 	self.icon:Dock(FILL)
-	self.icon:SetModel( LocalPlayer():GetModel() )
+    
+    local model = LocalPlayer():GetModel()
+    if not string.find(model, 'models/player/') then
+        model = "models/player/Group01/male_07.mdl"
+    end
+    
+	self.icon:SetModel(model)
 	self.icon:SetAnimated( false )
     self.icon.Entity:SetPlaybackRate(0)
     

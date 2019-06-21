@@ -95,7 +95,12 @@ end
 -- This function is hooked into various gamemodes to stop cosmetics from being drawn when they shouldn't be
 -- Key examples of this is to override tracers, hide hats on certain playermodels, etc.
 function GM:DoCosmeticsCheck(ply, ITEM)
-    return hook.Run('ShouldDrawCosmetics', ply, ITEM) or true
+    local hook_res = hook.Run('ShouldDrawCosmetics', ply, ITEM)
+    if hook_res == false and hook_res != nil then
+        return false
+    else
+        return true
+    end
 end
 
 SHOP:LoadResources()

@@ -133,7 +133,7 @@ function GM:StartRound()
 end
 
 -- End the round
-function GM:EndRound(reason)
+function GM:EndRound(reason, extra)
     -- Check that we're in a round
     if GetGlobalString('RoundState') != 'InRound' then return end
     -- Stop the timer
@@ -147,8 +147,8 @@ function GM:EndRound(reason)
     
     -- Send the result to the players
     net.Start('EndRound')
-        net.WriteString( msg )
-        net.WriteString('')
+        net.WriteString(msg)
+        net.WriteString(extra or '')
     net.Broadcast()
     
     -- STATS: Add round wins

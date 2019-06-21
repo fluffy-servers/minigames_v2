@@ -159,7 +159,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     ply:CreateRagdoll()
     
     -- Play a funny death sound
-    if GAMEMODE.DeathSounds then
+    if GAMEMODE.DeathSounds and ply:Team() != TEAM_UNASSIGNED and not ply.Spectating then
         local gender = GAMEMODE:DetermineModelGender(ply:GetModel())
         local sound = GAMEMODE:GetRandomDeathSound(gender)
         ply:EmitSound(sound)

@@ -73,7 +73,7 @@ end)
 hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
 	if !ent:IsPlayer() then return end
 	local effect = ent:GetNWString('ShopTracerEffect')
-	if not effect then return end
+	if not effect or effect == '' then return end
     
     if not GAMEMODE:DoCosmeticsCheck(ent, {Type='Tracer'}) then return end
 	
