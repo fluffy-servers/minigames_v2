@@ -22,16 +22,17 @@ GM.VoteGamemodes = {
     {'fluffy_microgames', 'Microgames', 'FFA'},
     {'fluffy_paintball', 'Paintball', 'Team DM'},
     {'fluffy_climb', 'Climb!', 'FFA'},
+    {'fluffy_ctf', 'Capture The Flag', 'Team DM'},
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_canals_v2', 'pvp_crossfire_v2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2'}
+local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_canals_v2', 'pvp_crossfire_v2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_glacier'}
 local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_canals_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_lasertag_arena_v2'}
 
 GM.VoteMaps = {
-    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1'},
+    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1', 'sw_iceberg_small', 'sw_grassy'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
-    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
+    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2', 'dh_giants', 'dh_crumble'},
     fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3', 'sb_pyramid'},
     fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker', 'db_parkalyptic'},
     fluffy_pitfall = {'pf_ocean'},
@@ -47,6 +48,7 @@ GM.VoteMaps = {
     fluffy_microgames = {'micro_basic'},
     fluffy_climb = {'climb_prototype', 'climb_spacejump'},
     fluffy_paintball = {'pb_ratrun_v1', 'pb_paintballarena_v1'},
+    fluffy_ctf = {'ctf_prototype3'},
 }
 
 -- Variables to keep track of voting
