@@ -3,7 +3,8 @@ DeriveGamemode('fluffy_mg_base')
 GM.Name = 'Stalker'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    to do
+    The Stalker is a powerful invisible monster
+    Work together to destroy the Stalker without being eliminated first
 ]]
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?

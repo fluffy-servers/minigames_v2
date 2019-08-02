@@ -5,14 +5,11 @@ GM.Author = 'FluffyXVI'
 GM.HelpText = [[
     Break crates to power up during the final battle!
     
-    Each round is divided into two phases:
-     Crate Breaking
-       Break as many crates as you can!
-       More crates = more health
-       25 Crates = 1 SMG Grenade
-        
-     Deathmatch
-       Eliminate all the other players
+    During the first phase of each round, break all the crates!
+    Each crate will give you extra health and a chance of rare weapons
+    
+    About halfway through the round, the battle will begin!
+    The last player standing will win the round
 ]]
 
 GM.Elimination = true
