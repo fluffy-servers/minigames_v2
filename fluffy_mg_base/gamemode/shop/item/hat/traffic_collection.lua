@@ -80,3 +80,16 @@ ITEM.Model = 'models/props_c17/streetsign005b.mdl'
 ITEM.Slot = 'face'
 ITEM.Rarity = 4
 SHOP:RegisterHat( ITEM )
+
+-- Generated with the ingame creator
+ITEM = {}
+ITEM.VanillaID = 'conehat'
+ITEM.Name = 'Traffic Jam'
+ITEM.Model = 'models/props_junk/TrafficCone001a.mdl'
+ITEM.Attachment = 'eyes'
+
+ITEM.Modify = {
+	scale = 0.4,
+	offset = Vector(-8, 0, 8.5),
+	angle = Angle(30, 0, 0),
+}
