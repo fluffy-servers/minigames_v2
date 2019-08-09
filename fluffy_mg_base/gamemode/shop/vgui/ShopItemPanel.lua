@@ -17,6 +17,31 @@ rarity_names[3] = "Rare"
 rarity_names[4] = "Epic"
 rarity_names[5] = "Legendary"
 
+local camera_changes = {}
+camera_changes['back'] = function(p)
+    p:SetCamPos(Vector(-100, 0, -22))
+    p:SetLookAt(Vector(-50, 0, -22))
+    p:SetFOV(35)
+end
+
+camera_changes['hat'] = function(p)
+    p:SetCamPos(Vector(0, 15, -5))
+    p:SetLookAt(Vector(-50, 0, -5))
+    p:SetFOV(25)
+end
+
+camera_changes['face'] = function(p)
+    p:SetCamPos(Vector(0, 0, -12))
+    p:SetLookAt(Vector(-50, 0, -12))
+    p:SetFOV(25)
+end
+
+camera_changes['head'] = function(p)
+    p:SetCamPos(Vector(0, 15, -12))
+    p:SetLookAt(Vector(-50, 0, -12))
+    p:SetFOV(25)
+end
+
 local PANEL = {}
 
 function PANEL:Init()
@@ -188,11 +213,19 @@ function PANEL:WearableIcon(ITEM)
 	self.icon:SetAnimated( false )
     self.icon.Entity:SetPlaybackRate(0)
     
+    if camera_changes[ITEM.Slot] then
+        camera_changes[ITEM.Slot](self.icon)
+    else
+        self.icon:SetCamPos(Vector(0, 0, -12))
+        self.icon:SetLookAt(Vector(-50, 0, -12))
+        self.icon:SetFOV(26)
+    end
+    
     local shift = Vector(0, 0, 0)
-    if ITEM.IconShift then shift = ITEM.IconShift end
-    self.icon:SetCamPos( Vector(0, 0, -12) + shift)
-    self.icon:SetLookAt( Vector(-50, 0, -12) + shift)
-    self.icon:SetFOV(26)
+    if ITEM.IconShift then 
+        self.icon:SetCamPos(self.icon:GetCamPos() + ITEM.IconShift)
+        self.icon:SetLookAt(self.icon:GetLookAt() + ITEM.IconShift)
+    end
     self.icon.panel = self
     
     if !IsValid(self.icon.Entity) then return end
