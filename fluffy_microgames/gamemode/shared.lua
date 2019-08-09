@@ -1,4 +1,5 @@
 DeriveGamemode('fluffy_mg_base')
+include('ply_extension.lua')
 
 GM.Name = 'Microgames'
 GM.Author = 'FluffyXVI'
