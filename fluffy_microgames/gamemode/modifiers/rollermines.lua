@@ -27,5 +27,5 @@ MOD = {
             ply:AddFrags(2)
         end
     end,
-    hooks = {DoPlayerDeath = GAMEMODE.SurvivalBonus, EntityTakeDamage = GAMEMODE.CrowbarKnockback}
+    hooks = {DoPlayerDeath = GM.SurvivalBonus, EntityTakeDamage = GM.CrowbarKnockback}
 }

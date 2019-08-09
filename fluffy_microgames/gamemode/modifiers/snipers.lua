@@ -22,5 +22,5 @@ MOD = {
             ply:AddFrags(2)
         end
     end,
-    hooks = {DoPlayerDeath = GAMEMODE.SurvivalBonus}
+    hooks = {DoPlayerDeath = GM.SurvivalBonus}
 }
