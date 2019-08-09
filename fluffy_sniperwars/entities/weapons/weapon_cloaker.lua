@@ -92,3 +92,8 @@ function SWEP:PrimaryAttack()
     self.Owner:SetNWFloat('LastUtility', CurTime() + 5)
     self.LastUtility = self.Owner:GetNWFloat('LastUtility')
 end
+
+-- Disable shotgun
+function SWEP:SecondaryAttack()
+    return false
+end
