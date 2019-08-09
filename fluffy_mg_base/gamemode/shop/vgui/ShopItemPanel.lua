@@ -42,6 +42,12 @@ camera_changes['head'] = function(p)
     p:SetFOV(25)
 end
 
+camera_changes['body'] = function(p)
+    p:SetCamPos(Vector(0, 0, -32))
+    p:SetLookAt(Vector(-50, 0, -32))
+    p:SetFOV(40)
+end
+
 local PANEL = {}
 
 function PANEL:Init()

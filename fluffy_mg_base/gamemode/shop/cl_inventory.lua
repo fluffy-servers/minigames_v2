@@ -231,21 +231,23 @@ function SHOP:OpenInventory()
     
     
     -- Create the scrollable inventory display
+    local scroll_w = xx - 448
     local scroll = vgui.Create('DScrollPanel', frame)
-    scroll:SetSize(xx - 448, yy - 24)
+    scroll:SetSize(scroll_w, yy - 24)
     scroll:SetPos(448, 24)
     
-    -- Sizing for the display
-    local test = (xx - 448) / (128+8)
-    test = math.floor(test)*(128+8)-8
-    local border = (xx-448-test)/2
+    local s_offset = 16
+    local psize = (128+8)
+    local maxpanels = math.floor((scroll_w - s_offset) / psize) - 1
+    local twidth = psize*maxpanels
+    local border = (scroll_w - s_offset - twidth)/2
     
     local display = vgui.Create('DIconLayout', scroll)
-    display:SetSize(xx - 448 - border*2, yy)
+    display:SetSize(twidth, yy - 24)
     display:SetPos(border, 0)
     display:SetSpaceX(8)
     display:SetSpaceY(8)
-    display:SetBorder(0)
+    display:DockPadding(0, 0, 0, border/2)
     display:Layout()
     
     SHOP.InventoryPanel = frame
