@@ -24,7 +24,7 @@ function GM:HUDPaint()
     -- Obey the convar
     local shouldDraw = GetConVar('cl_drawhud'):GetBool()
     if !shouldDraw then 
-		if GAMEMODE.ScoringPaneEnabled and IsValid(ScorePane) then
+		if GAMEMODE:ScoringPaneActive() and IsValid(ScorePane) then
 			ScorePane:Hide()
 		end
         
@@ -51,13 +51,15 @@ function GM:HUDPaint()
     end
 	
 	-- Scoring pane
-	if GAMEMODE.ScoringPaneEnabled then
+	if GAMEMODE:ScoringPaneActive() then
 		if !IsValid(ScorePane) then 
 			GAMEMODE:CreateScoringPane() 
 		else
 			ScorePane:Show()
 		end
-	end
+	elseif IsValid(ScorePane) then
+        ScorePane:Hide()
+    end
     
     -- Hooks! Yay!
     hook.Run("HUDDrawTargetID")
@@ -610,6 +612,12 @@ end)
 -- Override in gamemodes
 function GM:ScoringPaneScore(ply)
 	return ply:Frags()
+end
+
+-- Function to determine if the scoring pane is enabled or not
+-- This is usually always static - but this might be useful to override in some rare cases
+function GM:ScoringPaneActive()
+    return GAMEMODE.ScoringPaneEnabled
 end
 
 -- Sort the scoring pane so the top player is first in the list etc.
