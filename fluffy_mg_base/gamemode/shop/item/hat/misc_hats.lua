@@ -4,6 +4,7 @@ ITEM.VanillaID = 'graduation'
 ITEM.Name = 'Graduation Cap'
 ITEM.Model = 'models/player/items/humans/graduation_cap.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	offset = Vector(-3, 0, -3.5),
@@ -17,6 +18,7 @@ ITEM.VanillaID = 'tophat'
 ITEM.Name = 'Fancy Hat'
 ITEM.Model = 'models/player/items/humans/top_hat.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	offset = Vector(-3, 0, -3.5),
@@ -47,6 +49,7 @@ ITEM.VanillaID = 'desklamp'
 ITEM.Name = 'Pixar'
 ITEM.Model = 'models/props_lab/desklamp01.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 0.5,

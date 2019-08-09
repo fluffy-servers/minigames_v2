@@ -4,6 +4,7 @@ ITEM.VanillaID = 'lampshade'
 ITEM.Name = 'The Brightest Bulb'
 ITEM.Model = 'models/props_c17/lampShade001a.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	offset = Vector(-4.1, 0, 2.8),
@@ -20,6 +21,7 @@ ITEM.VanillaID = 'headcrabhat'
 ITEM.Name = 'Slight Headache'
 ITEM.Model = 'models/Lamarr.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
     scale = 0.5,
@@ -36,6 +38,7 @@ ITEM.VanillaID = 'clockmask'
 ITEM.Name = 'Clockwork Orange'
 ITEM.Model = 'models/props_c17/clock01.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 0.9,
@@ -53,6 +56,7 @@ ITEM.VanillaID = 'bewaredog'
 ITEM.Name = 'Frank\'s Nightmare'
 ITEM.Model = 'models/props_lab/bewaredog.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 0.5,
@@ -70,6 +74,7 @@ ITEM.VanillaID = 'gmanonhead'
 ITEM.Name = 'Always Watching'
 ITEM.Model = 'models/gman_high.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 0.3,
@@ -87,6 +92,7 @@ ITEM.VanillaID = 'tophat'
 ITEM.Name = 'Dapper Top Hat'
 ITEM.Model = 'models/player/items/humans/top_hat.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 1.1,
@@ -104,6 +110,7 @@ ITEM.VanillaID = 'camera'
 ITEM.Name = 'Lights, Camera, Action!'
 ITEM.Model = 'models/dav0r/camera.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 0.6,
@@ -121,6 +128,7 @@ ITEM.VanillaID = 'woodencube'
 ITEM.Name = 'Be There'
 ITEM.Model = 'models/props_phx/construct/wood/wood_wire1x1x1.mdl'
 ITEM.Attachment = 'eyes'
+ITEM.Slot = 'hat'
 
 ITEM.Modify = {
 	scale = 0.3,
