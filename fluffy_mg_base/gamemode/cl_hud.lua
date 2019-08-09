@@ -24,8 +24,8 @@ function GM:HUDPaint()
     -- Obey the convar
     local shouldDraw = GetConVar('cl_drawhud'):GetBool()
     if !shouldDraw then 
-		if GAMEMODE:ScoringPaneActive() and IsValid(ScorePane) then
-			ScorePane:Hide()
+		if GAMEMODE:ScoringPaneActive() and IsValid(GAMEMODE.ScorePane) then
+			GAMEMODE.ScorePane:Hide()
 		end
         
 		return 
@@ -52,13 +52,13 @@ function GM:HUDPaint()
 	
 	-- Scoring pane
 	if GAMEMODE:ScoringPaneActive() then
-		if !IsValid(ScorePane) then 
+		if !IsValid(GAMEMODE.ScorePane) then 
 			GAMEMODE:CreateScoringPane() 
 		else
-			ScorePane:Show()
+			GAMEMODE.ScorePane:Show()
 		end
-	elseif IsValid(ScorePane) then
-        ScorePane:Hide()
+	elseif IsValid(GAMEMODE.ScorePane) then
+        GAMEMODE.ScorePane:Hide()
     end
     
     -- Hooks! Yay!
@@ -622,7 +622,7 @@ end
 
 -- Sort the scoring pane so the top player is first in the list etc.
 function GM:ScoreRefreshSort()
-    if !ScorePane then return end
+    if !GAMEMODE.ScorePane then return end
     
     -- Sort the table with default implementation
     local scores = {}
@@ -633,7 +633,7 @@ function GM:ScoreRefreshSort()
     table.sort(scores, function(a, b) return a[2] > b[2] end)
     
     -- Clear the current order
-    ScorePane:Clear()
+    GAMEMODE.ScorePane:Clear()
     
     -- math stuff
     local count = ScrW()*0.5 / 68
@@ -644,7 +644,7 @@ function GM:ScoreRefreshSort()
     -- Reorder the players in the score panel
     for k,v in pairs(scores) do
         if k > count then return end
-        ScorePane:CreatePlayer(v[1], xx)
+        GAMEMODE.ScorePane:CreatePlayer(v[1], xx)
         xx = xx + 68
     end
 end
@@ -676,7 +676,7 @@ function GM:CreateScoringPane()
     function Frame:Paint()
     
     end
-    ScorePane = Frame
+    GAMEMODE.ScorePane = Frame
 	
     -- Refresh the score panel every 2 seconds
     -- This is a bit expensive hence the infrequency
