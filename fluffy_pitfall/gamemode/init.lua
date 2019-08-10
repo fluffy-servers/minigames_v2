@@ -29,7 +29,7 @@ end
 GM.BlockOptions = {
     'circle',
     'square',
-    --'triangle',
+    'hexagon',
     'mixed',
     --'props',
 }
@@ -181,8 +181,10 @@ end
 function GM:RandomPlatforms(pos)
     -- Scaling information
     local levelscale = math.min(math.ceil(player.GetCount() / 4), 5)
-    local rows = math.random(3 + levelscale, 5 + levelscale)
-    local columns = math.random(3 + levelscale, 5 + levelscale)
+    local mins = 3
+    local maxs = 9
+    local rows = math.random(mins + levelscale, maxs + levelscale)
+    local columns = math.random(mins + levelscale, maxs + levelscale)
     local levels = math.random(1, 3 + math.floor(levelscale/2))
     if math.random() > 0.5 then levels = levels + 1 end
     
@@ -192,7 +194,7 @@ function GM:RandomPlatforms(pos)
     end
     
     -- Position the platforms in the middle of the level
-    local size = math.random(120, 200)
+    local size = math.random(75, 120)
     local px = pos.x - (size*rows)/2
     local py = pos.y - (size*columns)/2
     local pz = pos.z
@@ -241,7 +243,7 @@ function GM:SpawnPlatform(pos, addspawn)
 	local prop = ents.Create( "pf_platform" )
 	if not IsValid(prop) then return end
 	prop:SetAngles( Angle( 0, 0, 0 ) )
-	prop:SetPos( pos )
+	prop:SetPos( pos + Vector(0, 0, math.random()*math.random(-2, 2)) )
 	prop:Spawn()
 	prop:Activate()
     
@@ -263,6 +265,9 @@ end
 
 -- Award powerups to players randomly when triggered
 function GM:AddPowerUp()
+    if true then return end
+
+
     local t = table.Random(GAMEMODE:GetPowerUpTypes())
     local target = false
     local platforms = ents.FindByClass('til_tile')

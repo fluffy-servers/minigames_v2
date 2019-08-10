@@ -25,7 +25,7 @@ SWEP.Secondary.ClipSize		= 9999
 SWEP.Secondary.DefaultClip	= 9999
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo		    = 9999
-SWEP.Secondary.Delay		= 3
+SWEP.Secondary.Delay		= 1
 SWEP.Secondary.NextUse		= 0
 SWEP.Secondary.Recoil       = 2
 
@@ -77,7 +77,12 @@ function SWEP:Knockback()
     if trace.Hit and trace.Entity and trace.Entity:IsPlayer() then
         local dist = self.Owner:GetPos():DistToSqr(trace.Entity:GetPos())
         if dist < 400000 then
-            trace.Entity:SetVelocity(trace.Entity:GetVelocity() + ((self.Owner:GetAimVector() + Vector(0, 0, 0.3)) * 900))
+            trace.Entity:ViewPunch(Angle(-10, 0, 0))
+            
+            local vec = self.Owner:GetAimVector()
+            vec.z = math.abs(vec.z) + 0.15
+            trace.Entity:SetGroundEntity(NULL)
+            trace.Entity:SetLocalVelocity(vec * math.random(250, 550))
         end
     end
     
