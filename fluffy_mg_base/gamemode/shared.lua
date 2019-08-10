@@ -23,6 +23,10 @@ GM.HelpText = [[
 GM.TeamBased = false    -- Is the gamemode team based, or is it FFA?
 GM.Elimination = false  -- Should players stay dead, or should they respawn?
 
+GM.DeathLingerTime = 3  -- How long should players linger on their corpse before ghosting?
+GM.RespawnTime = 2      -- How long do players have to wait before respawning?
+GM.AutoRespawn = true   -- Should players automatically respawn?
+
 GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?

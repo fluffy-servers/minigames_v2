@@ -16,6 +16,9 @@ GM.RoundType = 'timed_endless'
 GM.GameTime = 500
 GM.HUDStyle = 4
 
+GM.RespawnTime = 2
+GM.AutoRespawn = true
+
 GM.SpawnProtection = true -- Spawn protection enabled
 
 function GM:Initialize()
