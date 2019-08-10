@@ -196,7 +196,6 @@ end
 
 -- Fairly self-explanatory
 function GM:PlayerSpawnAsSpectator( ply )
-    print('Spawned ' .. ply:Nick() .. ' as a spectator')
 	ply:StripWeapons()
 	ply.Spectating = true
     ply:Spectate( OBS_MODE_ROAMING )

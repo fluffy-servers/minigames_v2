@@ -56,7 +56,7 @@ GM.VotingTime = false
 GM.CurrentVoteTable = {}
 GM.VotingResults = {}
 GM.RTV = {}
-GM.RTVCount = GAMEMODE.RTVCount or 0
+GM.RTVCount = GM.RTVCount or 0
 
 -- Network strings
 util.AddNetworkString('SendMapVoteTable')
