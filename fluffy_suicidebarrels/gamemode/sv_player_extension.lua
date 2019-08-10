@@ -1,4 +1,16 @@
 -- This file contains the useful code that makes the barrels work properly
+local taunts = {
+	"vo/npc/male01/behindyou01.wav",
+	"vo/npc/male01/behindyou02.wav",
+	"vo/npc/male01/watchout.wav",
+	"vo/npc/male01/upthere01.wav",
+	"vo/npc/male01/upthere02.wav",
+	"vo/npc/male01/thehacks01.wav",
+	"vo/npc/male01/strider_run.wav",
+	"vo/npc/male01/runforyourlife01.wav",
+	"vo/npc/male01/runforyourlife02.wav",
+	"vo/npc/male01/runforyourlife03.wav"
+}
 
 -- Make suicide barrels go boom when they die
 hook.Add('PlayerDeath', 'SuicideBarrelsDeath', function( ply )
@@ -7,7 +19,7 @@ hook.Add('PlayerDeath', 'SuicideBarrelsDeath', function( ply )
         boom:SetPos( ply:GetPos() ) 
         boom:SetOwner( ply )
         boom:Spawn()
-        boom:SetKeyValue( "iMagnitude", "125" ) 
+        boom:SetKeyValue( "iMagnitude", "135" ) 
         boom:Fire( "Explode", 0, 0 ) 
     end
 end )
@@ -34,7 +46,7 @@ hook.Add('KeyPress', 'SuicideBarrelBoom', function( ply, key )
         if !ply:Alive() then return end
         if ply.NextTaunt and CurTime() > ply.NextTaunt then
             ply.NextTaunt = CurTime() + 1
-            ply:EmitSound( "vo/npc/male01/behindyou01.wav", 100, 140 ) -- todo: variety
+            ply:EmitSound(table.Random(taunts), 100, 140 ) -- todo: variety
         end
     end
 end )
