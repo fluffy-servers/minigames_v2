@@ -10,6 +10,7 @@ SWEP.Primary.Damage = 1000
 SWEP.Primary.Delay = 0.5
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0
+SWEP.Primary.NumShots = 1
 
 -- Primary ammo settings
 SWEP.Primary.ClipSize = -1
@@ -28,14 +29,24 @@ SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 
 -- Generic primary attack function
 function SWEP:PrimaryAttack()
+    if not self:CanPrimaryAttack() then return end
+    
     self.Weapon:EmitSound(self.Primary.Sound)
-	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+	self:ShootBullet(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+    self:TakePrimaryAmmo(1)
+    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
 end
 
 function SWEP:SecondaryAttack()
 	-- Nothing here!
 	-- Make sure this is blank to override the default
+    if not self:CanSecondaryAttack() then return end
+end
+
+function SWEP:Reload()
+    self:DefaultReload(ACT_VM_RELOAD)
 end
 
 -- Helper function to fire bullets
@@ -47,12 +58,9 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
 	bullet.Src 		= self.Owner:GetShootPos()
 	bullet.Dir 		= self.Owner:GetAimVector()
 	bullet.Spread 	= Vector(scale, scale, 0)	
-	bullet.Force	= math.Round(damage * 2)							
+	bullet.Force	= math.Round(damage)							
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = self.Primary.Ammo
-    bullet.Callback = function(a, t, dmg)
-        dmg:SetDamageType(DMG_DISSOLVE)
-    end
 	self.Owner:FireBullets(bullet)
     
 	-- Make the firing look nice
@@ -70,7 +78,7 @@ function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
 	bullet.Src 		= self.Owner:GetShootPos()
 	bullet.Dir 		= self.Owner:GetAimVector()
 	bullet.Spread 	= Vector(scale, scale, 0)
-	bullet.Force	= math.Round(damage * 2)
+	bullet.Force	= math.Round(damage)
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = self.Primary.Ammo
 	bullet.Tracer = 1
