@@ -55,6 +55,8 @@ GM.VoteMaps = {
 GM.VotingTime = false
 GM.CurrentVoteTable = {}
 GM.VotingResults = {}
+GM.RTV = {}
+GM.RTVCount = GAMEMODE.RTVCount or 0
 
 -- Network strings
 util.AddNetworkString('SendMapVoteTable')
@@ -163,3 +165,59 @@ function GM:EndVote()
     game.ConsoleCommand('gamemode ' .. winning_gamemode .. '\n')
     timer.Simple(5, function() game.ConsoleCommand('changelevel ' .. winning_map .. '\n') end)
 end
+
+-- Rock the vote logic function
+function GM:RockTheVote(ply)
+    if !IsValid(ply) then return end
+    if #GAMEMODE.CurrentVoteTable >= 1 then return end
+    
+    if player.GetCount() == 1 then
+        GAMEMODE.RTVCount = 100
+        ply:ChatPrint('Vote to skip map passed since you are alone')
+        timer.Simple(3, function()
+            GAMEMODE:EndGame()
+        end)
+        
+        return
+    end
+    
+	local voted = false
+	if !GAMEMODE.RTV[ply] then
+		GAMEMODE.RTV[ply] = true
+		GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 0) + 1
+		
+		local c = GAMEMODE.RTVCount
+		local t = player.GetCount()
+		local m = math.ceil(player.GetCount() * 0.5)
+		if c >= m then
+			for k,v in pairs(player.GetAll()) do
+				v:ChatPrint('Vote to skip map passed!')
+			end
+            
+            timer.Simple(3, function()
+                GAMEMODE:EndGame()
+            end)
+		else
+			for k,v in pairs(player.GetAll()) do
+				v:ChatPrint(ply:Nick() .. ' has voted to skip the map.')
+				v:ChatPrint(m - c .. ' more votes are needed.')
+			end
+		end
+	else
+		ply:ChatPrint('You have already voted to skip the map!')
+	end
+end
+
+hook.Add('PlayerDisconnected', 'RemoveRTVVotes', function(ply)
+	if GAMEMODE.RTV[ply] then
+		GAMEMODE.RTV[ply] = nil
+		GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 1) - 1
+	end
+end )
+
+hook.Add('PlayerSay', 'TrackRTV', function(ply, txt)
+	if txt == '!rtv' or txt == '/rtv' then
+        GAMEMODE:RockTheVote(ply)
+        return ""
+	end
+end)
