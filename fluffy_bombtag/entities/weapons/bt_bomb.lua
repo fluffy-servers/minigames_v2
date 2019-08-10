@@ -37,7 +37,6 @@ function SWEP:Think()
 	if CLIENT and not self.EndingTime then
 		self.EndingTime = CurTime() + math.Clamp(self.Owner:GetNWInt("Time", 0) - 1, 0, 60)
 		self.TimeLength = math.Clamp(self.Owner:GetNWInt("Time", 0) - 1, 0, 60)
-        print(self.TimeLength)
 	end
 	
     -- Tick down the bomb
@@ -99,6 +98,9 @@ function SWEP:Trace()
         self.Owner:AddStatPoints('Bomb Passes', 1)
         self.Owner:StripWeapon("bt_bomb")
 		timer.Simple(0.1, function() ent:Give("bt_bomb") end)
+        
+        local name = string.sub(ent:Nick(), 1, 10)
+        GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1)
 	end
 end
 
