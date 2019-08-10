@@ -265,22 +265,37 @@ function GM:GetTeamLivingPlayers( t )
     return alive
 end
 
--- Table shuffle
--- Borrowed from TTT
--- Fisher-Yates implementation
-local table = table
+-- Fisher-Yates table shuffle
 function table.Shuffle(t)
-  local n = #t
+    for i = #t, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
+    end
+    return t
+end
 
-  while n > 2 do
-    -- n is now the last pertinent index
-    local k = rand(n) -- 1 <= k <= n
-    -- Quick swap
-    t[n], t[k] = t[k], t[n]
-    n = n - 1
-  end
-
-  return t
+-- Test the fairness of the shuffling
+-- I'm pretty sure it's fair now
+function testShuffle()
+    local results1 = {}
+    local results2 = {}
+    local resultsN = {}
+    local tester = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}
+    
+    for i = 1, 10000 do
+        local t = table.Copy(tester)
+        t = table.Shuffle(t)
+        
+        results1[t[1]] = (results1[t[1]] or 0) + 1
+        results2[t[1]] = (results2[t[2]] or 0) + 1
+        resultsN[t[#t]] = (resultsN[t[#t]] or 0) + 1
+    end
+    
+    PrintTable(results1)
+    print('-')
+    PrintTable(results2)
+    print('-')
+    PrintTable(resultsN)
 end
 
 -- Pick a random player
