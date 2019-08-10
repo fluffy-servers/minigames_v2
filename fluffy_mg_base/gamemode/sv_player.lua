@@ -48,7 +48,7 @@ function GM:PlayerSetModel(ply)
 	ply:SetModel( modelname )
     
     -- Set player colors
-	if GAMEMODE.TeamBased then
+	if GAMEMODE.TeamBased and not GAMEMODE.ForceFFAColors then
 		local color = team.GetColor( ply:Team() )
 		ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
         

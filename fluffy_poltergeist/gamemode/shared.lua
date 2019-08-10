@@ -27,6 +27,7 @@ GM.NoSuicidePenalty = true
 
 GM.RoundNumber = 10      -- How many rounds?
 GM.RoundTime = 90      -- Seconds each round lasts for
+GM.ForceFFAColors = true -- Force team gamemodes to use FFA colors
 
 function GM:Initialize()
 
