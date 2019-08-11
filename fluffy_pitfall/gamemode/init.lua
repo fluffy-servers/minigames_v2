@@ -96,6 +96,11 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     
+    if ply.LastKnockback then
+        attacker = ply.LastKnockback
+        dmginfo:SetAttacker(attacker)
+    end
+    
     -- Do not count deaths unless in round
     if GetGlobalString('RoundState') != 'InRound' then return end
     ply:AddDeaths(1)
