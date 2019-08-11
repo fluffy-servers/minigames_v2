@@ -5,6 +5,12 @@ if CLIENT then
 	SWEP.PrintName = "Shotgun"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
+    
+    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+		draw.SimpleText('0', "HL2MPTypeDeath", x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
+	end
+    
+    killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
 end
 
 -- Primary fire damage and aim settings
@@ -22,6 +28,8 @@ SWEP.Primary.Ammo = "Buckshot"
 SWEP.Primary.Automatic = true
 
 SWEP.Secondary.Automatic = true
+
+SWEP.HoldType = 'shotgun'
 
 -- Set the model for the gun
 -- Using hands is preferred
