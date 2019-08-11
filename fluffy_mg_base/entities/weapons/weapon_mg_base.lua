@@ -58,7 +58,7 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
 	bullet.Src 		= self.Owner:GetShootPos()
 	bullet.Dir 		= self.Owner:GetAimVector()
 	bullet.Spread 	= Vector(scale, scale, 0)	
-	bullet.Force	= math.Round(damage)							
+	bullet.Force	= math.Round(damage/10)							
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = self.Primary.Ammo
 	self.Owner:FireBullets(bullet)
@@ -78,7 +78,7 @@ function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
 	bullet.Src 		= self.Owner:GetShootPos()
 	bullet.Dir 		= self.Owner:GetAimVector()
 	bullet.Spread 	= Vector(scale, scale, 0)
-	bullet.Force	= math.Round(damage)
+	bullet.Force	= math.Round(damage/10)
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = self.Primary.Ammo
 	bullet.Tracer = 1

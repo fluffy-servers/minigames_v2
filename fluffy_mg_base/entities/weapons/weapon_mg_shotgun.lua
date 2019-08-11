@@ -85,18 +85,18 @@ end
 
 function SWEP:CanPrimaryAttack()
     if self:Clip1() <= 0 then
-        self:EmitSound("Weapon_Shotgun.Empty")
-        self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-        self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+        self:Reload()
         return false
     end
+    
+    if self:GetReloading() then return false end
     
     return true
 end
 
 function SWEP:Think()
     if self:GetReloading() then
-        if self:GetOwner():KeyDown(IN_ATTACK) or self:GetOwner():KeyDown(IN_ATTACK2) then
+        if (self:GetOwner():KeyDown(IN_ATTACK) or self:GetOwner():KeyDown(IN_ATTACK2)) and self:Clip1() >= 1 then
             self:FinishReload()
             return
         end
