@@ -13,7 +13,7 @@ function ENT:Initialize()
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:PhysWake()
-    self:SetGravity(0)
+    self:SetGravity(1)
     
     -- Add a trail
     self.Trail = util.SpriteTrail(self, 0, team.GetColor(self.Player:Team()) or color_white, false, 24, 2, 4, 1, 'trails/laser')

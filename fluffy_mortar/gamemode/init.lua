@@ -10,3 +10,17 @@ function GM:PlayerLoadout(ply)
     ply:Give('mortar')
     ply:GiveAmmo(1000, 'RPG_Round')
 end
+
+-- No fall damage
+function GM:GetFallDamage()
+    return 0
+end
+
+-- During the crate phase, players cannot die
+function GM:EntityTakeDamage(target, dmginfo)
+    local attacker = dmginfo:GetAttacker()
+    if attacker == target then
+        dmginfo:SetDamage(0)
+        target:SetLocalVelocity(dmginfo:GetDamageForce():GetNormalized() * 650)
+    end
+end

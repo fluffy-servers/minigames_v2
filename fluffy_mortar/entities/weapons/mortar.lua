@@ -38,7 +38,7 @@ function SWEP:Launch()
     self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
     self.Owner:SetAnimation(PLAYER_ATTACK1)
     self.Weapon:EmitSound('Weapon_RPG.Single')
-    self:CreateRocket(src, self.Owner:GetAimVector()*1500)
+    self:CreateRocket(src, self.Owner:GetAimVector()*1000)
     --timer.Simple(0.3, function() self.Weapon:SendWeaponAnim(ACT_VM_DRAW) end)
 end
 
