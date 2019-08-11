@@ -11,7 +11,8 @@ local hide = {
 	CHudBattery = true,
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
-    CHudCrosshair = true
+    CHudCrosshair = true,
+    CHudDamageIndicator = true
 }
 
 hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)

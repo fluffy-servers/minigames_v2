@@ -276,12 +276,12 @@ function PANEL:DoClick()
         -- Add equip button
         local text = "Equip"
         if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] == true then text = "Unequip" end
-        Menu:AddOption(text, function() SHOP:RequestEquip(self.key) end ):SetIcon("icon16/wrench.png")
+        Menu:AddOption(text, function() SHOP:RequestEquip(self.key) end):SetIcon("icon16/wrench.png")
     end
     
     -- Add paint button
     if ITEM.Paintable then
-        Menu:AddOption("Select Paint", function() SHOP:OpenPaintBox(self.key) end ):SetIcon("icon16/palette.png")
+        Menu:AddOption("Select Paint", function() SHOP:OpenPaintBox(self.key) end):SetIcon("icon16/palette.png")
     end
 	
 	-- Add remove / gift buttons
@@ -296,7 +296,7 @@ function PANEL:DoClick()
 			for k,v in pairs(player.GetHumans()) do
 				if !IsValid(v) then continue end
 				if v == LocalPlayer() then continue end
-				submenu:AddOption(v:Nick(), function() SHOP:RequestGift(key, v) end)
+				submenu:AddOption(v:Nick(), function() SHOP:RequestGift(self.key, v) end)
 			end
 		end
 	end

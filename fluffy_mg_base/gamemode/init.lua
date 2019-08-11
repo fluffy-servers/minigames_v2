@@ -19,6 +19,8 @@ AddCSLuaFile('cl_announcements.lua')
 AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
 
+AddCSLuaFile('shop/sh_init.lua')
+
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
 AddCSLuaFile('sh_levels.lua')
