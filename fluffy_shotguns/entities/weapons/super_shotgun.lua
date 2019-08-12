@@ -29,7 +29,7 @@ SWEP.Primary.Ammo = "Buckshot"
 SWEP.Primary.Automatic = true
 
 SWEP.Secondary.Automatic = true
-SWEP.Secondary.Delay = 0.85
+SWEP.Secondary.Delay = 1.15
 
 SWEP.HoldType = 'shotgun'
 
@@ -126,8 +126,8 @@ function SWEP:SecondaryAttack()
     
     self.Weapon:EmitSound("Weapon_Shotgun.Double")
 	self:ShootBullet(self.Primary.Damage, self.Primary.NumShots * 2, self.Primary.Cone)
-    self:SetNextPrimaryFire(CurTime() + self.Secondary.Delay + 0.25)
-    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay + 0.35)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     self:TakePrimaryAmmo(2)
     self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil*2, math.Rand(-0.1, 0.1) * self.Primary.Recoil*2, 0))
     
