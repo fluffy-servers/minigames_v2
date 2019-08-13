@@ -70,6 +70,11 @@ function GM:StatsRoundWin(winners)
     end
 end
 
+-- Remove fall damage
+function GM:GetFallDamage()
+    return 0
+end
+
 -- Register XP for Suicide Barrels
 hook.Add('RegisterStatsConversions', 'AddSuicideBarrelsStatConversions', function()
     GAMEMODE:AddStatConversion('Humans Killed', 'Humans Killed', 3)
