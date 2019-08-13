@@ -9,6 +9,10 @@ function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:Give('mortar')
     ply:GiveAmmo(1000, 'RPG_Round')
+    
+    local hp = 100 + 25 * GAMEMODE:NumNonSpectators()
+    ply:SetMaxHealth(hp)
+    ply:SetHealth(hp)
 end
 
 -- No fall damage
