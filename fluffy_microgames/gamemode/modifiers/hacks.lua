@@ -27,5 +27,5 @@ MOD = {
             ply:AddFrags(2)
         end
     end,
-    hooks = {DoPlayerDeath = SurvivalBonus, EntityTakeDamage = CrowbarKnockback}
+    hooks = {DoPlayerDeath = SurvivalBonus, EntityTakeDamage = function(ent, dmg) GAMEMODE:CrowbarKnockback(ent, dmg) end}
 }
