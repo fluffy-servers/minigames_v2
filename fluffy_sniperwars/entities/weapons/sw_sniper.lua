@@ -13,7 +13,7 @@ if CLIENT then
 end
 
 -- Model information
-SWEP.PrintName = 'Sniper Rifle [New]'
+SWEP.PrintName = 'Sniper Rifle'
 SWEP.ViewModel = "models/weapons/cstrike/c_snip_awp.mdl"
 SWEP.ViewModelFOV = 75
 SWEP.ViewModelFlip = false
