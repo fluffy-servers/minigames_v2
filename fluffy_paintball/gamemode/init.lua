@@ -195,3 +195,9 @@ end)
 hook.Add('RegisterStatsConversions', 'AddPaintballStatConversions', function()
     GAMEMODE:AddStatConversion('Weapons Collected', 'Weapons Collected', 0.25)
 end)
+
+-- Hide all Tracer cosmetics
+-- Wouldn't be paintball without paintball tracers
+hook.Add('ShouldDrawCosmetics', 'HideLaserDanceCosmetics', function(ply, ITEM)
+    if ITEM.Type == 'Tracer' then return false end
+end)
