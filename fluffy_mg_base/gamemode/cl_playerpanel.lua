@@ -2,88 +2,103 @@
 	This file defines the info panel that appears at the start of each map
 --]]
 
--- Information & help panel at the start of a game
---[[
-function GM:CreateHelpPanel()
-    if IsValid(GAMEMODE.MinigamesHelpPanel) then return end
+local motd_lightblue = Color(0, 168, 255)
+local motd_darkblue = Color(0, 151, 230)
+local motd_white = Color(245, 246, 250)
+function GM:CreateInfoFrame()
+    if IsValid(GAMEMODE.MinigamesInfoPanel) then return end
     
+    -- Create the frame for the info panel
     local f = vgui.Create('DFrame')
     f:SetTitle('')
-    f:SetSize(480, 640)
+    f:SetSize(ScrW() * 0.75, ScrH() * 0.75)
     f:Center()
-    function f:Paint(w, h)
-        draw.RoundedBox(0, 0, 0, w, 64, GAMEMODE.FCol2)
-        draw.RoundedBox(0, 0, 64, w, h-64, Color(150, 150, 160))--Color(53, 59, 72))
-        draw.SimpleText(GAMEMODE.Name, 'FS_L64', 4, 0, GAMEMODE.FCol1)
-    end
     f:MakePopup()
+    f:ShowCloseButton(true)
+    f.CreationTime = CurTime()
     
-    local help = vgui.Create('DLabel', f)
-    help:SetSize(480, 496)
-    help:SetPos(0, 80)
-    help:SetText(GAMEMODE.HelpText)
-    help:SetFont('FS_16')
-    help:SetTextColor(GAMEMODE.FCol1)
-    help:SetWrap(true)
-    help:SetContentAlignment(7)
-    
-    local team_panel = vgui.Create('DPanel', f)
-    team_panel:SetSize(480, 64)
-    team_panel:SetPos(0, 576)
-    
-    local num = #team.GetAllTeams()
-    if GAMEMODE.TeamBased then
-        local tw = 480/3
-        for id, t in pairs(team.GetAllTeams()) do
-            if id == TEAM_CONNECTING or id == TEAM_UNASSIGNED then continue end
-            
-            local teamp = vgui.Create('DButton', team_panel)
-            teamp:SetSize(tw, 64)
-            teamp:Dock(LEFT)
-            teamp:SetText('')
-            teamp:SetTextColor(GAMEMODE.FCol1)
-            teamp:SetFont('FS_B40')
-            local c = team.GetColor(id)
-            if id == TEAM_SPECTATOR then
-                c = Color(251, 197, 49)
-            end
-            
-            function teamp:Paint(w, h)
-                draw.RoundedBox(0, 0, 0, w, h, c)
-                local name = team.GetName(id) or ''
-                draw.SimpleText(name, 'FS_B40', w/2, h/2 - 6, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                local num = team.NumPlayers(id) or 0
-                draw.SimpleText(num .. ' players', 'FS_B24', w/2, h/2 + 16, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            end
-            
-            function teamp:DoClick()
-                f:Close()
-                RunConsoleCommand('changeteam', id)
-            end
-            
-        end
-    else
-        --local spectate = vgui.Create('DButton', team_panel)
-        --spectate:SetSize(160, 64)
-        --spectate:SetPos(0, 0)
-        
-        local play = vgui.Create('DButton', team_panel)
-        play:SetSize(480, 64)
-        play:SetText('Play!')
-        play:SetTextColor(GAMEMODE.FCol1)
-        play:SetFont('FS_B40')
-        function play:Paint(w, h)
-            draw.RoundedBox(0, 0, 0, w, h, GAMEMODE.FCol3)
-        end
-        
-        function play:DoClick()
-            f:Close()
+    f.Think = function(self)
+        local state = GetGlobalString('RoundState', 'GameNotStarted')
+        if state == 'GameNotStarted' then
+            f:ShowCloseButton(false)
+        else
+            f:ShowCloseButton(true)
         end
     end
     
-    GAMEMODE.MinigamesHelpPanel = f
+    f.Paint = function(self, w, h)
+        Derma_DrawBackgroundBlur(self, self.CreationTime)
+        DisableClipping(true)
+        local header_h = 64
+        local footer_h = 16
+        
+        draw.RoundedBoxEx(8, 0, 0, w, header_h, motd_lightblue, true, true, false, false)
+        draw.RoundedBoxEx(8, 0, header_h, w, h - header_h, motd_white, false, false, true, true)
+        
+        draw.SimpleText('Fluffy Minigames', 'FS_L32', 8, 0, motd_white)
+        DisableClipping(false)
+    end
+    
+    -- Create the different category buttons
+    local b_width = 112
+    local b_index = 0
+    local bInfo = vgui.Create('DButton', f)
+    bInfo:SetSize(b_width, 32)
+    bInfo:SetPos(b_width*b_index, 32)
+    bInfo:SetText('')
+    bInfo.Paint = function(self, w, h)
+        local c = motd_lightblue
+        if self:IsHovered() or self.Selected then c = motd_darkblue end
+        
+        draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, false, true)
+        draw.SimpleText('Info', 'FS_32', 6, h/2 + 2, motd_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    end
+    b_index = b_index + 1
+    
+    if GAMEMODE.TeamBased then
+        local bTeam = vgui.Create('DButton', f)
+        bTeam:SetSize(b_width, 32)
+        bTeam:SetPos(b_width*b_index, 32)
+        bTeam:SetText('')
+        bTeam.Paint = function(self, w, h)
+            local c = motd_lightblue
+            if self:IsHovered() or self.Selected then c = motd_darkblue end
+            
+            draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, false, true)
+            draw.SimpleText('Team', 'FS_32', 6, h/2 + 2, motd_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        end
+        b_index = b_index + 1
+    end
+    
+    local bShop = vgui.Create('DButton', f)
+    bShop:SetSize(b_width, 32)
+    bShop:SetPos(b_width*b_index, 32)
+    bShop:SetText('')
+    bShop.Paint = function(self, w, h)
+        local c = motd_lightblue
+        if self:IsHovered() or self.Selected then c = motd_darkblue end
+        
+        draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, false, true)
+        draw.SimpleText('Player', 'FS_32', 6, h/2 + 2, motd_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    end
+    b_index = b_index + 1
+    
+    local bDiscord = vgui.Create('DButton', f)
+    bDiscord:SetSize(b_width, 32)
+    bDiscord:SetPos(b_width*b_index, 32)
+    bDiscord:SetText('')
+    bDiscord.Paint = function(self, w, h)
+        local c = motd_lightblue
+        if self:IsHovered() or self.Selected then c = motd_darkblue end
+        
+        draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, false, true)
+        draw.SimpleText('Discord', 'FS_32', 6, h/2 + 2, motd_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+    end
+    b_index = b_index + 1
+    
+    
+    GAMEMODE.MinigamesInfoPanel = f
 end
---]]
 
 local motd_lightblue = Color(0, 168, 255)
 local motd_darkblue = Color(0, 151, 230)

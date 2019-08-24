@@ -18,6 +18,8 @@ SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.Automatic = false
 
+SWEP.HoldType = 'pistol'
+
 -- We don't have anything that uses secondary ammo so there's nothing here for it
 
 -- Set the model for the gun
@@ -26,6 +28,10 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+
+function SWEP:Initialize() 
+	self:SetWeaponHoldType(self.HoldType)
+end 
 
 -- Generic primary attack function
 function SWEP:PrimaryAttack()

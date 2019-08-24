@@ -36,5 +36,5 @@ MOD = {
         end
     end,
     
-    hooks = {EntityTakeDamage = GM.CrowbarKnockback}
+    hooks = {EntityTakeDamage = function(ent, dmg) GAMEMODE:CrowbarKnockback(ent, dmg) end}
 }

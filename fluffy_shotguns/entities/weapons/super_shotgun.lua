@@ -2,12 +2,13 @@ DEFINE_BASECLASS "weapon_mg_base"
 
 if CLIENT then
 	-- Define the name and slot clientside
-	SWEP.PrintName = "Shotgun"
+	SWEP.PrintName = "Super Shotgun"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
     
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText('0', "HL2MPTypeDeath", x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
+    function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
+        local shake = math.cos(CurTime()*20) * 3
+		draw.SimpleText('0', "HL2MPTypeDeath", x + wide/2, y + tall/2.5 + shake, Color(241, 196, 15), TEXT_ALIGN_CENTER)
 	end
     
     killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
@@ -16,18 +17,19 @@ end
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 10
 SWEP.Primary.Cone = 0.1
-SWEP.Primary.Delay = 0.75
-SWEP.Primary.NumShots = 7
+SWEP.Primary.Delay = 0.5
+SWEP.Primary.NumShots = 8
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Recoil = 8
 
 -- Primary ammo settings
-SWEP.Primary.ClipSize = 6
-SWEP.Primary.DefaultClip = 6
+SWEP.Primary.ClipSize = 8
+SWEP.Primary.DefaultClip = 8
 SWEP.Primary.Ammo = "Buckshot"
 SWEP.Primary.Automatic = true
 
 SWEP.Secondary.Automatic = true
+SWEP.Secondary.Delay = 1.15
 
 SWEP.HoldType = 'shotgun'
 
@@ -124,11 +126,11 @@ function SWEP:SecondaryAttack()
     
     self.Weapon:EmitSound("Weapon_Shotgun.Double")
 	self:ShootBullet(self.Primary.Damage, self.Primary.NumShots * 2, self.Primary.Cone)
-    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay + 0.25)
-    self:SetNextSecondaryFire(CurTime() + self.Primary.Delay + 0.25)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     self:TakePrimaryAmmo(2)
     self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil*2, math.Rand(-0.1, 0.1) * self.Primary.Recoil*2, 0))
     
     self.Owner:SetGroundEntity(NULL)
-	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -200)
+	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -350)
 end
