@@ -40,7 +40,17 @@ function ENT:PhysicsSimulate(phys, deltatime)
     if ply:KeyDown(IN_MOVERIGHT) then move = move + ang:Right() end
     move.z = 0
     move:Normalize()
-    move = move * 500000 * deltatime
+    move = move * 150000 * deltatime
+    
+    local maxboost = 50
+    if ply:KeyDown(IN_ATTACK) then 
+        move = move * (self.Boost or 10)
+        self.Boost = (self.Boost or 0) - (deltatime*maxboost*10)
+    else
+        self.Boost = (self.Boost or 0) + (deltatime*maxboost*2)
+    end
+    
+    self.Boost = math.Clamp(self.Boost, 0, maxboost)
     
     return Vector(0, 0, 0), move, SIM_GLOBAL_FORCE
 end
@@ -50,6 +60,10 @@ function ENT:PhysicsCollide(data, physobj)
         data.HitEntity:Fire('break', '', 0)
         physobj:SetVelocity(data.OurOldVelocity)
         return
+    elseif data.HitEntity and data.HitEntity:IsPlayer() and data.Speed > 50 then
+        local damage = math.Clamp(data.Speed * 0.05, 5, 50)
+        print('Dealing ', damage)
+        data.HitEntity:TakeDamage(damage, self:GetPlayer() or nil, self)
     end
     
     local speed = data.Speed
@@ -67,7 +81,7 @@ function ENT:Destroy()
     end
     
     self:GibBreakClient(self:GetVelocity())
-    timer.Simple(1, function() self:Remove() end)
+    timer.Simple(0.1, function() self:Remove() end)
 end
 
 function ENT:OnTakeDamage(dmginfo)

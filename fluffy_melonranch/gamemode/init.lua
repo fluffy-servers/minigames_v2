@@ -7,7 +7,7 @@ include('shared.lua')
 function GM:PlayerLoadout(ply)
     if ply:Team() == TEAM_BLUE then
         ply:GiveAmmo(1000, "357", true)
-        ply:Give("weapon_357")
+        ply:Give("yeehaw_revolver")
         
         ply:SetWalkSpeed(200)
         ply:SetRunSpeed(250)
@@ -25,7 +25,7 @@ hook.Add('PlayerSpawn', 'SpawnMelons', function(ply)
     if IsValid(ply.Melon) then ply.Melon:Remove() end
     ply.Melon = ents.Create('yee_melon')
     ply.Melon:SetPlayer(ply)
-    ply.Melon:SetPos(ply:GetPos() + VectorRand()*32)
+    ply.Melon:SetPos(ply:GetPos() + Vector(0, 0, 16))
     ply.Melon:Spawn()
     ply.Melon:Activate()
     ply:SetNWEntity('Melon', ply.Melon)
