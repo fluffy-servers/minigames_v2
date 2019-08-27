@@ -43,7 +43,7 @@ util.AddNetworkString('CoolTransition')
 
 -- Called each time a player spawns
 function GM:PlayerSpawn( ply )
-    local state = GetGlobalString('RoundState', 'GameNotStarted')
+    local state = GAMEMODE:GetRoundState()
     
     -- If elimination, block respawns during round
     if state != 'PreRound' and GAMEMODE.Elimination == true then
@@ -80,7 +80,7 @@ function GM:PlayerSpawn( ply )
         
         -- Calculate time to be in god mode for
         local god_time = GAMEMODE.SpawnProtectionTime or 3
-        if GetGlobalString('RoundState') != 'InRound' then 
+        if GAMEMODE:GetRoundState() != 'InRound' then 
             god_time = god_time + GAMEMODE.RoundCooldown
         end
         
@@ -168,7 +168,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
 
     -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
