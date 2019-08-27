@@ -1,6 +1,6 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Prop Bashers'
+GM.Name = 'Junk Joust'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
     pending

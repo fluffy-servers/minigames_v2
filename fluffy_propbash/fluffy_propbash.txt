@@ -1,6 +1,0 @@
-"minigames"
-{
-	"base"	"fluffy_base"
-	"title"	"Melon Rancher"
-    "maps"	"^mr_"
-}
