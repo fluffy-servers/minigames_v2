@@ -113,6 +113,12 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
+    -- Award an point to the attacker (if there is one)
+    if IsValid(attacker) and attacker:IsPlayer() then
+        attacker:AddFrags(1)
+        attacker:AddStatPoints('Kills', 1)
+    end
+    
     -- Every living players earns a point
     for k,v in pairs(player.GetAll()) do
         if !v:Alive() or v == ply then continue end
