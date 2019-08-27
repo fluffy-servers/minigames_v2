@@ -62,7 +62,7 @@ function ENT:Destroy()
     if self.Broken then return end
     self.Broken = true
     
-    if IsValid(self:GetPlayer()) then
+    if IsValid(self:GetPlayer()) and self:GetPlayer():Alive() then
         self:GetPlayer():Kill()
     end
     
