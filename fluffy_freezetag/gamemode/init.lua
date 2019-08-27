@@ -83,7 +83,7 @@ hook.Add('PlayerUse', 'FreezeTagUse', function(ply, ent)
     if ent:Team() != ply:Team() then return end
     
     -- Unfreeze the player
-    if ent:IsIceFrozen() then
+    if ent:IsIceFrozen() and not ply:IsIceFrozen() then
         ent:Thaw()
     end
 end)
