@@ -394,3 +394,60 @@ net.Receive('SHOP_InventoryChange', function()
 		end
 	end)
 end)
+
+-- Below functions are all about rendering all the items and saving to a png
+-- This is useful stuff to build a complete display of the inventory
+function SHOP:StartRenderIcons()
+    -- Get the list of items to generate
+    SHOP.CaptureKeys = table.GetKeys(SHOP.VanillaItems)
+    SHOP.CaptureCurrent = 1
+    
+    -- Create the folder
+    file.CreateDir("minigames_shop")
+    
+    timer.Simple(3, function()
+        SHOP:RenderNextIcon()
+    end)
+end
+
+function SHOP:RenderNextIcon()
+    -- Abort if done all icons
+    if SHOP.CaptureCurrent > #SHOP.CaptureKeys then
+        SHOP.CaptureKeys = nil
+        SHOP.CaptureCurrent = nil
+        return
+    end
+    
+    -- Create an icon panel
+    SHOP.CapturePanel = vgui.Create('ShopItemPanel')
+    SHOP.CapturePanel:SetPos(0, 0)
+    SHOP.CapturePanel.ITEM = SHOP.CaptureKeys[SHOP.CaptureCurrent]
+    SHOP.CapturePanel:Ready()
+    SHOP.CaptureIcon = true
+end
+
+hook.Add('PostRender', 'MGCaptureShopIcons', function()
+    if not SHOP.CaptureIcon then return end
+    SHOP.CaptureIcon = nil
+    
+    local data = render.Capture({
+        format = "png",
+        x = 0,
+        y = 0,
+        w = 128,
+        h = 128,
+        alpha = false,
+    })
+    
+    -- Save to a file
+    local name = SHOP.CaptureKeys[SHOP.CaptureCurrent]
+    local f = file.Open("minigames_shop/" .. name .. ".png", "wb", "DATA")
+    f:Write(data)
+    f:Close()
+    
+    -- Clear the panel and render the next icon
+    SHOP.CapturePanel:Remove()
+    SHOP.CapturePanel = nil
+    SHOP.CaptureCurrent = SHOP.CaptureCurrent + 1
+    SHOP:RenderNextIcon()
+end)
