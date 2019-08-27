@@ -7,3 +7,10 @@ include('shared.lua')
 function GM:PlayerLoadout(ply)
     ply:Give("weapon_physcannon")
 end
+
+-- Double damage
+hook.Add('EntityTakeDamage', 'DoubleDamage', function(target, dmginfo)
+    if target:IsPlayer() then
+        dmginfo:ScaleDamage(2)
+    end
+end)
