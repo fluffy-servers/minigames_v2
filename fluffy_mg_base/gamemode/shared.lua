@@ -130,13 +130,13 @@ end
 function GM:CreateTeams()
 	if not GAMEMODE.TeamBased then return end
 	
-	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true )
+	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true)
 	team.SetSpawnPoint(TEAM_RED, TEAM_RED_SPAWNS)
 	
-	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true )
+	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
 	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
 	
-	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"})
 end
 
