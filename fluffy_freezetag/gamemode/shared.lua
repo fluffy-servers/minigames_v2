@@ -1,25 +1,22 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Super Shotguns'
+GM.Name = 'Freeze Tag'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    Super Shotguns to the death in this intense deathmatch!
-    
-    The team with the most kills when time runs out is the winner.
+    pending
 ]]
 
-GM.TeamBased = true	-- Is the gamemode FFA or Teams?
-GM.RoundTime = 200
-GM.RoundNumber = 3
-
-GM.RoundType = 'timed_endless'
-GM.GameTime = 500
-GM.HUDStyle = 4
-
-GM.RespawnTime = 1
-GM.AutoRespawn = true
-GM.SpawnProtection = true -- Spawn protection enabled
+GM.TeamBased = true		-- Is the gamemode FFA or Teams?
+GM.Elimination = true	-- Is this gamemode elimination?
+GM.RoundTime = 90 		-- How long each round should last, in seconds
+GM.RoundNumber = 10		-- How many rounds are in each game?
 
 function GM:Initialize()
 
+end
+
+local meta = FindMetaTable('Player')
+
+function meta:IsIceFrozen()
+    return self:GetNWBool('Frozen', false)
 end

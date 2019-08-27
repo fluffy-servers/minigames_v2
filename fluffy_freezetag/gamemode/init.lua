@@ -9,16 +9,36 @@ function GM:PlayerLoadout(ply)
     ply:Give('snowball_cannon')
 end
 
+-- Ensure nobody stays frozen between rounds
+hook.Add('PreRoundStart', 'ResetFrozenness', function()
+    for k,v in pairs(player.GetAll()) do
+        v:Thaw()
+    end
+end)
+
+-- Thaw corpses
+hook.Add('DoPlayerDeath', 'ThawCorpses', function(ply)
+    ply:Thaw()
+end)
+
 -- Get the number of currently frozen players on a given team
 function GM:GetFrozenPlayers(t)
     local num = 0
     for k,v in pairs(team.GetPlayers(t)) do
         if v:IsIceFrozen() then num = num + 1 end
     end
+    
+    return num
 end
 
+-- Check for victory conditions when a player gets frozen
+-- If the number of frozen players is more than the number of living players then there's an issue
 function GM:CheckVictory()
-    -- Todo
+    if GAMEMODE:GetTeamLivingPlayers(1) - GAMEMODE:GetFrozenPlayers(1) < 1 then
+        GAMEMODE:EndRound(2)
+    elseif GAMEMODE:GetTeamLivingPlayers(2) - GAMEMODE:GetFrozenPlayers(2) < 1 then
+        GAMEMODE:EndRound(1)
+    end
 end
 
 -- Custom damage hook to handle freezeing
@@ -26,13 +46,12 @@ function GM:EntityTakeDamage(ent, dmg)
     if not ent:IsPlayer() then return end
     if not ent:Alive() then return end
     
-    if ent:IsIceFrozen() then 
-        return 
-    else
-        dmg:SetDamage(0)
-    end
-    
     local attacker = dmg:GetAttacker()
+    if not attacker:IsPlayer() then return end
+    
+    -- No damage in this gamemode
+    dmg:SetDamage(0)
+    if ent:IsIceFrozen() then return end
     if attacker:Team() != ent:Team() then
         -- Freeze!
         ent:SetHealth(1)
@@ -59,24 +78,26 @@ end)
 local meta = FindMetaTable('Player')
 
 function meta:Thaw()
-    self:Freeze(false)
+    self:SetWalkSpeed(250)
+    self:SetRunSpeed(500)
+    self:SetJumpPower(200)
     
     self:SetMaterial()
     self:SetColor(color_white)
     self:SetHealth(100)
+    GAMEMODE:PlayerLoadout(self)
     
     self:SetNWBool('Frozen', false)
 end
 
 function meta:IceFreeze()
-    self:Freeze(true)
+    self:SetWalkSpeed(10)
+    self:SetRunSpeed(10)
+    self:SetJumpPower(1)
     
     self:SetMaterial('models/debug/debugwhite')
-    self:SetColor(Color(171, 209, 243))
+    self:SetColor(Color(199, 236, 238))
+    self:StripWeapons()
     
     self:SetNWBool('Frozen', true)
-end
-
-function meta:IsIceFrozen()
-    return self:GetNWBool('Frozen', false)
 end
