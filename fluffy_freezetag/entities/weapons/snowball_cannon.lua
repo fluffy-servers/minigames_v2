@@ -8,8 +8,8 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 100
-SWEP.Primary.Delay = 0.5
+SWEP.Primary.Damage = 40
+SWEP.Primary.Delay = 0.35
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0.02
 
@@ -17,8 +17,8 @@ SWEP.Primary.Cone = 0.02
 SWEP.Primary.ClipSize = 1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Ammo = "none"
-SWEP.Primary.Automatic = false
-SWEP.Primary.Sound = Sound("Weapon_357.Single")
+SWEP.Primary.Automatic = true
+SWEP.Primary.Sound = Sound("Weapon_Pistol.Single")
 
 -- We don't have anything that uses secondary ammo so there's nothing here for it
 

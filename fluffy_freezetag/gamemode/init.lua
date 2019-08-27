@@ -50,16 +50,29 @@ function GM:EntityTakeDamage(ent, dmg)
     if not attacker:IsPlayer() then return end
     
     -- No damage in this gamemode
-    dmg:SetDamage(0)
-    if ent:IsIceFrozen() then return end
-    if attacker:Team() != ent:Team() then
-        -- Freeze!
-        ent:SetHealth(1)
-        ent:AddDeaths(1)
-        ent:IceFreeze()
-        
-        attacker:AddFrags(1)
-        GAMEMODE:CheckVictory()
+    if ent:IsIceFrozen() then
+        dmg:SetDamage(0)
+        return 
+    end
+    
+    local amount = dmg:GetDamage()
+    if ent:Health() - amount <= 0 then
+        if attacker:Team() != ent:Team() then
+            -- Freeze!
+            dmg:SetDamage(0)
+            ent:SetHealth(1)
+            ent:AddDeaths(1)
+            ent:IceFreeze()
+            
+            attacker:AddFrags(1)
+            GAMEMODE:CheckVictory()
+            
+            net.Start('PlayerKilledByPlayer')
+                net.WriteEntity(ent)
+                net.WriteString('snowball_cannon')
+                net.WriteEntity(attacker)
+            net.Broadcast()
+        end
     end
 end
 
