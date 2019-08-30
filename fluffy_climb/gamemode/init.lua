@@ -80,7 +80,7 @@ function GM:ClimbVictory(ply)
     ply.BestHeight = GAMEMODE.CurrentHeight
     GAMEMODE:EndRound(ply)
     
-    GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5, Vector(0, 0, 72))
+    GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5)
 end
 
 -- Register XP for Paintball
