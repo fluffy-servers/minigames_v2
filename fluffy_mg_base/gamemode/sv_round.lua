@@ -26,13 +26,13 @@ hook.Add('Think', 'MinigamesRoundThink', function()
         -- Delegate this to each gamemode (defaults are provided lower down for reference)
         GAMEMODE:CheckRoundEnd()
     end
-end )
+end)
 
 -- Check if there enough players to start a round
 function GM:CanRoundStart()
     -- If team based, check there is at least player on each team
-    -- ( Override this function if there is ever a four-team gamemode )
-    -- ( Hopefully there won't be but that'll be pretty cool )
+    -- (Override this function if there is ever a four-team gamemode)
+    -- (Hopefully there won't be but that'll be pretty cool)
     if GAMEMODE.TeamBased and !GAMEMODE.TeamSurvival then
         if #team.GetPlayers(1) >= 1 and #team.GetPlayers(2) >= 1 then
             return true
@@ -52,7 +52,7 @@ end
 -- Called just before the round starts
 -- Cleans up the map and resets round data
 function GM:PreStartRound()
-    local round = GetGlobalInt('RoundNumber', 0 )
+    local round = GetGlobalInt('RoundNumber', 0)
     
     -- Reset stuff
     game.CleanUpMap()
@@ -88,16 +88,16 @@ function GM:PreStartRound()
     end
     
     -- Set global round data
-    SetGlobalInt('RoundNumber', round + 1 )
+    SetGlobalInt('RoundNumber', round + 1)
     SetGlobalString('RoundState', 'PreRound')
 	SetGlobalFloat('RoundStart', CurTime())
     hook.Call('PreRoundStart')
     
     -- Respawn everybody & freeze them until the round actually starts
-    for k,v in pairs( player.GetAll() ) do
-        if !GAMEMODE.TeamBased then v:SetTeam( TEAM_UNASSIGNED ) v:SetNWInt("RoundKills", 0) end
+    for k,v in pairs(player.GetAll()) do
+        if !GAMEMODE.TeamBased then v:SetTeam(TEAM_UNASSIGNED) v:SetNWInt("RoundKills", 0) end
         v:Spawn()
-        v:Freeze( true )
+        v:Freeze(true)
         v.FFAKills = 0
         
         if (not GAMEMODE.TeamBased) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
@@ -112,13 +112,13 @@ end
 -- Start a round
 function GM:StartRound()
     -- Unfreeze all players
-    for k,v in pairs( player.GetAll() ) do
-        v:Freeze( false )
+    for k,v in pairs(player.GetAll()) do
+        v:Freeze(false)
     end
     
     -- Set global round data
-	SetGlobalString( 'RoundState', 'InRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+	SetGlobalString('RoundState', 'InRound')
+	SetGlobalFloat('RoundStart', CurTime())
     
     -- yay hooks
     hook.Call('RoundStart')
@@ -128,7 +128,7 @@ function GM:StartRound()
     if GAMEMODE.RoundType != 'timed_endless' and GAMEMODE.RoundTime > 0 then
         timer.Create('GamemodeTimer', GAMEMODE.RoundTime, 0, function()
             GAMEMODE:EndRound('TimeEnd')
-        end )
+        end)
     end
 end
 
@@ -153,11 +153,14 @@ function GM:EndRound(reason, extra)
     
     -- STATS: Add round wins
     GAMEMODE:StatsRoundWin(winners)
-            
+    
+    -- Apply confetti effect
+    GAMEMODE:ConfettiEffect(winners)
+    
     -- Move to next round
     hook.Call('RoundEnd')
-    SetGlobalString( 'RoundState', 'EndRound' )
-    timer.Simple( GAMEMODE.RoundCooldown, function() GAMEMODE:PreStartRound() end )
+    SetGlobalString('RoundState', 'EndRound')
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:PreStartRound() end)
 end
 
 -- End the game
@@ -220,6 +223,31 @@ function GM:StatsRoundWin(winners)
     end
 end
 
+-- Generates a lovely confetti effect
+function GM:ConfettiEffect(winners)
+    if GAMEMODE.DisableConfetti then return end
+    
+    -- Sort the winners into a nice table
+    local tbl = {}
+    if IsEntity(winners) then
+        tbl = {winners}
+    elseif type(winners) == 'number' then
+        tbl = team.GetPlayers(winners)
+    elseif type(winners) == 'table' then
+        tbl = winners
+    end
+    
+    -- Create confetti for all living winners
+    for k,v in pairs(tbl) do
+        if not v:IsPlayer() then continue end
+        if not v:Alive() then continue end
+        
+        local effectdata = EffectData()
+        effectdata:SetOrigin(v:GetPos())
+        util.Effect('win_confetti', effectdata)
+    end
+end
+
 --[[
     Example (basic) round end handlers
 ]]--
@@ -255,7 +283,7 @@ function GM:HandleTeamWin(reason)
         msg = winners:Nick() .. ' wins the round!'
     end
     
-    if winners and winners > 0 then team.AddScore( winners, 1 ) end
+    if winners and winners > 0 then team.AddScore(winners, 1) end
     return winners, msg
 end
 
@@ -284,9 +312,9 @@ end
 function GM:CheckFFAElimination()
     if GAMEMODE.WinBySurvival then
         if GAMEMODE:GetLivingPlayers() <= 1 then
-            for k,v in pairs( player.GetAll() ) do
+            for k,v in pairs(player.GetAll()) do
                 if v:Alive() and !v.Spectating then
-                    GAMEMODE:EndRound( v )
+                    GAMEMODE:EndRound(v)
                     return
                 end
             end
@@ -302,16 +330,16 @@ end
 -- Handles Team Elimination
 function GM:CheckTeamElimination()
     if GAMEMODE.Elimination then
-        if GAMEMODE:GetTeamLivingPlayers( 1 ) == 0 then
-            GAMEMODE:EndRound( 2 )
-        elseif GAMEMODE:GetTeamLivingPlayers( 2 ) == 0 then
-            GAMEMODE:EndRound( 1 )
+        if GAMEMODE:GetTeamLivingPlayers(1) == 0 then
+            GAMEMODE:EndRound(2)
+        elseif GAMEMODE:GetTeamLivingPlayers(2) == 0 then
+            GAMEMODE:EndRound(1)
         end
     end
     
     if GAMEMODE.TeamSurvival then
-        if GAMEMODE:GetTeamLivingPlayers( GAMEMODE.SurvivorTeam ) == 0 then
-            GAMEMODE:EndRound( GAMEMODE.HunterTeam )
+        if GAMEMODE:GetTeamLivingPlayers(GAMEMODE.SurvivorTeam) == 0 then
+            GAMEMODE:EndRound(GAMEMODE.HunterTeam)
         end
     end
 end
