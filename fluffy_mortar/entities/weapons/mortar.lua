@@ -40,6 +40,8 @@ function SWEP:Launch()
     self.Weapon:EmitSound('Weapon_RPG.Single')
     self:CreateRocket(src, self.Owner:GetAimVector()*1000)
     --timer.Simple(0.3, function() self.Weapon:SendWeaponAnim(ACT_VM_DRAW) end)
+    
+    self.Owner:AddStatPoints('Mortars Launched', 1)
 end
 
 function SWEP:CreateRocket(pos, velocity)
