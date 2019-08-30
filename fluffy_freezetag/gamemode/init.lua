@@ -65,6 +65,7 @@ function GM:EntityTakeDamage(ent, dmg)
             ent:IceFreeze()
             
             attacker:AddFrags(1)
+            attacker:AddStatPoints('Enemies Frozen', 1)
             GAMEMODE:CheckVictory()
             
             net.Start('PlayerKilledByPlayer')
@@ -85,6 +86,7 @@ hook.Add('PlayerUse', 'FreezeTagUse', function(ply, ent)
     -- Unfreeze the player
     if ent:IsIceFrozen() and not ply:IsIceFrozen() then
         ent:Thaw()
+        ply:AddStatPoints('Allies Thawed', 1)
     end
 end)
 
@@ -114,3 +116,9 @@ function meta:IceFreeze()
     
     self:SetNWBool('Frozen', true)
 end
+
+-- Register XP for Freeze Tag
+hook.Add('RegisterStatsConversions', 'AddMortarStatConversions', function()
+    GAMEMODE:AddStatConversion('Allies Thawed', 'Allies Thawed', 1)
+    GAMEMODE:AddStatConversion('Enemies Frozen', 'Enemies Frozen', 0.5)
+end)
