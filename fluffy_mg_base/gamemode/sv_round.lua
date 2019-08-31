@@ -143,7 +143,7 @@ function GM:EndRound(reason, extra)
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
     local msg = "The round has ended!"
-    winners, msg = GAMEMODE:HandleEndRound(reason)
+    winners, msg, extra = GAMEMODE:HandleEndRound(reason)
     
     -- Send the result to the players
     net.Start('EndRound')
