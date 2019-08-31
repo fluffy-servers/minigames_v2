@@ -140,7 +140,7 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
 	
 	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
-	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"})
+	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
 -- Valid playermodels
