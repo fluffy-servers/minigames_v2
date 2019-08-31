@@ -266,6 +266,52 @@ function GM:GetTeamLivingPlayers( t )
     return alive
 end
 
+-- Useful function to swap the current teams
+function GM:SwapTeams(respawn)
+    local red_players = team.GetPlayers(TEAM_RED)
+    local blue_players = team.GetPlayers(TEAM_BLUE)
+    local respawn = respawn or true
+    
+    -- Move red players to blue
+    for k,v in pairs(red_players) do 
+        v:SetTeam(TEAM_BLUE)
+        if respawn then v:Spawn() end
+    end
+    
+    -- Move blue players to red
+    for k,v in pairs(blue_players) do 
+        v:SetTeam(TEAM_RED)
+        if respawn then v:Spawn() end
+    end
+end
+
+-- Useful function to scramble the teams nicely
+-- This is good for rebalancing if things go really badly
+function GM:ShuffleTeams(respawn)
+    -- Figure out what players are eligible for team swaps
+    local respawn = respawn or true
+    local players = {}
+    local num = 0
+    for k,v in pairs(player.GetAll()) do
+        if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then 
+            num = num + 1
+            table.insert(players, v)
+        end
+    end
+    
+    -- Reassign the teams
+    players = table.Shuffle(players)
+    for i = 1,num do
+        if i%2 == 0 then 
+            players[i]:SetTeam(TEAM_RED) 
+        else 
+            players[i]:SetTeam(TEAM_BLUE) 
+        end
+        
+        if respawn then players[i]:Spawn() end
+    end
+end
+
 -- Fisher-Yates table shuffle
 function table.Shuffle(t)
     for i = #t, 2, -1 do
