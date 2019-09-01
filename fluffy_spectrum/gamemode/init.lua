@@ -32,7 +32,7 @@ end)
 
 -- If one team has taken over, win the round
 function GM:CheckVictory(t)
-    if team.NumPlayers(t) >= GAMEMODE:NumNonSpectators() then
+    if team.NumPlayers(t) >= GAMEMODE:GetLivingPlayers() then
         GAMEMODE:EndRound(t)
     end
 end
@@ -78,6 +78,16 @@ function GM:EntityTakeDamage(ent, dmg)
         net.Broadcast()
     end
 end
+
+-- Check for victory when people die
+hook.Add('DoPlayerDeath', 'CheckVictoryOnDeath', function()
+    -- Check all teams since we don't know who is winning
+    timer.Simple(0.2, function()
+        for i=1,8 do
+            GAMEMODE:CheckVictory(i)
+        end
+    end)
+end)
 
 -- Nobody wins on time up
 function GM:HandleTeamWin(reason)
