@@ -21,9 +21,12 @@ function GM:PlayerLoadout(ply)
     
     if ply:Team() == TEAM_BLUE then
         if ply.IsVIP then return end
+        ply:GiveAmmo(512, "Pistol", true)
         ply:Give('weapon_mg_pistol')
         ply:Give('weapon_mg_sniper')
     elseif ply:Team() == TEAM_RED then
+        ply:GiveAmmo(512, "SMG1", true)
+        ply:GiveAmmo(512, "Buckshot", true)
         ply:Give('weapon_mg_smg')
         ply:Give('weapon_mg_shotgun')
     end
@@ -61,7 +64,7 @@ end)
 -- Guardians win if the VIP survives til TimeEnd
 function GM:HandleTeamWin(reason)
     local winners, msg, extra
-    if reason == 'TimeEnd' then
+    if reason == 'TimeEnd' or reason == TEAM_BLUE then
         winners = TEAM_BLUE
         msg = team.GetName(TEAM_BLUE) .. ' win the round!'
         extra = GAMEMODE.CurrentVIP:Nick() .. ' survived!'
