@@ -21,11 +21,11 @@ function GM:PlayerLoadout(ply)
     
     if ply:Team() == TEAM_BLUE then
         if ply.IsVIP then return end
-        ply:GiveWeapon('weapon_mg_pistol')
-        ply:GiveWeapon('weapon_mg_sniper')
+        ply:Give('weapon_mg_pistol')
+        ply:Give('weapon_mg_sniper')
     elseif ply:Team() == TEAM_RED then
-        ply:GiveWeapon('weapon_mg_smg')
-        ply:GiveWeapon('weapon_mg_shotgun')
+        ply:Give('weapon_mg_smg')
+        ply:Give('weapon_mg_shotgun')
     end
 end
 
@@ -69,6 +69,8 @@ function GM:HandleTeamWin(reason)
         winners = TEAM_RED
         msg = team.GetName(TEAM_RED) .. ' win the round!'
         extra = GAMEMODE.CurrentVIP:Nick() .. ' is dead'
+    else
+        msg = 'The round is over!'
     end
     
     return winners, msg, extra
