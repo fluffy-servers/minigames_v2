@@ -170,7 +170,7 @@ function GM:CreateHelpPanel()
     end
     
     -- Add team buttons (if applicable)
-    if GAMEMODE.TeamBased and not GAMEMODE.TeamSurvival then
+    if GAMEMODE.TeamBased and (not GAMEMODE.TeamSurvival) and (GAMEMODE.PlayerChooseTeams) then
         local tw = 160
         local xx = tw
         if LocalPlayer():Team() == TEAM_CONNECTING or LocalPlayer():Team() == TEAM_UNASSIGNED then

@@ -22,6 +22,7 @@ GM.HelpText = [[
 
 GM.TeamBased = false    -- Is the gamemode team based, or is it FFA?
 GM.Elimination = false  -- Should players stay dead, or should they respawn?
+GM.PlayerChooseTeams = true -- Can players choose their own teams?
 
 GM.DeathLingerTime = 3  -- How long should players linger on their corpse before ghosting?
 GM.RespawnTime = 2      -- How long do players have to wait before respawning?

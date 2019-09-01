@@ -99,7 +99,7 @@ end
 hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     -- Assign teams
     if ply:IsBot() then
-        GAMEMODE:PlayerRequestTeam( ply, team.BestAutoJoinTeam() )
+        GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
     else
         ply:ConCommand("minigames_info")
     end
@@ -124,10 +124,15 @@ function GM:PlayerRequestTeam(ply, teamid)
     
     -- Stop players joining weird teams
 	if not team.Joinable(teamid) then
-		ply:ChatPrint( "You can't join that team" )
+		ply:ChatPrint("You can't join that team")
         return 
     end
-
+    
+    -- Stop players changing teams in certain gamemodes
+    if not GAMEMODE.PlayerChooseTeams then
+        ply:ChatPrint("You can't change teams in this gamemode!")
+    end
+        
 	-- Run the can join hook
 	if not hook.Run('PlayerCanJoinTeam', ply, teamid) then
         return
