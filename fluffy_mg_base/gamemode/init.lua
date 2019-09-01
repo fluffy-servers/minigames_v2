@@ -237,40 +237,6 @@ function GM:PlayerDeathThink(ply)
     end
 end
 
--- Convenience function to get number of living players
--- This isn't fantastically efficient don't overuse
-function GM:GetLivingPlayers()
-    local alive = 0
-    for k,v in pairs( player.GetAll() ) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then alive = alive + 1 end
-    end
-    return alive
-end
-
--- Convenience function to get number of non-spectators
--- I don't think there is actually a need for this anymore, but it's here
-function GM:NumNonSpectators()
-    local num = 0
-    for k,v in pairs( player.GetAll() ) do
-        if GAMEMODE.TeamBased then
-            if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then num = num + 1 end
-        else
-            if v:Team() != TEAM_SPECTATOR then num = num + 1 end
-        end
-    end
-
-    return num
-end
-
--- Convenience function to get number of living players in a team
-function GM:GetTeamLivingPlayers( t )
-    local alive = 0
-    for k,v in pairs( team.GetPlayers( t ) ) do
-        if v:Alive() and !v.Spectating then alive = alive + 1 end
-    end
-    return alive
-end
-
 -- Useful function to swap the current teams
 function GM:SwapTeams(respawn)
     local red_players = team.GetPlayers(TEAM_RED)

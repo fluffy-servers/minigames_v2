@@ -127,7 +127,6 @@ function team.SetColor(id, color)
     return SetGlobalVector("Team" .. tostring(id) .. ".GColor", color)
 end
 
-
 -- Note that RED is CT and BLUE is T
 -- Not sure why I did this but oh well, way too late to change it
 -- seriously don't change it you'll break a lot of maps
@@ -144,34 +143,36 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
--- Valid playermodels
-GM.ValidModels = {
-    male01 = "models/player/Group01/male_01.mdl",
-    male02 = "models/player/Group01/male_02.mdl",
-    male03 = "models/player/Group01/male_03.mdl",
-    male04 = "models/player/Group01/male_04.mdl",
-    male05 = "models/player/Group01/male_05.mdl",
-    male06 = "models/player/Group01/male_06.mdl",
-    male07 = "models/player/Group01/male_07.mdl",
-    male08 = "models/player/Group01/male_08.mdl",
-    male09 = "models/player/Group01/male_09.mdl",
-    
-    female01 = "models/player/Group01/female_01.mdl",
-    female02 = "models/player/Group01/female_02.mdl",
-    female03 = "models/player/Group01/female_03.mdl",
-    female04 = "models/player/Group01/female_04.mdl",
-    female05 = "models/player/Group01/female_05.mdl",
-    female06 = "models/player/Group01/female_06.mdl",
-}
-
--- Convert the playermodel name into a model
-function GM:TranslatePlayerModel(name, ply)
-    if GAMEMODE.ValidModels[name] != nil then
-        return GAMEMODE.ValidModels[name]
-    elseif ply.TemporaryModel then
-        return ply.TemporaryModel
-    else
-        ply.TemporaryModel = table.Random(GAMEMODE.ValidModels)
-        return ply.TemporaryModel
+-- Convenience function to get number of living players
+-- This isn't fantastically efficient don't overuse
+function GM:GetLivingPlayers()
+    local alive = 0
+    for k,v in pairs( player.GetAll() ) do
+        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then alive = alive + 1 end
     end
+    return alive
+end
+
+-- Convenience function to get number of non-spectators
+-- I don't think there is actually a need for this anymore, but it's here
+function GM:NumNonSpectators()
+    local num = 0
+    for k,v in pairs( player.GetAll() ) do
+        if GAMEMODE.TeamBased then
+            if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then num = num + 1 end
+        else
+            if v:Team() != TEAM_SPECTATOR then num = num + 1 end
+        end
+    end
+
+    return num
+end
+
+-- Convenience function to get number of living players in a team
+function GM:GetTeamLivingPlayers( t )
+    local alive = 0
+    for k,v in pairs( team.GetPlayers( t ) ) do
+        if v:Alive() and !v.Spectating then alive = alive + 1 end
+    end
+    return alive
 end
