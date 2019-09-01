@@ -12,6 +12,7 @@ GM.WinBySurvival = false
 GM.RoundTime = 90 		-- How long each round should last, in seconds
 GM.RoundNumber = 10		-- How many rounds are in each game?
 GM.PlayerChooseTeams = false    -- Players cannot change teams at will
+GM.ShowTeamScoreboard = false
 
 function GM:Initialize()
 

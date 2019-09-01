@@ -47,8 +47,9 @@ GM.TeamSurvival = false		-- Is this a Hunter vs Hunted gametype?
 GM.SurvivorTeam = TEAM_BLUE	-- Survivor team
 GM.HunterTeam = TEAM_RED	-- Hunter team
 
-GM.DisableConfetti = false    -- Should the round win confetti be disabled?
-GM.HUDTeamColor = true       -- Should the HUD color be based on the team color?
+GM.DisableConfetti = false      -- Should the round win confetti be disabled?
+GM.HUDTeamColor = true          -- Should the HUD color be based on the team color?
+GM.ShowTeamScoreboard = true    -- Should the team scores be displayed at the top of the scoreboard?
 
 function GM:Initialize()
 	-- Gamemode crashes without this function so don't remove it
