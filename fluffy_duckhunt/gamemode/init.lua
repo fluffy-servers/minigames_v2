@@ -12,9 +12,30 @@ function GM:PlayerLoadout( ply )
         ply:SetRunSpeed(400)
     elseif ply:Team() == TEAM_RED then
         -- Snipers
-        ply:Give('sniper_normal')
+        ply:StripWeapons()
+        ply:Give('dh_sniper')
         ply:SetWalkSpeed(475)
         ply:SetRunSpeed(525)
+    end
+end
+
+-- Assign FFA colors to all the runners and the basic red to the Snipers
+function GM:PlayerSetModel(ply)
+	local cl_playermodel = ply:GetInfo("cl_playermodel")
+	local modelname = GAMEMODE:TranslatePlayerModel(cl_playermodel, ply)
+	util.PrecacheModel(modelname)
+	ply:SetModel(modelname)
+    
+    if ply:Team() == TEAM_RED then
+		local color = team.GetColor( ply:Team() )
+		ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
+    else
+        if not ply.FFAColor then
+            ply.FFAColor = HSVToColor(math.random(360), 1, 1)
+        end
+        
+        local c = Vector(ply.FFAColor.r/255, ply.FFAColor.g/255, ply.FFAColor.b/255)
+        ply:SetPlayerColor(c)
     end
 end
 

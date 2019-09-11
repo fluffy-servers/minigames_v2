@@ -1,9 +1,9 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Sniper Wars'
+GM.Name = 'Super Shotguns'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    It's Sniper vs Sniper in this intense team battle!
+    Super Shotguns to the death in this intense deathmatch!
     
     The team with the most kills when time runs out is the winner.
 ]]
@@ -16,9 +16,8 @@ GM.RoundType = 'timed_endless'
 GM.GameTime = 500
 GM.HUDStyle = 4
 
-GM.RespawnTime = 2
+GM.RespawnTime = 1
 GM.AutoRespawn = true
-
 GM.SpawnProtection = true -- Spawn protection enabled
 
 function GM:Initialize()

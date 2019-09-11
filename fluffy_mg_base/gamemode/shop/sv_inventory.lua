@@ -73,22 +73,13 @@ function SHOP:RemoveItem(key, ply)
 	if not SHOP.PlayerInventories[ply][key] then return end
 	table.remove(SHOP.PlayerInventories[ply], key)
     
-    -- Offset the equipped array
-    for eq,_ in pairs(SHOP.PlayerEquipped[ply]) do
-        if eq == key then
-            SHOP.PlayerEquipped[ply][eq] = nil
-        elseif eq > key then
-            SHOP.PlayerEquipped[ply][eq] = nil
-            SHOP.PlayerEquipped[ply][eq-1] = true
-        end
-    end
-	
+    SHOP:ShiftEquippedTable(ply, key)
+    
 	-- Network changes
 	net.Start('SHOP_InventoryChange')
 		net.WriteString('REMOVE')
 		net.WriteInt(key, 16)
 	net.Send(ply)
-	SHOP:NetworkEquipped(ply)
 end
 
 function SHOP:EquipItem(key, ply, state)
@@ -150,9 +141,31 @@ function SHOP:EquipItem(key, ply, state)
     end
 end
 
+-- Offset the equipped array
+function SHOP:ShiftEquippedTable(ply, key)
+    PrintTable(SHOP.PlayerEquipped[ply])
+
+    if SHOP.PlayerEquipped[ply] then
+        for eq,_ in pairs(SHOP.PlayerEquipped[ply]) do
+            if eq == key then
+                -- hm?
+                SHOP:EquipItem(key, ply, false)
+                SHOP.PlayerEquipped[ply][eq] = nil
+            elseif eq > key then
+                print('Shifted ', eq, eq-1)
+                SHOP.PlayerEquipped[ply][eq] = nil
+                SHOP.PlayerEquipped[ply][eq-1] = true
+            end
+        end
+        
+        PrintTable(SHOP.PlayerEquipped[ply])
+        SHOP:NetworkEquipped(ply)
+    end
+end
+
 hook.Add('PlayerInitialSpawn', 'LoadShopInventory', function(ply)
     -- to do
-    SHOP.PlayerInventories[ply] = test_inventory
+    SHOP.PlayerInventories[ply] = table.Copy(test_inventory)
 end)
 
 hook.Add('PlayerDisconnected', 'ShopDisconnect', function(ply)
@@ -179,8 +192,10 @@ net.Receive('SHOP_NetworkInventory', function(len, ply)
     -- If the check differs from our version, resend all the data
     if check != SHOP:HashTable(SHOP.PlayerInventories[ply]) then
         SHOP:NetworkInventory(ply)
-        SHOP:NetworkEquipped(ply)
     end
+    
+    -- Send equipped anyway since it breaks like 90% of the time
+    SHOP:NetworkEquipped(ply)
 end)
 
 net.Receive('SHOP_RequestItemAction', function(len, ply)
@@ -220,6 +235,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 	elseif action == 'UNBOX' then
 		-- Handle unboxing of items
 		SHOP:OpenUnbox(key, ply)
+        SHOP:RemoveItem(key, ply)
 	elseif action == 'DELETE' then
 		-- Handle deletion of items
 		-- Verify the item isn't locked
@@ -241,6 +257,7 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
 		if not giftee:IsPlayer() then return end
 		
 		SHOP:AddItem(ITEM, giftee)
+        giftee:ChatPrint(ply:Nick() .. ' gave you an item!')
 		SHOP:RemoveItem(key, ply)
 	end
 end)

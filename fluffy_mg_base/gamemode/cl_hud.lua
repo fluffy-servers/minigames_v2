@@ -11,7 +11,8 @@ local hide = {
 	CHudBattery = true,
 	CHudAmmo = true,
 	CHudSecondaryAmmo = true,
-    CHudCrosshair = true
+    CHudCrosshair = true,
+    CHudDamageIndicator = true
 }
 
 hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)
@@ -703,17 +704,12 @@ function GM:GetPlayerInfoPanel(ply)
     local last_health = ply:GetMaxHealth() or 100
     
     function panel:Paint(w, h)
+        -- Draw a subtle background
+        draw.RoundedBox(8, 0, 0, w, h, Color(0, 0, 0, 80))
+        
         -- Small animation for the arc
         local hp_max = ply:GetMaxHealth() or 100
-        if last_health then
-            last_health = math.Approach(last_health, ply:Health(), 300*FrameTime())
-        else
-            last_health = 100
-        end
-        
-        local hp = last_health
-        if hp <= 0 then return end
-        
+        local hp = ply:Health()
         draw.NoTexture()
         
         -- Calculate the color based on team or FFA

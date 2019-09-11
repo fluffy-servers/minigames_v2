@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 if CLIENT then
-    killicon.AddFont('sw_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
+    killicon.AddFont('dh_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
     
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "r"
@@ -31,7 +31,7 @@ SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.00025
 SWEP.Primary.Delay = 1.5
 
-SWEP.Primary.ClipSize = 10
+SWEP.Primary.ClipSize = 6
 SWEP.Primary.DefaultClip = 9999
 SWEP.Primary.Automatic = false
 SWEP.Primary.Ammo = 'pistol'

@@ -70,12 +70,12 @@ hook.Add('InitPostEntity', 'PopulateStartingProps', function()
     end
 end )
 
--- Set playermodel - only temporary for Poltergeists
+-- Pick player models
 function GM:PlayerSetModel( ply )
     if ply:Team() == TEAM_RED then
         ply:SetModel( "models/props_junk/wood_crate001a.mdl" )
     else
-        ply:SetModel( 'models/player/Group01/male_09.mdl' )
+        GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
 end
 

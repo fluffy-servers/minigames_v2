@@ -72,6 +72,7 @@ function GM:GenerateStatisticsTable()
     local tbl = {}
     for stat,_ in pairs(GAMEMODE.StatConversions) do
         if stat == 'Deaths' or stat == 'Rounds Played' then continue end
+        if GAMEMODE.TeamBased and stat == 'Rounds Won' then continue end
         local passed = false
         local stat_tbl = {}
         

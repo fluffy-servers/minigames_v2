@@ -12,13 +12,13 @@ function GM:PlayerLoadout(ply)
     
     if ply:Team() == TEAM_RED then
         -- Stalker loadout here
-        ply:SetColor(Color(255, 255, 255, 10))
+        ply:SetColor(Color(0, 0, 0, 30))
         ply:SetRenderMode(RENDERMODE_TRANSALPHA)
-        ply:SetWalkSpeed(500)
-        ply:SetRunSpeed(500)
-        ply:SetJumpPower(500)
+        ply:SetWalkSpeed(350)
+        ply:SetRunSpeed(350)
+        ply:SetJumpPower(300)
         
-        local hp = 150 + math.Clamp(team.NumPlayers(TEAM_BLUE), 1, 16) * 35
+        local hp = 125 + math.Clamp(team.NumPlayers(TEAM_BLUE), 1, 16) * 25
         ply:SetHealth(hp)
         ply:SetMaxHealth(hp)
         ply:Give('weapon_fists')
@@ -26,6 +26,7 @@ function GM:PlayerLoadout(ply)
         -- Reset colour
         ply:SetColor(color_white)
         ply:SetRenderMode(RENDERMODE_NORMAL)
+        ply:AllowFlashlight(false)
         
         ply:SetWalkSpeed(200)
         ply:SetRunSpeed(300)
@@ -100,7 +101,7 @@ end
 
 -- Flashlight enabled for humans only
 function GM:PlayerSwitchFlashlight(ply, state)
-    return (ply:Team() == TEAM_BLUE and not ply.Spectating)
+    return false
 end
 
 -- Stop any form of team swapping in this gamemode

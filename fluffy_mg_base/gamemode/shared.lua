@@ -23,13 +23,17 @@ GM.HelpText = [[
 GM.TeamBased = false    -- Is the gamemode team based, or is it FFA?
 GM.Elimination = false  -- Should players stay dead, or should they respawn?
 
+GM.DeathLingerTime = 3  -- How long should players linger on their corpse before ghosting?
+GM.RespawnTime = 2      -- How long do players have to wait before respawning?
+GM.AutoRespawn = true   -- Should players automatically respawn?
+
 GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?
 
 GM.RoundType = 'default'    -- What system should be used for game/round logic?
 GM.GameTime = 600           -- If not using rounds, how long should the game go for?
-GM.EndOnTimeOut = true      -- If using 'timed' RoundType, should this cut off the middle of a round?
+GM.EndOnTimeOut = false     -- If using 'timed' RoundType, should this cut off the middle of a round?
 
 GM.CanSuicide = true            -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
@@ -126,13 +130,13 @@ end
 function GM:CreateTeams()
 	if not GAMEMODE.TeamBased then return end
 	
-	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true )
+	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true)
 	team.SetSpawnPoint(TEAM_RED, TEAM_RED_SPAWNS)
 	
-	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true )
+	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
 	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
 	
-	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_terrorist", "info_player_combine", "info_player_counterterrorist", "info_player_rebel"})
 end
 

@@ -8,7 +8,7 @@ local mixedmodels = {
     "models/hunter/tubes/circle2x2.mdl",
     "models/hunter/tubes/circle2x2.mdl",
     "models/hunter/blocks/cube075x075x075.mdl",
-    "models/hunter/misc/shell2x2a.mdl",
+    --"models/hunter/misc/shell2x2a.mdl",
     "models/hunter/tubes/circle4x4c.mdl",
     "models/hunter/triangles/2x2.mdl",
     "models/hunter/triangles/2x2.mdl",
@@ -35,6 +35,7 @@ local gametypefunctions = {}
 gametypefunctions['square'] = function(p) p:SetModel("models/hunter/blocks/cube2x2x025.mdl") end
 gametypefunctions['circle'] = function(p) p:SetModel("models/hunter/tubes/circle2x2.mdl") end
 gametypefunctions['mixed'] = function(p) p:SetModel( table.Random( mixedmodels ) ); p:SetAngles( Angle(0, math.random(360), 0 ) ) end
+gametypefunctions['hexagon'] = function(p) p:SetModel("models/hunter/geometric/hex1x1.mdl") end
 
 function ENT:Initialize()
     if CLIENT then return end
@@ -65,8 +66,8 @@ end
 -- Make platforms take damage when someone is touching them
 function ENT:Touch(ent)
     -- 3 seconds of spawn protection in rounds
-    if GetGlobalString( 'RoundState', 'none' ) != 'InRound' then return end
-    if GetGlobalFloat( 'RoundStart', 0 )+3 > CurTime() then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if GM:GetRoundStartTime() + 3 > CurTime() then return end
     
     -- Only living players make the platforms fall
     if not IsValid(ent) then return end
@@ -81,8 +82,11 @@ function ENT:Touch(ent)
         self:AddDamage(0)
     end
     
+    local scale = CurTime() - self.CreationTime
+    scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
+    
     -- yay damage
-    self:AddDamage(FrameTime() * 45)
+    self:AddDamage(FrameTime() * 40*scale)
 end
 
 -- Add a powerup to this platform
@@ -114,7 +118,7 @@ function ENT:OnTakeDamage(dmg)
         -- pew pew does some damage
         local scale = CurTime() - self.CreationTime
         scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
-        self:AddDamage(8 * scale, attacker)
+        self:AddDamage(15 * scale, attacker)
     else
         -- Deal damage based on round time
         local scale = CurTime() - self.CreationTime
@@ -145,11 +149,11 @@ function ENT:AddDamage(amount, ply)
     -- Drop the platform after 1 second if applicable
     if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerUp then
         self.Dropped = true
-        self:EmitSound(table.Random(self.ActivateSounds), 33, math.random(70, 130))
+        self:EmitSound(table.Random(self.ActivateSounds), 50, math.random(70, 130))
         
-        timer.Simple(1, function()
+        timer.Simple(0.7, function()
             if not IsValid(self) then return end
-            self:EmitSound(table.Random(self.FallSounds), 33, math.random(70, 130))
+            self:EmitSound(table.Random(self.FallSounds), 65, math.random(70, 130))
             self:Drop()
         end)
     end
@@ -159,7 +163,7 @@ end
 function ENT:Drop()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
-    self:SetSolid(SOLID_VPHYSICS)
+    self:SetSolid(SOLID_NONE)
     
     local phys = self:GetPhysicsObject()
     if phys and IsValid(phys) then

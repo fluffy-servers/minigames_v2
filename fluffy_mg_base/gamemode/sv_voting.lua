@@ -33,11 +33,11 @@ GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1', 'sw_iceberg_small', 'sw_grassy'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
     fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2', 'dh_giants_v1', 'dh_crumble'},
-    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_storage_v3', 'sb_pyramid_b2'},
+    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms'},
     fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker', 'db_parkalyptic'},
     fluffy_pitfall = {'pf_ocean'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
-    fluffy_bombtag = {'bt_diamond', 'bt_rainbow', 'bt_plaza_v2', 'bt_museum', 'bt_canal', 'bt_yeoldearena', 'bt_laserama'},
+    fluffy_bombtag = {'bt_rainbow', 'bt_plaza_v2', 'bt_museum', 'bt_canal', 'bt_yeoldearena', 'bt_laserama'},
     fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix'},
 	fluffy_cratewars = {'cw_bricks', 'cw_boxingring'},
 	fluffy_balls = pvp_maps,
@@ -55,27 +55,20 @@ GM.VoteMaps = {
 GM.VotingTime = false
 GM.CurrentVoteTable = {}
 GM.VotingResults = {}
+GM.RTV = {}
+GM.RTVCount = GM.RTVCount or 0
 
 -- Network strings
 util.AddNetworkString('SendMapVoteTable')
 util.AddNetworkString('MapVoteSendVote')
 
--- Table shuffle stolen from TTT
--- Nice Fisher-Yates implementation, from Wikipedia
-local rand = math.random
-local table = table
+-- Fisher-Yates table shuffle
 function table.Shuffle(t)
-  local n = #t
-
-  while n > 2 do
-    -- n is now the last pertinent index
-    local k = rand(n) -- 1 <= k <= n
-    -- Quick swap
-    t[n], t[k] = t[k], t[n]
-    n = n - 1
-  end
-
-  return t
+    for i = #t, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
+    end
+    return t
 end
 
 -- Generate the voting 'queue' of six options
@@ -83,16 +76,25 @@ function GM:GenerateVotingQueue()
     -- Copy the gamemodes & shuffle
     local vote = table.Copy(GAMEMODE.VoteGamemodes)
     table.Shuffle(vote)
-    vote = {vote[1], vote[2], vote[3], vote[4], vote[5], vote[6]}
+    
+    -- Ensure the current gamemode is not selected
+    local vote_final = {}
+    for i = 1, #vote do
+        if vote[i][1] != GAMEMODE_NAME then
+            table.insert(vote_final, vote[i])
+            if #vote_final == 6 then break end
+        else
+            continue
+        end
+    end
     
     -- Add a map to each gamemode
-    for k,v in pairs(vote) do
+    for k,v in pairs(vote_final) do
         local gamemode = v[1]
         local map = table.Random(GAMEMODE.VoteMaps[gamemode])
         table.insert(v, map)
     end
-    
-    return vote
+    return vote_final
 end
 
 -- Start the voting process
@@ -118,7 +120,7 @@ function GM:StartVoting()
         v:UpdateStatsToDB()
     end
     
-    -- 30 seconds of voting time
+    -- 15 seconds of voting time
     timer.Simple(30, function() GAMEMODE:EndVote() end)
 end
 
@@ -128,6 +130,7 @@ function GM:CountVote(ply, vote)
     if vote < 1 or vote > 6 then return end
     GAMEMODE.VotingResults[ply] = vote
 end
+
 -- Player has cast a vote, count it
 net.Receive('MapVoteSendVote', function(len, ply)
     local vote = net.ReadInt(8)
@@ -162,3 +165,59 @@ function GM:EndVote()
     game.ConsoleCommand('gamemode ' .. winning_gamemode .. '\n')
     timer.Simple(5, function() game.ConsoleCommand('changelevel ' .. winning_map .. '\n') end)
 end
+
+-- Rock the vote logic function
+function GM:RockTheVote(ply)
+    if !IsValid(ply) then return end
+    if #GAMEMODE.CurrentVoteTable >= 1 then return end
+    
+    if player.GetCount() == 1 then
+        GAMEMODE.RTVCount = 100
+        ply:ChatPrint('Vote to skip map passed since you are alone')
+        timer.Simple(3, function()
+            GAMEMODE:EndGame()
+        end)
+        
+        return
+    end
+    
+	local voted = false
+	if !GAMEMODE.RTV[ply] then
+		GAMEMODE.RTV[ply] = true
+		GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 0) + 1
+		
+		local c = GAMEMODE.RTVCount
+		local t = player.GetCount()
+		local m = math.ceil(player.GetCount() * 0.5)
+		if c >= m then
+			for k,v in pairs(player.GetAll()) do
+				v:ChatPrint('Vote to skip map passed!')
+			end
+            
+            timer.Simple(3, function()
+                GAMEMODE:EndGame()
+            end)
+		else
+			for k,v in pairs(player.GetAll()) do
+				v:ChatPrint(ply:Nick() .. ' has voted to skip the map.')
+				v:ChatPrint(m - c .. ' more votes are needed.')
+			end
+		end
+	else
+		ply:ChatPrint('You have already voted to skip the map!')
+	end
+end
+
+hook.Add('PlayerDisconnected', 'RemoveRTVVotes', function(ply)
+	if GAMEMODE.RTV[ply] then
+		GAMEMODE.RTV[ply] = nil
+		GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 1) - 1
+	end
+end )
+
+hook.Add('PlayerSay', 'TrackRTV', function(ply, txt)
+	if txt == '!rtv' or txt == '/rtv' then
+        GAMEMODE:RockTheVote(ply)
+        return ""
+	end
+end)

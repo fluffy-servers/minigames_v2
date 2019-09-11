@@ -1,0 +1,6 @@
+"minigames"
+{
+	"base"	"fluffy_base"
+	"title"	"Super Shotguns"
+    "maps"	"^sg_"
+}

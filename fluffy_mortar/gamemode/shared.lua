@@ -1,9 +1,9 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Dodgeball'
+GM.Name = 'Mortar'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    Eliminate the other team with dodgeballs!
+    Eliminate the other team with giant mortars of doom!
 ]]
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?

@@ -8,7 +8,7 @@ hook.Add("PlayerBindPress", "ThirdpersonToggle", function(ply, bind, pressed)
     if bind == "gm_showspare1" and pressed == true then
         if !GAMEMODE.ThirdpersonEnabled and !LocalPlayer():IsSuperAdmin() then return end
         if !LocalPlayer().Thirdperson then LocalPlayer().Thirdperson = false end
-        LocalPlayer().Thirdperson = !( LocalPlayer().Thirdperson )
+        LocalPlayer().Thirdperson = !(LocalPlayer().Thirdperson)
     end
 end)
 
@@ -21,8 +21,8 @@ function GM:ThirdPersonView(ply, pos, angles, fov)
     if not angles then return end
     
     -- not sure how much commenting will help
-    if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and ( LocalPlayer().Thirdperson ) then
-        view.fov = 60 -- GetConVar( "default_fov" ):GetFloat()
+    if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and (LocalPlayer().Thirdperson) then
+        view.fov = 60 -- GetConVar("default_fov"):GetFloat()
         
         -- Calculate the angle better
         local newP = angles.p
@@ -32,7 +32,7 @@ function GM:ThirdPersonView(ply, pos, angles, fov)
         -- Make a trace backwards and check for collisions with the world
         local tr = util.TraceLine({
             start = pos,
-            endpos = pos - ( newAng:Forward() * 150 ),
+            endpos = pos - (newAng:Forward() * 150),
             filter = ply
         })
 
@@ -47,7 +47,7 @@ function GM:ThirdPersonView(ply, pos, angles, fov)
         view.drawviewer = true
     else
         -- rethink this section tbh
-        --view.fov = GetConVar( "default_fov" ):GetFloat() BAD FLUFFY NO DON'T DO THIS
+        --view.fov = GetConVar("default_fov"):GetFloat() BAD FLUFFY NO DON'T DO THIS
         view.origin = pos
         view.angles = angles
     end

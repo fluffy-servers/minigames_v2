@@ -17,18 +17,28 @@ fs_icons['admin'] = Material('icon16/shield.png')
 fs_icons['dev'] = Material('icon16/wrench.png')
 fs_icons['user'] = Material('icon16/user_gray.png')
 fs_icons['donor'] = Material('icon16/heart.png') 
+fs_icons['map'] = Material('icon16/map.png')
+fs_icons['bot'] = Material('icon16/cog.png')
+
+local fs_users = {}
+fs_users['76561198067202125'] = 'dev'
+fs_users['76561198087419337'] = 'map'
 
 fluffy_scoreboard = nil
 
 -- Rank icons and other convienent functions
 local function GetRankIcon(ply)
 	local rank = ply:GetUserGroup()
-	if rank == 'superadmin' then
-		return 'admin'
-	elseif rank == 'donor' then -- Donor is not handled this way man what am I doing
-		return 'donor'
-	end
-	
+    if fs_users[ply:SteamID64()] then
+        return fs_users[ply:SteamID64()]
+    elseif ply:IsAdmin() then
+        return 'admin'
+    elseif ply:GetNWBool('Donor', false) then
+        return 'donor'
+    elseif ply:IsBot() then
+        return 'bot'
+    end
+    
 	return 'user'
 end
 

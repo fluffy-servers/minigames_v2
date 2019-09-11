@@ -6,7 +6,7 @@
 -- Make new players join the Hunter team on connection
 function GM:PlayerInitialSpawn(ply)
     if GAMEMODE.TeamSurvival and GAMEMODE.HunterTeam then
-        ply:SetTeam( GAMEMODE.HunterTeam )
+        ply:SetTeam(GAMEMODE.HunterTeam)
     end
 end
 
@@ -14,9 +14,9 @@ end
 hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
     if GAMEMODE.TeamSurvival then
         local num_players = 0
-        for k,v in pairs( player.GetAll() ) do
+        for k,v in pairs(player.GetAll()) do
             if v:Team() == TEAM_SPECTATOR then continue end
-            v:SetTeam( GAMEMODE.SurvivorTeam )
+            v:SetTeam(GAMEMODE.SurvivorTeam)
             num_players = num_players + 1
             v.InitialHunter = false
             v.Spectating = false
@@ -29,7 +29,7 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
             v.InitialHunter = true
         end
     end
-end )
+end)
 
 -- Stop Hunters from switching back to the other team
 hook.Add('PlayerCanJoinTeam', 'StopHunterSwap', function(ply, team)
@@ -53,7 +53,7 @@ end)
 -- Return a single player if they are the last player alive
 function GM:GetLastPlayer(exclude_player)
     local last_alive = nil
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         if v:Alive() and v:Team() == GAMEMODE.SurvivorTeam and !v.Spectating then
             if exclude_player and v == exclude_player then continue end
             if IsValid(last_alive) then

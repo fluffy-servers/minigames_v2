@@ -185,14 +185,12 @@ hook.Add('KeyPress', 'GhostAttackControls', function(ply, key)
             local prop = ply:GetProp()
             if not prop or not prop:IsValid() then return end
             
-            local strength = 40 + math.Clamp(100-ply:GetMaxHealth(), 0, 100)
-            
 			-- Create the explosion effect
             local boom = ents.Create( "env_explosion" )
             boom:SetPos( prop:GetPos() ) 
             boom:SetOwner( ply )
             boom:Spawn()
-            boom:SetKeyValue( "iMagnitude", strength ) 
+            boom:SetKeyValue( "iMagnitude", "125" ) 
             boom:Fire( "Explode", 0, 0 ) 
         end end )
     end
