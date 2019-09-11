@@ -80,7 +80,7 @@ function CreateFluffyScoreboard()
 	fluffy_scoreboard:SetTitle('')
 	fluffy_scoreboard:ShowCloseButton(false)
 	fluffy_scoreboard.players = {}
-	local gametype = GAMEMODE.TeamBased
+	local gametype = (GAMEMODE.TeamBased and GAMEMODE.ShowTeamScoreboard)
 	
 	function fluffy_scoreboard:Paint(w, h)
         -- Draw the top bar with player information
@@ -91,15 +91,15 @@ function CreateFluffyScoreboard()
         
         -- Draw team information if applicable
         -- Todo: maybe display better team scoring information
-        if GAMEMODE.TeamBased then
+        if GAMEMODE.TeamBased and GAMEMODE.ShowTeamScoreboard then
             draw.RoundedBox(8, 32, 36, 256, 52, team.GetColor(TEAM_BLUE))
             draw.SimpleText(team.GetName(TEAM_BLUE), 'FS_32', 40, 36, GAMEMODE.FCol1)
-            draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_BLUE), 'FS_16', 40, 60, GAMEMODE.FCol1)
+            --draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_BLUE), 'FS_16', 40, 60, GAMEMODE.FCol1)
             draw.SimpleText(team.GetScore(TEAM_BLUE), 'FS_60', 284, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
             
             draw.RoundedBox(8, 412, 36, 256, 52, team.GetColor(TEAM_RED))
             draw.SimpleText(team.GetName(TEAM_RED), 'FS_32', 660, 36, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT)
-            draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_RED), 'FS_16', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT)
+            --draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_RED), 'FS_16', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT)
             draw.SimpleText(team.GetScore(TEAM_RED), 'FS_60', 416, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         end
 	end
@@ -220,7 +220,7 @@ function CreateFluffyScoreboard()
     -- Create the playerlist for the scoregboard
 	fluffy_scoreboard.PlayerList = vgui.Create('DScrollPanel', fluffy_scoreboard)
 	fluffy_scoreboard.PlayerList:SetSize(700, ScrH() - 232)
-    if GAMEMODE.TeamBased then
+    if GAMEMODE.TeamBased and GAMEMODE.ShowTeamScoreboard then
         fluffy_scoreboard.PlayerList:SetPos(0, 92)
     else
         fluffy_scoreboard.PlayerList:SetPos(0, 32)

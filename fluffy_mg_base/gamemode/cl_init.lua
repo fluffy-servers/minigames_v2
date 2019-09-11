@@ -124,12 +124,20 @@ surface.CreateFont( "CSKillIcons", {
 
 local possible_colors = {
     blue = {Color(0, 168, 255), Color(0, 151, 230)},
-    red = {Color(232, 65, 24), Color(194, 54, 22)},
+    red = {Color(255, 77, 77), Color(255, 56, 56)},
     yellow = {Color(251, 197, 49), Color(225, 177, 44)},
     green = {Color(76, 209, 55), Color(68, 189, 50)},
     purple = {Color(156, 136, 255), Color(140, 122, 230)},
+    pink = {Color(255, 159, 243), Color(243, 104, 224)},
+    cyan = {Color(0, 210, 211), Color(1, 163, 164)},
+    orange = {Color(230, 126, 34), Color(211, 84, 0)},
     dark = {Color(39, 60, 117), Color(25, 42, 86)}
 }
+
+-- Default is blue
+-- This changes based on team in some gamemodes
+GM.HColLight = Color(0, 168, 255)
+GM.HColDark = Color(0, 151, 230)
 
 -- Default is blue
 GM.FCol1 = Color(245, 246, 250)
@@ -139,9 +147,9 @@ GM.FColShadow = Color(53, 59, 72)
 
 -- Function to update the color set to any in the table
 function GM:UpdateColorSet(name)
-    if not possible_colors[name] then return end
-    GAMEMODE.FCol2 = possible_colors[name][1]
-    GAMEMODE.FCol3 = possible_colors[name][2]
+    if not possible_colors[name] then name = 'blue' end
+    GAMEMODE.HColLight = possible_colors[name][1]
+    GAMEMODE.HColDark = possible_colors[name][2]
 end
 
 -- Function to adjust a colour strength

@@ -9,9 +9,11 @@ GM.WeaponOptions = {
     weapon_357 = {'Revolver', '357', 3},
     weapon_frag = {'Grenade', 'Grenade', 1},
     weapon_crossbow = {'Crossbow', 'XBowBolt', 3},
-    weapon_pistol = {'Pistol', 'Pistol', 12},
-    weapon_smg1 = {'SMG Bomb', 'SMG1_Grenade', 1},
-    weapon_shotgun = {'Shotgun', 'Buckshot', 6},
+    weapon_mg_pistol = {'Pistol', 'Pistol', 12},
+    weapon_mg_smg = {'SMG Bomb', 'SMG1_Grenade', 1},
+    weapon_mg_shotgun = {'Shotgun', 'Buckshot', 6},
+    weapon_mg_mortar = {'Mortar', 'RPG_Round', 5},
+    weapon_mg_sniper = {'Sniper', 'SniperRound', 10},
 }
 
 -- Percentage of crates that have bonuses
@@ -56,8 +58,9 @@ function GM:StartBattlePhase()
         
         -- Award HP and prizes based on what they collected
         if v.SmashedCrates and v.SmashedCrates > 0 then
-            v:SetHealth(v.SmashedCrates * 5) -- 5HP per crate
-            v:SetMaxHealth(v.SmashedCrates * 5)
+            local hp = math.Clamp(v.SmashedCrates*5, 10, 250)
+            v:SetHealth(hp) -- 5HP per crate
+            v:SetMaxHealth(hp)
             v:AddFrags(math.floor(v.SmashedCrates / 10)) -- 1 point for 10 crates
             for wep, amount in pairs(v.Bonuses) do
                 local tbl = GAMEMODE.WeaponOptions[wep]

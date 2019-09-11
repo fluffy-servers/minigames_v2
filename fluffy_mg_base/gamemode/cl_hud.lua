@@ -32,6 +32,14 @@ function GM:HUDPaint()
 		return 
 	end
     
+    -- Check team changes (where needed)
+    if GAMEMODE.HUDTeamColor then
+        if LocalPlayer():Team() != (GAMEMODE.team_cached or nil) then
+            GAMEMODE.team_cached = LocalPlayer():Team()
+            GAMEMODE:UpdateTeamColors(LocalPlayer():Team())
+        end
+    end
+    
     -- Draw some of the parts
     self:DrawRoundState()
     self:DrawHealth()
@@ -66,6 +74,24 @@ function GM:HUDPaint()
     hook.Run("HUDDrawTargetID")
 	hook.Run("HUDDrawPickupHistory")
     hook.Run("DrawDeathNotice", 0.85, 0.04)
+end
+
+-- Useful function that helps sort out team colors
+function GM:UpdateTeamColors(t)
+    local name = team.GetName(t)
+    if name == 'Spectators' then
+        GAMEMODE:UpdateColorSet()
+    else
+        if t == TEAM_RED then
+            GAMEMODE:UpdateColorSet('red')
+        elseif t == TEAM_BLUE then
+            GAMEMODE:UpdateColorSet('blue')
+        else
+            -- Last resort, try getting the color from the team name
+            name = string.lower(string.Replace(name, ' Team', ''))
+            GAMEMODE:UpdateColorSet(name)
+        end
+    end
 end
 
 -- Convenience to draw a circle (uncached)
@@ -168,7 +194,7 @@ function GM:RoundStateDefault()
 	
     -- Draw the circle shadow
     draw.NoTexture()
-    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawPoly(round_circle_shadow)
     
     -- Calculate the size of the text to adapt the box
@@ -180,14 +206,14 @@ function GM:RoundStateDefault()
     -- Draw the box with sizing information determined above
     local rect_height = 32
     local rect_width = w + 64
-    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
-    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height)
     
     -- Draw the top layer of the circle
     draw.NoTexture()
-    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(round_circle)
     
     -- Calculate time remaining
@@ -237,7 +263,7 @@ function GM:RoundStateWithTimer()
 	
     -- Draw the circle shadow
     draw.NoTexture()
-    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawPoly(round_circle_shadow)
     
     -- Calculate the size of the text to adapt the box
@@ -249,14 +275,14 @@ function GM:RoundStateWithTimer()
     -- Draw the box with sizing information determined above
     local rect_height = 32
     local rect_width = w + 64
-    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
-    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height)
     
     -- Draw the top layer of the circle
     draw.NoTexture()
-    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(round_circle)
     
     -- Calculate time remaining
@@ -298,8 +324,8 @@ function GM:RoundStateTimerOnly()
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
     
     -- Draw the box
-    draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48+3, GAMEMODE.FCol3)
-    draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.FCol2)
+    draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48+3, GAMEMODE.HColDark)
+    draw.RoundedBox(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.HColLight)
     
     -- Draw the time text
     if time_left > 0 then
@@ -313,8 +339,8 @@ function GM:RoundStateTimerOnly()
     -- Draw the round number (if applicable)
     if GAMEMODE.RoundType == 'timed' then
         -- Draw the box
-        draw.RoundedBoxEx(8, c_pos-48, c_pos-3, 128, 32+3, GAMEMODE.FCol3, false, false, true, true)
-        draw.RoundedBoxEx(8, c_pos-48, c_pos-2, 128, 32, GAMEMODE.FCol2, false, false, true, true)
+        draw.RoundedBoxEx(8, c_pos-48, c_pos-3, 128, 32+3, GAMEMODE.HColDark, false, false, true, true)
+        draw.RoundedBoxEx(8, c_pos-48, c_pos-2, 128, 32, GAMEMODE.HColLight, false, false, true, true)
         
         local round = GetGlobalInt('RoundNumber') or 1
         draw.SimpleText('Round ' .. round, "FS_24", c_pos + 16, c_pos + 15, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -336,7 +362,7 @@ function GM:RoundStateTimerTeamScore()
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
     
     -- Draw the box
-    draw.RoundedBoxEx(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.FCol2, true, true, false, false)
+    draw.RoundedBoxEx(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.HColLight, true, true, false, false)
     
     -- Draw the time
     if time_left > 0 then
@@ -388,7 +414,7 @@ function GM:DrawHealth()
     
     -- Draw the circle shadow
     draw.NoTexture()
-    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawPoly(health_circle_shadow)
     
     -- Calculate the size of the team name text
@@ -399,14 +425,14 @@ function GM:DrawHealth()
         local w = surface.GetTextSize(team_name)
         local rect_height = 32
         local rect_width = w + 64
-        surface.SetDrawColor(GAMEMODE.FCol3)
+        surface.SetDrawColor(GAMEMODE.HColDark)
         surface.DrawRect(c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height + 3)
-        surface.SetDrawColor(GAMEMODE.FCol2)
+        surface.SetDrawColor(GAMEMODE.HColLight)
         surface.DrawRect(c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height)
     end
     
     -- Draw the top layer of the circle
-    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(health_circle)
     
     -- Draw arc (if applicable)
@@ -466,9 +492,9 @@ function GM:DrawAmmo()
     
     -- Draw the shadow & circle
     draw.NoTexture()
-    surface.SetDrawColor(GAMEMODE.FCol3)
+    surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawPoly(ammo_circle_shadow)
-    surface.SetDrawColor(GAMEMODE.FCol2)
+    surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(ammo_circle)
     
     -- Draw the arc (if applicable)

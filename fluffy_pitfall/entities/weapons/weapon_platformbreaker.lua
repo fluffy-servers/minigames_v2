@@ -18,7 +18,7 @@ SWEP.Primary.Cone		    = 0.01
 SWEP.Primary.ClipSize		= -1
 SWEP.Primary.Delay		    = 0.15
 SWEP.Primary.DefaultClip	= -1
-SWEP.Primary.Automatic		= false
+SWEP.Primary.Automatic		= true
 SWEP.Primary.Ammo		    = "none"
  
 SWEP.Secondary.ClipSize		= 9999

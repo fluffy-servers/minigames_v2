@@ -24,7 +24,16 @@ end
 function GM:EntityTakeDamage(target, dmginfo)
     local attacker = dmginfo:GetAttacker()
     if attacker == target then
+        if dmginfo:GetDamage() > 75 then
+            target:AddStatPoints('Rocket Jumps', 1)
+        end
         dmginfo:SetDamage(0)
         target:SetLocalVelocity(dmginfo:GetDamageForce():GetNormalized() * 650)
     end
 end
+
+-- Register XP for Mortar
+hook.Add('RegisterStatsConversions', 'AddMortarStatConversions', function()
+    GAMEMODE:AddStatConversion('Mortars Launched', 'Mortars Launched', 0.15)
+    GAMEMODE:AddStatConversion('Rocket Jumps', 'Rocket Jumps', 0.25)
+end)

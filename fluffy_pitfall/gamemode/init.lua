@@ -90,21 +90,34 @@ function GM:GetFallDamage(ply, vel)
     return 0
 end
 
+-- Credit damage to players for Knockbacks
+hook.Add('EntityTakeDamage', 'CreditPitfallKills', function(ply, dmginfo)
+    if not ply:IsPlayer() then return end
+    if dmginfo:GetAttacker():GetClass() == 'trigger_hurt' then
+    
+        if ply.LastKnockback and (CurTime() - ply.KnockbackTime) < 5 then
+            attacker = ply.LastKnockback
+            dmginfo:SetAttacker(attacker)
+        end
+    end
+end)
+
 -- Handle player death
 -- It's hard to track kills in this gamemode
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     
-    if ply.LastKnockback then
-        attacker = ply.LastKnockback
-        dmginfo:SetAttacker(attacker)
-    end
-    
     -- Do not count deaths unless in round
     if GAMEMODE:GetRoundState() != 'InRound' then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
+    
+    -- Award an point to the attacker (if there is one)
+    if IsValid(attacker) and attacker:IsPlayer() then
+        attacker:AddFrags(1)
+        attacker:AddStatPoints('Kills', 1)
+    end
     
     -- Every living players earns a point
     for k,v in pairs(player.GetAll()) do

@@ -76,11 +76,12 @@ function GM:SetPlayerGhost(ply)
     ply.DeathPos = nil
     ply.DeathAng = nil
     
-    local time = math.Clamp(ply.DeathTimer or 60, 0, 60)
-    if time < 1 then
+    -- Permadeath
+    if not ply.PaintballLives then ply.PaintballLives = 3 end
+    if ply.PaintballLives < 1 then
         ply:Kill()
-        return
     end
+    
     ply:StripWeapons()
     
     -- Ghost visuals
@@ -96,10 +97,10 @@ function GM:SetPlayerGhost(ply)
     -- Network ghost state
     ply:SetNWBool('IsGhost', true)
     ply:SetNWFloat('GhostStart', CurTime())
-    ply:SetNWInt('GhostTime', time)
+    ply:SetNWInt('GhostTime', 20)
     
     -- Eliminate the player PERMAMENTLY after this amount of time
-    timer.Create(ply:AccountID() .. 'GHOST', time, 1, function()
+    timer.Create(ply:AccountID() .. 'GHOST', 20, 1, function()
         ply:Kill()
     end)
 end
@@ -118,10 +119,8 @@ function GM:SetPlayerUnGhost(ply)
     ply:SetColor(color_white)
     ply:SetMaterial('models/props_combine/portalball001_sheet', true)
     
-    -- Reduce the timer as a penalty
-    local starttime = ply:GetNWFloat('GhostStart')
-    --local timetaken = CurTime() - starttime
-    ply.DeathTimer = (ply.DeathTimer or GAMEMODE.LifeTimer) - 10--2 - timetaken
+    -- Reduce number of lives by 1
+    ply.PaintballLives = ply.PaintballLives - 1
     
     -- Ungodmode after given time
     timer.Simple(3, function()
@@ -141,6 +140,7 @@ hook.Add('PreRoundStart', 'ResetPaintball', function()
         v.DeathPos = nil
         v.DeathAng = nil
         v.DeathTimer = GAMEMODE.LifeTimer
+        v.PaintballLives = 3
         
         -- Clear ghost effects
         v:SetNWBool('IsGhost', false)
@@ -194,4 +194,10 @@ end)
 -- Register XP for Paintball
 hook.Add('RegisterStatsConversions', 'AddPaintballStatConversions', function()
     GAMEMODE:AddStatConversion('Weapons Collected', 'Weapons Collected', 0.25)
+end)
+
+-- Hide all Tracer cosmetics
+-- Wouldn't be paintball without paintball tracers
+hook.Add('ShouldDrawCosmetics', 'HideLaserDanceCosmetics', function(ply, ITEM)
+    if ITEM.Type == 'Tracer' then return false end
 end)

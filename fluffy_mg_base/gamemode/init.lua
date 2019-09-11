@@ -127,7 +127,12 @@ function GM:PlayerRequestTeam(ply, teamid)
 		ply:ChatPrint("You can't join that team")
         return 
     end
-
+    
+    -- Stop players changing teams in certain gamemodes
+    if not GAMEMODE.PlayerChooseTeams then
+        ply:ChatPrint("You can't change teams in this gamemode!")
+    end
+        
 	-- Run the can join hook
 	if not hook.Run('PlayerCanJoinTeam', ply, teamid) then
         return
@@ -232,38 +237,50 @@ function GM:PlayerDeathThink(ply)
     end
 end
 
--- Convenience function to get number of living players
--- This isn't fantastically efficient don't overuse
-function GM:GetLivingPlayers()
-    local alive = 0
-    for k,v in pairs(player.GetAll()) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then alive = alive + 1 end
+-- Useful function to swap the current teams
+function GM:SwapTeams(respawn)
+    local red_players = team.GetPlayers(TEAM_RED)
+    local blue_players = team.GetPlayers(TEAM_BLUE)
+    local respawn = respawn or true
+    
+    -- Move red players to blue
+    for k,v in pairs(red_players) do 
+        v:SetTeam(TEAM_BLUE)
+        if respawn then v:Spawn() end
     end
-    return alive
+    
+    -- Move blue players to red
+    for k,v in pairs(blue_players) do 
+        v:SetTeam(TEAM_RED)
+        if respawn then v:Spawn() end
+    end
 end
 
--- Convenience function to get number of non-spectators
--- I don't think there is actually a need for this anymore, but it's here
-function GM:NumNonSpectators()
+-- Useful function to scramble the teams nicely
+-- This is good for rebalancing if things go really badly
+function GM:ShuffleTeams(respawn)
+    -- Figure out what players are eligible for team swaps
+    local respawn = respawn or true
+    local players = {}
     local num = 0
     for k,v in pairs(player.GetAll()) do
-        if GAMEMODE.TeamBased then
-            if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then num = num + 1 end
-        else
-            if v:Team() != TEAM_SPECTATOR then num = num + 1 end
+        if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then 
+            num = num + 1
+            table.insert(players, v)
         end
     end
-
-    return num
-end
-
--- Convenience function to get number of living players in a team
-function GM:GetTeamLivingPlayers(t)
-    local alive = 0
-    for k,v in pairs(team.GetPlayers(t)) do
-        if v:Alive() and !v.Spectating then alive = alive + 1 end
+    
+    -- Reassign the teams
+    players = table.Shuffle(players)
+    for i = 1,num do
+        if i%2 == 0 then 
+            players[i]:SetTeam(TEAM_RED) 
+        else 
+            players[i]:SetTeam(TEAM_BLUE) 
+        end
+        
+        if respawn then players[i]:Spawn() end
     end
-    return alive
 end
 
 -- Fisher-Yates table shuffle
@@ -387,18 +404,6 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
         attacker.FFAKills = attacker.FFAKills + 1
     end
 end
-
-hook.Add('EntityTakeDamage', 'ShotgunGlobalBuff', function(target, dmg)
-    local wep = dmg:GetInflictor()
-    
-    if not IsValid(wep) then return end
-    if wep:GetClass() == 'player' then wep = wep:GetActiveWeapon() end
-    if not IsValid(wep) then return end
-    
-    if wep:GetClass() == "weapon_shotgun" then
-        dmg:ScaleDamage(2)
-    end
-end)
 
 -- Import the component parts
 include('sv_database.lua')

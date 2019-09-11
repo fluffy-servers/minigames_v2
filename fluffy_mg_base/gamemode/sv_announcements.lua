@@ -61,6 +61,20 @@ function GM:PlayerOnlyAnnouncement(ply, duration, text, size, sound)
     net.Send(ply)
 end
 
+-- Send a pulse announcement to many players
+function GM:TableOnlyAnnouncement(recipients, duration, text, size, sound)
+    local tbl = {
+        type = 'pulse',
+        duration = duration,
+        sound = sound,
+        text = text,
+        size = size,
+    }
+    net.Start('MinigamesAnnouncement')
+        net.WriteTable(tbl)
+    net.Send(recipients)
+end
+
 -- Send an entity camera announcement
 function GM:EntityCameraAnnouncement(ent, duration, offset, distance)
     local tbl = {

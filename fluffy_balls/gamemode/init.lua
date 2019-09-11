@@ -23,10 +23,10 @@ function GM:CollectBall(ply)
     ply:EmitSound('buttons/blip1.wav', 50, math.Clamp(100 + balls*5, 100, 255))
 	
 	local hp = ply:Health()
-	ply:SetHealth(hp + 10)
+	ply:SetHealth(hp + 5)
 	
-	if hp >= 140 then
-		ply:SetHealth(150)
+	if hp >= 195 then
+		ply:SetHealth(200)
 	end
 end
 
@@ -35,7 +35,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     
-    local balls = math.min(ply:GetNWInt("Balls", 0), 20)
+    -- Drop up to 15 balls, + up to 4 additional balls
+    local balls = math.min(ply:GetNWInt("Balls", 0), 15)
     for i=math.random(-4, 0),balls do
 		local b = ents.Create('mg_ball_drop')
 		local p = ply:GetPos() + Vector(0, 0, 50)
@@ -48,6 +49,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         local c3 = ply:GetPlayerColor()
         b:SetBallColor(c3)
     end
+    
+    -- Reduce the amount of player balls
     local new_balls = math.max(ply:GetNWInt("Balls", 0) - balls, 0)
     ply:SetNWInt("Balls", new_balls)
     

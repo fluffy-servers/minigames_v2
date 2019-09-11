@@ -22,6 +22,15 @@ GM.VoteGamemodes = {
     {'fluffy_microgames', 'Microgames', 'FFA'},
     {'fluffy_paintball', 'Paintball', 'Team DM'},
     {'fluffy_climb', 'Climb!', 'FFA'},
+    
+    --{'fluffy_spectrum', 'Spectrum', 'FFA'},
+    --{'fluffy_assassination', 'Assassination', 'Team DM'},
+    --{'fluffy_mortar', 'Mortar', 'Team DM'},
+    --{'fluffy_shotguns', 'Super Shotguns', 'Team DM'},
+    --{'fluffy_freezetag', 'Freeze Tag', 'Team DM'},
+    --{'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
+    --{'fluffy_junkjoust', 'Junk Joust', 'FFA'},
+    --{'fluffy_stalker', 'Stalker', 'Hunter vs Hunted'},
     --{'fluffy_ctf', 'Capture The Flag', 'Team DM'},
 }
 
@@ -32,12 +41,12 @@ local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_
 GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1', 'sw_iceberg_small', 'sw_grassy'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
-    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2', 'dh_giants_v1', 'dh_crumble'},
+    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
     fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms'},
     fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker', 'db_parkalyptic'},
     fluffy_pitfall = {'pf_ocean'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
-    fluffy_bombtag = {'bt_rainbow', 'bt_plaza_v2', 'bt_museum', 'bt_canal', 'bt_yeoldearena', 'bt_laserama'},
+    fluffy_bombtag = {'bt_rainbow', 'bt_museum', 'bt_canal', 'bt_yeoldearena'},
     fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix'},
 	fluffy_cratewars = {'cw_bricks', 'cw_boxingring'},
 	fluffy_balls = pvp_maps,

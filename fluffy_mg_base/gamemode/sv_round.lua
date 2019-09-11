@@ -158,7 +158,7 @@ function GM:EndRound(reason, extra)
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
     local msg = "The round has ended!"
-    winners, msg = GAMEMODE:HandleEndRound(reason)
+    winners, msg, extra = GAMEMODE:HandleEndRound(reason)
     
     -- Send the result to the players
     net.Start('EndRound')
@@ -168,7 +168,10 @@ function GM:EndRound(reason, extra)
     
     -- STATS: Add round wins
     GAMEMODE:StatsRoundWin(winners)
-            
+    
+    -- Apply confetti effect
+    GAMEMODE:ConfettiEffect(winners)
+    
     -- Move to next round
     hook.Call('RoundEnd')
     SetGlobalString('RoundState', 'EndRound')
@@ -232,6 +235,31 @@ function GM:StatsRoundWin(winners)
             if not v:IsPlayer() then continue end
             v:AddStatPoints('Rounds Won', 1)
         end
+    end
+end
+
+-- Generates a lovely confetti effect
+function GM:ConfettiEffect(winners)
+    if GAMEMODE.DisableConfetti then return end
+    
+    -- Sort the winners into a nice table
+    local tbl = {}
+    if IsEntity(winners) then
+        tbl = {winners}
+    elseif type(winners) == 'number' then
+        tbl = team.GetPlayers(winners)
+    elseif type(winners) == 'table' then
+        tbl = winners
+    end
+    
+    -- Create confetti for all living winners
+    for k,v in pairs(tbl) do
+        if not v:IsPlayer() then continue end
+        if not v:Alive() then continue end
+        
+        local effectdata = EffectData()
+        effectdata:SetOrigin(v:GetPos())
+        util.Effect('win_confetti', effectdata)
     end
 end
 
