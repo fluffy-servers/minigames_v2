@@ -13,7 +13,7 @@ end
 
 -- Add a new ball to the field
 function GM:SpawnBall()
-    if GM:GetRoundState() != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     
     local ball = ents.Create('db_dodgeball')
     if not IsValid(ball) then return end
@@ -49,7 +49,7 @@ end )
 
 -- Add a new ball to the field every 20 seconds
 hook.Add("Think", "ThinkBallSpawn", function()
-    if GM:GetRoundState() != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     if not GAMEMODE.NextSpawn then return end
     
 	if CurTime() > GAMEMODE.NextSpawn then

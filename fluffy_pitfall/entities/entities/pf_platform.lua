@@ -67,7 +67,7 @@ end
 function ENT:Touch(ent)
     -- 3 seconds of spawn protection in rounds
     if GAMEMODE:GetRoundState() != 'InRound' then return end
-    if GM:GetRoundStartTime() + 3 > CurTime() then return end
+    if GAMEMODE:GetRoundStartTime() + 3 > CurTime() then return end
     
     -- Only living players make the platforms fall
     if not IsValid(ent) then return end
