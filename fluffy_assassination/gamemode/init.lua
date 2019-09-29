@@ -61,6 +61,13 @@ hook.Add('DoPlayerDeath', 'VIPDeath', function(victim, attacker, dmg)
     GAMEMODE:EndRound('VIPDead')
 end)
 
+-- End the round if the VIP disconnects
+hook.Add('PlayerDisconnected', 'VIPDisconnect', function(ply)
+    if GAMEMODE.CurrentVIP == ply then
+        GAMEMODE:EndRound('VIPDead')
+    end
+end)
+
 -- Guardians win if the VIP survives til TimeEnd
 function GM:HandleTeamWin(reason)
     local winners, msg, extra
