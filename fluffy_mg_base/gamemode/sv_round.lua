@@ -27,22 +27,6 @@ hook.Add('Think', 'MinigamesRoundThink', function()
     end
 end)
 
--- Much nicer wrapper for this function
-function GM:GetRoundState()
-    return GetGlobalString('RoundState', 'GameNotStarted')
-end
-
--- This is the most common use of the above function
--- Helps clean up code
-function GM:IsInRound()
-    return (GM:GetRoundState() == 'InRound')
-end
-
--- Another nice wrapper for a global variable
-function GM:GetRoundStartTime()
-    return GetGlobalFloat('RoundStart', 0)
-end
-
 -- Check if there enough players to start a round
 function GM:CanRoundStart()
     -- If team based, check there is at least player on each team

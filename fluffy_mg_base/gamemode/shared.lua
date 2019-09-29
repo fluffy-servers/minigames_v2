@@ -177,3 +177,19 @@ function GM:GetTeamLivingPlayers( t )
     end
     return alive
 end
+
+-- Much nicer wrapper for this function
+function GM:GetRoundState()
+    return GetGlobalString('RoundState', 'GameNotStarted')
+end
+
+-- This is the most common use of the above function
+-- Helps clean up code
+function GM:IsInRound()
+    return (GAMEMODE:GetRoundState() == 'InRound')
+end
+
+-- Another nice wrapper for a global variable
+function GM:GetRoundStartTime()
+    return GetGlobalFloat('RoundStart', 0)
+end
