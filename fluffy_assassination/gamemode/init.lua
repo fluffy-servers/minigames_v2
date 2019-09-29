@@ -59,6 +59,10 @@ end)
 hook.Add('DoPlayerDeath', 'VIPDeath', function(victim, attacker, dmg)
     if GAMEMODE.CurrentVIP != victim then return end
     GAMEMODE:EndRound('VIPDead')
+    
+    if attacker:IsPlayer() then
+        attacker:AddStatPoints('Assassinations', 1)
+    end
 end)
 
 -- End the round if the VIP disconnects
@@ -75,13 +79,28 @@ function GM:HandleTeamWin(reason)
         winners = TEAM_BLUE
         msg = team.GetName(TEAM_BLUE) .. ' win the round!'
         extra = GAMEMODE.CurrentVIP:Nick() .. ' survived!'
+        
+        if IsValid(GAMEMODE.CurrentVIP) then
+            GAMEMODE.CurrentVIP:AddStatPoints('VIP Survivals', 'VIP Survivals', 1)
+        end
     elseif reason == 'VIPDead' then
         winners = TEAM_RED
         msg = team.GetName(TEAM_RED) .. ' win the round!'
         extra = GAMEMODE.CurrentVIP:Nick() .. ' is dead'
+        
+        if IsValid(GAMEMODE.CurrentVIP) then
+            GAMEMODE.CurrentVIP:AddStatPoints('VIP Deaths', 'VIP Deaths', 1)
+        end
     else
         msg = 'The round is over!'
     end
     
     return winners, msg, extra
 end
+
+-- Register XP for Assassination
+hook.Add('RegisterStatsConversions', 'AddAssassinationStatConversions', function()
+    GAMEMODE:AddStatConversion('Assassinations', 'Assassinations', 2)
+    GAMEMODE:AddStatConversion('VIP Deaths', 'VIP Deaths', 0)
+    GAMEMODE:AddStatConversion('VIP Survivals', 'VIP Survivals', 1)
+end)
