@@ -27,6 +27,7 @@ hook.Add('PreRoundStart', 'VIPPreparations', function()
     for k,v in pairs(players) do
         local i = ((k-1)%8) + 1
         v:SetTeam(colors[i])
+        v.InitialTeam = colors[i]
     end
 end)
 
@@ -103,3 +104,8 @@ function GM:HandleTeamWin(reason)
     
     return winners, msg, extra
 end
+
+-- Register XP for Spectrum
+hook.Add('RegisterStatsConversions', 'AddSpectrumStatConversions', function()
+    GAMEMODE:AddStatConversion('Enemy Conversions', 'Enemy Conversions', 0.5)
+end)

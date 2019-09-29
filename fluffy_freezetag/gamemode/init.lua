@@ -118,7 +118,7 @@ function meta:IceFreeze()
 end
 
 -- Register XP for Freeze Tag
-hook.Add('RegisterStatsConversions', 'AddMortarStatConversions', function()
+hook.Add('RegisterStatsConversions', 'AddFreezeTagStatConversions', function()
     GAMEMODE:AddStatConversion('Allies Thawed', 'Allies Thawed', 1)
     GAMEMODE:AddStatConversion('Enemies Frozen', 'Enemies Frozen', 0.5)
 end)
