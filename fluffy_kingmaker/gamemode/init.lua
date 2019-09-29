@@ -87,7 +87,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if GetGlobalString( 'RoundState' ) != 'InRound' then return end
     ply:AddDeaths(1)
-    ply:AddStatPoints('Death', 1)
+    ply:AddStatPoints('Deaths', 1)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
