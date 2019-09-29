@@ -10,9 +10,9 @@ GM.StatsTracking = {}
 hook.Add('InitPostEntity', 'PrepareStatsStuff', function()
 	local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-	GAMEMODE.MinigamesPQueries['getstats'] = db:prepare("SELECT stats FROM stats_minigames WHERE `steamid64` = ? AND `gamemode` = ?;")
+	GAMEMODE.MinigamesPQueries['getstats'] = db:prepare("SELECT category, points FROM stats_minigames_new WHERE `steamid64` = ? AND `gamemode` = ?;")
 	GAMEMODE.MinigamesPQueries['addnewstats'] = db:prepare('INSERT INTO stats_minigames VALUES(?, ?, "{}");')
-	GAMEMODE.MinigamesPQueries['updatestats'] = db:prepare("UPDATE stats_minigames SET `stats` = ? WHERE `steamid64` = ? AND `gamemode` = ?;")
+	GAMEMODE.MinigamesPQueries['updatestats'] = db:prepare("INSERT INTO stats_minigames_new VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points);")
 end)
 
 -- Add some points to a given statistic
@@ -124,17 +124,13 @@ function meta:LoadStatsFromDB()
     function q:onSuccess(data)
         if type(data) == 'table' and #data > 0 then
             -- Load information from DB
-            ply.GamemodeDBStatsTable = util.JSONToTable(data[1]['stats'])
-        else
-            -- Add new blank row into the table
-            local q = GAMEMODE.MinigamesPQueries['addnewstats']
-            q:setString(1, ply:SteamID64())
-            q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
-            function q:onError(err)
-                print(err)
+            ply.GamemodeDBStatsTable = {}
+            for key, value in pairs(data) do
+                local category = data[key]['category']
+                local points = data[key]['points']
+                ply.GamemodeDBStatsTable[category] = points
             end
-            q:start()
-            
+        else
             ply.GamemodeDBStatsTable = {}
         end
     end
@@ -166,20 +162,23 @@ function meta:UpdateStatsToDB()
     local json = util.TableToJSON(new_table, false)
     
     -- Prepare the query
-    local q = GAMEMODE.MinigamesPQueries['updatestats']
-	if not q then return end
-    q:setString(1, json)
-    q:setString(2, self:SteamID64())
-    q:setString(3, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+    for k,v in pairs(new_table) do
+        local q = GAMEMODE.MinigamesPQueries['updatestats']
+        if not q then return end
+        q:setString(1, self:SteamID64())
+        q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+        q:setString(3, k)
+        q:setNumber(4, v)
     
-    -- Success function
-    function q:onSuccess(data)
-        -- done
+        -- Success function
+        function q:onSuccess(data)
+            print('Updated ', k)
+        end
+        
+        -- Print error if any occur (they shouldn't)
+        function q:onError(err)
+            print(err)
+        end
+        q:start()
     end
-    
-    -- Print error if any occur (they shouldn't)
-    function q:onError(err)
-        print(err)
-    end
-    q:start()
 end
