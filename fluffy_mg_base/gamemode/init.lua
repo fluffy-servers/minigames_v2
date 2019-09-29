@@ -42,30 +42,30 @@ util.AddNetworkString('MinigamesAnnouncement')
 util.AddNetworkString('CoolTransition')
 
 -- Called each time a player spawns
-function GM:PlayerSpawn( ply )
-    local state = GetGlobalString('RoundState', 'GameNotStarted')
+function GM:PlayerSpawn(ply)
+    local state = GAMEMODE:GetRoundState()
     
     -- If elimination, block respawns during round
     if state != 'PreRound' and GAMEMODE.Elimination == true then
-        self:PlayerSpawnAsSpectator( ply )
+        self:PlayerSpawnAsSpectator(ply)
         return
     end
     
     -- Spectators should be spawned as spectators (duh)
     if ply:Team() == TEAM_SPECTATOR then
-        self:PlayerSpawnAsSpectator( ply )
+        self:PlayerSpawnAsSpectator(ply)
         return
     end
     
     -- Make sure players have a team
-    if GAMEMODE.TeamBased and ( ply:Team() == TEAM_UNASSIGNED or ply:Team() == 0 ) then
-        self:PlayerSpawnAsSpectator( ply )
+    if GAMEMODE.TeamBased and (ply:Team() == TEAM_UNASSIGNED or ply:Team() == 0) then
+        self:PlayerSpawnAsSpectator(ply)
         return
     end
     
     -- Call functions to setup model and loadout
-	hook.Call('PlayerLoadout', GAMEMODE, ply )
-    hook.Call('PlayerSetModel', GAMEMODE, ply )
+	hook.Call('PlayerLoadout', GAMEMODE, ply)
+    hook.Call('PlayerSetModel', GAMEMODE, ply)
     ply:SetupHands()
     
     -- Exit out of spectate
@@ -80,7 +80,7 @@ function GM:PlayerSpawn( ply )
         
         -- Calculate time to be in god mode for
         local god_time = GAMEMODE.SpawnProtectionTime or 3
-        if GetGlobalString('RoundState') != 'InRound' then 
+        if GAMEMODE:GetRoundState() != 'InRound' then 
             god_time = god_time + GAMEMODE.RoundCooldown
         end
         
@@ -105,7 +105,7 @@ hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     end
     
     if not GAMEMODE.TeamBased then
-        ply:SetTeam( TEAM_UNASSIGNED )
+        ply:SetTeam(TEAM_UNASSIGNED)
     end
 end)
 
@@ -151,7 +151,7 @@ end
 
 -- Attempt to fix the damage scaling system
 -- Don't think it worked :(
-function GM:ScalePlayerDamage( ply, hitgroup, dmginfo )
+function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
     return
 end
 
@@ -173,7 +173,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
 
     -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
@@ -189,7 +189,7 @@ function GM:GetWinningPlayer()
     -- Loop through all players and return the one with the most frags
     local bestscore = 0
     local bestplayer = nil
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         local frags = v.FFAKills or 0
         if frags > bestscore then
             bestscore = frags
@@ -202,11 +202,11 @@ function GM:GetWinningPlayer()
 end
 
 -- Fairly self-explanatory
-function GM:PlayerSpawnAsSpectator( ply )
+function GM:PlayerSpawnAsSpectator(ply)
 	ply:StripWeapons()
 	ply.Spectating = true
-    ply:Spectate( OBS_MODE_ROAMING )
-    --if !GAMEMODE.TeamBased then ply:SetTeam( TEAM_SPECTATOR ) end
+    ply:Spectate(OBS_MODE_ROAMING)
+    --if !GAMEMODE.TeamBased then ply:SetTeam(TEAM_SPECTATOR) end
 end
 
 -- Override function to stop respawning for whatever reason
@@ -348,7 +348,7 @@ function GM:GetMVP()
 	
 	local tbl = player.GetAll()
 	local count = #tbl
-	table.sort( tbl, function(a, b) return a:Frags()*-50 + a:EntIndex() < b:Frags()*-50 + b:EntIndex() end )
+	table.sort(tbl, function(a, b) return a:Frags()*-50 + a:EntIndex() < b:Frags()*-50 + b:EntIndex() end)
     return tbl[1]
 end
 
@@ -380,7 +380,7 @@ local deathmatch_remove = {
     ['item_ammo_ar2_altfire'] = true,
 }
 function GM:CleanUpDMStuff()
-    for k,v in pairs( ents.GetAll() ) do
+    for k,v in pairs(ents.GetAll()) do
         if deathmatch_remove[ v:GetClass() ] then v:Remove() end
     end
 end

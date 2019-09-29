@@ -11,9 +11,8 @@
 -- Thinking for round coordination
 -- Usually check for round start and end conditions
 hook.Add('Think', 'MinigamesRoundThink', function()
-    local state = GetGlobalString('RoundState', 'GameNotStarted')
     -- Check if the game is ready to start
-    if state == 'GameNotStarted' then
+    if GAMEMODE:GetRoundState() == 'GameNotStarted' then
         if GAMEMODE:CanRoundStart() then
             -- Store the starting time of the game for TIMED gamemodes
             -- Timed gamemodes don't have a fixed number of rounds
@@ -22,11 +21,27 @@ hook.Add('Think', 'MinigamesRoundThink', function()
             end
             GAMEMODE:PreStartRound()
         end
-    elseif state == 'InRound' then
+    elseif GAMEMODE:GetRoundState() == 'InRound' then
         -- Delegate this to each gamemode (defaults are provided lower down for reference)
         GAMEMODE:CheckRoundEnd()
     end
 end)
+
+-- Much nicer wrapper for this function
+function GM:GetRoundState()
+    return GetGlobalString('RoundState', 'GameNotStarted')
+end
+
+-- This is the most common use of the above function
+-- Helps clean up code
+function GM:IsInRound()
+    return (GM:GetRoundState() == 'InRound')
+end
+
+-- Another nice wrapper for a global variable
+function GM:GetRoundStartTime()
+    return GetGlobalFloat('RoundStart', 0)
+end
 
 -- Check if there enough players to start a round
 function GM:CanRoundStart()
@@ -135,7 +150,7 @@ end
 -- End the round
 function GM:EndRound(reason, extra)
     -- Check that we're in a round
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
     

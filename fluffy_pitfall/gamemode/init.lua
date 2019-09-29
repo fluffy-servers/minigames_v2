@@ -109,7 +109,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     ply:CreateRagdoll()
     
     -- Do not count deaths unless in round
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
@@ -145,7 +145,7 @@ end )
 
 -- Add platforms to the platforms at random intervals
 hook.Add('Think', 'PowerUpThink', function()
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     if not GAMEMODE.NextPowerUp then GAMEMODE.NextPowerUp = CurTime() + 5 return end
     
     if GAMEMODE.NextPowerUp < CurTime() then
@@ -232,7 +232,6 @@ function GM:RandomPlatforms(pos)
         px = pos.x - (size*rows)/2
         py = pos.y - (size*columns)/2
     end
-    print('Spawned platforms!')
 end
 
 -- Certain maps have platform positions predefined
@@ -284,7 +283,6 @@ end
 -- Award powerups to players randomly when triggered
 function GM:AddPowerUp()
     if true then return end
-
 
     local t = table.Random(GAMEMODE:GetPowerUpTypes())
     local target = false

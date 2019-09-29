@@ -7,8 +7,10 @@ GM.HelpText = [[
 ]]
 
 GM.TeamBased = true	-- Is the gamemode FFA or Teams?
-GM.RoundTime = 90
-GM.RoundNumber = 10
+GM.RoundType = 'timed'
+GM.RoundTime = 60
+GM.GameTime = 600
+GM.HUDStyle = 4
 
 GM.Elimination = true
 GM.WinBySurvival = true
