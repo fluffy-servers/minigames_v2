@@ -59,6 +59,9 @@ local crate_models = {
     'models/props_junk/wood_crate002a.mdl',
 }
 
+GM.HueMin = 0
+GM.HueMax = 360
+
 function GM:SpawnBlob(position, hue, generator)
     -- Create the block
     local block = ents.Create('jump_block')
@@ -82,7 +85,7 @@ function GM:GenerateStrand(generator)
     local gAngle = math.random(0, 360)
     local gPower = math.random(generator.powerMin, generator.powerMax)
     local num = math.random(generator.minNumBlobs, generator.maxNumBlobs)
-    local hue = math.random(0, 360)
+    local hue = math.random(GAMEMODE.HueMin, GAMEMODE.HueMax)
     
     local curPos = Vector(math.random(-352, 352), math.random(-352, 352), 32*math.random())
     
