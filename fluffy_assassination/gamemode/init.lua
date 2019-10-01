@@ -81,7 +81,7 @@ function GM:HandleTeamWin(reason)
         extra = GAMEMODE.CurrentVIP:Nick() .. ' survived!'
         
         if IsValid(GAMEMODE.CurrentVIP) then
-            GAMEMODE.CurrentVIP:AddStatPoints('VIP Survivals', 'VIP Survivals', 1)
+            GAMEMODE.CurrentVIP:AddStatPoints('VIP Survivals', 1)
         end
     elseif reason == 'VIPDead' then
         winners = TEAM_RED
@@ -89,7 +89,7 @@ function GM:HandleTeamWin(reason)
         extra = GAMEMODE.CurrentVIP:Nick() .. ' is dead'
         
         if IsValid(GAMEMODE.CurrentVIP) then
-            GAMEMODE.CurrentVIP:AddStatPoints('VIP Deaths', 'VIP Deaths', 1)
+            GAMEMODE.CurrentVIP:AddStatPoints('VIP Deaths', 1)
         end
     else
         msg = 'The round is over!'
