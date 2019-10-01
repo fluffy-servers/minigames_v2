@@ -59,6 +59,9 @@ function GM:HandleEndRound(reason)
         if reason:Team() == TEAM_BLUE then
             team.AddScore(TEAM_BLUE, 1)
             for k,v in pairs( team.GetPlayers(TEAM_BLUE) ) do
+                if v.Spectating then continue end
+                if not v:Alive() then continue end
+                
                 GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
                 if v != reason then v:AddFrags(1) end
             end

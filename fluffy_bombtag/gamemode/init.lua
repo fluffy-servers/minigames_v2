@@ -88,6 +88,19 @@ function GM:StatsRoundWin(winners)
             GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
         end
     end
+    
+    -- Add round win stats
+    if IsEntity(winners) then
+        if winners:IsPlayer() then
+            winners:AddStatPoints('Rounds Won', 1)
+        end
+    elseif type(winners) == 'table' then
+        for k,v in pairs(winners) do
+            if not IsEntity(v) then continue end
+            if not v:IsPlayer() then continue end
+            v:AddStatPoints('Rounds Won', 1)
+        end
+    end
 end
 
 function GM:DoPlayerDeath( ply, attacker, dmginfo )

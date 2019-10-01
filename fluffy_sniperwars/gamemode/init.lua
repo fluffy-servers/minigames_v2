@@ -28,7 +28,7 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)
-    GAMEMODE:AddStatPoints(attacker, 'kills', 1)
+    GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
 
     -- Add the point to the team
     if attacker:Team() != TEAM_RED and attacker:Team() != TEAM_BLUE then return end
