@@ -180,7 +180,7 @@ end
 -- Make sure that Timed gamemodes end at the right time
 hook.Add('Think', 'TimedGamemodeThink', function()
     if GAMEMODE.RoundType == 'default' then return end
-    if not GAMEMODE.EndOnTimeOut then return end
+    
     if GAMEMODE.RoundType == 'timed' and GAMEMODE.EndOnTimeOut then
         -- End the gamemode if EndOnTimeOut is enabled
         -- This does not have a countdown announcement - possible future addition?

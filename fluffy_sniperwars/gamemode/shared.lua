@@ -13,6 +13,7 @@ GM.RoundTime = 200
 GM.RoundNumber = 3
 
 GM.RoundType = 'timed_endless'
+GM.EndOnTimeOut = true
 GM.GameTime = 500
 GM.HUDStyle = 4
 
