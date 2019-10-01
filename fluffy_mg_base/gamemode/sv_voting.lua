@@ -59,6 +59,9 @@ GM.VoteMaps = {
     fluffy_ctf = {'ctf_prototype3'},
     fluffy_shotguns = {'sg_bang_v1', 'sg_towerattack_v1', 'sg_overpassdefence_v1'},
     fluffy_junkjoust = {'jj_foul_v1'},
+    fluffy_spectrum = pvp_maps,
+    fluffy_freezetag = pvp_maps_team,
+    fluffy_assassination = pvp_maps_team,
 }
 
 -- Variables to keep track of voting
