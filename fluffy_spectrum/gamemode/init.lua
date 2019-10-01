@@ -14,6 +14,15 @@ function GM:PlayerLoadout(ply)
 	ply:GiveAmmo(512, "Buckshot", true)
 end
 
+-- Check if there enough players to start a round
+function GM:CanRoundStart()
+    if GAMEMODE:NumNonSpectators() >= 2 then
+        return true
+    else
+        return false
+    end
+end
+
 -- Prepare the round properties
 hook.Add('PreRoundStart', 'VIPPreparations', function()
     -- Shuffle a list of team colors & the list of players
