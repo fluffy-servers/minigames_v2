@@ -25,7 +25,7 @@ end
 
 -- Create a ball entity at a position
 function GM:RespawnBall(number)
-    if GM:GetRoundState() != 'InRound' then return end
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
     
     local ball = ents.Create('db_dodgeball')
     
