@@ -130,8 +130,8 @@ function GM:DrawRoundState()
     
     -- Draw spectating message on bottom (very rare)
     if LocalPlayer():Team() == TEAM_SPECTATOR then
-        draw.SimpleText('You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP) -- shadow
-		draw.SimpleText('You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText('You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+		draw.SimpleText('You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     
     -- There are four default round state styles
