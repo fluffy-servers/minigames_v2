@@ -34,6 +34,8 @@ hook.Add('PreRoundStart', 'VIPPreparations', function()
     -- Otherwise, by the Pigeonhole Principle, the teams will be unbalanced (unless a multiple of 8)
     -- Team balancing for this will be implemented at some point but until then there's some slight bias
     for k,v in pairs(players) do
+        if v:Team() == TEAM_SPECTATOR then continue end
+        
         local i = ((k-1)%8) + 1
         v:SetTeam(colors[i])
         v.InitialTeam = colors[i]
