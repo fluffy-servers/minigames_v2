@@ -23,7 +23,7 @@ GM.VoteGamemodes = {
     {'fluffy_paintball', 'Paintball', 'Team DM'},
     {'fluffy_climb', 'Climb!', 'FFA'},
     {'fluffy_spectrum', 'Spectrum', 'FFA'},
-    {'fluffy_assassination', 'Assassination', 'Team DM'},
+    --{'fluffy_assassination', 'Assassination', 'Team DM'},
     --{'fluffy_mortar', 'Mortar', 'Team DM'},
     {'fluffy_shotguns', 'Super Shotguns', 'Team DM'},
     {'fluffy_freezetag', 'Freeze Tag', 'Team DM'},
