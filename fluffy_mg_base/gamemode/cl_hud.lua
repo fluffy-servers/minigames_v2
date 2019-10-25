@@ -157,8 +157,8 @@ function GM:DrawRoundState()
     
     -- Draw spectating message on bottom (very rare)
     if LocalPlayer():Team() == TEAM_SPECTATOR then
-        draw.SimpleText('You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP) -- shadow
-		draw.SimpleText('You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText('You are spectating', "FS_40", ScrW()/2+1, ScrH() - 32+2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM) -- shadow
+		draw.SimpleText('You are spectating', "FS_40", ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
     
     -- There are four default round state styles
@@ -420,7 +420,7 @@ function GM:DrawHealth()
     -- Calculate the size of the team name text
     -- Then draw a rectangle
     local team_name = team.GetName(LocalPlayer():Team())
-    if GAMEMODE.TeamBased then
+    if GAMEMODE.TeamBased and LocalPlayer():Team() != TEAM_CONNECTING then
         surface.SetFont('FS_24')
         local w = surface.GetTextSize(team_name)
         local rect_height = 32
@@ -447,7 +447,7 @@ function GM:DrawHealth()
 	draw.SimpleText(math.floor(LocalPlayer():Health()), "FS_40", c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the team name (if applicable)
-    if GAMEMODE.TeamBased then
+    if GAMEMODE.TeamBased and LocalPlayer():Team() != TEAM_CONNECTING then
         draw.SimpleText(team_name, "FS_24", c_pos+53, ScrH() - c_pos+3, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(team_name, "FS_24", c_pos+52, ScrH() - c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
