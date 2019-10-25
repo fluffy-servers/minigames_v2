@@ -114,6 +114,9 @@ function meta:LoadStatsFromDB()
     if not self:SteamID64() or self:IsBot() then return end
     local ply = self
     
+    local db = GAMEMODE:CheckDBConnection()
+    if not db then return end
+    
     -- Prepare the query
     local q = GAMEMODE.MinigamesPQueries['getstats']
 	if not q then return end
@@ -145,6 +148,9 @@ end
 function meta:UpdateStatsToDB()
     if not self:SteamID64() or self:IsBot() then return end
     local ply = self
+    
+    local db = GAMEMODE:CheckDBConnection()
+    if not db then return end
     
     -- Copy the current gamemode stats table
     -- Then add any new data to the table
