@@ -15,6 +15,7 @@ AddCSLuaFile('cl_playerpanel.lua')
 AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
 AddCSLuaFile('cl_announcements.lua')
+AddCSLuaFile('cl_killfeed.lua')
 
 AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
