@@ -68,15 +68,12 @@ function GM:AddDeathNotice2(attacker, inflictor, victim)
     Death.time = CurTime()
     Death.icon = inflictor
     
-    print(attacker, inflictor, victim, team.GetName(victim:Team()), victim:GetPlayerColor())
-    
     if IsValid(attacker) and attacker:IsPlayer() then
         Death.left = attacker:Name()
         local pc = attacker:GetPlayerColor()
         if not pc then
             Death.color1 = table.Copy(team.GetColor(attacker:Team()))
         else
-            print('Using player color for attacker')
             Death.color1 = Color(pc[1]*255, pc[2]*255, pc[3]*255)
         end
     else
