@@ -16,8 +16,8 @@ SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0
 
 -- Primary ammo settings
-SWEP.Primary.ClipSize = 5
-SWEP.Primary.DefaultClip = 5
+SWEP.Primary.ClipSize = 8
+SWEP.Primary.DefaultClip = 8
 SWEP.Primary.Ammo = "SniperRound"
 SWEP.Primary.Automatic = true
 

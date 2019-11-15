@@ -10,14 +10,14 @@ if CLIENT then
 end
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 15
+SWEP.Primary.Damage = 10
 SWEP.Primary.Delay = 0.05
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0.02
 
 -- Primary ammo settings
 SWEP.Primary.ClipSize = 30
-SWEP.Primary.DefaultClip = 30
+SWEP.Primary.DefaultClip = 60
 SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Automatic = true
 
