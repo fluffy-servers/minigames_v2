@@ -20,7 +20,6 @@ end
 -- Stat points for throwing
 function GM:GravGunPunt(ply, ent)
     local model = ent:GetModel()
-    print(model)
     
     if ply.HoldingProp then
         if model == 'models/props_junk/sawblade001a.mdl' then
@@ -29,7 +28,6 @@ function GM:GravGunPunt(ply, ent)
             ply:AddStatPoints('Props Thrown', 1)
         end
     else
-        print('Prop punted')
         ply:AddStatPoints('Props Punted', 1)
     end
     
