@@ -44,6 +44,11 @@ end)
 hook.Add('EntityTakeDamage', 'DoubleDamage', function(target, dmginfo)
     if target:IsPlayer() then
         dmginfo:ScaleDamage(2)
+        if dmginfo:GetDamage() < 15 then
+            dmginfo:SetDamage(dmginfo:GetDamage() * 3.5)
+        elseif dmginfo:GetDamage() > 65 then
+            dmginfo:SetDamage(150)
+        end
     end
 end)
 
