@@ -68,7 +68,10 @@ function GM:AddDeathNotice2(attacker, inflictor, victim)
     Death.time = CurTime()
     Death.icon = inflictor
     
-    if IsValid(attacker) and attacker:IsPlayer() then
+    if isstring(attacker) then
+        Death.left = attacker
+        Death.color1 = table.Copy(NPC_Color)
+    elseif IsValid(attacker) and attacker:IsPlayer() then
         Death.left = attacker:Name()
         local pc = attacker:GetPlayerColor()
         if not pc then
