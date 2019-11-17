@@ -94,7 +94,10 @@ function GM:PreStartRound()
     
     -- Respawn everybody & freeze them until the round actually starts
     for k,v in pairs(player.GetAll()) do
-        if !GAMEMODE.TeamBased then v:SetTeam(TEAM_UNASSIGNED) v:SetNWInt("RoundKills", 0) end
+        if !GAMEMODE.TeamBased then 
+            if v:Team() != TEAM_SPECTATOR then v:SetTeam(TEAM_UNASSIGNED) end
+            v:SetNWInt("RoundKills", 0) 
+        end
         v:Spawn()
         v:Freeze(true)
         v.FFAKills = 0
