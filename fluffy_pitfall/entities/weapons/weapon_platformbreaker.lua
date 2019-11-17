@@ -76,7 +76,7 @@ function SWEP:Knockback()
 	effectdata:SetEntity( self.Weapon )
 	effectdata:SetOrigin( self.Owner:GetShootPos() + self.Owner:GetAimVector()*150 )
 	effectdata:SetAttachment( 1 )
-	util.Effect( "punch_tracer", effectdata )
+	util.Effect( "mg_tracer", effectdata )
     
     
     for k,v in pairs(ents) do

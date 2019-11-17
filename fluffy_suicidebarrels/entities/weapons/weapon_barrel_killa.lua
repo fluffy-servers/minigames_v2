@@ -38,11 +38,38 @@ function SWEP:PrimaryAttack()
 	if !self:CanPrimaryAttack() then return end
 
 	self.Weapon:EmitSound(self.Primary.Sound)
-	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+	self:ShootBullets(self.Primary.Damage, 1, self.Primary.Cone, 'mg_tracer')
 	self:TakePrimaryAmmo(1)
 	self.Owner:ViewPunch(Angle(-self.Primary.Recoil, 0, 0 ))
 end
 
 function SWEP:SecondaryAttack()
 
+end
+
+function SWEP:ShootBullets(damage, numbullets, aimcone, tracer)
+	local scale = aimcone
+	if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
+		scale = aimcone * 1.5
+	elseif self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
+		scale = math.Clamp(aimcone / 2, 0, 10)
+	end
+	
+	local bullet = {}
+	bullet.Num 		= numbullets
+	bullet.Src 		= self.Owner:GetShootPos()			
+	bullet.Dir 		= self.Owner:GetAimVector()			
+	bullet.Spread 	= Vector(scale, scale, 0)		
+	bullet.Tracer	= 1	
+	bullet.Force	= damage * 3							
+	bullet.Damage	= damage
+	bullet.AmmoType = "Pistol"
+	bullet.TracerName 	= tracer
+	bullet.Callback = function (attacker, tr, dmginfo)
+	
+	end
+	
+	self.Owner:FireBullets(bullet)
+	self.Owner:SetAnimation(PLAYER_ATTACK1)				// 3rd Person Animation
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
 end

@@ -68,7 +68,7 @@ end
 function SWEP:PrimaryAttack()
 	self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 	self.Weapon:EmitSound(self.Primary.Sound, 100, math.random(90,110))
-	self.Weapon:ShootBullets(40, self.Primary.NumShots, self.Primary.Cone, "beam_tracer")	
+	self.Weapon:ShootBullets(40, self.Primary.NumShots, self.Primary.Cone, "mg_tracer")	
 end
 
 function SWEP:SecondaryAttack()

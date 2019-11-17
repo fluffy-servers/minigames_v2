@@ -54,7 +54,7 @@ function SWEP:ShootBullets()
 	bullet.Force	= 100						
 	bullet.Damage	= 15
 	bullet.AmmoType = "Pistol"
-	bullet.TracerName 	= "beam_tracer"
+	bullet.TracerName 	= "mg_tracer"
 	bullet.Callback = function (attacker, tr, dmginfo)
 		if CLIENT then return end
 		if tr.Entity:IsPlayer() then
