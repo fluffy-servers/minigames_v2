@@ -108,11 +108,13 @@ function CreateFluffyScoreboard()
 	function fluffy_scoreboard:Appear()
 		self:SetSize(700, ScrH() - 200)
 		self:SlideDown(0.5)
+        self:MakePopup()
 	end
 	
     -- Slide out animation
 	function fluffy_scoreboard:Disappear()
 		self:SlideUp(0.5)
+        fluffy_scoreboard:SetMouseInputEnabled(false)
 	end
     
     -- Add rows of any players that aren't on the scoreboard yet
@@ -135,13 +137,20 @@ function CreateFluffyScoreboard()
 		row:SetHeight(52)
 		row:DockMargin(12, 4, 12, 0)
 		row:SetZPos(4 + ply:EntIndex())
+        
+        -- Add a clickable button for the avatar
+        row.AvatarButton = row:Add('DButton')
+        row.AvatarButton:SetSize(48, 48)
+        row.AvatarButton:SetPos(2, 2)
+        row.AvatarButton.DoClick = function() ply:ShowProfile() end
+        row.AvatarButton.Paint = function() end
 		
-        -- Add the avatar
-		row.Avatar = row:Add('AvatarCircle')
+        -- Add the avatar to the button
+		row.Avatar = vgui.Create('AvatarCircle', row.AvatarButton)
         if IsValid(row.Avatar) then
             row.Avatar.Avatar:SetPlayer(ply, 64) -- Don't ask
-            row.Avatar:SetPos(2, 2)
-            row.Avatar:SetSize(48, 48)
+            row.Avatar:Dock(FILL)
+            row.Avatar:SetMouseInputEnabled(false)
         end
 		
         -- Display the medals for this player
@@ -225,6 +234,8 @@ function CreateFluffyScoreboard()
     else
         fluffy_scoreboard.PlayerList:SetPos(0, 32)
     end
+    
+    fluffy_scoreboard:MakePopup()
 end
 
 -- Display scoreboard
