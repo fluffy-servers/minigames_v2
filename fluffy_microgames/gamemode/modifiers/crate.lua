@@ -3,7 +3,7 @@
 MOD = {
     name = 'Crate Time',
     subtext = 'Break a crate OR DIE',
-	time = 20,
+	time = 10,
 	-- Spawn a random number of crates
     func_init = function()
         local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
