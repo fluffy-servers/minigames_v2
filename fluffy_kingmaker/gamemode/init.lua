@@ -103,6 +103,7 @@ hook.Add('PreRoundStart', 'ResetKing', function()
         v:SetNWBool("IsKing", false)
 	end
     GAMEMODE.CurrentKing = nil
+    SetGlobalEntity("KingPlayer", nil)
 end )
 
 hook.Add('Think', 'KingTimer', function()
