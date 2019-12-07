@@ -26,10 +26,7 @@ SWEP.Primary.ClipSize = 12
 SWEP.Primary.DefaultClip = 12
 SWEP.Primary.Ammo = "Pistol"
 SWEP.Primary.Automatic = true
-
-SWEP.Secondary.Automatic = true
-
-SWEP.HoldType = 'pistol'
+SWEP.Secondary.Automatic = true -- ???
 
 -- Set the model for the gun
 -- Using hands is preferred
@@ -37,3 +34,4 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.HoldType = 'pistol'

@@ -29,11 +29,10 @@ SWEP.Primary.Automatic = true
 
 SWEP.Secondary.Automatic = true
 
-SWEP.HoldType = 'smg'
-
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_smg1.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_smg1.mdl"
+SWEP.HoldType = 'smg'
