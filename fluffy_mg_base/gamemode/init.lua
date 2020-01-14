@@ -110,6 +110,14 @@ hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     end
 end)
 
+-- Check for server autorestart situations
+-- This reloads the map if the server is currently empty and has been up for more than 2 hours
+hook.Add('PlayerInitialSpawn', 'CheckServerAutoRestart', function(ply)
+    if(player.GetCount() == 1 and CurTime() > 7200) then
+        RunConsoleCommand("changelevel", game.GetMap())
+    end
+end)
+
 -- Rebind help menu
 function GM:ShowHelp(ply)
     ply:ConCommand("minigames_info")
