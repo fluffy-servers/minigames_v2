@@ -18,7 +18,7 @@ local hide = {
 -- Helper function to draw shadowed text
 function GM:DrawShadowText(text, font, x, y, color, horizontal_align, vertical_align)
     draw.SimpleText(text, font, x+1, y+2, GAMEMODE.FColShadow, horizontal_align, vertical_align) -- Shadow first, slightly offset
-	return draw.SimpleText(text, font, x+1, y+2, color, horizontal_align, vertical_align) -- Regular text
+	return draw.SimpleText(text, font, x, y, color, horizontal_align, vertical_align) -- Regular text
 end
 
 hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)
@@ -427,7 +427,7 @@ function GM:DrawHealth()
     end
     
     -- Draw the health number
-    GAMEMODE:DrawShadowText(math.floor(LocalPlayer():Health(), 'FS_40', c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(math.floor(LocalPlayer():Health()), 'FS_40', c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the team name (if applicable)
     if GAMEMODE.TeamBased and LocalPlayer():Team() != TEAM_CONNECTING then
