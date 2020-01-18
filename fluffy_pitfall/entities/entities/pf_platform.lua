@@ -118,7 +118,7 @@ function ENT:OnTakeDamage(dmg)
         -- pew pew does some damage
         local scale = CurTime() - self.CreationTime
         scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
-        self:AddDamage(15 * scale, attacker)
+        self:AddDamage(25 * scale, attacker)
     else
         -- Deal damage based on round time
         local scale = CurTime() - self.CreationTime

@@ -30,7 +30,7 @@ GM.BlockOptions = {
     'circle',
     'square',
     'hexagon',
-    'mixed',
+    --'mixed',
     --'props',
 }
 
@@ -298,7 +298,7 @@ function GM:AddPowerUp()
     end
 end
 
--- Register XP for Crate Wars
+-- Register XP for Pitfall
 hook.Add('RegisterStatsConversions', 'AddPitfallStatConversions', function()
     GAMEMODE:AddStatConversion('Platform Damage', 'Platform Damage', 0.01)
 end)

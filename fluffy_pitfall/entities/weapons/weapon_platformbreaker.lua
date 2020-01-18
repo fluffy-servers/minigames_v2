@@ -89,7 +89,7 @@ function SWEP:Knockback()
                 v:ViewPunch(Angle(-10, 0, 0))
                 
                 local vec = self.Owner:GetAimVector()
-                vec.z = math.abs(vec.z) + 0.15
+                vec.z = math.abs(vec.z) + 0.25
                 v:SetGroundEntity(NULL)
                 v:SetLocalVelocity(vec * math.random(250, 550))
             end
