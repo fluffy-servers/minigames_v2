@@ -12,8 +12,8 @@ function GM:PlayerLoadout(ply)
     ply:GiveAmmo(512, "SMG1", true)
 	ply:GiveAmmo(512, "Buckshot", true)
     
-    ply:SetRunSpeed(450)
-    ply:SetWalkSpeed(350)
+    ply:SetRunSpeed(300)
+    ply:SetWalkSpeed(275)
     ply:SetMaxHealth(100)
     ply:SetJumpPower(250)
 end
@@ -23,8 +23,8 @@ function GM:MakeKing(ply)
     ply:SetMaxHealth(150)
     ply:SetHealth(150)
     ply:SetJumpPower(250)
-    ply:SetRunSpeed(575)
-    ply:SetWalkSpeed(575)
+    ply:SetRunSpeed(400)
+    ply:SetWalkSpeed(400)
 end
 
 -- Stop regi-sui-cide?
@@ -114,6 +114,7 @@ hook.Add('Think', 'KingTimer', function()
             GAMEMODE.CurrentKing:SetNWInt('KingPoints', GAMEMODE.CurrentKing:GetNWInt('KingPoints', 0) + 1)
             GAMEMODE.CurrentKing:AddStatPoints('Points', 1)
             GAMEMODE.CurrentKing:EmitSound("npc/roller/code2.wav")
+            GAMEMODE.CurrentKing:SetHealth(math.Clamp(GAMEMODE.CurrentKing:Health() + 10, 0, GAMEMODE.CurrentKing:GetMaxHealth()))
             GAMEMODE.LastKingThink = CurTime()
         end
     elseif not GAMEMODE.LastKingThink then
