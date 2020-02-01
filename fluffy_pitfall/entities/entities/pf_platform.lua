@@ -74,27 +74,11 @@ function ENT:Touch(ent)
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
     
-    -- Apply powerups if applicable
-    if self.HasPowerUp and ent.ActivePowerUp == nil then
-        GAMEMODE:PowerUpApply(ent, self.PowerUp, true)
-        self.PowerUp = nil
-        self.HasPowerUp = false
-        self:AddDamage(0)
-    end
-    
     local scale = CurTime() - self.CreationTime
     scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
     
     -- yay damage
     self:AddDamage(FrameTime() * 40*scale)
-end
-
--- Add a powerup to this platform
-function ENT:AddPowerUp(type)
-    self.HasPowerUp = true
-    self.PowerUp = type
-    
-    self:SetColor(GAMEMODE.PColorBonus)
 end
 
 -- Called when this platform is damaged by an entity
@@ -138,16 +122,8 @@ function ENT:AddDamage(amount, ply)
         ply:AddStatPoints('Platform Damage', math.floor(damage))
     end
     
-    -- Adjust color based on gamemode
-    if not self.HasPowerUp then
-        local r = GAMEMODE.PColorEnd.r - GAMEMODE.PDR*scale
-        local g = GAMEMODE.PColorEnd.g - GAMEMODE.PDG*scale
-        local b = GAMEMODE.PColorEnd.b - GAMEMODE.PDB*scale
-        self:SetColor(Color(r, g, b))
-    end
-    
     -- Drop the platform after 1 second if applicable
-    if self.MyHealth <= 0 and not self.Dropped and not self.HasPowerUp then
+    if self.MyHealth <= 0 and not self.Dropped then
         self.Dropped = true
         self:EmitSound(table.Random(self.ActivateSounds), 50, math.random(70, 130))
         

@@ -34,36 +34,6 @@ GM.BlockOptions = {
     --'props',
 }
 
--- Register the powerups using the base powerups library
-hook.Add('RegisterPowerUps', 'TilesPowerUps', function()
-    -- Shotgun for 10 seconds
-    GAMEMODE:RegisterPowerUp('shotgun', {
-        Time = 10,
-        OnCollect = function(ply)
-            ply:Give('weapon_shotgun')
-        end,
-        
-        OnFinish = function(ply)
-            ply:StripWeapon('weapon_shotgun')
-        end,
-        Text = 'Shotgun!',
-    })
-    
-    -- Crowbar for 10 seconds
-    GAMEMODE:RegisterPowerUp('crowbar', {
-        Time = 10,
-        OnCollect = function(ply)
-            ply:Give('weapon_crowbar')
-        end,
-        
-        OnFinish = function(ply)
-            ply:StripWeapon('weapon_crowbar')
-        end,
-        
-        Text = 'Crowbar!',
-    })
-end)
-
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout( ply )
     ply:Give('weapon_platformbreaker')
