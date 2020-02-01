@@ -52,6 +52,15 @@ if SERVER then
         elseif CurTime() > self.NextTime then
             self:SetNWBool('GiftReady', true)
             self:SetCollisionGroup(COLLISION_GROUP_NONE)
+            
+            -- Check that nobody is stuck
+            local nearby_ents = ents.FindInSphere(self:GetPos(), 48)
+            for _, v in pairs(nearby_ents) do
+                if v:IsPlayer() then
+                    self:Touch(v)
+                    break
+                end
+            end
         end
         
         self:NextThink(CurTime() + 1)
