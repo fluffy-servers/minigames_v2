@@ -80,19 +80,22 @@ if SERVER then
                 ent:GiveAmmo(ammo_table[type][2], ammo_table[type][1])
             end
         else
-            ent:Give(wep)
+            local weapon_ent = ent:Give(wep)
+            ent:SelectWeapon(wep)
+            if weapon_ent then
+                GAMEMODE:PlayerOnlyAnnouncement(ent, 1, weapon_ent.PrintName, 1)
+            end
         end
         ent:AddStatPoints('Weapons Collected', 1)
         
         -- Shuffle the type (if applicable)
         if self.RandomTable then
-            PrintTable(self.RandomTable)
             self:SetNWString('WeaponType', table.Random(self.RandomTable))
         end
         
         -- Reset the timer
         self:SetNWBool('GiftReady', false)
-        self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
+        self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE) -- this seems strange but it's so bullets work
         self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
     end
     
