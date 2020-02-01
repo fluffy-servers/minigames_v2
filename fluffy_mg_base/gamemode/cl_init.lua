@@ -144,7 +144,7 @@ GM.HColDark = Color(0, 151, 230)
 GM.FCol1 = Color(245, 246, 250)
 GM.FCol2 = Color(0, 168, 255)
 GM.FCol3 = Color(0, 151, 230)
-GM.FColShadow = Color(53, 59, 72)
+GM.FColShadow = Color(0, 0, 0, 150)
 
 -- Function to update the color set to any in the table
 function GM:UpdateColorSet(name)
