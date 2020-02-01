@@ -15,6 +15,11 @@ local hide = {
     CHudDamageIndicator = true
 }
 
+local HEALTH_ICON = Material("fluffy/health.png", "noclamp smooth")
+local TIME_ICON = Material("fluffy/time.png", "noclamp smooth")
+local AMMO_ICON = Material("fluffy/ammo.png", "noclamp smooth")
+
+
 -- Helper function to draw shadowed text
 function GM:DrawShadowText(text, font, x, y, color, horizontal_align, vertical_align)
     draw.SimpleText(text, font, x+1, y+2, GAMEMODE.FColShadow, horizontal_align, vertical_align) -- Shadow first, slightly offset
@@ -224,9 +229,16 @@ function GM:RoundStateDefault()
 	local t = tmax - (CurTime() - RoundTime)
 	if t < 0 then t = 0 end
     
+    -- Draw background icon
+    local icon_size = 40
+    surface.SetDrawColor(GAMEMODE.HColDark)
+    surface.SetMaterial(TIME_ICON)
+    surface.DrawTexturedRect(c_pos - (icon_size/2), c_pos - (icon_size/2), icon_size, icon_size)
+    
     -- Draw the arc (if applicable)
     if !fast_hud:GetBool() and t != 0 and tmax > 0 then
-        draw.Arc(c_pos, c_pos, 42, 14, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1)
+        draw.NoTexture()
+        draw.Arc(c_pos, c_pos, 42, 10, math.Round((t/tmax * -360) + 90), 90, 8, GAMEMODE.FCol1)
     end
     
     -- Draw the time text
@@ -419,10 +431,17 @@ function GM:DrawHealth()
     surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(health_circle)
     
+    -- Draw background icon
+    local icon_size = 40
+    surface.SetDrawColor(GAMEMODE.HColDark)
+    surface.SetMaterial(HEALTH_ICON)
+    surface.DrawTexturedRect(c_pos - (icon_size/2), ScrH() - c_pos - (icon_size/2), icon_size, icon_size)
+    
     -- Draw arc (if applicable)
     if !fast_hud:GetBool() and hp > 0 and hp_max > 0 then
         local ang = (hp/hp_max) * -360
         if ang % 2 == 1 then ang = ang - 1 end
+        draw.NoTexture()
         draw.Arc(c_pos, ScrH() - c_pos, 42, 10, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
     end
     
@@ -479,6 +498,12 @@ function GM:DrawAmmo()
     surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(ammo_circle)
     
+    -- Draw background icon
+    local icon_size = 40
+    surface.SetDrawColor(GAMEMODE.HColDark)
+    surface.SetMaterial(AMMO_ICON)
+    surface.DrawTexturedRect(ScrW() - c_pos - (icon_size/2), ScrH() - c_pos - (icon_size/2), icon_size, icon_size)
+    
     -- Draw the arc (if applicable)
     if !fast_hud:GetBool() then
         if ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > -1 then
@@ -501,6 +526,7 @@ function GM:DrawAmmo()
             
             -- Draw the arc
             local ang = ClipPercentage * -360
+            draw.NoTexture()
             draw.Arc(ScrW() - c_pos, ScrH() - c_pos, 42, 6, math.Round(ang+90), 90, 12, GAMEMODE.FCol1)
         end
     end
