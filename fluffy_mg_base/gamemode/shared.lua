@@ -51,6 +51,8 @@ GM.DisableConfetti = false      -- Should the round win confetti be disabled?
 GM.HUDTeamColor = true          -- Should the HUD color be based on the team color?
 GM.ShowTeamScoreboard = true    -- Should the team scores be displayed at the top of the scoreboard?
 
+GM.MinPlayers = 2   -- How many players are needed to play the gamemode
+
 function GM:Initialize()
 	-- Gamemode crashes without this function so don't remove it
 	-- There's nothing that needs to be handled here, hence the blank

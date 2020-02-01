@@ -40,7 +40,7 @@ function GM:CanRoundStart()
         end
     -- If FFA, check there's at least two people not spectating
     else
-        if GAMEMODE:NumNonSpectators() >= 2 then
+        if GAMEMODE:NumNonSpectators() >= GAMEMODE.MinPlayers then
             return true
         else
             return false
@@ -52,6 +52,12 @@ end
 -- Cleans up the map and resets round data
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0)
+    
+    -- Make sure we have enough players to start the next round
+    if not GAMEMODE:CanRoundStart() then
+        SetGlobalString('RoundState', 'GameNotStarted')
+        return
+    end
     
     -- Reset stuff
     game.CleanUpMap()
