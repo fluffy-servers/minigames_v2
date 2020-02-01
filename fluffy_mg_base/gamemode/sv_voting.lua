@@ -34,8 +34,8 @@ GM.VoteGamemodes = {
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_smugglestruggle_version2', 'gm_passo_v2'}
-local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_smugglestruggle_version2', 'gm_passo_v2'}
+local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1'}
+local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1'}
 
 GM.VoteMaps = {
     fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_toxic_v1', 'sw_iceberg_small', 'sw_grassy'},
@@ -45,8 +45,8 @@ GM.VoteMaps = {
     fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker_v2', 'db_dreamscape_v5'},
     fluffy_pitfall = {'pf_ocean'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
-    fluffy_bombtag = {'bt_rainbow', 'bt_museum', 'bt_canal', 'bt_yeoldearena'},
-    fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix'},
+    fluffy_bombtag = {'bt_rainbow', 'bt_museum', 'bt_canal', 'bt_yeoldearena_v2'},
+    fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix', 'ld_furina'},
 	fluffy_cratewars = {'cw_bricks', 'cw_boxingring'},
 	fluffy_balls = pvp_maps,
 	fluffy_oitc = pvp_maps_team,
@@ -58,7 +58,7 @@ GM.VoteMaps = {
     fluffy_paintball = {'pb_ratrun_v1', 'pb_paintballarena_v1'},
     fluffy_ctf = {'ctf_prototype3'},
     fluffy_shotguns = {'sg_bang_v1', 'sg_towerattack_v1', 'sg_overpassdefence_v1'},
-    fluffy_junkjoust = {'jj_foul_v1'},
+    fluffy_junkjoust = {'jj_foul_v1', 'jj_pumpkinpatch_v1'},
     fluffy_spectrum = pvp_maps,
     fluffy_freezetag = pvp_maps_team,
     fluffy_assassination = pvp_maps_team,
