@@ -1,8 +1,6 @@
 DEFINE_BASECLASS "weapon_mg_base"
 
 if CLIENT then
-	-- Define the name and slot clientside
-	SWEP.PrintName = "Shotgun"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
     
@@ -12,6 +10,7 @@ if CLIENT then
     
     killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
 end
+SWEP.PrintName = "Shotgun"
 
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 10

@@ -1,11 +1,10 @@
-if (SERVER) then
+if SERVER then
 	SWEP.Weight				= 5
 	SWEP.AutoSwitchTo		= false
 	SWEP.AutoSwitchFrom		= false
 end
 
-if ( CLIENT ) then
-	SWEP.PrintName			= "Knife" 
+if CLIENT then
 	SWEP.ViewModelFOV		= 65
 	SWEP.ViewModelFlip		= false
 	SWEP.CSMuzzleFlashes	= true
@@ -18,6 +17,7 @@ if ( CLIENT ) then
 		draw.SimpleText('j', "CSSelectIcons", x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
 	end
 end
+SWEP.PrintName			= "Knife" 
 
 SWEP.Spawnable				= true
 SWEP.AdminSpawnable			= true
