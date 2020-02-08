@@ -10,13 +10,15 @@ if CLIENT then
     
     killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
 end
+
 SWEP.PrintName = "Shotgun"
+SWEP.Knockback = 300
 
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 10
 SWEP.Primary.Cone = 0.1
 SWEP.Primary.Delay = 0.75
-SWEP.Primary.NumShots = 7
+SWEP.Primary.NumShots = 6
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Recoil = 8
 
@@ -129,7 +131,7 @@ function SWEP:SecondaryAttack()
     if self:Clip1() < 2 then return end
     
     self.Weapon:EmitSound("Weapon_Shotgun.Double")
-	self:ShootBullet(self.Primary.Damage, self.Primary.NumShots * 2, self.Primary.Cone)
+	self:ShootBullet(self.Primary.Damage, math.floor(self.Primary.NumShots * 1.5), self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay + 0.25)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay + 0.25)
     self:TakePrimaryAmmo(2)
@@ -137,5 +139,5 @@ function SWEP:SecondaryAttack()
     
     -- Adds the strong knockback effect
     self.Owner:SetGroundEntity(NULL) -- Stop the user sticking to the ground
-	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -200)
+	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -self.Knockback)
 end

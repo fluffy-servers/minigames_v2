@@ -1,8 +1,6 @@
 DEFINE_BASECLASS "weapon_mg_base"
 
 if CLIENT then
-	-- Define the name and slot clientside
-	SWEP.PrintName = "Super Shotgun"
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
     
@@ -14,11 +12,14 @@ if CLIENT then
     killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
 end
 
+SWEP.PrintName = "Super Shotgun"
+SWEP.Knockback = 425
+
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 10
+SWEP.Primary.Damage = 15
 SWEP.Primary.Cone = 0.1
 SWEP.Primary.Delay = 0.45
-SWEP.Primary.NumShots = 8
+SWEP.Primary.NumShots = 6
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Recoil = 8
 
@@ -125,7 +126,7 @@ function SWEP:SecondaryAttack()
     if self:Clip1() < 2 then return end
     
     self.Weapon:EmitSound("Weapon_Shotgun.Double")
-	self:ShootBullet(self.Primary.Damage, math.floor(self.Primary.NumShots * 1.75), self.Primary.Cone)
+	self:ShootBullet(self.Primary.Damage, math.floor(self.Primary.NumShots * 1.5), self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     self:TakePrimaryAmmo(2)
@@ -133,5 +134,5 @@ function SWEP:SecondaryAttack()
     
     -- Send the shooter flying backwards
     self.Owner:SetGroundEntity(NULL)
-	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -425)
+	self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -self.Knockback)
 end
