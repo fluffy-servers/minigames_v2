@@ -331,7 +331,7 @@ function GM:RoundStateTimerOnly()
     
     -- Draw the time text
     if time_left > 0 then
-        GAMEMODE:DrawShadowText(round_message, 'FS_24', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(round_message, 'FS_32', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     else
         GAMEMODE:DrawShadowText('Overtime!', 'FS_24', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
@@ -366,7 +366,7 @@ function GM:RoundStateTimerTeamScore()
     
     -- Draw the time text
     if time_left > 0 then
-        GAMEMODE:DrawShadowText(round_message, 'FS_24', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(round_message, 'FS_32', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     else
         GAMEMODE:DrawShadowText('Overtime!', 'FS_24', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
