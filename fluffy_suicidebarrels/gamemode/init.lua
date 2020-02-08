@@ -5,14 +5,14 @@ include('shared.lua')
 include('sv_player_extension.lua')
 
 -- Appropriate weapon stuff
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     if ply:Team() == TEAM_BLUE then
 		-- Humans get pistol ammo and the barrel killa weapon
-        ply:GiveAmmo( 1800, "pistol", true )
-        ply:Give( "weapon_barrel_killa" )
+        ply:GiveAmmo(1800, "pistol", true)
+        ply:Give("weapon_barrel_killa")
         
-        ply:SetWalkSpeed( 200 )
-        ply:SetRunSpeed( 250 )
+        ply:SetWalkSpeed(200)
+        ply:SetRunSpeed(250)
         ply:SetBloodColor(BLOOD_COLOR_RED)
     elseif ply:Team() == TEAM_RED then
 		-- Make sure that barrels have no weapons
@@ -21,13 +21,13 @@ function GM:PlayerLoadout( ply )
         ply.NextTaunt = CurTime() + 1
         ply.NextBoom = CurTime() + 2
         
-        ply:SetWalkSpeed( 300 )
-        ply:SetRunSpeed( 175 )
+        ply:SetWalkSpeed(300)
+        ply:SetRunSpeed(175)
     end
 end
 
 -- Pick player models
-function GM:PlayerSetModel( ply )
+function GM:PlayerSetModel(ply)
     if ply:Team() == TEAM_RED then
         local color = team.GetColor(TEAM_RED)
         ply:SetModel("models/props_c17/oildrum001_explosive.mdl")
