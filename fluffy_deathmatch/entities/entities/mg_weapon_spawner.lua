@@ -126,13 +126,13 @@ if CLIENT then
     -- Render the weapon preview
     function ENT:RenderPreviewModel()
         if not self.PreviewModel then
-            local type = self:GetNWString('WeaponType', 'shotgun')
+            local type = self:GetNWString('WeaponType', 'weapon_mg_shotgun')
             self.PreviewModel = ClientsideModel(models_table[type])
             self.PreviewType = type
             self.PreviewModel:SetNoDraw(true)
         end
         
-        if self.PreviewType != self:GetNWString('WeaponType', 'shotgun') then
+        if self.PreviewType != self:GetNWString('WeaponType', 'weapon_mg_shotgun') then
             SafeRemoveEntity(self.PreviewModel)
             self.PreviewModel = nil
             return
