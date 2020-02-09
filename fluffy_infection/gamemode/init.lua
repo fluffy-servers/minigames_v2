@@ -25,14 +25,14 @@ function GM:PlayerLoadout( ply )
         -- Initial infected are stronger but slower
         ply:SetBloodColor(BLOOD_COLOR_GREEN)
         if ply.InitialHunter then
-            ply:SetMaxHealth(150)
-            ply:SetHealth(150)
-            ply:SetRunSpeed(325)
-            ply:SetWalkSpeed(275)
+            ply:SetMaxHealth(75)
+            ply:SetHealth(75)
+            ply:SetRunSpeed(305)
+            ply:SetWalkSpeed(255)
         else
-            ply:SetMaxHealth(100)
-            ply:SetHealth(100)
-            ply:SetRunSpeed(375)
+            ply:SetMaxHealth(50)
+            ply:SetHealth(50)
+            ply:SetRunSpeed(325)
             ply:SetWalkSpeed(300)
         end
         ply:Give('weapon_fists')
@@ -43,9 +43,9 @@ end
 function GM:PlayerSetModel(ply)
     if ply:Team() == TEAM_RED then
         if ply.InitialHunter then
-            ply:SetModel("models/player/zombie_soldier.mdl")
-        else
             ply:SetModel("models/player/zombie_classic.mdl")
+        else
+            ply:SetModel("models/player/zombie_fast.mdl")
         end
     else
         GAMEMODE.BaseClass:PlayerSetModel(ply)
