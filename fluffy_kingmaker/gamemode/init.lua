@@ -20,8 +20,8 @@ end
 
 function GM:MakeKing(ply)
     ply:StripWeapons()
-    ply:SetMaxHealth(150)
-    ply:SetHealth(150)
+    ply:SetMaxHealth(100)
+    ply:SetHealth(100)
     ply:SetJumpPower(250)
     ply:SetRunSpeed(400)
     ply:SetWalkSpeed(400)
@@ -114,7 +114,7 @@ hook.Add('Think', 'KingTimer', function()
             GAMEMODE.CurrentKing:SetNWInt('KingPoints', GAMEMODE.CurrentKing:GetNWInt('KingPoints', 0) + 1)
             GAMEMODE.CurrentKing:AddStatPoints('Points', 1)
             GAMEMODE.CurrentKing:EmitSound("npc/roller/code2.wav")
-            GAMEMODE.CurrentKing:SetHealth(math.Clamp(GAMEMODE.CurrentKing:Health() + 10, 0, GAMEMODE.CurrentKing:GetMaxHealth()))
+            GAMEMODE.CurrentKing:SetHealth(math.Clamp(GAMEMODE.CurrentKing:Health() + 5, 0, GAMEMODE.CurrentKing:GetMaxHealth()))
             GAMEMODE.LastKingThink = CurTime()
         end
     elseif not GAMEMODE.LastKingThink then
