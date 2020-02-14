@@ -7,27 +7,32 @@ ENT.MinRespawn = 10
 ENT.MaxRespawn = 20
 
 local weapon_table = {}
-weapon_table['shotgun'] = 'paint_shotgun'
-weapon_table['bazooka'] = 'paint_bazooka'
-weapon_table['smg'] = 'paint_smg'
-weapon_table['crossbow'] = 'paint_crossbow'
-weapon_table['grenade'] = 'paint_grenade_wep'
-weapon_table['knife'] = 'paint_knife'
+weapon_table['1'] = {'weapon_mg_knife', 'weapon_mg_pistol', 'weapon_mg_smg'}
+weapon_table['2'] = {'weapon_mg_shotgun', 'weapon_mg_smg', 'weapon_crossbow', 'weapon_357'}
+weapon_table['3'] = {'weapon_mg_sniper', 'weapon_rpg', 'weapon_mg_mortar', 'weapon_frag'}
 
 local models_table = {}
-models_table['shotgun'] = 'models/weapons/w_shotgun.mdl'
-models_table['bazooka'] = 'models/weapons/w_rocket_launcher.mdl'
-models_table['smg'] = 'models/weapons/w_smg1.mdl'
-models_table['crossbow'] = 'models/weapons/w_crossbow.mdl'
-models_table['grenade'] = 'models/weapons/w_grenade.mdl'
-models_table['knife'] = 'models/weapons/w_knife_t.mdl'
+models_table['weapon_mg_shotgun'] = 'models/weapons/w_shotgun.mdl'
+models_table['weapon_mg_knife'] = 'models/weapons/w_knife_t.mdl'
+models_table['weapon_mg_pistol'] = 'models/weapons/w_pistol.mdl'
+models_table['weapon_mg_smg'] = 'models/weapons/w_smg1.mdl'
+models_table['weapon_crossbow'] = 'models/weapons/w_crossbow.mdl'
+models_table['weapon_357'] = 'models/weapons/w_357.mdl'
+models_table['weapon_mg_sniper'] = 'models/weapons/w_snip_awp.mdl'
+models_table['weapon_rpg'] = 'models/weapons/w_rocket_launcher.mdl'
+models_table['weapon_mg_mortar'] = 'models/weapons/w_rocket_launcher.mdl'
+models_table['weapon_frag'] = 'models/weapons/w_grenade.mdl'
 
 local ammo_table = {}
-ammo_table['shotgun'] = {'Buckshot', 12}
-ammo_table['bazooka'] = {'RPG_Round', 3}
-ammo_table['smg'] = {'SMG1', 60}
-ammo_table['crossbow'] = {'SniperRound', 5}
-ammo_table['grenade'] = {'Grenade', 3}
+ammo_table['weapon_mg_shotgun'] = {'Buckshot', 12}
+ammo_table['weapon_mg_pistol'] = {'Pistol', 12}
+ammo_table['weapon_mg_smg'] = {'SMG1', 60}
+ammo_table['weapon_crossbow'] = {'XBowBolt', 5}
+ammo_table['weapon_357'] = {'357', 12}
+ammo_table['weapon_mg_sniper'] = {'Pistol', 12}
+ammo_table['weapon_rpg'] = {'RPG_Round', 3}
+ammo_table['weapon_mg_mortar'] = {'RPG_Round', 3}
+ammo_table['weapon_frag'] = {'Grenade', 3}
 
 if SERVER then
     function ENT:Initialize()
@@ -72,20 +77,23 @@ if SERVER then
         if ent:GetNWBool('IsGhost', false) then return end
         
         -- Award the player the weapon
-        local type = self:GetNWString('WeaponType', 'shotgun')
-        local wep = weapon_table[type]
-        if ent:HasWeapon(wep) then
-            -- If they already have the weapon, award ammo instead
-            if ammo_table[type] then
-                ent:GiveAmmo(ammo_table[type][2], ammo_table[type][1])
-            end
-        else
+        local wep = self:GetNWString('WeaponType', 'weapon_mg_shotgun')
+
+        -- Award weapon
+        if not ent:HasWeapon(wep) then
             local weapon_ent = ent:Give(wep)
             ent:SelectWeapon(wep)
+
             if weapon_ent then
                 GAMEMODE:PlayerOnlyAnnouncement(ent, 1, weapon_ent.PrintName, 1)
             end
         end
+
+        -- Award ammo
+        if ammo_table[wep] then
+            ent:GiveAmmo(ammo_table[wep][2], ammo_table[wep][1])
+        end
+
         ent:AddStatPoints('Weapons Collected', 1)
         
         -- Shuffle the type (if applicable)
@@ -101,16 +109,9 @@ if SERVER then
     
     -- KV properties for mapping data
     function ENT:KeyValue(key, value)
-        if key == 'type' then
-            if string.match(value, ',') then
-                -- List of weapons
-                value = string.Split(value, ',')
-                self.RandomTable = value
-                self:SetNWString('WeaponType', table.Random(self.RandomTable))
-            else
-                -- Single weapon
-                self:SetNWString('WeaponType', value)
-            end
+        if key == 'level' then
+            self.RandomTable = weapon_table[value]
+            self:SetNWString('WeaponType', table.Random(self.RandomTable))
         elseif key == 'minspawn' then
             self.MinRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
@@ -125,13 +126,13 @@ if CLIENT then
     -- Render the weapon preview
     function ENT:RenderPreviewModel()
         if not self.PreviewModel then
-            local type = self:GetNWString('WeaponType', 'shotgun')
+            local type = self:GetNWString('WeaponType', 'weapon_mg_shotgun')
             self.PreviewModel = ClientsideModel(models_table[type])
             self.PreviewType = type
             self.PreviewModel:SetNoDraw(true)
         end
         
-        if self.PreviewType != self:GetNWString('WeaponType', 'shotgun') then
+        if self.PreviewType != self:GetNWString('WeaponType', 'weapon_mg_shotgun') then
             SafeRemoveEntity(self.PreviewModel)
             self.PreviewModel = nil
             return

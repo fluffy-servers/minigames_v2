@@ -1,5 +1,4 @@
 if CLIENT then
-	-- Define the name and slot clientside
 	SWEP.PrintName = "Base Weapon"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
@@ -21,6 +20,7 @@ SWEP.Primary.Automatic = false
 SWEP.HoldType = 'pistol'
 
 -- We don't have anything that uses secondary ammo so there's nothing here for it
+-- If making a gun derived from this you'd have to add this yourself
 
 -- Set the model for the gun
 -- Using hands is preferred
@@ -29,6 +29,7 @@ SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 
+-- Apply the weapon hold type
 function SWEP:Initialize() 
 	self:SetWeaponHoldType(self.HoldType)
 end 
@@ -46,8 +47,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	-- Nothing here!
-	-- Make sure this is blank to override the default
+	-- Nothing here (in the base)
+	-- This can be overwritten for secondary-fire functionality
     if not self:CanSecondaryAttack() then return end
 end
 
@@ -56,6 +57,7 @@ function SWEP:Reload()
 end
 
 -- Helper function to fire bullets
+-- Firing bullets can be a bit of a pain but this really helps
 function SWEP:ShootBullet(damage, numbullets, aimcone)
 	-- Setup the bullet table and fire it
 	local scale = aimcone

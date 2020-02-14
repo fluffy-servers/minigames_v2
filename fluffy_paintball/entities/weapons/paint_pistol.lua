@@ -1,6 +1,4 @@
 if CLIENT then
-	-- Define the name and slot clientside
-	SWEP.PrintName = "Paintball Pistol"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
@@ -8,10 +6,11 @@ if CLIENT then
     
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end
+SWEP.PrintName = "Paintball Pistol"
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 25
-SWEP.Primary.Delay = 0.2
+SWEP.Primary.Damage = 15
+SWEP.Primary.Delay = 0.35
 SWEP.Primary.Recoil = 0
 SWEP.Primary.Cone = 0.02
 

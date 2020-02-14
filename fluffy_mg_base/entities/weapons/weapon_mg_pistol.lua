@@ -1,8 +1,6 @@
 DEFINE_BASECLASS "weapon_mg_base"
 
 if CLIENT then
-	-- Define the name and slot clientside
-	SWEP.PrintName = "Pistol"
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
     
@@ -12,6 +10,7 @@ if CLIENT then
     
     killicon.AddFont("weapon_mg_pistol", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
+SWEP.PrintName = "Pistol"
 
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 15
@@ -26,10 +25,7 @@ SWEP.Primary.ClipSize = 12
 SWEP.Primary.DefaultClip = 12
 SWEP.Primary.Ammo = "Pistol"
 SWEP.Primary.Automatic = true
-
-SWEP.Secondary.Automatic = true
-
-SWEP.HoldType = 'pistol'
+SWEP.Secondary.Automatic = true -- ???
 
 -- Set the model for the gun
 -- Using hands is preferred
@@ -37,3 +33,4 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
+SWEP.HoldType = 'pistol'

@@ -23,9 +23,11 @@ MOD = {
 	
 	-- Verify a player is standing on a prop
     func_check = function(ply)
-        local tr = util.TraceLine({
-            start = ply:GetPos(),
+        local tr = util.TraceHull({
+            start = ply:GetPos() + Vector(0, 0, 24),
             endpos = ply:GetPos() - Vector(0, 0, 128),
+            mins = Vector(-16, -16, -16),
+            maxs = Vector(16, 16, 16)
             filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
         })
         

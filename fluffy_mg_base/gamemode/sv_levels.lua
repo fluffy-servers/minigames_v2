@@ -41,6 +41,9 @@ function meta:LoadLevelFromDB()
     if not self:SteamID64() or self:IsBot() then return end
     local ply = self
     
+    local db = GAMEMODE:CheckDBConnection()
+    if not db then return end
+    
     local q = GAMEMODE.MinigamesPQueries['getlevel']
 	if not q then return end
     q:setString(1, self:SteamID64())
@@ -73,6 +76,9 @@ function meta:UpdateLevelToDB()
     local level = ply:GetLevel()
     local xp = ply:GetExperience()
     if level == 0 and xp == 0 then return end
+    
+    local db = GAMEMODE:CheckDBConnection()
+    if not db then return end
     
     local q = GAMEMODE.MinigamesPQueries['updatelevel']
     if not q then return end

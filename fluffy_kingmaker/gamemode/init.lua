@@ -12,19 +12,19 @@ function GM:PlayerLoadout(ply)
     ply:GiveAmmo(512, "SMG1", true)
 	ply:GiveAmmo(512, "Buckshot", true)
     
-    ply:SetRunSpeed(450)
-    ply:SetWalkSpeed(350)
+    ply:SetRunSpeed(300)
+    ply:SetWalkSpeed(275)
     ply:SetMaxHealth(100)
     ply:SetJumpPower(250)
 end
 
 function GM:MakeKing(ply)
     ply:StripWeapons()
-    ply:SetMaxHealth(150)
-    ply:SetHealth(150)
+    ply:SetMaxHealth(100)
+    ply:SetHealth(100)
     ply:SetJumpPower(250)
-    ply:SetRunSpeed(575)
-    ply:SetWalkSpeed(575)
+    ply:SetRunSpeed(400)
+    ply:SetWalkSpeed(400)
 end
 
 -- Stop regi-sui-cide?
@@ -47,7 +47,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- If the King dies accidentally, make King up for grabs
     if ply:GetNWBool('IsKing', false) and (attacker == ply or !attacker:IsValid() or !attacker:IsPlayer()) then
         ply:SetNWBool('IsKing', false)
-        GAMEMODE:PulseAnnouncement(2, 'Nobody is King!', 1)
+        GAMEMODE:PulseAnnouncement(2, 'King is up for grabs!', 1)
         GAMEMODE.CurrentKing = nil
         SetGlobalEntity("KingPlayer", NULL)
         return
@@ -103,6 +103,7 @@ hook.Add('PreRoundStart', 'ResetKing', function()
         v:SetNWBool("IsKing", false)
 	end
     GAMEMODE.CurrentKing = nil
+    SetGlobalEntity("KingPlayer", nil)
 end )
 
 hook.Add('Think', 'KingTimer', function()
@@ -113,6 +114,7 @@ hook.Add('Think', 'KingTimer', function()
             GAMEMODE.CurrentKing:SetNWInt('KingPoints', GAMEMODE.CurrentKing:GetNWInt('KingPoints', 0) + 1)
             GAMEMODE.CurrentKing:AddStatPoints('Points', 1)
             GAMEMODE.CurrentKing:EmitSound("npc/roller/code2.wav")
+            GAMEMODE.CurrentKing:SetHealth(math.Clamp(GAMEMODE.CurrentKing:Health() + 5, 0, GAMEMODE.CurrentKing:GetMaxHealth()))
             GAMEMODE.LastKingThink = CurTime()
         end
     elseif not GAMEMODE.LastKingThink then

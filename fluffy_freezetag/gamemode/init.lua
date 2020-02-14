@@ -115,6 +115,12 @@ function meta:IceFreeze()
     self:StripWeapons()
     
     self:SetNWBool('Frozen', true)
+    
+    -- Very briefly freeze the player to prevent sprint bug
+    self:Freeze(true)
+    timer.Simple(0.5, function()
+        if IsValid(self) then self:Freeze(false) end
+    end)
 end
 
 -- Register XP for Freeze Tag

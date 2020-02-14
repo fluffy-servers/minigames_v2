@@ -1,6 +1,4 @@
 if CLIENT then
-	-- Define the name and slot clientside
-	SWEP.PrintName = "Paintbrush"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
@@ -8,6 +6,7 @@ if CLIENT then
     
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end
+SWEP.PrintName = "Paintbrush"
 
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 100

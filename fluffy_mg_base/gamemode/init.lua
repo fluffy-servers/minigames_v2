@@ -15,6 +15,7 @@ AddCSLuaFile('cl_playerpanel.lua')
 AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
 AddCSLuaFile('cl_announcements.lua')
+AddCSLuaFile('cl_killfeed.lua')
 
 AddCSLuaFile('vgui/avatar_circle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
@@ -27,9 +28,13 @@ AddCSLuaFile('sh_levels.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
-resource.AddFile('gamemodes/fluffy_mg_base/content/resource/fonts/BebasKai.ttf')
-resource.AddFile('gamemodes/fluffy_mg_base/content/resource/fonts/LemonMilk.ttf')
-resource.AddFile('gamemodes/fluffy_mg_base/content/materials/fluffy/pattern1.png')
+resource.AddFile('resource/fonts/BebasKai.ttf')
+resource.AddFile('resource/fonts/LemonMilk.ttf')
+
+resource.AddFile('materials/fluffy/pattern1.png')
+resource.AddFile('materials/fluffy/health.png')
+resource.AddFile('materials/fluffy/ammo.png')
+resource.AddFile('materials/fluffy/time.png')
 
 -- Include useful server files
 include('shared.lua')
@@ -106,6 +111,14 @@ hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
     
     if not GAMEMODE.TeamBased then
         ply:SetTeam(TEAM_UNASSIGNED)
+    end
+end)
+
+-- Check for server autorestart situations
+-- This reloads the map if the server is currently empty and has been up for more than 2 hours
+hook.Add('PlayerInitialSpawn', 'CheckServerAutoRestart', function(ply)
+    if(player.GetCount() == 1 and CurTime() > 7200) then
+        RunConsoleCommand("changelevel", game.GetMap())
     end
 end)
 
@@ -412,6 +425,5 @@ include('sv_round.lua')
 include('sv_voting.lua')
 include('sv_player.lua')
 include('sv_levels.lua')
-include('sv_powerups.lua')
 include('sv_announcements.lua')
 include('gametype_hunter.lua')

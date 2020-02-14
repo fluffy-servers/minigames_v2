@@ -39,7 +39,7 @@ function SWEP:CustomAmmoDisplay()
     self.AmmoDisplay = self.AmmoDisplay or {}
     
     self.AmmoDisplay.Draw = true
-    self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 5), 0, 100)
+    self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100)
     self.AmmoDisplay.MaxPrimaryClip = 100
     
     return self.AmmoDisplay
@@ -80,7 +80,7 @@ end
 
 -- Only allow the player to cloak if the device is fully charged
 function SWEP:CanPrimaryAttack()
-    return math.Clamp(math.floor((CurTime() - self.LastUtility)*4), 0, 100) >= 100
+    return math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100) >= 100
 end
 
 -- Cloak the player
