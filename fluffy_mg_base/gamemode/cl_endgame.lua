@@ -332,7 +332,7 @@ function GM:OpenEndGamePanel()
         -- Add the avatar
 		row.Avatar = row:Add('AvatarCircle')
         if IsValid(row.Avatar) then
-            row.Avatar.Avatar:SetPlayer(ply, 64) -- Don't ask
+            row.Avatar:SetPlayer(ply, 64) -- Don't ask
             row.Avatar:SetPos(2, 2)
             --row.Avatar:SetSize(48, 48)
         end
