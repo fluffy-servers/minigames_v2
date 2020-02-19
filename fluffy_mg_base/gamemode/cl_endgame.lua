@@ -346,6 +346,15 @@ function GM:OpenEndGamePanel()
             row.Avatar:SetSize(48, 48)
             self.yy = self.yy + 60
         end
+
+        -- If a player leaves the game on this screen, remove this row
+        -- Future: Try and keep this data or leave a gap
+        function row:Think()
+		    if !IsValid(row.Player) then
+		    	self:Remove()
+		    	return
+		    end
+        end
     end
     
     -- Start off with the default scoreboard display
