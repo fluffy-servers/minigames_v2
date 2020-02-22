@@ -214,40 +214,9 @@ function GM:GetWinningPlayer()
     return bestplayer
 end
 
--- Fairly self-explanatory
-function GM:PlayerSpawnAsSpectator(ply)
-	ply:StripWeapons()
-	ply.Spectating = true
-    ply:Spectate(OBS_MODE_ROAMING)
-    --if !GAMEMODE.TeamBased then ply:SetTeam(TEAM_SPECTATOR) end
-end
-
 -- Override function to stop respawning for whatever reason
 function GM:CanRespawn(ply)
     return true
-end
-
--- Death thinking hook
--- Used as a replacement to slightly broken spectating
-function GM:PlayerDeathThink(ply)
-    ply.DeathTime = ply.DeathTime or CurTime()
-    local t = CurTime() - ply.DeathTime
-    
-    -- Move players to spectate mode
-    local dlt = GAMEMODE.DeathLingerTime or -1
-    if dlt > 0 and t > dlt and ply:GetObserverMode() != OBS_MODE_ROAMING then
-        ply:Spectate(OBS_MODE_ROAMING)
-    end
-    
-    -- Make sure players can respawn
-    if GAMEMODE.Elimination then return false end
-    if not GAMEMODE:CanRespawn(ply) then return false end
-    if t < (GAMEMODE.RespawnTime or 2) then return end
-    
-    -- Respawn players when pressing buttons
-    if GAMEMODE.AutoRespawn or ply:KeyPressed(IN_ATTACK) or ply:KeyPressed(IN_ATTACK2) or ply:KeyPressed(IN_JUMP) then
-        ply:Spawn()
-    end
 end
 
 -- Useful function to swap the current teams
@@ -426,4 +395,5 @@ include('sv_voting.lua')
 include('sv_player.lua')
 include('sv_levels.lua')
 include('sv_announcements.lua')
+include('sv_spectating.lua')
 include('gametype_hunter.lua')
