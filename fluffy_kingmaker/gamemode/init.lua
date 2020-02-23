@@ -103,8 +103,10 @@ hook.Add('PreRoundStart', 'ResetKing', function()
         v:SetNWBool("IsKing", false)
 	end
     GAMEMODE.CurrentKing = nil
-    SetGlobalEntity("KingPlayer", nil)
-end )
+
+    -- We can't set this to nil, so we fake it by setting to world
+    SetGlobalEntity("KingPlayer", game.GetWorld())
+end)
 
 hook.Add('Think', 'KingTimer', function()
     if GetGlobalString('RoundState') != 'InRound' then return end
@@ -152,7 +154,7 @@ hook.Add('SetupPlayerVisibility', 'KingVisible', function(ply)
     if IsValid(GAMEMODE.CurrentKing) then
         AddOriginToPVS(GAMEMODE.CurrentKing:GetPos())
     end
-end )
+end)
 
 -- Register XP for Kingmaker
 hook.Add('RegisterStatsConversions', 'AddKingmakerStatConversions', function()

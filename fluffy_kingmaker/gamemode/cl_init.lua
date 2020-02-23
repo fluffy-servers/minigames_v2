@@ -20,6 +20,7 @@ end)
 -- Being the best comes at a price
 hook.Add('HUDPaint', 'DrawKingNotice', function()
     if not GetConVar('cl_drawhud'):GetBool() then return end
+    if GAMEMODE:GetRoundState() == 'GameNotStarted' then return end
 
     local king = GetGlobalEntity("KingPlayer")
     if IsValid(king) and king != LocalPlayer() then
@@ -29,7 +30,7 @@ hook.Add('HUDPaint', 'DrawKingNotice', function()
     elseif LocalPlayer():GetNWBool("IsKing", false) || king == LocalPlayer() then
         local x = ScrW()/2
         local y = ScrH() - 88
-        GAMEMODE:DrawShadowText("You are the King!", "FS_32", p.x, p.y, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+        GAMEMODE:DrawShadowText("You are the King!", "FS_32", x, y, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     else
         local x = ScrW()/2
         local y = ScrH() - 88
