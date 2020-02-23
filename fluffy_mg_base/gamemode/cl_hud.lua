@@ -678,7 +678,7 @@ end
 
 -- Create the scoring pane
 function GM:CreateScoringPane()
-    if(GAMEMODE.ScorePane) then
+    if GAMEMODE.ScorePane then
         GAMEMODE.ScorePane:Remove()
     end
 
