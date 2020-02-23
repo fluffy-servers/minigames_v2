@@ -24,11 +24,11 @@ GM.Progression = {
     'weapon_rpg',
     'weapon_crossbow',
     
-    'weapon_smg1',
-    'weapon_shotgun',
+    'weapon_mg_smg',
+    'weapon_mg_shotgun',
     'weapon_357',
     
-    'weapon_pistol',
+    'weapon_mg_pistol',
     'weapon_crowbar',
 }
 
