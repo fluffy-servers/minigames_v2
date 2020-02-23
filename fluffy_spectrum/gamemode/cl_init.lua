@@ -1,7 +1,8 @@
 include('shared.lua')
 
-GAMEMODE.PaintSplat = Material('decals/decal_paintsplatterpink001')
+GM.PaintSplat = Material('decals/decal_paintsplatterpink001')
 
+/*
 -- Paintball effects for every bullet
 hook.Add('EntityFireBullets', 'PaintSplatterEffects', function(ent, data)
     if ent:IsWeapon() then
@@ -17,3 +18,4 @@ hook.Add('EntityFireBullets', 'PaintSplatterEffects', function(ent, data)
 
     return true
 end)
+*/
