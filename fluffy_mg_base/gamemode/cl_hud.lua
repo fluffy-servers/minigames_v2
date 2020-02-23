@@ -35,7 +35,7 @@ end )
 function GM:HUDPaint()
     -- Obey the convar
     local shouldDraw = GetConVar('cl_drawhud'):GetBool()
-    if !shouldDraw then 
+    if not shouldDraw then 
 		if GAMEMODE:ScoringPaneActive() and IsValid(GAMEMODE.ScorePane) then
 			GAMEMODE.ScorePane:Hide()
 		end
@@ -678,31 +678,36 @@ end
 
 -- Create the scoring pane
 function GM:CreateScoringPane()
-    local Frame = vgui.Create('DPanel')
-    Frame:SetSize(ScrW() * 0.5, 96 )
-    Frame:SetPos(ScrW() * 0.25, ScrH() - 72)
+    if(GAMEMODE.ScorePane) then
+        GAMEMODE.ScorePane:Remove()
+    end
+
+    local frame = vgui.Create('DPanel')
+    local panel_h = 80
+    frame:SetSize(ScrW() * 0.5, panel_h)
+    frame:SetPos(ScrW() * 0.25, ScrH() - panel_h)
     
     -- Function to create a blob for each player
     -- This includes the score & avatar
-    function Frame:CreatePlayer(ply, x)
-        local p = vgui.Create('DPanel', Frame )
+    function frame:CreatePlayer(ply, x)
+        local p = vgui.Create('DPanel', frame)
         p:SetPos(x, 0)
-        p:SetSize(64, 80)
+        p:SetSize(64, panel_h)
         function p:Paint()
             local score = GAMEMODE:ScoringPaneScore(ply) or 0
-            GAMEMODE:DrawShadowText(score, 'FS_32', 32, 40, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(score, 'FS_32', 32, panel_h - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
         end
         
         local Avatar = vgui.Create('AvatarImage', p)
-        Avatar:SetSize(36, 36)
-        Avatar:SetPos(14, 0)
+        Avatar:SetSize(40, 40)
+        Avatar:SetPos(12, 0)
         Avatar:SetPlayer(ply, 64)
     end
     
-    function Frame:Paint()
+    function frame:Paint()
     
     end
-    GAMEMODE.ScorePane = Frame
+    GAMEMODE.ScorePane = frame
 	
     -- Refresh the score panel every 2 seconds
     -- This is a bit expensive hence the infrequency
