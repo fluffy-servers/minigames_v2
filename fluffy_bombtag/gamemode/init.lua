@@ -120,6 +120,11 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
     end
 end
 
+-- Disable fall damage
+function GM:GetFallDamage()
+    return 0
+end
+
 -- Register XP for Bomb Tag
 hook.Add('RegisterStatsConversions', 'AddBombTagStatConversions', function()
     GAMEMODE:AddStatConversion('Bomb Passes', 'Bomb Tagged', 0.5)
