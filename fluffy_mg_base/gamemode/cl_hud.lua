@@ -214,7 +214,7 @@ function GM:RoundStateDefault()
     
     -- Draw the box with sizing information determined above
     local rect_height = 32
-    local rect_width = w + 64
+    local rect_width = w + 80
     surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
     surface.SetDrawColor(GAMEMODE.HColLight)
@@ -283,7 +283,7 @@ function GM:RoundStateWithTimer()
     
     -- Draw the box with sizing information determined above
     local rect_height = 32
-    local rect_width = w + 64
+    local rect_width = w + 80
     surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
     surface.SetDrawColor(GAMEMODE.HColLight)
@@ -420,7 +420,7 @@ function GM:DrawHealth()
         surface.SetFont('FS_24')
         local w = surface.GetTextSize(team_name)
         local rect_height = 32
-        local rect_width = w + 64
+        local rect_width = w + 80
         surface.SetDrawColor(GAMEMODE.HColDark)
         surface.DrawRect(c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height + 3)
         surface.SetDrawColor(GAMEMODE.HColLight)
