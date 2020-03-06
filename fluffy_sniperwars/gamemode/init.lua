@@ -4,7 +4,8 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Give the player these weapons on loadout
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
+    -- Give weapons
     ply:Give('weapon_cloaker')
     ply:Give('weapon_mg_knife')
     ply:Give('weapon_mg_pistol')
@@ -14,6 +15,9 @@ function GM:PlayerLoadout( ply )
     ply:SetNoDraw(false)
     ply:SetRunSpeed(350)
     ply:SetWalkSpeed(325)
+
+    -- Select the sniper rifle on spawn
+    ply:SelectWeapon('sw_sniper')
 end
 
 -- Add frags to player & team when someone dies
