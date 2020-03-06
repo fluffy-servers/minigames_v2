@@ -11,11 +11,6 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 include('sv_modifiers.lua')
 
--- Remove fall damage
-function GM:GetFallDamage( ply, speed )
-    return 0
-end
-
 -- Reset the map before the round starts
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0 )

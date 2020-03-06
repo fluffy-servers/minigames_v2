@@ -55,11 +55,6 @@ function GM:PlayerSelectSpawn( pl )
     return selected
 end
 
--- Disable fall damage
-function GM:GetFallDamage(ply, vel)
-    return 0
-end
-
 -- Credit damage to players for Knockbacks
 hook.Add('EntityTakeDamage', 'CreditPitfallKills', function(ply, dmginfo)
     if not ply:IsPlayer() then return end

@@ -16,11 +16,6 @@ function GM:PlayerLoadout( ply )
     ply:SetWalkSpeed(325)
 end
 
--- Remove fall damage
-function GM:GetFallDamage( ply, speed )
-    return 0
-end
-
 -- Add frags to player & team when someone dies
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on

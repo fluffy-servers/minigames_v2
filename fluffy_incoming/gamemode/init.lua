@@ -15,11 +15,6 @@ function GM:PlayerLoadout( ply )
     --ply:Give('weapon_crowbar')
 end
 
--- Disable fall damage
-function GM:GetFallDamage()
-    return 0
-end
-
 -- Get the winning position of this map
 -- This is hardcoded into sv_maps.lua because entities are weird for some reason
 function GM:EndingPoint()

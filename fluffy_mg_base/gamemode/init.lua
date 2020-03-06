@@ -387,6 +387,12 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     end
 end
 
+hook.Add('GetFallDamage', 'MinigamesFallDamage', function(ply, vel)
+    if !GAMEMODE.EnableFallDamage then
+        return 0
+    end
+end)
+
 -- Import the component parts
 include('sv_database.lua')
 include('sv_stats.lua')

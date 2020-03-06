@@ -17,11 +17,6 @@ function GM:PlayerLoadout(ply)
     ply:SetRunSpeed(250)
 end
 
--- Remove fall damage
-function GM:GetFallDamage(ply, vel)
-    return 0
-end
-
 -- Calculations to check player scoring based on height
 function GM:PlayerTick(ply)
     if GAMEMODE:GetRoundState() != 'InRound' then return end

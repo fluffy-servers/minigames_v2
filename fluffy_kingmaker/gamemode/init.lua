@@ -144,11 +144,6 @@ function GM:GetWinningPlayer()
     return bestplayer
 end
 
--- Remove fall damage
-function GM:GetFallDamage( ply, speed )
-    return 0
-end
-
 -- Attempt to help with seeing the King through walls
 hook.Add('SetupPlayerVisibility', 'KingVisible', function(ply)
     if IsValid(GAMEMODE.CurrentKing) then

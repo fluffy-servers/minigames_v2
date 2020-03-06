@@ -36,9 +36,10 @@ GM.RoundType = 'default'    -- What system should be used for game/round logic?
 GM.GameTime = 600           -- If not using rounds, how long should the game go for?
 GM.EndOnTimeOut = false     -- If using 'timed' RoundType, should this cut off the middle of a round?
 
-GM.CanSuicide = true            -- Should players be able to die at will? :(
+GM.CanSuicide = false           -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
 GM.SpawnProtection = false      -- Should players have brief spawn protection?
+GM.EnableFallDamage = false     -- Should players take fall damage?
 
 GM.DeathSounds = true	-- Should voicelines play on player death?
 GM.KillValue = 1        -- How many points should be awarded for a kill?
