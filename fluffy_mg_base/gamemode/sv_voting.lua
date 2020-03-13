@@ -38,7 +38,7 @@ local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_finci
 local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1'}
 
 GM.VoteMaps = {
-    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_iceberg_small', 'sw_grassy', 'sw_doublestronghold'},
+    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_iceberg_small', 'sw_grassy', 'sw_doublestronghold_v4'},
     fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
     fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
     fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_shrecksagons_b2'},
