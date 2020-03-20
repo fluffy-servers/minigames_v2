@@ -125,6 +125,17 @@ function GM:GetFallDamage()
     return 0
 end
 
+-- Disable propkilling
+function GM:EntityTakeDamage(ent, dmginfo)
+    if IsValid(dmg:GetAttacker()) and dmg:GetAttacker():GetClass() == 'prop_physics' then
+        return true
+    end
+
+    if IsValid(dmg:GetInflictor()) and dmg:GetInflictor():GetClass() == 'prop_physics' then
+        return true
+    end
+end
+
 -- Register XP for Bomb Tag
 hook.Add('RegisterStatsConversions', 'AddBombTagStatConversions', function()
     GAMEMODE:AddStatConversion('Bomb Passes', 'Bomb Tagged', 0.5)
