@@ -27,8 +27,8 @@ MOD = {
             start = ply:GetPos() + Vector(0, 0, 24),
             endpos = ply:GetPos() - Vector(0, 0, 128),
             mins = Vector(-16, -16, -16),
-            maxs = Vector(16, 16, 16)
-            filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
+            maxs = Vector(16, 16, 16),
+            filter = function( ent ) return ent:GetClass() == "prop_physics" end
         })
         
         if not IsValid(tr.Entity) or tr.HitWorld then

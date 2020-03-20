@@ -11,6 +11,8 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 include('sv_modifiers.lua')
 
+GAMEMODE.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
+
 -- Reset the map before the round starts
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0 )
@@ -149,19 +151,29 @@ function GM:NewModifier()
     -- Make sure the same modifier doesn't come up twice
     if not GAMEMODE.CurrentModifier then GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers) end
     local modifier = GAMEMODE.CurrentModifier
-    
-    while modifier == GAMEMODE.CurrentModifier do
-        modifier = table.Random(GAMEMODE.Modifiers)
-        
-        -- If the modifier is restricted to certain maps, ensure that the map is valid
-        if modifier.maps then
-            if not modifier.maps[game.GetMap()] then
-                modifier = GAMEMODE.CurrentModifier
+
+    -- Pick the next modifier
+    -- If a force modifier is set, then use that
+    -- Otherwise, pick a NEW gamemode randomly (don't have duplicates)
+    local force_modifier = GAMEMODE.ForceNextModifier:GetString()
+    print(force_modifier)
+    if GAMEMODE.Modifiers[force_modifier] then
+        GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[force_modifier]
+    else
+        while modifier == GAMEMODE.CurrentModifier do
+            modifier = table.Random(GAMEMODE.Modifiers)
+
+            -- If the modifier is restricted to certain maps, ensure that the map is valid
+            if modifier.maps then
+                if not modifier.maps[game.GetMap()] then
+                    modifier = GAMEMODE.CurrentModifier
+                end
             end
         end
+
+        GAMEMODE.CurrentModifier = modifier
     end
-    GAMEMODE.CurrentModifier = modifier
-        
+
     -- Call the initialize function for the modifier
     if modifier.func_init then
         modifier.func_init()
