@@ -29,6 +29,8 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
             v.InitialHunter = true
         end
     end
+
+    GAMEMODE.LastSurvivor = nil
 end)
 
 -- Stop Hunters from switching back to the other team
@@ -78,5 +80,7 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
         local name = string.sub(last_player:Nick(), 1, 10)
         GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8)
         last_player:AddStatPoints('LastSurvivor', 1)
+
+        GAMEMODE.LastSurvivor = last_player
     end
 end)

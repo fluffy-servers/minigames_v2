@@ -151,6 +151,7 @@ function GM:EndRound(reason, extra)
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
     local msg = "The round has ended!"
+    local extra = nil
     winners, msg, extra = GAMEMODE:HandleEndRound(reason)
     
     -- Send the result to the players
@@ -264,6 +265,7 @@ end
 function GM:HandleTeamWin(reason)
     local winners = reason -- Default: set to winning team in certain gamemodes
     local msg = 'The round has ended!'
+    local extra = nil
     
     if reason == 'TimeEnd' then
         --If team survival, surviving team wins, otherwise determine which team has more kills
@@ -283,6 +285,9 @@ function GM:HandleTeamWin(reason)
     elseif GAMEMODE.TeamSurvival then
         winners = GAMEMODE.HunterTeam
         msg = team.GetName(GAMEMODE.HunterTeam) .. ' win the round!'    
+        if GAMEMODE.LastSurvivor then
+            extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. ' was the last survivor'
+        end
     end
     
     if msg == 'The round has ended!' and type(winners) == 'number' then
@@ -292,7 +297,7 @@ function GM:HandleTeamWin(reason)
     end
     
     if winners and winners > 0 then team.AddScore(winners, 1) end
-    return winners, msg
+    return winners, msg, extra
 end
 
 -- Handles victory conditions for Free for All based gamemodes

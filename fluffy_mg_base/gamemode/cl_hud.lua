@@ -615,7 +615,7 @@ function GM:CreateRoundEndPanel(message, tagline)
         draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, true, true)
         if self.TagLine then
             GAMEMODE:DrawShadowText(self.Message, 'FS_64', w/2, h/2 - 24, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(self.Tagline, 'FS_40', w/2, h/2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(self.TagLine, 'FS_40', w/2, h/2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         else
             GAMEMODE:DrawShadowText(self.Message, 'FS_64', w/2, h/2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
