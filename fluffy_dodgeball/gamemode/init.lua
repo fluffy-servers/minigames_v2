@@ -54,7 +54,7 @@ hook.Add("Think", "ThinkBallSpawn", function()
     
 	if CurTime() > GAMEMODE.NextSpawn then
         GAMEMODE:SpawnBall()
-        GAMEMODE.NextSpawn = CurTime() + 20
+        GAMEMODE.NextSpawn = CurTime() + math.random(5, 15)
 	end
 end )
 
@@ -85,6 +85,7 @@ function GM:GravGunOnPickedUp(ply, ent)
         GAMEMODE:CollectBall(ent, ply:Team())
         ent.LastTime = CurTime()
         ent.LastHolder = ply
+        ent.CurrentBounces = 0
     end
 end
 
@@ -96,6 +97,7 @@ function GM:GravGunPunt(ply, ent)
         GAMEMODE:CollectBall(ent, ply:Team())
         ent.LastTime = CurTime()
         ent.LastHolder = ply
+        ent.CurrentBounces = 0
         return true
     end
 end
