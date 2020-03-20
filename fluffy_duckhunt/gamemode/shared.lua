@@ -30,13 +30,14 @@ GM.TeamSurvival = true
 GM.SurvivorTeam = TEAM_BLUE
 GM.HunterTeam = TEAM_RED
 
-GM.RoundNumber = 10 -- How many rounds?
-GM.RoundTime = 90 -- How long should each round go for?
-GM.RoundCooldown = 5 -- How long between each round?
+GM.RoundNumber = 10     -- How many rounds?
+GM.RoundTime = 90       -- How long should each round go for?
+GM.RoundCooldown = 5    -- How long between each round?
 
-GM.CanSuicide = false -- Should players be able to die at will? :(
-GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do with this
-GM.SpawnProtection = true -- Spawn protection enabled
+GM.CanSuicide = false           -- Should players be able to die at will? :(
+GM.ThirdPersonEnabled = false   -- This gamemode overrides some functions to do with this
+GM.SpawnProtection = true       -- Spawn protection enabled
+GM.SpawnProtectionTime = 10     -- Increased spawn protection time for runners
 
 function GM:CreateTeams()
 	if ( !GAMEMODE.TeamBased ) then return end

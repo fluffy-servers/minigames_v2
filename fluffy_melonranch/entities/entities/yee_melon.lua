@@ -62,7 +62,6 @@ function ENT:PhysicsCollide(data, physobj)
         return
     elseif data.HitEntity and data.HitEntity:IsPlayer() and data.Speed > 50 then
         local damage = math.Clamp(data.Speed * 0.05, 5, 50)
-        print('Dealing ', damage)
         data.HitEntity:TakeDamage(damage, self:GetPlayer() or nil, self)
     end
     
@@ -85,7 +84,6 @@ function ENT:Destroy()
 end
 
 function ENT:OnTakeDamage(dmginfo)
-    print('Taking damage!')
     local attacker = dmginfo:GetAttacker()
     if not attacker:IsPlayer() then return end
     

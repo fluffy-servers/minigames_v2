@@ -175,11 +175,6 @@ function meta:UpdateStatsToDB()
         q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
         q:setString(3, k)
         q:setNumber(4, v)
-    
-        -- Success function
-        function q:onSuccess(data)
-            print('Updated ', k)
-        end
         
         -- Print error if any occur (they shouldn't)
         function q:onError(err)

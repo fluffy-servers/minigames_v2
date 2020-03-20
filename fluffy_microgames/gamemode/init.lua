@@ -156,7 +156,6 @@ function GM:NewModifier()
     -- If a force modifier is set, then use that
     -- Otherwise, pick a NEW gamemode randomly (don't have duplicates)
     local force_modifier = GAMEMODE.ForceNextModifier:GetString()
-    print(force_modifier)
     if GAMEMODE.Modifiers[force_modifier] then
         GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[force_modifier]
     else
