@@ -27,7 +27,7 @@ SWEP.WorldModel 			= "models/weapons/w_knife_t.mdl"
 SWEP.UseHands               = true
 
 SWEP.Primary.Automatic			= true
-SWEP.Primary.Damage 			= 100
+SWEP.Primary.Damage 			= 50
 SWEP.Secondary.ClipSize			= -1
 SWEP.Secondary.DefaultClip		= -1
 SWEP.Secondary.Damage			= -1
