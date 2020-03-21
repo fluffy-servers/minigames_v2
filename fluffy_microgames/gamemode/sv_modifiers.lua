@@ -72,6 +72,7 @@ function GM:SetupModifier(modifier)
             GAMEMODE:NewModifier()
             return
         end
+        GAMEMODE.ForceSpawnRegion = modifier.Region
 
         for k,v in pairs(player.GetAll()) do
             v:Spawn()
@@ -145,6 +146,15 @@ function GM:TeardownModifier(modifier)
             hook.Remove(v, modifier.Name)
         end
         GAMEMODE.ModifierHooks = nil
+    end
+
+    -- Restore everyone back to the generic region
+    if modifier.Region and modifier.Region != 'generic' then
+        GAMEMODE.ForceSpawnRegion = 'generic'
+
+        for k,v in pairs(player.GetAll()) do
+            v:Spawn()
+        end
     end
 end
 

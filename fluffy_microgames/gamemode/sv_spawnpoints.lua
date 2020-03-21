@@ -40,23 +40,22 @@ function GM:PlayerSelectSpawn(ply, transition)
     end
 
     local region = 'generic'
-    if GAMEMODE.CurrentModifier then
+    if GAMEMODE.ForceSpawnRegion then
+        region = GAMEMODE.ForceSpawnRegion
+    elseif GAMEMODE.CurrentModifier then
         if GAMEMODE.CurrentModifier.Region then
             region = GAMEMODE.CurrentModifier.Region
         end
     end
 
+    -- Iterate over the spawnpoints in a random order until we find a suitable one
     local spawntable = GAMEMODE.Spawnpoints[region]
-    local count = table.Count(spawntable)
     local chosen = nil
 
-    -- Pick the best random spawnpoint
-    for i = 1, count do
+    for i=0,6 do
         chosen = table.Random(spawntable)
-        if IsValid(chosen) and chosen:IsInWorld() then
-            if hook.Call('IsSpawnpointSuitable', GAMEMODE, ply, chosen, i == count) then
-                return chosen
-            end
+        if hook.Call('IsSpawnpointSuitable', GAMEMODE, ply, chosen, i == 6) then
+            return chosen
         end
     end
 
