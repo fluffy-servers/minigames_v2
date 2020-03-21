@@ -75,15 +75,6 @@ GM.RTVCount = GM.RTVCount or 0
 util.AddNetworkString('SendMapVoteTable')
 util.AddNetworkString('MapVoteSendVote')
 
--- Fisher-Yates table shuffle
-function table.Shuffle(t)
-    for i = #t, 2, -1 do
-        local j = math.random(i)
-        t[i], t[j] = t[j], t[i]
-    end
-    return t
-end
-
 -- Generate the voting 'queue' of six options
 function GM:GenerateVotingQueue()
     -- Copy the gamemodes & shuffle

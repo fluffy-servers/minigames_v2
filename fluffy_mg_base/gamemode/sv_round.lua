@@ -232,31 +232,6 @@ function GM:StatsRoundWin(winners)
     end
 end
 
--- Generates a lovely confetti effect
-function GM:ConfettiEffect(winners)
-    if GAMEMODE.DisableConfetti then return end
-    
-    -- Sort the winners into a nice table
-    local tbl = {}
-    if IsEntity(winners) then
-        tbl = {winners}
-    elseif type(winners) == 'number' then
-        tbl = team.GetPlayers(winners)
-    elseif type(winners) == 'table' then
-        tbl = winners
-    end
-    
-    -- Create confetti for all living winners
-    for k,v in pairs(tbl) do
-        if not v:IsPlayer() then continue end
-        if not v:Alive() then continue end
-        
-        local effectdata = EffectData()
-        effectdata:SetOrigin(v:GetPos())
-        util.Effect('win_confetti', effectdata)
-    end
-end
-
 --[[
     Example (basic) round end handlers
 ]]--
