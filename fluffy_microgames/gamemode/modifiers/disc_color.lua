@@ -36,6 +36,10 @@ function MOD:Initialize()
     end)
 end
 
+function MOD:Loadout(ply)
+    ply:Give('weapon_crowbar')
+end
+
 function MOD:Cleanup()
     timer.Destroy("DiscTimer")
 
@@ -58,4 +62,5 @@ function MOD:PlayerFinish(ply)
 end
 
 MOD.ThinkTime = 0.1
-MOD.Think = GAMEMODE.RunFiveSeconds
+MOD.Think = GM.RunFiveSeconds
+MOD.EntityTakeDamage = GM.CrowbarKnockback
