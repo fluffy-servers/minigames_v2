@@ -58,8 +58,8 @@ function GM:StartRound()
     GAMEMODE:NewModifier()
     
     -- Set global round data
-	SetGlobalString( 'RoundState', 'InRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+	SetGlobalString('RoundState', 'InRound')
+	SetGlobalFloat('RoundStart', CurTime())
     
     -- yay hooks
     hook.Call('RoundStart')
@@ -70,7 +70,7 @@ function GM:StartRound()
     -- Does not apply to endless round types
     timer.Create('GamemodeTimer', roundtime, 0, function()
         GAMEMODE:EndRound('TimeEnd')
-    end )
+    end)
 end
 
 -- End a round and check subgame functionality
@@ -144,7 +144,7 @@ function GM:HandleFFAWin(reason)
     -- If the time ran out, get the player with the most frags
     -- Otherwise, the reason is likely the winner entity
     if reason == 'TimeEnd' then
-        winner = GAMEMODE:GetWinningPlayer()
+        winner = GAMEMODE:GetWinningPlayer(GAMEMODE.CurrentModifier)
     elseif IsEntity(reason) and reason:IsPlayer() then
         winner = reason
         winner:AddFrags(5)
@@ -158,34 +158,9 @@ function GM:HandleFFAWin(reason)
     return winner, msg
 end
 
--- Basic function to get the player with the most frags
-function GM:GetWinningPlayer()
-    -- Doesn't really make sense in Team gamemodes
-    -- if GAMEMODE.TeamBased then return nil end
-    
-    -- Check again that there isn't just one player alive
-    -- Useful for survival gamemodes
-    if GAMEMODE:GetNumberAlive() <= 1 then
-        for k,v in pairs( player.GetAll() ) do
-            if v:Alive() and not v.Spectating then
-                return v
-            end
-        end
-    end
-    
-    -- Loop through all players and return the one with the most frags
-    local bestscore = 0
-    local bestplayer = nil
-    for k,v in pairs( player.GetAll() ) do
-        local frags = v.RoundScore or 0
-        if frags > bestscore then
-            bestscore = frags
-            bestplayer = v
-        end
-    end
-    
-    -- Return the winner! Yay!
-    return bestplayer
+-- Players cannot respawn in the middle of rounds
+function GM:CanRespawn(ply)
+    return (GetGlobalString('RoundState') != 'InRound')
 end
 
 -- Helper function to relay announcements

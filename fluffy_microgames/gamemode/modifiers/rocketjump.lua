@@ -34,7 +34,7 @@ end
 function MOD:PlayerFinish(ply)
     local ground = ply:GetGroundEntity()
     if IsValid(ground) and ground:GetModel() == 'models/props_phx/construct/metal_angle360.mdl' then
-        ply:AddFrags(1)
+        ply:AwardWin()
     else
         ply:Kill()
     end

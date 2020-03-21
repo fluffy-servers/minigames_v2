@@ -18,6 +18,19 @@ function GM:CrowbarKnockback(ent, dmg)
     ent:SetVelocity(v * 100)
 end
 
+-- Players can't stop moving for the first 5 seconds
+function GM:RunFiveSeconds()
+    if CurTime() < GAMEMODE.ModifierStart + 1.5 then return end
+    if CurTime() > GAMEMODE.ModifierStart + 5 then return end
+
+    for k,v in pairs(player.GetAll()) do
+        if not v:Alive() or v.Spectating then continue end
+        if v:GetVelocity():LengthSqr() < 5000 then
+            v:Kill()
+        end
+    end
+end
+
 local modifier_properties = {
     ['Initialize'] = true,
     ['Loadout'] = true,
@@ -25,7 +38,8 @@ local modifier_properties = {
     ['Cleanup'] = true,
     ['PlayerFinish'] = true,
     ['Think'] = true,
-    ['CanStart'] = true
+    ['CanStart'] = true,
+    ['GetWinningPlayer'] = true
 }
 
 -- Set up a new modifier
@@ -120,6 +134,35 @@ function GM:TeardownModifier(modifier)
     end
 end
 
+-- Basic function to get the player with the most frags
+function GM:GetWinningPlayer(modifier)
+    -- Return modifier behaviour if it exists
+    if modifier.GetWinningPlayer then
+        return modifier:GetWinningPlayer()
+    end
+
+    -- Check for a lone survivor, and return them
+    if GAMEMODE:GetNumberAlive() <= 1 then
+        for k,v in pairs( player.GetAll() ) do
+            if v:Alive() and not v.Spectating then
+                return v
+            end
+        end
+    end
+    
+    -- Otherwise, loop through all players and return the one with the most frags
+    local bestscore = 0
+    local bestplayer = nil
+    for k,v in pairs(player.GetAll()) do
+        local frags = v:GetMScore()
+        if frags > bestscore then
+            bestscore = frags
+            bestplayer = v
+        end
+    end
+    return bestplayer
+end
+
 -- Think hook with built-in delay
 hook.Add('Think', 'ModifierThinkLoop', function()
     if GAMEMODE:GetRoundState() != 'InRound' then return end
@@ -130,6 +173,27 @@ hook.Add('Think', 'ModifierThinkLoop', function()
         GAMEMODE.CurrentModifier.Think()
     end
 end)
+
+function GM:CheckRoundEnd()
+    -- Abort rounds if everyone dies
+    if GAMEMODE:GetNumberAlive() == 0 then
+        GAMEMODE:EndRound(nil)
+    end
+
+    -- Handle elimination if the modifier has it enabled
+    local modifier = GAMEMODE.CurrentModifier
+    if modifier.Elimination then
+        if GAMEMODE:GetNumberAlive() <= 1 then
+            for k,v in pairs(player.GetAll()) do
+                if v:Alive() and !v.Spectating then
+                    GAMEMODE:EndRound(v)
+                    return
+                end
+            end
+            GAMEMODE:EndRound(nil)
+        end
+    end
+end
 
 -- Load all the modifiers from the files
 -- This has to be outside of a function

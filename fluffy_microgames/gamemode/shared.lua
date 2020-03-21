@@ -17,10 +17,6 @@ GM.RoundType = 'timed'
 GM.GameTime  = 600
 GM.HUDStyle  = 3
 
-GM.Elimination = true
-GM.WinBySurvival = true
-GM.ThirdpersonEnabled = true
-
 function GM:Initialize()
 
 end

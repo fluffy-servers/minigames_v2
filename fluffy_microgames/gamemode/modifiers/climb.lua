@@ -32,7 +32,7 @@ end
 function MOD:PlayerFinish(ply)
     local ground = ply:GetGroundEntity()
     if IsValid(ground) and ground:GetClass() == 'prop_physics' then
-        ply:AddFrags(1)
+        ply:AwardWin()
     else
         ply:Kill()
     end

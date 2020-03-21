@@ -38,13 +38,13 @@ end
 function MOD:PlayerFinish(ply)
     if ply:InVehicle() then
         local chair = ply:GetVehicle()
-        ply:AddFrags(1)
+        ply:AwardWin()
         ply:ExitVehicle()
 
         if IsValid(chair) then
             chair:Remove()
         end
-    elseif GAMEMODE:GetNumberAlive() >= 2 then
+    elseif ply:Alive() then
         ply:Kill()
     end
 end

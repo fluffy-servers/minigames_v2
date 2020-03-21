@@ -13,3 +13,8 @@ end
 function meta:AddMScore(amount)
     return self:SetNWInt("Microscore", self:GetScore() + amount)
 end
+
+function meta:AwardWin(confetti)
+    self:AddFrags(1)
+    GAMEMODE:ConfettiEffectSingle(self)
+end

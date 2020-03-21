@@ -213,6 +213,6 @@ end
 
 -- Helper function to scale data based on the number of players
 function GM:PlayerScale(ratio, min, max)
-    local players = GAMEMODE:NumNonSpectators()
+    local players = GAMEMODE:GetNumberAlive()
     return math.Clamp(math.ceil(players * ratio), min, max)
 end

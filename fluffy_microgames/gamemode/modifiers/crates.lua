@@ -28,7 +28,7 @@ function MOD:PlayerFinish(ply)
     if not ply.BrokeCrate then
         ply:Kill()
     else
-        ply:AddFrags(1)
+        ply:AwardWin()
     end
     ply.BrokeCrate = false
 end
@@ -36,5 +36,4 @@ end
 function MOD:PropBreak(ply, prop)
     if ply.BrokeCrate then return end
     ply.BrokeCrate = true
-    GAMEMODE:ConfettiEffectSingle(ply)
 end
