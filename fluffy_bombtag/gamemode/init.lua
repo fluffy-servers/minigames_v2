@@ -11,16 +11,6 @@ function GM:PlayerLoadout(ply)
     ply:Give('bt_punch')
 end
 
--- Get a table of all alive players
-function GM:GetAlivePlayers()
-    local tbl = {}
-    for k,v in pairs(player.GetAll() ) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
-    end
-    
-    return tbl
-end
-
 -- Timing based on active players
 function GM:GetNewBombTime()
     local amount = player.GetCount()
@@ -40,11 +30,11 @@ function GM:PickBomber()
         v:StripWeapon('bt_bomb')
 	end
     
-    if #GAMEMODE:GetAlivePlayers() < 2 then return end
+    if #GAMEMODE:GetLivingPlayers() < 2 then return end
 	
 	-- Give the bomb & set the time randomly
-	local newply = table.Random( GAMEMODE:GetAlivePlayers() )
-	newply:SetCarrier( true )
+	local newply = table.Random(GAMEMODE:GetLivingPlayers())
+	newply:SetCarrier(true)
 	newply:SetTime(GAMEMODE:GetNewBombTime())
 	newply:StripWeapons()
 	newply:Give('bt_bomb')
