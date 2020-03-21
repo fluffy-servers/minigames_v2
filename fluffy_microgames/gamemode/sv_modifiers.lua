@@ -24,6 +24,7 @@ local modifier_properties = {
     ['WinCheck'] = true,
     ['Cleanup'] = true,
     ['PlayerFinish'] = true,
+    ['Think'] = true,
 }
 
 -- Set up a new modifier
@@ -48,6 +49,8 @@ function GM:SetupModifier(modifier)
             table.insert(GAMEMODE.ModifierHooks, k)
         end
     end
+
+    GAMEMODE.LastThink = CurTime()
 end
 
 -- Cleanup after a modifier
@@ -83,6 +86,17 @@ function GM:TeardownModifier(modifier)
         GAMEMODE.ModifierHooks = nil
     end
 end
+
+-- Think hook with built-in delay
+hook.Add('Think', 'ModifierThinkLoop', function()
+    if GAMEMODE:GetRoundState() != 'InRound' then return end
+
+    if GAMEMODE.CurrentModifier.Think then
+        if CurTime() < GAMEMODE.LastThink + (GAMEMODE.CurrentModifier.ThinkTime or 0) then return end
+        GAMEMODE.LastThink = CurTime()
+        GAMEMODE.CurrentModifier.Think()
+    end
+end)
 
 -- Load all the modifiers from the files
 -- This has to be outside of a function

@@ -1,5 +1,5 @@
 MOD.Name = 'Crates'
-MOD.RoundTime = 15
+MOD.RoundTime = 10
 
 local function spawnCrates()
     local number = GAMEMODE:PlayerScale(0.5, 2, 10) + math.random(-1, 1)
