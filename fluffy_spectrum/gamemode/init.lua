@@ -44,7 +44,7 @@ end)
 
 -- If one team has taken over, win the round
 function GM:CheckVictory(t)
-    if team.NumPlayers(t) >= GAMEMODE:GetLivingPlayers() then
+    if team.NumPlayers(t) >= GAMEMODE:GetNumberAlive() then
         GAMEMODE:EndRound(t)
     end
 end

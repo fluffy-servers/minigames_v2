@@ -299,7 +299,7 @@ end
 -- Handles FFA Elimination
 function GM:CheckFFAElimination()
     if GAMEMODE.WinBySurvival then
-        if GAMEMODE:GetLivingPlayers() <= 1 then
+        if GAMEMODE:GetNumberAlive() <= 1 then
             for k,v in pairs(player.GetAll()) do
                 if v:Alive() and !v.Spectating then
                     GAMEMODE:EndRound(v)
@@ -309,7 +309,7 @@ function GM:CheckFFAElimination()
             GAMEMODE:EndRound(nil)
         end
     elseif GAMEMODE.Elimination then
-        if GAMEMODE:GetLivingPlayers() == 0 then
+        if GAMEMODE:GetNumberAlive() == 0 then
             GAMEMODE:EndRound(nil)
         end
     end

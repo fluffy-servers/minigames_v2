@@ -30,10 +30,10 @@ function GM:PickBomber()
         v:StripWeapon('bt_bomb')
 	end
     
-    if #GAMEMODE:GetLivingPlayers() < 2 then return end
+    if GAMEMODE:GetNumberAlive() < 2 then return end
 	
 	-- Give the bomb & set the time randomly
-	local newply = table.Random(GAMEMODE:GetLivingPlayers())
+	local newply = table.Random(GAMEMODE:GetAlivePlayers())
 	newply:SetCarrier(true)
 	newply:SetTime(GAMEMODE:GetNewBombTime())
 	newply:StripWeapons()

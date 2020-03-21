@@ -304,7 +304,7 @@ function GM:GetRandomPlayer(num, forcetable)
     
     -- Return one player for compatibility
     if num == 1 and not forcetable then
-        local players = GAMEMODE:GetLivingPlayers()
+        local players = GAMEMODE:GetAlivePlayers()
         return players[math.random(1, #players)]
     end
     

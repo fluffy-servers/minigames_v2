@@ -147,14 +147,20 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
+-- Get a table of all alive players
+function GM:GetAlivePlayers()
+    local tbl = {}
+    for k,v in pairs(player.GetAll() ) do
+        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
+    end
+    
+    return tbl
+end
+
 -- Convenience function to get number of living players
 -- This isn't fantastically efficient don't overuse
-function GM:GetLivingPlayers()
-    local alive = 0
-    for k,v in pairs( player.GetAll() ) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then alive = alive + 1 end
-    end
-    return alive
+function GM:GetNumberAlive()
+    return #GAMEMODE:GetAlivePlayers()
 end
 
 -- Convenience function to get number of non-spectators
