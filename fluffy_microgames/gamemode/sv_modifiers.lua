@@ -1,49 +1,3 @@
--- Define tables of random weapons
-local random_weapons = {}
-random_weapons['shotgun'] = function(p)
-    p:Give('weapon_shotgun')
-    p:GiveAmmo(20, 'Buckshot')
-end
-
-random_weapons['smg'] = function(p)
-    p:Give('weapon_smg1')
-    p:GiveAmmo(100, 'SMG1')
-end
-
-random_weapons['ar2'] = function(p)
-    p:Give('weapon_ar2')
-    p:GiveAmmo(100, 'AR2')
-end
-
-random_weapons['357'] = function(p)
-    p:Give('weapon_357')
-    p:GiveAmmo(10, '357')
-end
-
-random_weapons['pistol'] = function(p)
-    p:Give('weapon_pistol')
-    p:GiveAmmo(60, 'Pistol')
-end
-
-random_weapons['crossbow'] = function(p)
-    p:Give('weapon_crossbow')
-    p:GiveAmmo(10, 'XBowBolt')
-end
-
-local cache_seed = nil
-local cache = nil
-
--- Pick a number of random weapons from the above list
-function GM:PickRandomWeapons(seed, num)
-    if cache_seed and seed == cache_seed then
-        return cache
-    else
-        cache = table.Random(random_weapons)
-        cache_seed = seed
-        return cache
-    end
-end
-
 -- Award survival bonuses to any living players
 function GM:SurvivalBonus(victim, attacker, dmg)
     for k,v in pairs(player.GetAll()) do
@@ -62,6 +16,72 @@ function GM:CrowbarKnockback(ent, dmg)
     dmg:SetDamage(0)
     local v = dmg:GetDamageForce()
     ent:SetVelocity(v * 100)
+end
+
+local modifier_properties = {
+    ['Initialize'] = true,
+    ['Loadout'] = true,
+    ['WinCheck'] = true,
+    ['Cleanup'] = true,
+    ['PlayerFinish'] = true,
+}
+
+-- Set up a new modifier
+function GM:SetupModifier(modifier)
+    -- Call the initialize function for the modifier
+    if modifier.Initialize then
+        modifier:Initialize()
+    end
+    
+    -- Call the player function for the modifier
+    if modifier.Loadout then
+        for k,v in pairs(player.GetAll()) do
+            modifier:Loadout(v)
+        end
+    end
+    
+    -- Register any hooks related to this modifier
+    GAMEMODE.ModifierHooks = {}
+    for k,func in pairs(modifier) do
+        if type(func) == 'function' and not modifier_properties[k] then
+            hook.Add(k, modifier.Name, function(...) return func(modifier, ...) end)
+            table.insert(GAMEMODE.ModifierHooks, k)
+        end
+    end
+end
+
+-- Cleanup after a modifier
+function GM:TeardownModifier(modifier)
+	-- Call any cleanup conditions in the subgame
+    if modifier.Cleanup then
+        modifier:Cleanup()
+    end
+
+    -- Cleanup all players
+    for k,v in pairs(player.GetAll()) do
+        v:StripWeapons()
+        v:StripAmmo()
+        v:SetRunSpeed(300)
+        v:SetWalkSpeed(200)
+        v:SetMoveType(2)
+        v:SetHealth(100)
+        v:SetMaxHealth(100)
+        v:SetJumpPower(200)
+        hook.Call('PlayerSetModel', GAMEMODE, v)
+        
+		-- Win conditions / points / cleanup etc.
+        if modifier.PlayerFinish then
+            modifier:PlayerFinish(v)
+        end
+    end
+
+	-- Remove any subgame hooks
+    if GAMEMODE.ModifierHooks then
+        for k,v in pairs(GAMEMODE.ModifierHooks) do
+            hook.Remove(k, modifier.Name)
+        end
+        GAMEMODE.ModifierHooks = nil
+    end
 end
 
 -- Load all the modifiers from the files

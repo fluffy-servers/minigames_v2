@@ -9,9 +9,10 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 
 include('shared.lua')
+include('sv_markers.lua')
 include('sv_modifiers.lua')
 
-GAMEMODE.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
+GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 
 -- Reset the map before the round starts
 function GM:PreStartRound()
@@ -48,7 +49,7 @@ function GM:PreStartRound()
     end
     
     -- Start the round after a short cooldown
-    timer.Simple(2, function() GAMEMODE:StartRound() end )
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end )
 end
 
 -- Pick a new modifier each round
@@ -63,7 +64,7 @@ function GM:StartRound()
     -- yay hooks
     hook.Call('RoundStart')
     
-    local roundtime = GAMEMODE.CurrentModifier.time or GAMEMODE.RoundTime
+    local roundtime = GAMEMODE.CurrentModifier.RoundTime or GAMEMODE.RoundTime
     
     -- End the round after a certain time
     -- Does not apply to endless round types
@@ -78,21 +79,9 @@ function GM:EndRound(reason)
     if GetGlobalString('RoundState') != 'InRound' then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
-    
-	-- Call any win condition checks in the subgame
-    if GAMEMODE.CurrentModifier.func_check then
-        for k,v in pairs(player.GetAll()) do
-            GAMEMODE.CurrentModifier.func_check(v)
-        end
-    end
-    
-	-- Call any cleanup conditions in the subgame
-    if GAMEMODE.CurrentModifier.func_cleanup then
-        GAMEMODE.CurrentModifier.func_cleanup()
-    end
-    
-    -- The end of each round is honestly the painful part
-    -- Delegate this to each gamemode (defaults are provided lower down for reference)
+
+    GAMEMODE:TeardownModifier(GAMEMODE.CurrentModifier)
+
     local winners = nil
     local msg = "The round has ended!"
     winners, msg = GAMEMODE:HandleEndRound(reason)
@@ -109,91 +98,19 @@ function GM:EndRound(reason)
     GAMEMODE:StatsRoundWin(winners)
             
     -- Move to next round
-    SetGlobalString( 'RoundState', 'EndRound' )
+    SetGlobalString('RoundState', 'EndRound')
     hook.Call('RoundEnd')
-    GAMEMODE:EndModifier()
     
     -- No cooldown in this gamemode
-    timer.Simple(2, function() GAMEMODE:PreStartRound() end)
-end
-
--- Wind down from a subgame
--- This resets all the player data to defaults
-function GM:EndModifier()
-    local modifier = GAMEMODE.CurrentModifier
-    for k,v in pairs(player.GetAll()) do
-        v:StripWeapons()
-        v:StripAmmo()
-        v:SetRunSpeed(300)
-        v:SetWalkSpeed(200)
-        v:SetMoveType(2)
-        v:SetHealth(100)
-        v:SetMaxHealth(100)
-        v:SetJumpPower(200)
-        hook.Call('PlayerSetModel', GAMEMODE, v)
-        
-		-- Call any other subgame cleanups
-        if modifier.func_finish then
-            modifier.func_finish(v)
-        end
-    end
-    
-	-- Remove any subgame hooks
-    if modifier.hooks then
-        for k,v in pairs(modifier.hooks) do
-            hook.Remove(k, modifier.name)
-        end
-    end
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:PreStartRound() end)
 end
 
 -- Load up a new modifier
 function GM:NewModifier()
-    -- Make sure the same modifier doesn't come up twice
-    if not GAMEMODE.CurrentModifier then GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers) end
-    local modifier = GAMEMODE.CurrentModifier
+    local modifier = table.Random(GAMEMODE.Modifiers)
+    GAMEMODE.CurrentModifier = modifier
 
-    -- Pick the next modifier
-    -- If a force modifier is set, then use that
-    -- Otherwise, pick a NEW gamemode randomly (don't have duplicates)
-    local force_modifier = GAMEMODE.ForceNextModifier:GetString()
-    if GAMEMODE.Modifiers[force_modifier] then
-        GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[force_modifier]
-    else
-        while modifier == GAMEMODE.CurrentModifier do
-            modifier = table.Random(GAMEMODE.Modifiers)
-
-            -- If the modifier is restricted to certain maps, ensure that the map is valid
-            if modifier.maps then
-                if not modifier.maps[game.GetMap()] then
-                    modifier = GAMEMODE.CurrentModifier
-                end
-            end
-        end
-
-        GAMEMODE.CurrentModifier = modifier
-    end
-
-    -- Call the initialize function for the modifier
-    if modifier.func_init then
-        modifier.func_init()
-    end
-    
-    -- Call the player function for the modifier
-    if modifier.func_player then
-        for k,v in pairs(player.GetAll()) do
-            modifier.func_player(v)
-        end
-    end
-    
-    -- Register any hooks related to this modifier
-    if modifier.hooks then
-        for k,v in pairs(modifier.hooks) do
-            hook.Add(k, modifier.name, v)
-        end
-    end
-    
-	-- Pulse announcement with the subgame information
-    GAMEMODE:PulseAnnouncementTwoLine(3, modifier.name, modifier.subtext)
+    GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
 end
 
 --Handles victory conditions for Free for All based gamemodes
@@ -246,4 +163,13 @@ function GM:GetWinningPlayer()
     
     -- Return the winner! Yay!
     return bestplayer
+end
+
+-- Helper function to relay announcements
+function GM:Announce(title, subtext)
+    if subtext then
+        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext)
+    else
+        GAMEMODE:PulseAnnouncement(3, title, subtext)
+    end
 end

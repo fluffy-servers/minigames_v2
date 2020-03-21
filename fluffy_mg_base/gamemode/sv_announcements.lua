@@ -129,6 +129,6 @@ function GM:ConfettiEffectSingle(ply)
     if not ply:Alive() then return end
 
     local effectdata = EffectData()
-    effectdata:SetOrigin(v:GetPos())
+    effectdata:SetOrigin(ply:GetPos())
     util.Effect('win_confetti', effectdata)
 end
