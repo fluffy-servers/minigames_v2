@@ -107,13 +107,32 @@ end
 
 -- Load up a new modifier
 function GM:NewModifier()
+    -- Force modifiers if applicable
     local force = GAMEMODE.ForceNextModifier:GetString()
     if GAMEMODE.Modifiers[force] then
         GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[force]
-    else
-        GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers)
+        GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
+        return
     end
 
+    -- Setup the queue if it doesn't exist
+    if not GAMEMODE.ModifierQueue then
+        local keys = table.GetKeys(GAMEMODE.Modifiers)
+        GAMEMODE.ModifierQueue = table.Shuffle(keys)
+        GAMEMODE.ModifierIndex = 1
+    end
+
+    -- Shuffle the queue if moving too fast
+    if GAMEMODE.ModifierIndex > #GAMEMODE.ModifierQueue then
+        local keys = table.GetKeys(GAMEMODE.Modifiers)
+        GAMEMODE.ModifierQueue = table.Shuffle(keys)
+        GAMEMODE.ModifierIndex = 1
+    end
+
+    -- Play the next modifier in the queue
+    local modifier_key = GAMEMODE.ModifierQueue[GAMEMODE.ModifierIndex]
+    GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[modifier_key]
+    GAMEMODE.ModifierIndex = GAMEMODE.ModifierIndex + 1
     GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
 end
 
