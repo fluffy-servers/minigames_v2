@@ -11,6 +11,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 include('sv_markers.lua')
 include('sv_modifiers.lua')
+include('sv_spawnpoints.lua')
 
 GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 

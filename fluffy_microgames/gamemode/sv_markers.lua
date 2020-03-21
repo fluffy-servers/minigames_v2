@@ -42,3 +42,7 @@ function GM:GetRandomLocations(num, type, region)
     end
     return results
 end
+
+function GM:HasRegion(region)
+    return GAMEMODE.Markers[region]
+end

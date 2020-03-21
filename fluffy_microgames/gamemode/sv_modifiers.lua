@@ -64,6 +64,20 @@ function GM:SetupModifier(modifier)
         end
     end
 
+    -- Check the region
+    -- If there are no markers for this region, bail out
+    -- If the region isn't generic, respawn everyone
+    if modifier.Region and modifier.Region != 'generic' then
+        if not GAMEMODE:HasRegion(modifier.Region) then
+            GAMEMODE:NewModifier()
+            return
+        end
+
+        for k,v in pairs(player.GetAll()) do
+            v:Spawn()
+        end
+    end
+
     -- Call the initialize function for the modifier
     if modifier.Initialize then
         modifier:Initialize()
