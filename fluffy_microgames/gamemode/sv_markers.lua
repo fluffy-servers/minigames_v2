@@ -14,7 +14,7 @@ function GM:LoadMarkers()
         end
 
         -- Determine the type of the marker and register it
-        local type = v:GetName()
+        local type = v.MarkerType
         if not GAMEMODE.Markers[region][type] then
             GAMEMODE.Markers[region][type] = {}
         end

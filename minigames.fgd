@@ -146,15 +146,19 @@
 ]
 
 // Microgames entities
-@PointClass iconsprite("editor/info_target.vmt") = marker_ground:
-    "Ground marker for various Microgames gamemodes"
+@PointClass iconsprite("editor/info_target.vmt") = microgames_marker:
+    "Marker for various Microgames gamemodes"
 [
+    type(string) : "Type" : : "The type of marker this is"
+    region(string) : "Region" : : "Region this marker is in"
 ]
 
-@PointClass iconsprite("editor/info_target.vmt") = marker_sky:
-    "Sky marker for various Microgames gamemodes"
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = microgames_spawnpoint:
+    "Enhanced spawnpoint for Microgames."
 [
+    region(string) : "Region" : : "Region this spawnpoint is in"
 ]
+
 
 // Capture The Flag entities
 @PointClass iconsprite("editor/info_target.vmt") = ctf_blue_marker:
