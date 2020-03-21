@@ -25,10 +25,31 @@ local modifier_properties = {
     ['Cleanup'] = true,
     ['PlayerFinish'] = true,
     ['Think'] = true,
+    ['CanStart'] = true
 }
 
 -- Set up a new modifier
 function GM:SetupModifier(modifier)
+    -- Check that we satisfy the minimum players
+    if modifier.MinPlayers and GAMEMODE:NumNonSpectators() < modifier.MinPlayers then
+        GAMEMODE:NewModifier()
+        return
+    end
+
+    -- Check that we satisfy the maximum players
+    if modifier.MaxPlayers and GAMEMODE:NumNonSpectators() > modifier.MaxPlayers then
+        GAMEMODE:NewModifier()
+        return
+    end
+
+    -- Check custom start conditions if applicable
+    if modifier.CanStart then
+        if not modifier:CanStart() then
+            GAMEMODE:NewModifier()
+            return
+        end
+    end
+
     -- Call the initialize function for the modifier
     if modifier.Initialize then
         modifier:Initialize()
