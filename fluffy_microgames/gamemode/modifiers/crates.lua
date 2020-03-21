@@ -3,7 +3,7 @@ MOD.RoundTime = 10
 
 local function spawnCrates()
     local number = GAMEMODE:PlayerScale(0.5, 2, 10) + math.random(-1, 1)
-    local positions = GAMEMODE:GetRandomLocations(number, 'over', 'generic')
+    local positions = GAMEMODE:GetRandomLocations(number, 'over')
 
     for i=1,number do
         local pos = positions[i]

@@ -107,8 +107,12 @@ end
 
 -- Load up a new modifier
 function GM:NewModifier()
-    local modifier = table.Random(GAMEMODE.Modifiers)
-    GAMEMODE.CurrentModifier = modifier
+    local force = GAMEMODE.ForceNextModifier:GetString()
+    if GAMEMODE.Modifiers[force] then
+        GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[force]
+    else
+        GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers)
+    end
 
     GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
 end
@@ -142,7 +146,7 @@ function GM:GetWinningPlayer()
     
     -- Check again that there isn't just one player alive
     -- Useful for survival gamemodes
-    if GAMEMODE:GetLivingPlayers() <= 1 then
+    if GAMEMODE:GetNumberAlive() <= 1 then
         for k,v in pairs( player.GetAll() ) do
             if v:Alive() and not v.Spectating then
                 return v

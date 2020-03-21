@@ -50,7 +50,16 @@ function GM:SetupModifier(modifier)
         end
     end
 
+    -- Add a countdown if requested
+    if modifier.Countdown then
+        local time = modifier.RoundTime or GAMEMODE.RoundTime
+        timer.Simple(time - 3, function()
+            GAMEMODE:CountdownAnnouncement(3)
+        end)
+    end
+
     GAMEMODE.LastThink = CurTime()
+    GAMEMODE.ModifierStart = CurTime()
 end
 
 -- Cleanup after a modifier
@@ -79,9 +88,12 @@ function GM:TeardownModifier(modifier)
     end
 
 	-- Remove any subgame hooks
+    print('Removing hooks...')
+    print(GAMEMODE.ModifierHooks)
     if GAMEMODE.ModifierHooks then
         for k,v in pairs(GAMEMODE.ModifierHooks) do
-            hook.Remove(k, modifier.Name)
+            print('Removing', v, modifier.Name)
+            hook.Remove(v, modifier.Name)
         end
         GAMEMODE.ModifierHooks = nil
     end
