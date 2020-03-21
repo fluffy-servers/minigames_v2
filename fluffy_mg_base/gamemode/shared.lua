@@ -158,7 +158,6 @@ function GM:GetLivingPlayers()
 end
 
 -- Convenience function to get number of non-spectators
--- I don't think there is actually a need for this anymore, but it's here
 function GM:NumNonSpectators()
     local num = 0
     for k,v in pairs( player.GetAll() ) do
@@ -195,4 +194,19 @@ end
 -- Another nice wrapper for a global variable
 function GM:GetRoundStartTime()
     return GetGlobalFloat('RoundStart', 0)
+end
+
+-- Fisher-Yates table shuffle
+function table.Shuffle(t)
+    for i = #t, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
+    end
+    return t
+end
+
+-- Helper function to scale data based on the number of players
+function GM:PlayerScale(ratio, min, max)
+    local players = GAMEMODE:NumNonSpectators()
+    return math.Clamp(math.ceil(players * ratio), min, max)
 end
