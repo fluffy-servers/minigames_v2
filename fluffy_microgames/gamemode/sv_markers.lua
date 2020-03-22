@@ -28,11 +28,7 @@ end)
 
 function GM:GetRandomLocations(num, type, region)
     if not region then
-        if GAMEMODE.CurrentModifier.Region then
-            region = GAMEMODE.CurrentModifier.Region
-        else
-            region = 'generic'
-        end
+        region = GAMEMODE.CurrentRegion or 'generic'
     end
 
     -- Shuffle the table

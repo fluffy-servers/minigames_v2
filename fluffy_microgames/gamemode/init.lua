@@ -18,7 +18,7 @@ GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 -- Reset the map before the round starts
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0 )
-    GAMEMODE.ForceSpawnRegion = nil
+    GAMEMODE.CurrentRegion = nil
     
     -- Reset stuff
     game.CleanUpMap()

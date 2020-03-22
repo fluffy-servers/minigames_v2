@@ -75,19 +75,11 @@ function GM:SetupModifier(modifier)
         end
     end
 
-    -- Check the region
-    -- If there are no markers for this region, bail out
-    -- If the region isn't generic, respawn everyone
-    if modifier.Region and modifier.Region != 'generic' then
-        if not GAMEMODE:HasRegion(modifier.Region) then
-            GAMEMODE:NewModifier()
-            return
-        end
-        GAMEMODE.ForceSpawnRegion = modifier.Region
-
-        for k,v in pairs(player.GetAll()) do
-            v:Spawn()
-        end
+    -- Handle regions
+    local region_accept = GAMEMODE:HandleRegion(modifier)
+    if not region_accept then
+        GAMEMODE:NewModifier()
+        return
     end
 
     -- Call the initialize function for the modifier
@@ -121,6 +113,33 @@ function GM:SetupModifier(modifier)
 
     GAMEMODE.LastThink = CurTime()
     GAMEMODE.ModifierStart = CurTime()
+end
+
+-- Handle region switching for specific modifiers
+function GM:HandleRegion(modifier)
+    -- Check the region
+    -- If there are no markers for this region, bail out
+    -- If the region isn't generic, respawn everyone
+    local region = modifier.Region
+    if not modifier.Region or modifier.Region == 'generic' then return true end
+
+    -- If multiple regions are specified, pick one at random from the table
+    if type(region) == 'table' then
+        region = table.Random(region)
+        if region == 'generic' then return true end
+    end
+
+    -- Abort the gamemode if the region is not in this map
+    if not GAMEMODE:HasRegion(region) then
+        return false
+    end
+
+    -- Respawn everyone in the new region
+    GAMEMODE.CurrentRegion = region
+    for k,v in pairs(player.GetAll()) do
+        v:Spawn()
+    end
+    return true
 end
 
 -- Cleanup after a modifier
@@ -160,8 +179,8 @@ function GM:TeardownModifier(modifier)
     end
 
     -- Restore everyone back to the generic region
-    if modifier.Region and modifier.Region != 'generic' then
-        GAMEMODE.ForceSpawnRegion = 'generic'
+    if GAMEMODE.CurrentRegion then
+        GAMEMODE.CurrentRegion = 'generic'
 
         for k,v in pairs(player.GetAll()) do
             v:Spawn()

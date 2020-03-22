@@ -39,14 +39,7 @@ function GM:PlayerSelectSpawn(ply, transition)
         GAMEMODE:LoadSpawnpoints()
     end
 
-    local region = 'generic'
-    if GAMEMODE.ForceSpawnRegion then
-        region = GAMEMODE.ForceSpawnRegion
-    elseif GAMEMODE.CurrentModifier then
-        if GAMEMODE.CurrentModifier.Region then
-            region = GAMEMODE.CurrentModifier.Region
-        end
-    end
+    local region = GAMEMODE.CurrentRegion or 'generic'
 
     -- Iterate over the spawnpoints in a random order until we find a suitable one
     local spawntable = GAMEMODE.Spawnpoints[region]
