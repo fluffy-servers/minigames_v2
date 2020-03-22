@@ -16,6 +16,12 @@ local function spawnDisc(pos, color)
     return ent
 end
 
+local function giveCrowbars()
+    for k,v in pairs(player.GetAll()) do
+        v:Give('weapon_crowbar')
+    end
+end
+
 function MOD:SpawnCircles()
     local positions = GAMEMODE:GetRandomLocations(6, 'ground')
     local colors = table.Shuffle(self.Colors)
@@ -32,12 +38,9 @@ function MOD:Initialize()
     GAMEMODE:Announce("Don't stop moving!")
 
     timer.Create("DiscTimer", 5, 1, function()
+        giveCrowbars()
         self:SpawnCircles()
     end)
-end
-
-function MOD:Loadout(ply)
-    ply:Give('weapon_crowbar')
 end
 
 function MOD:Cleanup()

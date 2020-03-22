@@ -23,10 +23,18 @@ local function spawnChairs()
     end
 end
 
+local function giveGravityGuns()
+    if math.random() < 0.5 then return end
+    for k,v in pairs(player.GetAll()) do
+        v:Give('weapon_physcannon')
+    end
+end
+
 function MOD:Initialize()
     GAMEMODE:Announce("Don't stop moving!")
     timer.Create("MusicalChairsTimer", 5, 1, function()
         spawnChairs()
+        giveGravityGuns()
         GAMEMODE:Announce("Musical Chairs", "Get in a chair, quick!")
     end)
 end

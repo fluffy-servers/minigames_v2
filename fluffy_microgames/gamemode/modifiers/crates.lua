@@ -37,3 +37,12 @@ function MOD:PropBreak(ply, prop)
     if ply.BrokeCrate then return end
     ply.BrokeCrate = true
 end
+
+function MOD:EntityTakeDamage(ent, dmg)
+    if not ent:IsPlayer() then return end
+    if not dmg:GetAttacker():IsPlayer() then return end
+    
+    dmg:SetDamage(0)
+    local v = dmg:GetDamageForce()
+    ent:SetVelocity(v * 15)
+end

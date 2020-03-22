@@ -15,7 +15,7 @@ function GM:CrowbarKnockback(ent, dmg)
     
     dmg:SetDamage(0)
     local v = dmg:GetDamageForce()
-    ent:SetVelocity(v * 100)
+    ent:SetVelocity(v * 35)
 end
 
 -- Players can't stop moving for the first 5 seconds

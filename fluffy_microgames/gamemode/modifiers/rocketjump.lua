@@ -28,7 +28,7 @@ end
 
 function MOD:EntityTakeDamage(ply, dmg)
     dmg:SetDamage(0)
-    ply:SetVelocity(dmg:GetDamageForce() * 0.025)
+    ply:SetVelocity(dmg:GetDamageForce() * 0.0225)
 end
 
 function MOD:PlayerFinish(ply)

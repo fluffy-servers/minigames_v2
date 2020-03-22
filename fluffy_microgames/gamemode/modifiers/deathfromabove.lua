@@ -1,7 +1,7 @@
 MOD.Name = 'Death from Above'
 
 local function spawnBarrels()
-    local number = GAMEMODE:PlayerScale(0.3, 2, 5)
+    local number = GAMEMODE:PlayerScale(0.4, 3, 6)
     local positions = GAMEMODE:GetRandomLocations(number, 'sky')
 
     for i=1,number do
@@ -13,8 +13,8 @@ local function spawnBarrels()
         ent:Spawn()
 
         -- Add some downwards force to each barrel
-        local vel = VectorRand() * math.random(400, 800)
-        vel.z = -math.abs(vel.z)
+        local vel = VectorRand() * math.random(800, 1200)
+        vel.z = -math.abs(vel.z) * 0.1
         ent:GetPhysicsObject():SetVelocity(vel)
     end
 end
@@ -33,7 +33,7 @@ function MOD:EntityTakeDamage(ent, dmg)
     if not dmg:IsExplosionDamage() then return true end
 end
 
-MOD.ThinkTime = 1.5
+MOD.ThinkTime = 1
 function MOD:Think()
     spawnBarrels()
 end
