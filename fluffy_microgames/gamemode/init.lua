@@ -31,9 +31,9 @@ function GM:PreStartRound()
     end
     
     -- Set global round data
-    SetGlobalInt('RoundNumber', round + 1 )
-    SetGlobalString( 'RoundState', 'PreRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+    SetGlobalInt('RoundNumber', round + 1)
+    SetGlobalString('RoundState', 'PreRound')
+	SetGlobalFloat('RoundStart', CurTime())
     hook.Call('PreRoundStart')
     
     -- Respawn the dead
@@ -138,7 +138,7 @@ function GM:NewModifier()
     GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
 end
 
---Handles victory conditions for Free for All based gamemodes
+-- Handles victory conditions for Free for All based gamemodes
 function GM:HandleFFAWin(reason)
     local winner = nil -- Default: everyone sucks
     local msg = 'The round has ended!'
@@ -162,7 +162,7 @@ end
 
 -- Players cannot respawn in the middle of rounds
 function GM:CanRespawn(ply)
-    return (GetGlobalString('RoundState') != 'InRound')
+    return (GetGlobalString('RoundState') == 'PreRound')
 end
 
 -- Helper function to relay announcements

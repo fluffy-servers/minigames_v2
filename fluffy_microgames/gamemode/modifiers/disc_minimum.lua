@@ -59,11 +59,8 @@ function MOD:Cleanup()
             min_players = v
         elseif #v == min then
             table.Add(min_players, v)
-            PrintTable(min_players)
         end
     end
-
-    PrintTable(min_players)
 
     -- Perform the final murder pass
     -- If everyone is on the same circle, punish them anyway
