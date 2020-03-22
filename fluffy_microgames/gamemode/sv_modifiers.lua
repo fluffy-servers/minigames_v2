@@ -31,6 +31,17 @@ function GM:RunFiveSeconds()
     end
 end
 
+GM.DiscColors = {
+    {"Red", Color(255, 0, 0)},
+    {"Orange", Color(255, 100, 0)},
+    {"Yellow", Color(255, 255, 0)},
+    {"Green", Color(0, 255, 0)},
+    {"Light Blue", Color(0, 255, 255)},
+    {"Dark Blue", Color(0, 0, 255)},
+    {"Purple", Color(100, 0, 255)},
+    {"Pink", Color(255, 0, 255)}
+}
+
 local modifier_properties = {
     ['Initialize'] = true,
     ['Loadout'] = true,

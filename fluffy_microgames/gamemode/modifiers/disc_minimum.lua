@@ -1,12 +1,4 @@
 MOD.Name = 'Disc Balance'
-MOD.Colors = {
-    Color(231, 76, 60),
-    Color(230, 126, 34),
-    Color(241, 196, 15),
-    Color(46, 204, 113),
-    Color(52, 152, 219),
-    Color(155, 89, 182)
-}
 MOD.Countdown = true
 
 local function spawnDisc(pos, color)
@@ -20,10 +12,10 @@ end
 function MOD:SpawnCircles()
     local number = GAMEMODE:PlayerScale(0.3, 2, 5)
     local positions = GAMEMODE:GetRandomLocations(number, 'ground')
-    local colors = table.Shuffle(self.Colors)
+    local colors = table.Shuffle(GAMEMODE.DiscColors)
     GAMEMODE.Circles = {}
     for i=1,number do
-        local circle = spawnDisc(positions[i], colors[i])
+        local circle = spawnDisc(positions[i], colors[i][2])
         table.insert(GAMEMODE.Circles, circle)
     end
 end
