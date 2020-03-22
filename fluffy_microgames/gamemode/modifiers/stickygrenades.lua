@@ -1,5 +1,6 @@
 MOD.Name = 'Sticky Grenades'
 MOD.Elimination = true
+MOD.Region = 'empty'
 
 function MOD:Initialize()
     GAMEMODE:Announce("Sticky Grenades", "Just to clarify: you are sticky")

@@ -2,7 +2,7 @@ MOD.Name = 'Antlionguard 2: Electric Boogaloo'
 MOD.Region = 'empty'
 
 local function spawnAntlionGuard()
-    local number = GAMEMODE:PlayerScale(0.75, 4, 10)
+    local number = GAMEMODE:PlayerScale(0.75, 5, 16)
     local positions = GAMEMODE:GetRandomLocations(number, 'ground')
 
     for i=1,number do
