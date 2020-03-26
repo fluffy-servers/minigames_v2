@@ -14,18 +14,32 @@ hook.Add('Think', 'MinigamesRoundThink', function()
     -- Check if the game is ready to start
     if GAMEMODE:GetRoundState() == 'GameNotStarted' then
         if GAMEMODE:CanRoundStart() then
-            -- Store the starting time of the game for TIMED gamemodes
-            -- Timed gamemodes don't have a fixed number of rounds
-            if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
-                SetGlobalFloat('GameStartTime', CurTime())
-            end
-            GAMEMODE:PreStartRound()
+            -- Transition into a warmup period before all goes well
+            GAMEMODE:SetRoundState('Warmup')
+            SetGlobalFloat('WarmupTime', CurTime())
+            timer.Simple(GAMEMODE.StartWaitTime, function() GAMEMODE:StartGame() end)
         end
     elseif GAMEMODE:GetRoundState() == 'InRound' then
         -- Delegate this to each gamemode (defaults are provided lower down for reference)
         GAMEMODE:CheckRoundEnd()
     end
 end)
+
+-- Waiting cooldown period has now ended, start the game proper
+function GM:StartGame()
+    if not GAMEMODE:CanRoundStart() then
+        -- Uh oh, something went wrong in the cooldown period
+        GAMEMODE:SetRoundState('GameNotStarted')
+        return
+    end
+
+    -- Store the starting time of the game for TIMED gamemodes
+    -- Timed gamemodes don't have a fixed number of rounds
+    if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
+        SetGlobalFloat('GameStartTime', CurTime())
+    end
+    GAMEMODE:PreStartRound()
+end
 
 -- Check if there enough players to start a round
 function GM:CanRoundStart()

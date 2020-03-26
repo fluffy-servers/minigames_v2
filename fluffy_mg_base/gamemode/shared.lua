@@ -31,6 +31,7 @@ GM.AutoRespawn = true   -- Should players automatically respawn?
 GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?
+GM.StartWaitTime = 10
 
 GM.RoundType = 'default'    -- What system should be used for game/round logic?
 GM.GameTime = 600           -- If not using rounds, how long should the game go for?
@@ -189,6 +190,10 @@ end
 -- Much nicer wrapper for this function
 function GM:GetRoundState()
     return GetGlobalString('RoundState', 'GameNotStarted')
+end
+
+function GM:SetRoundState(newstate)
+    return SetGlobalString('RoundState', newstate)
 end
 
 -- This is the most common use of the above function
