@@ -2,6 +2,10 @@ SWEP.Base = 'weapon_mg_shotgun'
 SWEP.PrintName = "Super Shotgun"
 SWEP.Knockback = 425
 
+if CLIENT then
+    killicon.AddFont("super_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
+end
+
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 15
 SWEP.Primary.Cone = 0.1
