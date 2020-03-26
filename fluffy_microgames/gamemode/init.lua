@@ -78,7 +78,7 @@ end
 -- End a round and check subgame functionality
 function GM:EndRound(reason)
     -- Check that we're in a round
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
 
@@ -162,7 +162,7 @@ end
 
 -- Players cannot respawn in the middle of rounds
 function GM:CanRespawn(ply)
-    return (GetGlobalString('RoundState') == 'PreRound')
+    return (GAMEMODE:GetRoundState() == 'PreRound')
 end
 
 -- Helper function to relay announcements

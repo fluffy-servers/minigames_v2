@@ -158,7 +158,7 @@ local fast_hud = CreateClientConVar("minigames_fast_hud", "0", true, false, "Set
 -- Draw the state of the round, including time and round number etc.
 -- This is in the top left corner
 function GM:DrawRoundState()
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     -- Draw a notification if not enough players are in the game
     if GAME_STATE == 'GameNotStarted' then
         GAMEMODE:DrawShadowText('Waiting for Players...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
@@ -196,7 +196,7 @@ end
 -- Includes a countdown timer for each round + round number indicator
 function GM:RoundStateDefault()
     -- Get round information
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local RoundTime = GetGlobalFloat('RoundStart')
     
     -- Draw the cool round timer
@@ -261,7 +261,7 @@ function GM:RoundStateWithTimer()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
     -- Get round information
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local RoundTime = GetGlobalFloat('RoundStart')
     local GameTime = GetGlobalFloat('GameStartTime')
 
@@ -324,7 +324,7 @@ end
 function GM:RoundStateTimerOnly()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local GameTime = GetGlobalFloat('GameStartTime')
     
     if !GameTime then return end
@@ -359,7 +359,7 @@ end
 function GM:RoundStateTimerTeamScore()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local GameTime = GetGlobalFloat('GameStartTime')
     
     if !GameTime then return end

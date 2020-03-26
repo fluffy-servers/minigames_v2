@@ -219,7 +219,7 @@ end
 
 -- Think hook with built-in delay
 hook.Add('Think', 'ModifierThinkLoop', function()
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
 
     if GAMEMODE.CurrentModifier.Think then
         if CurTime() < GAMEMODE.LastThink + (GAMEMODE.CurrentModifier.ThinkTime or 0) then return end

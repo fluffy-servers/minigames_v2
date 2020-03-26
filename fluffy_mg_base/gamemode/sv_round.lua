@@ -19,7 +19,7 @@ hook.Add('Think', 'MinigamesRoundThink', function()
             SetGlobalFloat('WarmupTime', CurTime())
             timer.Simple(GAMEMODE.WarmupTime, function() GAMEMODE:StartGame() end)
         end
-    elseif GAMEMODE:GetRoundState() == 'InRound' then
+    elseif GAMEMODE:InRound() then
         -- Delegate this to each gamemode (defaults are provided lower down for reference)
         GAMEMODE:CheckRoundEnd()
     end
@@ -157,7 +157,7 @@ end
 -- End the round
 function GM:EndRound(reason, extra)
     -- Check that we're in a round
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
     

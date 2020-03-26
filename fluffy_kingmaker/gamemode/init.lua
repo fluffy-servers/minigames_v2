@@ -85,7 +85,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
     
     -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     ply:AddStatPoints('Deaths', 1)
     
@@ -109,7 +109,7 @@ hook.Add('PreRoundStart', 'ResetKing', function()
 end)
 
 hook.Add('Think', 'KingTimer', function()
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if GAMEMODE.LastKingThink and CurTime() >= GAMEMODE.LastKingThink+1 then
         if IsValid(GAMEMODE.CurrentKing) then
             GAMEMODE.CurrentKing:AddFrags(1)

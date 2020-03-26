@@ -15,7 +15,7 @@ end
 -- Used as a replacement to slightly broken spectating
 function GM:PlayerDeathThink(ply)
     -- If outside of round, respawn dead players as spectators
-    if not GAMEMODE:IsInRound() then
+    if not GAMEMODE:InRound() then
         GAMEMODE:PlayerSpawnAsSpectator(ply)
         return
     end

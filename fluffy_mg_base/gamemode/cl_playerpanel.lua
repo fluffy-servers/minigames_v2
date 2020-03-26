@@ -18,7 +18,7 @@ function GM:CreateInfoFrame()
     f.CreationTime = CurTime()
     
     f.Think = function(self)
-        local state = GetGlobalString('RoundState', 'GameNotStarted')
+        local state = GAMEMODE:GetRoundState()
         if state == 'GameNotStarted' then
             f:ShowCloseButton(false)
         else

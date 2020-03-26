@@ -6,7 +6,7 @@ include('shared.lua')
 -- Called each time a player spawns
 -- Overrides the base gamemode stuff
 function GM:PlayerSpawn( ply )
-    local state = GetGlobalString('RoundState', 'GameNotStarted')
+    local state = GAMEMODE:GetRoundState()
     
     -- If elimination, block respawns during round
     if state != 'PreRound' and (GAMEMODE.Elimination == true and not ply.DeathPos) then
@@ -161,7 +161,7 @@ end)
 
 -- If killed by another player, enter ghost mode before dying
 hook.Add('PlayerDeath', 'PaintballDeath', function(ply, inflictor, attacker)
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
     if ply:GetNWBool('IsGhost', false) or not attacker:IsPlayer() then
         GAMEMODE:PulseAnnouncement(2, (ply:Nick() or '?') .. ' has been eliminated', 0.8)

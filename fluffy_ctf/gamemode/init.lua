@@ -21,7 +21,7 @@ end
 function GM:SpawnFlag()
     local flag = ents.Create('ctf_flag')
     if not IsValid(flag) then return end
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
 	-- If the spawn position is not yet defined, find it
     if not GAMEMODE.FlagSpawnPosition then
@@ -69,7 +69,7 @@ end
 
 -- Triggered when a goal is scored
 function GM:ScoreGoal(team, entity)
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
     local message = nil
     -- Bonus to the person who scores the capture

@@ -66,7 +66,7 @@ end
 -- Make platforms take damage when someone is touching them
 function ENT:Touch(ent)
     -- 3 seconds of spawn protection in rounds
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if GAMEMODE:GetRoundStartTime() + 3 > CurTime() then return end
     
     -- Only living players make the platforms fall

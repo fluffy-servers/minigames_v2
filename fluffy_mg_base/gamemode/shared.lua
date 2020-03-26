@@ -198,7 +198,7 @@ end
 
 -- This is the most common use of the above function
 -- Helps clean up code
-function GM:IsInRound()
+function GM:InRound()
     return (GAMEMODE:GetRoundState() == 'InRound')
 end
 

@@ -85,7 +85,7 @@ function GM:PlayerSpawn(ply)
         
         -- Calculate time to be in god mode for
         local god_time = GAMEMODE.SpawnProtectionTime or 3
-        if GAMEMODE:GetRoundState() != 'InRound' then 
+        if not GAMEMODE:InRound() then 
             god_time = god_time + GAMEMODE.RoundCooldown
         end
         
@@ -186,7 +186,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
 
     -- Do not count deaths unless in round
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     

@@ -19,7 +19,7 @@ end
 
 -- Calculations to check player scoring based on height
 function GM:PlayerTick(ply)
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
     local z = ply:GetPos().z
     if not z then return end
@@ -69,7 +69,7 @@ end)
 -- Function to be called when a player wins the round
 -- This should only occur for the first player to reach the top
 function GM:ClimbVictory(ply)
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
     ply:AddFrags(3)
     ply.BestHeight = GAMEMODE.CurrentHeight
