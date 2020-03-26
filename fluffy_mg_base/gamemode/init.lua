@@ -104,6 +104,7 @@ end
 function GM:PlayerInitialSpawn(ply)
     -- Nobody can spawn unless allowed to later
     ply:KillSilent()
+    ply.FirstSpawn = true
 
     -- Set teams to unassigned if the gamemode is not team based
     if not GAMEMODE.TeamBased then
@@ -119,6 +120,14 @@ function GM:PlayerInitialSpawn(ply)
         ply:ConCommand("minigames_info")
     end
 end
+
+-- Ensure that players really stay dead
+hook.Add('PlayerSpawn', 'KeepInitialDead', function(ply)
+    if ply.FirstSpawn then
+        ply.FirstSpawn = nil
+        ply:KillSilent()
+    end
+end)
 
 -- Check for server autorestart situations
 -- This reloads the map if the server is currently empty and has been up for more than 2 hours
@@ -157,6 +166,18 @@ function GM:PlayerRequestTeam(ply, teamid)
         return
     end
 	GAMEMODE:PlayerJoinTeam(ply, teamid)
+end
+
+function GM:OnPlayerChangedTeam(ply, old, new)
+    -- Spectators respawn in place
+    if new == TEAM_SPECTATOR then
+        local pos = ply:EyePos()
+        print('SPECTATOR RESPAWN', ply)
+        ply:Spawn()
+        ply:SetPos(pos)
+    end
+
+    PrintMessage(HUD_PRINTTALK, Format("%s joined '%s'", ply:Nick(), team.GetName(new)))
 end
 
 -- Disable friendly fire

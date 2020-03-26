@@ -20,6 +20,8 @@ function GM:PlayerDeathThink(ply)
         return
     end
 
+    if ply.Spectating then return end
+
     ply.DeathTime = ply.DeathTime or CurTime()
     local t = CurTime() - ply.DeathTime
     
