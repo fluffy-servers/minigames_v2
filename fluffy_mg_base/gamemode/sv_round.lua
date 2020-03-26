@@ -17,7 +17,7 @@ hook.Add('Think', 'MinigamesRoundThink', function()
             -- Transition into a warmup period before all goes well
             GAMEMODE:SetRoundState('Warmup')
             SetGlobalFloat('WarmupTime', CurTime())
-            timer.Simple(GAMEMODE.StartWaitTime, function() GAMEMODE:StartGame() end)
+            timer.Simple(GAMEMODE.WarmupTime, function() GAMEMODE:StartGame() end)
         end
     elseif GAMEMODE:GetRoundState() == 'InRound' then
         -- Delegate this to each gamemode (defaults are provided lower down for reference)

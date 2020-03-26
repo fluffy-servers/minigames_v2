@@ -159,9 +159,17 @@ local fast_hud = CreateClientConVar("minigames_fast_hud", "0", true, false, "Set
 -- This is in the top left corner
 function GM:DrawRoundState()
     local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
-    -- Only draw this if the game hasn't yet started
+    -- Draw a notification if not enough players are in the game
     if GAME_STATE == 'GameNotStarted' then
         GAMEMODE:DrawShadowText('Waiting for Players...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        return
+    end
+
+    -- Draw a warmup timer if the game is starting soon
+    if GAME_STATE == 'Warmup' then
+        local start_time = GetGlobalFloat('WarmupTime', CurTime())
+        local t = GAMEMODE.WarmupTime - (CurTime() - start_time)
+        GAMEMODE:DrawShadowText('Round starting in ' .. math.ceil(t) .. '...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
     

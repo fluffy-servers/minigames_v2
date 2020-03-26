@@ -31,7 +31,7 @@ GM.AutoRespawn = true   -- Should players automatically respawn?
 GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?
-GM.StartWaitTime = 10
+GM.WarmupTime = 10      -- How long to wait for players to join before starting the game?
 
 GM.RoundType = 'default'    -- What system should be used for game/round logic?
 GM.GameTime = 600           -- If not using rounds, how long should the game go for?
