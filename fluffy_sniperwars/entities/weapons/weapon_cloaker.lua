@@ -1,12 +1,8 @@
-AddCSLuaFile()
+SWEP.Base = 'weapon_mg_base'
 
 if CLIENT then
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "H"
-    
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
-	end
 end
 
 -- Menu data

@@ -1,14 +1,10 @@
-SWEP.Base = "weapon_mg_base"
+SWEP.Base = 'weapon_mg_base'
 
 if CLIENT then
-    killicon.AddFont('sw_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
-    
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "r"
     
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
-	end
+    killicon.AddFont('sw_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
 end
 
 -- Model information
@@ -21,6 +17,7 @@ SWEP.WorldModel = "models/weapons/w_snip_awp.mdl"
 SWEP.UseHands = true
 SWEP.Slot = 0
 SWEP.DrawCrosshair = false
+SWEP.StableAccuracy = true
 
 -- Primary information
 SWEP.Primary.Sound = Sound("npc/sniper/echo1.wav")
@@ -109,15 +106,7 @@ end
 
 -- Useful function for shooting bullets
 function SWEP:ShootBullets(damage, number, aimcone, numtracer, tracername)
-    -- Spread penalty for moving
-    if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
-        aimcone = aimcone * 2.5
-    end
-    
-    -- Accuracy increase for crouching or walking
-    if self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
-        aimcone = math.Clamp(aimcone/2.5, 0, 10)
-    end
+
     
     -- Create the bullet table
     local bullet = {}

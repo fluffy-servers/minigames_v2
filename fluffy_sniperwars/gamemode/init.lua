@@ -9,7 +9,7 @@ function GM:PlayerLoadout(ply)
     ply:Give('weapon_cloaker')
     ply:Give('weapon_mg_knife')
     ply:Give('weapon_mg_pistol')
-    ply:Give('sw_sniper')
+    ply:Give('weapon_mg_sniper')
     ply:GiveAmmo(512, 'Pistol', true)
     
     ply:SetNoDraw(false)
@@ -17,7 +17,7 @@ function GM:PlayerLoadout(ply)
     ply:SetWalkSpeed(325)
 
     -- Select the sniper rifle on spawn
-    ply:SelectWeapon('sw_sniper')
+    ply:SelectWeapon('weapon_mg_sniper')
 end
 
 -- Add frags to player & team when someone dies

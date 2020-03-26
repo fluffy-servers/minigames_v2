@@ -1,3 +1,5 @@
+SWEP.Base = 'weapon_mg_base'
+
 if SERVER then
 	SWEP.Weight				= 5
 	SWEP.AutoSwitchTo		= false
@@ -9,11 +11,10 @@ if CLIENT then
 	SWEP.ViewModelFlip		= false
 	SWEP.Slot				= 2
 	SWEP.SlotPos			= 0
+
+	SWEP.IconLetter = 'j'
+	SWEP.IconFont = 'CSSelectIcons'
     killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color( 255, 80, 0, 255 ))
-    
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText('j', "CSSelectIcons", x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
-	end
 end
 SWEP.PrintName			= "Knife" 
 
