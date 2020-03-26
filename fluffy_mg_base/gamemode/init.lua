@@ -100,21 +100,25 @@ function GM:PlayerSpawn(ply)
     end
 end
 
--- Open up team menu
-hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
+-- Minigames team preparation
+function GM:PlayerInitialSpawn(ply)
+    -- Nobody can spawn unless allowed to later
     ply:KillSilent()
-    
+
+    -- Set teams to unassigned if the gamemode is not team based
+    if not GAMEMODE.TeamBased then
+        ply:SetTeam(TEAM_UNASSIGNED)
+        return
+    end
+
     -- Assign teams
+    -- Bots get automatically assigned, players get to choose
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
     else
         ply:ConCommand("minigames_info")
     end
-    
-    if not GAMEMODE.TeamBased then
-        ply:SetTeam(TEAM_UNASSIGNED)
-    end
-end)
+end
 
 -- Check for server autorestart situations
 -- This reloads the map if the server is currently empty and has been up for more than 2 hours
