@@ -4,7 +4,7 @@ if CLIENT then
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "r"
     
-    killicon.AddFont('sw_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
+    killicon.AddFont('weapon_mg_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
 end
 
 -- Model information
@@ -94,7 +94,7 @@ function SWEP:PrimaryAttack()
     self:ZoomOut()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:EmitSound(self.Primary.Sound, 100, math.random(95, 105))
-    self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, 1, 'line_tracer')
+    self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, 'line_tracer')
     self:TakePrimaryAmmo(1)
     
     if SERVER then
@@ -102,28 +102,6 @@ function SWEP:PrimaryAttack()
         local strength2 = math.Rand(-0.15, 0.15) * self.Primary.Recoil
         self.Owner:ViewPunch(Angle(strength1, strength2, 0))
     end
-end
-
--- Useful function for shooting bullets
-function SWEP:ShootBullets(damage, number, aimcone, numtracer, tracername)
-
-    
-    -- Create the bullet table
-    local bullet = {}
-    bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
-    bullet.Spread = Vector(scale, scale, 0)
-    bullet.Force = math.Round(damage * 2)
-    bullet.Damage = math.Round(damage)
-    bullet.AmmoType = 'Pistol'
-    bullet.Tracer = 1
-    bullet.TracerName = 'line_tracer'
-    
-    self.Owner:FireBullets(bullet)
-    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    self.Owner:MuzzleFlash()
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 -- Handle scope in logic on right click
