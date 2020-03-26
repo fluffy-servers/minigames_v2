@@ -275,7 +275,7 @@ function PANEL:DoClick()
     else
         -- Add equip button
         local text = "Equip"
-        if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] == true then text = "Unequip" end
+        if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] then text = "Unequip" end
         Menu:AddOption(text, function() SHOP:RequestEquip(self.key) end):SetIcon("icon16/wrench.png")
     end
     
@@ -330,7 +330,7 @@ function PANEL:PaintOver(w, h)
 	end
 	
     -- Draw tick mark if equipped
-	if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] == true then
+	if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] then
 		surface.SetMaterial(icons['equipped'])
 		surface.DrawTexturedRect(w - 16, yy, 16, 16)
 		yy = yy + 16

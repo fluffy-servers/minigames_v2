@@ -27,7 +27,7 @@ GM.CurrentPropsCategory = 'Both'
 -- Spawns props at the top of the slope at a fixed interval
 INCPropSpawnTimer = 0
 hook.Add("Tick", "TickPropSpawn", function()
-    if GetGlobalString('RoundState') != 'InRound' then return end -- don't spawn props after the round
+    if not GAMEMODE:InRound() then return end -- don't spawn props after the round
     
     -- Get information from the currently selected props category
     -- See sv_maps for the prop data

@@ -51,7 +51,7 @@ function GM:PlayerSpawn(ply)
     local state = GAMEMODE:GetRoundState()
     
     -- If elimination, block respawns during round
-    if state != 'PreRound' and GAMEMODE.Elimination == true then
+    if state != 'PreRound' and GAMEMODE.Elimination then
         self:PlayerSpawnAsSpectator(ply)
         return
     end

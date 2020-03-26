@@ -474,7 +474,7 @@ function GM:DrawAmmo()
     -- Grab the current weapon
     local wep = LocalPlayer():GetActiveWeapon()
     if !IsValid(wep) then return end
-    if wep.DrawAmmo == false then return end
+    if not wep.DrawAmmo then return end
     
     -- Get the ammo information from the gun
     -- There's a lot of unusual cases here that could be handled better in futures
@@ -490,7 +490,7 @@ function GM:DrawAmmo()
     if wep.CustomAmmoDisplay then
         if wep:CustomAmmoDisplay() != nil then 
             ammo = wep:CustomAmmoDisplay()
-            if ammo.Draw == false then return end
+            if not ammo.Draw then return end
         end
     end
     
