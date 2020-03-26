@@ -4,11 +4,11 @@
 --]]
 
 -- Make new players join the Hunter team on connection
-function GM:PlayerInitialSpawn(ply)
+hook.Add('PlayerInitialSpawn', 'HunterTeamAssignment', function(ply)
     if GAMEMODE.TeamSurvival and GAMEMODE.HunterTeam then
         ply:SetTeam(GAMEMODE.HunterTeam)
     end
-end
+end)
 
 -- If team survival pick one player to be a hunter
 hook.Add('PreRoundStart', 'SurvivalPickHunter', function()

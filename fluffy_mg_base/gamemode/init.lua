@@ -102,6 +102,8 @@ end
 
 -- Open up team menu
 hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
+    ply:KillSilent()
+    
     -- Assign teams
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
