@@ -1,4 +1,4 @@
-AddCSLuaFile()
+SWEP.Base = "weapon_mg_base"
 
 -- Use an RPG model for the weapon
 -- Look it's good enough okay

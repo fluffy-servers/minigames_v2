@@ -1,4 +1,4 @@
-DEFINE_BASECLASS "weapon_mg_base"
+SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
 	SWEP.Slot = 2

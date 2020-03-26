@@ -1,4 +1,4 @@
-DEFINE_BASECLASS "weapon_mg_base"
+SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
 	SWEP.Slot = 1
@@ -13,9 +13,9 @@ end
 SWEP.PrintName = "Pistol"
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 30
+SWEP.Primary.Damage = 20
 SWEP.Primary.Cone = 0.015
-SWEP.Primary.Delay = 0.175
+SWEP.Primary.Delay = 0.1
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Sound = Sound("Weapon_Pistol.Single")
 SWEP.Primary.Recoil = 1
@@ -24,7 +24,7 @@ SWEP.Primary.Recoil = 1
 SWEP.Primary.ClipSize = 12
 SWEP.Primary.DefaultClip = 12
 SWEP.Primary.Ammo = "Pistol"
-SWEP.Primary.Automatic = true
+SWEP.Primary.Automatic = false
 SWEP.Secondary.Automatic = true -- ???
 
 -- Set the model for the gun

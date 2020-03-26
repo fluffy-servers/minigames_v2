@@ -7,14 +7,12 @@ end
 if CLIENT then
 	SWEP.ViewModelFOV		= 65
 	SWEP.ViewModelFlip		= false
-	SWEP.CSMuzzleFlashes	= true
 	SWEP.Slot				= 2
 	SWEP.SlotPos			= 0
     killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color( 255, 80, 0, 255 ))
-    surface.CreateFont("CSSelectIcons", { font="csd", size=ScreenScale(60) } )
     
     function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText('j', "CSSelectIcons", x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
+		draw.SimpleText('j', "CSSelectIcons", x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
 	end
 end
 SWEP.PrintName			= "Knife" 

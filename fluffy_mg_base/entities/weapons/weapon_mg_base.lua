@@ -2,6 +2,8 @@ if CLIENT then
 	SWEP.PrintName = "Base Weapon"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
+
+	surface.CreateFont("CSSelectIcons", {font="csd", size=72})
 end
 
 -- Primary fire damage and aim settings
