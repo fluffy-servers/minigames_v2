@@ -250,7 +250,7 @@ function GM:RoundStateDefault()
     end
     
     -- Draw the time text
-    GAMEMODE:DrawShadowText(math.floor(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(math.ceil(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the round information
     GAMEMODE:DrawShadowText(round_message, 'FS_24', c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -312,7 +312,7 @@ function GM:RoundStateWithTimer()
     end
     
     -- Draw the time text
-    GAMEMODE:DrawShadowText(math.floor(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(math.ceil(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
     -- Draw the round information
     GAMEMODE:DrawShadowText(round_message, 'FS_24', c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
