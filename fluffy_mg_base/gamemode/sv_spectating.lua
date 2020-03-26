@@ -14,13 +14,20 @@ end
 -- Death thinking hook
 -- Used as a replacement to slightly broken spectating
 function GM:PlayerDeathThink(ply)
+    -- If outside of round, respawn dead players as spectators
+    if not GAMEMODE:IsInRound() then
+        GAMEMODE:PlayerSpawnAsSpectator(ply)
+        return
+    end
+
     ply.DeathTime = ply.DeathTime or CurTime()
     local t = CurTime() - ply.DeathTime
     
     -- Move players to spectate mode
     local dlt = GAMEMODE.DeathLingerTime or -1
     if dlt > 0 and t > dlt and ply:GetObserverMode() != OBS_MODE_ROAMING then
-        ply:Spectate(OBS_MODE_ROAMING)
+        GAMEMODE:PlayerSpawnAsSpectator(ply)
+        return
     end
     
     -- Make sure players can respawn
