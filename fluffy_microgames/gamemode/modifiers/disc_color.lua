@@ -14,7 +14,7 @@ local function giveCrowbars()
     end
 end
 
-function MOD:SpawnCircles()
+function MOD:Initialize()
     local positions = GAMEMODE:GetRandomLocations(6, 'ground')
     local colors = table.Shuffle(GAMEMODE.DiscColors)
     GAMEMODE.CorrectCircle = spawnDisc(positions[1], colors[1][2])
@@ -26,18 +26,11 @@ function MOD:SpawnCircles()
     GAMEMODE:Announce("Get on the " .. goal .. " circle!")
 end
 
-function MOD:Initialize()
-    GAMEMODE:Announce("Don't stop moving!")
-
-    timer.Create("DiscTimer", 5, 1, function()
-        giveCrowbars()
-        self:SpawnCircles()
-    end)
+function MOD:Loadout(ply)
+    ply:Give('weapon_crowbar')
 end
 
 function MOD:Cleanup()
-    timer.Destroy("DiscTimer")
-
     if GAMEMODE:GetNumberAlive() >= 1 then
         local winning_players = GAMEMODE.CorrectCircle:GetPlayers()
         for k,v in pairs(winning_players) do
@@ -57,5 +50,4 @@ function MOD:PlayerFinish(ply)
 end
 
 MOD.ThinkTime = 0.1
-MOD.Think = GM.RunFiveSeconds
 MOD.EntityTakeDamage = GM.CrowbarKnockback

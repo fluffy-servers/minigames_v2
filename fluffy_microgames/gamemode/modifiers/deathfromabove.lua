@@ -1,5 +1,4 @@
 MOD.Name = 'Death from Above'
-MOD.Region = 'empty'
 
 local function spawnBarrels()
     local number = GAMEMODE:PlayerScale(0.4, 3, 6)
