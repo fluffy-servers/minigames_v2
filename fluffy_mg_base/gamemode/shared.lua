@@ -179,12 +179,21 @@ function GM:NumNonSpectators()
 end
 
 -- Convenience function to get number of living players in a team
-function GM:GetTeamLivingPlayers( t )
+function GM:GetTeamLivingPlayers(t)
     local alive = 0
-    for k,v in pairs( team.GetPlayers( t ) ) do
+    for k,v in pairs(team.GetPlayers(t)) do
         if v:Alive() and !v.Spectating then alive = alive + 1 end
     end
     return alive
+end
+
+function GM:GetTeamSurvivors(t)
+    local tbl = {}
+    for k,v in pairs(team.GetPlayers(t)) do
+        if v:Alive() and !v.Spectating then table.insert(tbl, v) end
+    end
+    
+    return tbl
 end
 
 -- Much nicer wrapper for this function
