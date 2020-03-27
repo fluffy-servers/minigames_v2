@@ -6,10 +6,9 @@ if CLIENT then
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
 
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText('.', "HL2MPTypeDeath", x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
-	end
-    
+	SWEP.IconLetter = '.'
+	SWEP.IconFont = 'HL2MPTypeDeath'
+	
     killicon.AddFont("oitc_gun", "HL2MPTypeDeath", ".", Color(255, 80, 0, 255))
 end
 

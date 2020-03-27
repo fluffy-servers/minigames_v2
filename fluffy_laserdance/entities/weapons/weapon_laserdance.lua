@@ -1,13 +1,12 @@
 SWEP.Base = 'weapon_mg_base'
-
+	
 if CLIENT then
-	-- Define the name and slot clientside
-	SWEP.PrintName = "Laser Dance Cannon"
-	SWEP.Slot = 0
-	SWEP.SlotPos = 0
-	SWEP.IconLetter = "f"
-    killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
+	SWEP.IconLetter = '.'
+	SWEP.IconFont = 'HL2MPTypeDeath'
+	killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
 end
+
+SWEP.PrintName = 'Laser Cannon'
 
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 1000

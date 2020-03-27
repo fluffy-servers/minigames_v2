@@ -1,6 +1,9 @@
-AddCSLuaFile()
+SWEP.Base = 'weapon_mg_base'
 	
 if CLIENT then
+	SWEP.IconLetter = 'G'
+	SWEP.IconFont = 'CSSelectIcons'
+
     killicon.AddFont("bt_bomb", "HL2MPTypeDeath", "*", Color( 255, 80, 0, 255 ))
 end
 
