@@ -669,6 +669,7 @@ function GM:ScoreRefreshSort()
     
     -- Clear the current order
     GAMEMODE.ScorePane:Clear()
+    GAMEMODE.ScorePane.scores = scores
     
     -- math stuff
     local count = ScrW()*0.5 / 68
