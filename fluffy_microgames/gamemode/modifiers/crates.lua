@@ -43,6 +43,8 @@ function MOD:EntityTakeDamage(ent, dmg)
     if not dmg:GetAttacker():IsPlayer() then return end
     
     dmg:SetDamage(0)
-    local v = dmg:GetDamageForce()
-    ent:SetVelocity(v * 15)
+    local v = dmg:GetDamageForce():GetNormalized()
+    v.z = math.max(math.abs(v.z) * 0.5, 0.0025)
+    ent:SetGroundEntity(nil)
+    ent:SetVelocity(v * 800)
 end
