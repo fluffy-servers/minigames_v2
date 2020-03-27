@@ -35,9 +35,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     
-    -- Drop up to 15 balls, + up to 4 additional balls
-    local balls = math.min(ply:GetNWInt("Balls", 0), 15)
-    for i=math.random(-4, 0),balls do
+    -- Drop up to 10 balls, + some additional balls
+    local balls = math.min(ply:GetNWInt("Balls", 0), 10)
+    for i=math.random(-6, 3),balls do
 		local b = ents.Create('mg_ball_drop')
 		local p = ply:GetPos() + Vector(0, 0, 50)
 		local v = Vector( math.random(-40, 40), math.random(-40, 40), math.random(-40, 40) )
@@ -85,7 +85,7 @@ function GM:GetWinningPlayer()
     -- Loop through all players and return the one with the most balls
     local bestscore = 0
     local bestplayer = nil
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         local frags = v:GetNWInt("Balls")
         if frags > bestscore then
             bestscore = frags
