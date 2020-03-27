@@ -75,6 +75,7 @@ end)
 function GM:StatsRoundWin(winners)
     for k,v in pairs(player.GetAll()) do
         if v:Alive() and !v.Spectating then
+            v:AddFrags(2)
             GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
         end
     end
@@ -116,7 +117,7 @@ function GM:GetFallDamage()
 end
 
 -- Disable propkilling
-function GM:EntityTakeDamage(ent, dmginfo)
+function GM:EntityTakeDamage(ent, dmg)
     if IsValid(dmg:GetAttacker()) and dmg:GetAttacker():GetClass() == 'prop_physics' then
         return true
     end
