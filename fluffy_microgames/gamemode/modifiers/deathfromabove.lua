@@ -1,5 +1,7 @@
 MOD.Name = 'Death from Above'
 
+MOD.SurviveValue = 1
+
 local function spawnBarrels()
     local number = GAMEMODE:PlayerScale(0.4, 3, 6)
     local positions = GAMEMODE:GetRandomLocations(number, 'sky')

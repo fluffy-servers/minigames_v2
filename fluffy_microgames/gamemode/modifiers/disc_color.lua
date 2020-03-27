@@ -1,5 +1,7 @@
 MOD.Name = 'Colored Discs'
 
+MOD.SurviveValue = 2
+
 local function spawnDisc(pos, color)
     local ent = ents.Create('microgames_disc')
     ent:SetPos(pos)

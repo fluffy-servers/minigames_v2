@@ -1,6 +1,8 @@
 MOD.Name = "Rocket Jump!"
 MOD.Countdown = true
 
+MOD.SurviveValue = 2
+
 local function spawnPlatforms()
     local number = GAMEMODE:PlayerScale(0.3, 2, 25) + math.random(0, 2)
     local positions = GAMEMODE:GetRandomLocations(number, 'sky')

@@ -397,6 +397,7 @@ end
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
+    if !GAMEMODE:InRound() then return end
     
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)

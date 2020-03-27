@@ -1,6 +1,8 @@
 MOD.Name = 'Social Distancing'
 MOD.RoundTime = 5
 
+MOD.SurviveValue = 1
+
 function MOD:Initialize()
     GAMEMODE:Announce("Social Distancing", "Keep away from everyone else!")
 end

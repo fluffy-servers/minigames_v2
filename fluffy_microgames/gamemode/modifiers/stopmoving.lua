@@ -1,6 +1,8 @@
 MOD.Name = "Stop Moving"
 MOD.RoundTime = 1.5
 
+MOD.SurviveValue = 1
+
 function MOD:Initialize()
     GAMEMODE:Announce("Quick!", "Stop moving!")
 end

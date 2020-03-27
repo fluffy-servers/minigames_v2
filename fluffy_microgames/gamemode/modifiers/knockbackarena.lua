@@ -2,6 +2,8 @@ MOD.Name = "Knockback"
 MOD.Region = 'knockback'
 MOD.Elimination = true
 
+MOD.KillValue = 1
+
 function MOD:Initialize()
     GAMEMODE:Announce("Knockback", "Don't get punched off!")
 end
@@ -18,5 +20,5 @@ function MOD:EntityTakeDamage(ent, dmg)
     local v = dmg:GetDamageForce():GetNormalized()
     v.z = math.max(math.abs(v.z) * 0.3, 0.001)
     ent:SetGroundEntity(nil)
-    ent:SetVelocity(v * 800)
+    ent:SetVelocity(v * 1000)
 end

@@ -1,36 +1,3 @@
--- Award survival bonuses to any living players
-function GM:SurvivalBonus(victim, attacker, dmg)
-    for k,v in pairs(player.GetAll()) do
-        if v == victim then continue end
-        if v.Spectating or not v:Alive() or v:Team() == TEAM_SPECTATOR then continue end
-        
-        v:AddFrags(1)
-    end
-end
-
--- Make crowbars knock players back instead of doing damage
-function GM:CrowbarKnockback(ent, dmg)
-    if not ent:IsPlayer() then return true end
-    if not dmg:GetAttacker():IsPlayer() then return end
-    
-    dmg:SetDamage(0)
-    local v = dmg:GetDamageForce()
-    ent:SetVelocity(v * 35)
-end
-
--- Players can't stop moving for the first 5 seconds
-function GM:RunFiveSeconds()
-    if CurTime() < GAMEMODE.ModifierStart + 1.5 then return end
-    if CurTime() > GAMEMODE.ModifierStart + 5 then return end
-
-    for k,v in pairs(player.GetAll()) do
-        if not v:Alive() or v.Spectating then continue end
-        if v:GetVelocity():LengthSqr() < 5000 then
-            v:Kill()
-        end
-    end
-end
-
 GM.DiscColors = {
     {"Red", Color(255, 0, 0)},
     {"Orange", Color(255, 100, 0)},
@@ -165,26 +132,19 @@ function GM:TeardownModifier(modifier)
         if modifier.PlayerFinish then
             modifier:PlayerFinish(v)
         end
+
+        -- Survival bonus if applicable)
+        if modifier.SurviveValue and v:Alive() and not v.Spectating then
+            v:AddFrags(modifier.SurviveValue)
+        end
     end
 
 	-- Remove any subgame hooks
-    print('Removing hooks...')
-    print(GAMEMODE.ModifierHooks)
     if GAMEMODE.ModifierHooks then
         for k,v in pairs(GAMEMODE.ModifierHooks) do
-            print('Removing', v, modifier.Name)
             hook.Remove(v, modifier.Name)
         end
         GAMEMODE.ModifierHooks = nil
-    end
-
-    -- Restore everyone back to the generic region
-    if GAMEMODE.CurrentRegion then
-        GAMEMODE.CurrentRegion = 'generic'
-
-        for k,v in pairs(player.GetAll()) do
-            v:Spawn()
-        end
     end
 end
 

@@ -1,6 +1,8 @@
 MOD.Name = 'Crates'
 MOD.RoundTime = 10
 
+MOD.SurviveValue = 1
+
 local function spawnCrates()
     local number = GAMEMODE:PlayerScale(0.5, 2, 10) + math.random(-1, 1)
     local positions = GAMEMODE:GetRandomLocations(number, 'over')

@@ -17,8 +17,16 @@ GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 
 -- Reset the map before the round starts
 function GM:PreStartRound()
-    local round = GetGlobalInt('RoundNumber', 0 )
-    GAMEMODE.CurrentRegion = nil
+    local round = GetGlobalInt('RoundNumber', 0)
+
+    -- Restore everyone back to the generic region (if applicable)
+    if GAMEMODE.CurrentRegion then
+        GAMEMODE.CurrentRegion = nil
+
+        for k,v in pairs(player.GetAll()) do
+            v:Spawn()
+        end
+    end
     
     -- Reset stuff
     game.CleanUpMap()
@@ -142,22 +150,44 @@ end
 function GM:HandleFFAWin(reason)
     local winner = nil -- Default: everyone sucks
     local msg = 'The round has ended!'
+    local modifier = GAMEMODE.CurrentModifier
     
     -- If the time ran out, get the player with the most frags
     -- Otherwise, the reason is likely the winner entity
     if reason == 'TimeEnd' then
-        winner = GAMEMODE:GetWinningPlayer(GAMEMODE.CurrentModifier)
+        winner = GAMEMODE:GetWinningPlayer(modifier)
     elseif IsEntity(reason) and reason:IsPlayer() then
         winner = reason
-        winner:AddFrags(5)
     end
     
+    -- Award bonus win points based on modifier properties
+    if winner then
+        if modifier.SurviveValue then
+            winner:AddFrags(modifier.SurviveValue * 2)
+        elseif modifier.KillValue then
+            winner:AddFrags(modifier.KillValue * 2)
+        end
+    end
+
     if IsValid(winner) then
         msg = winner:Nick() .. ' wins the round!'
     else
         msg = 'Nobody has won the round'
     end
     return winner, msg
+end
+
+-- Handle death points
+function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
+    if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
+    if attacker == ply then return end -- Suicides aren't important
+    if !GAMEMODE:InRound() then return end
+    
+    -- Add the frag to scoreboard
+    if GAMEMODE.CurrentModifier.KillValue then
+        attacker:AddFrags(GAMEMODE.CurrentModifier.KillValue)
+        GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
+    end
 end
 
 -- Players cannot respawn in the middle of rounds

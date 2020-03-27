@@ -1,5 +1,7 @@
 MOD.Name = 'Musical Chairs'
 
+MOD.SurviveValue = 2
+
 local function spawnChair(pos)
     local ent = ents.Create('prop_vehicle_prisoner_pod')
     ent:SetModel('models/nova/chair_wood01.mdl')

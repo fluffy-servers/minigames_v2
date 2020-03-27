@@ -1,4 +1,5 @@
 MOD.Name = 'Combine Balls'
+MOD.Elimination = true
 
 function MOD:Loadout(ply)
     ply:Give('weapon_ar2')
