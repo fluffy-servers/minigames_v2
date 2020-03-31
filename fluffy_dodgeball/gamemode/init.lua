@@ -13,7 +13,7 @@ end
 
 -- Add a new ball to the field
 function GM:SpawnBall()
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
     local ball = ents.Create('db_dodgeball')
     if not IsValid(ball) then return end
@@ -25,7 +25,7 @@ end
 
 -- Create a ball entity at a position
 function GM:RespawnBall(number)
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     
     local ball = ents.Create('db_dodgeball')
     
@@ -49,12 +49,12 @@ end )
 
 -- Add a new ball to the field every 20 seconds
 hook.Add("Think", "ThinkBallSpawn", function()
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if not GAMEMODE.NextSpawn then return end
     
 	if CurTime() > GAMEMODE.NextSpawn then
         GAMEMODE:SpawnBall()
-        GAMEMODE.NextSpawn = CurTime() + 20
+        GAMEMODE.NextSpawn = CurTime() + math.random(5, 15)
 	end
 end )
 
@@ -85,6 +85,7 @@ function GM:GravGunOnPickedUp(ply, ent)
         GAMEMODE:CollectBall(ent, ply:Team())
         ent.LastTime = CurTime()
         ent.LastHolder = ply
+        ent.CurrentBounces = 0
     end
 end
 
@@ -96,6 +97,7 @@ function GM:GravGunPunt(ply, ent)
         GAMEMODE:CollectBall(ent, ply:Team())
         ent.LastTime = CurTime()
         ent.LastHolder = ply
+        ent.CurrentBounces = 0
         return true
     end
 end

@@ -4,11 +4,11 @@
 --]]
 
 -- Make new players join the Hunter team on connection
-function GM:PlayerInitialSpawn(ply)
+hook.Add('PlayerInitialSpawn', 'HunterTeamAssignment', function(ply)
     if GAMEMODE.TeamSurvival and GAMEMODE.HunterTeam then
         ply:SetTeam(GAMEMODE.HunterTeam)
     end
-end
+end)
 
 -- If team survival pick one player to be a hunter
 hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
@@ -29,6 +29,8 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
             v.InitialHunter = true
         end
     end
+
+    GAMEMODE.LastSurvivor = nil
 end)
 
 -- Stop Hunters from switching back to the other team
@@ -78,5 +80,7 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
         local name = string.sub(last_player:Nick(), 1, 10)
         GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8)
         last_player:AddStatPoints('LastSurvivor', 1)
+
+        GAMEMODE.LastSurvivor = last_player
     end
 end)

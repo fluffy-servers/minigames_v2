@@ -49,7 +49,7 @@ end)
 -- This is in the top left corner
 -- Override in Paintball for our own super duper custom one
 function GM:DrawRoundState()
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     -- Only draw this if the game hasn't yet started
     if GAME_STATE == 'GameNotStarted' then
         draw.SimpleText('Waiting For Players...', "FS_40", 4+1, 4+2, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP) -- shadow

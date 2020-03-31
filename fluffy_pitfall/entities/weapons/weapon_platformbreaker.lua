@@ -1,4 +1,14 @@
-AddCSLuaFile()
+SWEP.Base = 'weapon_mg_base'
+
+if CLIENT then
+    SWEP.PrintName = "Platform Breaker!"
+    SWEP.Slot = 1
+    SWEP.SlotPos = 1
+
+	SWEP.IconLetter = '-'
+	SWEP.IconFont = 'HL2MPTypeDeath'
+    killicon.AddFont("weapon_platformbreaker", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
+end
 
 SWEP.Purpose = "Hurt a platform or push the nearest person"
 SWEP.Instructions = "Primary to attack a platform, Secondary to punt people close to you"
@@ -6,9 +16,6 @@ SWEP.ViewModel	= "models/weapons/c_pistol.mdl"
 SWEP.UseHands   = true
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 
-SWEP.PrintName = "Platform Breaker!"
-SWEP.Slot = 1
-SWEP.SlotPos = 1
 
 SWEP.Primary.Recoil			= 0.25
 SWEP.Primary.Damage 		= 1

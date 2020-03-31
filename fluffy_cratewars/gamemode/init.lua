@@ -146,7 +146,7 @@ end
 GM.CrateSpawnTimer = 0
 hook.Add("Tick", "TickCrateSpawn", function()
     if !GAMEMODE.SpawnCrates then return end
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if !GAMEMODE.CratePhase then return end
     
     if GAMEMODE.CrateSpawnTimer < CurTime() then

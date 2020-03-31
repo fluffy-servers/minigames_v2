@@ -15,11 +15,6 @@ function GM:PlayerLoadout(ply)
     ply:SetHealth(hp)
 end
 
--- No fall damage
-function GM:GetFallDamage()
-    return 0
-end
-
 -- During the crate phase, players cannot die
 function GM:EntityTakeDamage(target, dmginfo)
     local attacker = dmginfo:GetAttacker()

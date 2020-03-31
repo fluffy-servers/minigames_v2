@@ -148,7 +148,7 @@ function CreateFluffyScoreboard()
         -- Add the avatar to the button
 		row.Avatar = vgui.Create('AvatarCircle', row.AvatarButton)
         if IsValid(row.Avatar) then
-            row.Avatar.Avatar:SetPlayer(ply, 64) -- Don't ask
+            row.Avatar:SetPlayer(ply, 64)
             row.Avatar:Dock(FILL)
             row.Avatar:SetMouseInputEnabled(false)
         end

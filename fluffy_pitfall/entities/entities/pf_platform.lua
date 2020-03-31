@@ -66,7 +66,7 @@ end
 -- Make platforms take damage when someone is touching them
 function ENT:Touch(ent)
     -- 3 seconds of spawn protection in rounds
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if GAMEMODE:GetRoundStartTime() + 3 > CurTime() then return end
     
     -- Only living players make the platforms fall
@@ -121,6 +121,12 @@ function ENT:AddDamage(amount, ply)
     if IsValid(ply) and ply:IsPlayer() then
         ply:AddStatPoints('Platform Damage', math.floor(damage))
     end
+    
+    -- Adjust color
+    local r = GAMEMODE.PColorEnd.r - GAMEMODE.PDR*scale
+    local g = GAMEMODE.PColorEnd.g - GAMEMODE.PDG*scale
+    local b = GAMEMODE.PColorEnd.b - GAMEMODE.PDB*scale
+    self:SetColor(Color(r, g, b))
     
     -- Drop the platform after 1 second if applicable
     if self.MyHealth <= 0 and not self.Dropped then

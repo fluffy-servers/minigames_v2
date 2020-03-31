@@ -1,13 +1,11 @@
-DEFINE_BASECLASS "weapon_mg_base"
+SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
 	SWEP.Slot = 1
 	SWEP.SlotPos = 1
     
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText('/', "HL2MPTypeDeath", x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
-	end
-    
+	SWEP.IconLetter = '/'
+	SWEP.IconFont = 'HL2MPTypeDeath'
     killicon.AddFont("weapon_mg_smg", "HL2MPTypeDeath", "/", Color(255, 80, 0, 255))
 end
 SWEP.PrintName = "SMG"

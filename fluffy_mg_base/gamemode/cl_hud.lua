@@ -35,7 +35,7 @@ end )
 function GM:HUDPaint()
     -- Obey the convar
     local shouldDraw = GetConVar('cl_drawhud'):GetBool()
-    if !shouldDraw then 
+    if not shouldDraw then 
 		if GAMEMODE:ScoringPaneActive() and IsValid(GAMEMODE.ScorePane) then
 			GAMEMODE.ScorePane:Hide()
 		end
@@ -158,10 +158,18 @@ local fast_hud = CreateClientConVar("minigames_fast_hud", "0", true, false, "Set
 -- Draw the state of the round, including time and round number etc.
 -- This is in the top left corner
 function GM:DrawRoundState()
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
-    -- Only draw this if the game hasn't yet started
+    local GAME_STATE = GAMEMODE:GetRoundState()
+    -- Draw a notification if not enough players are in the game
     if GAME_STATE == 'GameNotStarted' then
         GAMEMODE:DrawShadowText('Waiting for Players...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        return
+    end
+
+    -- Draw a warmup timer if the game is starting soon
+    if GAME_STATE == 'Warmup' then
+        local start_time = GetGlobalFloat('WarmupTime', CurTime())
+        local t = GAMEMODE.WarmupTime - (CurTime() - start_time)
+        GAMEMODE:DrawShadowText('Round starting in ' .. math.ceil(t) .. '...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
     
@@ -188,7 +196,7 @@ end
 -- Includes a countdown timer for each round + round number indicator
 function GM:RoundStateDefault()
     -- Get round information
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local RoundTime = GetGlobalFloat('RoundStart')
     
     -- Draw the cool round timer
@@ -214,7 +222,7 @@ function GM:RoundStateDefault()
     
     -- Draw the box with sizing information determined above
     local rect_height = 32
-    local rect_width = w + 64
+    local rect_width = w + 80
     surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
     surface.SetDrawColor(GAMEMODE.HColLight)
@@ -242,7 +250,7 @@ function GM:RoundStateDefault()
     end
     
     -- Draw the time text
-    GAMEMODE:DrawShadowText(math.floor(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(math.ceil(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     
     -- Draw the round information
     GAMEMODE:DrawShadowText(round_message, 'FS_24', c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -253,7 +261,7 @@ function GM:RoundStateWithTimer()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
     -- Get round information
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local RoundTime = GetGlobalFloat('RoundStart')
     local GameTime = GetGlobalFloat('GameStartTime')
 
@@ -283,7 +291,7 @@ function GM:RoundStateWithTimer()
     
     -- Draw the box with sizing information determined above
     local rect_height = 32
-    local rect_width = w + 64
+    local rect_width = w + 80
     surface.SetDrawColor(GAMEMODE.HColDark)
     surface.DrawRect(c_pos, c_pos - rect_height/2, rect_width, rect_height + 3)
     surface.SetDrawColor(GAMEMODE.HColLight)
@@ -304,7 +312,7 @@ function GM:RoundStateWithTimer()
     end
     
     -- Draw the time text
-    GAMEMODE:DrawShadowText(math.floor(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(math.ceil(t), 'FS_40', c_pos, c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
     -- Draw the round information
     GAMEMODE:DrawShadowText(round_message, 'FS_24', c_pos+52, c_pos+2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
@@ -316,7 +324,7 @@ end
 function GM:RoundStateTimerOnly()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local GameTime = GetGlobalFloat('GameStartTime')
     
     if !GameTime then return end
@@ -351,7 +359,7 @@ end
 function GM:RoundStateTimerTeamScore()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
-    local GAME_STATE = GetGlobalString('RoundState', 'GameNotStarted')
+    local GAME_STATE = GAMEMODE:GetRoundState()
     local GameTime = GetGlobalFloat('GameStartTime')
     
     if !GameTime then return end
@@ -420,7 +428,7 @@ function GM:DrawHealth()
         surface.SetFont('FS_24')
         local w = surface.GetTextSize(team_name)
         local rect_height = 32
-        local rect_width = w + 64
+        local rect_width = w + 80
         surface.SetDrawColor(GAMEMODE.HColDark)
         surface.DrawRect(c_pos, ScrH() - c_pos - rect_height/2, rect_width, rect_height + 3)
         surface.SetDrawColor(GAMEMODE.HColLight)
@@ -466,7 +474,7 @@ function GM:DrawAmmo()
     -- Grab the current weapon
     local wep = LocalPlayer():GetActiveWeapon()
     if !IsValid(wep) then return end
-    if wep.DrawAmmo == false then return end
+    if not wep.DrawAmmo then return end
     
     -- Get the ammo information from the gun
     -- There's a lot of unusual cases here that could be handled better in futures
@@ -482,7 +490,7 @@ function GM:DrawAmmo()
     if wep.CustomAmmoDisplay then
         if wep:CustomAmmoDisplay() != nil then 
             ammo = wep:CustomAmmoDisplay()
-            if ammo.Draw == false then return end
+            if not ammo.Draw then return end
         end
     end
     
@@ -615,7 +623,7 @@ function GM:CreateRoundEndPanel(message, tagline)
         draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, true, true)
         if self.TagLine then
             GAMEMODE:DrawShadowText(self.Message, 'FS_64', w/2, h/2 - 24, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(self.Tagline, 'FS_40', w/2, h/2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(self.TagLine, 'FS_40', w/2, h/2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         else
             GAMEMODE:DrawShadowText(self.Message, 'FS_64', w/2, h/2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
@@ -661,6 +669,7 @@ function GM:ScoreRefreshSort()
     
     -- Clear the current order
     GAMEMODE.ScorePane:Clear()
+    GAMEMODE.ScorePane.scores = scores
     
     -- math stuff
     local count = ScrW()*0.5 / 68
@@ -678,31 +687,36 @@ end
 
 -- Create the scoring pane
 function GM:CreateScoringPane()
-    local Frame = vgui.Create('DPanel')
-    Frame:SetSize(ScrW() * 0.5, 96 )
-    Frame:SetPos(ScrW() * 0.25, ScrH() - 72)
+    if GAMEMODE.ScorePane then
+        GAMEMODE.ScorePane:Remove()
+    end
+
+    local frame = vgui.Create('DPanel')
+    local panel_h = 80
+    frame:SetSize(ScrW() * 0.5, panel_h)
+    frame:SetPos(ScrW() * 0.25, ScrH() - panel_h)
     
     -- Function to create a blob for each player
     -- This includes the score & avatar
-    function Frame:CreatePlayer(ply, x)
-        local p = vgui.Create('DPanel', Frame )
+    function frame:CreatePlayer(ply, x)
+        local p = vgui.Create('DPanel', frame)
         p:SetPos(x, 0)
-        p:SetSize(64, 80)
+        p:SetSize(64, panel_h)
         function p:Paint()
             local score = GAMEMODE:ScoringPaneScore(ply) or 0
-            GAMEMODE:DrawShadowText(score, 'FS_32', 32, 40, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(score, 'FS_32', 32, panel_h - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
         end
         
         local Avatar = vgui.Create('AvatarImage', p)
-        Avatar:SetSize(36, 36)
-        Avatar:SetPos(14, 0)
+        Avatar:SetSize(40, 40)
+        Avatar:SetPos(12, 0)
         Avatar:SetPlayer(ply, 64)
     end
     
-    function Frame:Paint()
+    function frame:Paint()
     
     end
-    GAMEMODE.ScorePane = Frame
+    GAMEMODE.ScorePane = frame
 	
     -- Refresh the score panel every 2 seconds
     -- This is a bit expensive hence the infrequency
@@ -725,7 +739,7 @@ function GM:GetPlayerInfoPanel(ply)
     local avatar = vgui.Create('AvatarCircle', panel)
     avatar:SetSize(32, 32)
     avatar:SetPos(16, 16)
-    avatar.Avatar:SetPlayer(ply, 32)
+    avatar:SetPlayer(ply, 32)
     local last_health = ply:GetMaxHealth() or 100
     
     function panel:Paint(w, h)

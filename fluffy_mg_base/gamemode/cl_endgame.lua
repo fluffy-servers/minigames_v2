@@ -332,7 +332,7 @@ function GM:OpenEndGamePanel()
         -- Add the avatar
 		row.Avatar = row:Add('AvatarCircle')
         if IsValid(row.Avatar) then
-            row.Avatar.Avatar:SetPlayer(ply, 64) -- Don't ask
+            row.Avatar:SetPlayer(ply, 64) -- Don't ask
             row.Avatar:SetPos(2, 2)
             --row.Avatar:SetSize(48, 48)
         end
@@ -345,6 +345,15 @@ function GM:OpenEndGamePanel()
             row:SetSize(self:GetWide() - 32, 52)
             row.Avatar:SetSize(48, 48)
             self.yy = self.yy + 60
+        end
+
+        -- If a player leaves the game on this screen, remove this row
+        -- Future: Try and keep this data or leave a gap
+        function row:Think()
+		    if !IsValid(row.Player) then
+		    	self:Remove()
+		    	return
+		    end
         end
     end
     

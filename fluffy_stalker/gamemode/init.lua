@@ -94,11 +94,6 @@ function GM:PlayerInitialSpawn(ply)
     ply:SetTeam(TEAM_BLUE)
 end
 
--- No fall damage
-function GM:GetFallDamage()
-    return 0
-end
-
 -- Flashlight enabled for humans only
 function GM:PlayerSwitchFlashlight(ply, state)
     return false

@@ -5,7 +5,7 @@
 
 -- Thirdperson toggle when F3 (default) is pressed
 hook.Add("PlayerBindPress", "ThirdpersonToggle", function(ply, bind, pressed)
-    if bind == "gm_showspare1" and pressed == true then
+    if bind == "gm_showspare1" and pressed then
         if !GAMEMODE.ThirdpersonEnabled and !LocalPlayer():IsSuperAdmin() then return end
         if !LocalPlayer().Thirdperson then LocalPlayer().Thirdperson = false end
         LocalPlayer().Thirdperson = !(LocalPlayer().Thirdperson)

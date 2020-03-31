@@ -85,7 +85,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
     
     -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     ply:AddStatPoints('Deaths', 1)
     
@@ -103,11 +103,13 @@ hook.Add('PreRoundStart', 'ResetKing', function()
         v:SetNWBool("IsKing", false)
 	end
     GAMEMODE.CurrentKing = nil
-    SetGlobalEntity("KingPlayer", nil)
-end )
+
+    -- We can't set this to nil, so we fake it by setting to world
+    SetGlobalEntity("KingPlayer", game.GetWorld())
+end)
 
 hook.Add('Think', 'KingTimer', function()
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if GAMEMODE.LastKingThink and CurTime() >= GAMEMODE.LastKingThink+1 then
         if IsValid(GAMEMODE.CurrentKing) then
             GAMEMODE.CurrentKing:AddFrags(1)
@@ -142,17 +144,12 @@ function GM:GetWinningPlayer()
     return bestplayer
 end
 
--- Remove fall damage
-function GM:GetFallDamage( ply, speed )
-    return 0
-end
-
 -- Attempt to help with seeing the King through walls
 hook.Add('SetupPlayerVisibility', 'KingVisible', function(ply)
     if IsValid(GAMEMODE.CurrentKing) then
         AddOriginToPVS(GAMEMODE.CurrentKing:GetPos())
     end
-end )
+end)
 
 -- Register XP for Kingmaker
 hook.Add('RegisterStatsConversions', 'AddKingmakerStatConversions', function()

@@ -1,6 +1,9 @@
-AddCSLuaFile()
+SWEP.Base = 'weapon_mg_base'
 	
 if CLIENT then
+	SWEP.IconLetter = 'G'
+	SWEP.IconFont = 'CSSelectIcons'
+
     killicon.AddFont("bt_bomb", "HL2MPTypeDeath", "*", Color( 255, 80, 0, 255 ))
 end
 
@@ -14,7 +17,7 @@ SWEP.PrintName      = "Time Bomb"
 SWEP.Primary.Sound			= Sound("buttons/blip2.wav")
 SWEP.Primary.Deploy         = Sound("ambient/alarms/warningbell1.wav")
 SWEP.Primary.Warning        = Sound("ambient/alarms/klaxon1.wav")
-SWEP.Primary.Delay          = 0.05
+SWEP.Primary.Delay          = 0.025
 
 SWEP.NextTick   = 0
 SWEP.EndingTime = 0
@@ -68,39 +71,35 @@ function SWEP:PrimaryAttack()
 	self.Weapon:Trace()
 end
 
+-- Pass the bomb to a new player
+function SWEP:PassBomb(ply)
+	if ply:Team() == TEAM_SPECTATOR or !ply:Alive() then return end
+    self.Owner:SetCarrier(false)
+	self.Owner:Give("bt_punch")
+	ply:SetCarrier(true)
+	ply:SetTime(self.Owner:GetTime())
+	ply:StripWeapons()
+    self.Owner:AddStatPoints('Bomb Passes', 1)
+    self.Owner:StripWeapon("bt_bomb")
+	timer.Simple(0.1, function() ply:Give("bt_bomb") end)
+    
+    local name = string.sub(ply:Nick(), 1, 10)
+    GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1)
+end
+
 function SWEP:Trace()
 	if CLIENT then return end
 	
 	local pos = self.Owner:GetShootPos()
-	local aim = self.Owner:GetAimVector() * 96
-	
-    -- Run a trace for any players
-	local tr = {}
-	tr.start = pos
-	tr.endpos = pos + aim
-	tr.filter = self.Owner
-	tr.mins = Vector(-32,-32,-32)
-	tr.maxs = Vector(32,32,32)
+	local aim = self.Owner:GetAimVector() * 32
 
-	local trace = util.TraceHull( tr )
-	local ent = trace.Entity
-
-	if not IsValid( ent ) or not ent:IsPlayer() then 
-		return 
-	else
-        -- Pass the bomb to a new player
-		if ent:Team() == TEAM_SPECTATOR or !ent:Alive() then return end
-        self.Owner:SetCarrier(false)
-		self.Owner:Give("bt_punch")
-		ent:SetCarrier(true)
-		ent:SetTime(self.Owner:GetTime())
-		ent:StripWeapons()
-        self.Owner:AddStatPoints('Bomb Passes', 1)
-        self.Owner:StripWeapon("bt_bomb")
-		timer.Simple(0.1, function() ent:Give("bt_bomb") end)
-        
-        local name = string.sub(ent:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1)
+	-- Search for player in a radius just in front of the player
+	local entities = ents.FindInSphere(pos + aim, 32)
+	for k,v in pairs(entities) do
+		if v:IsPlayer() and v != self.Owner then
+			self:PassBomb(v)
+			return
+		end
 	end
 end
 

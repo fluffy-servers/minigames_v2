@@ -11,16 +11,6 @@ function GM:PlayerLoadout(ply)
     ply:Give('bt_punch')
 end
 
--- Get a table of all alive players
-function GM:GetAlivePlayers()
-    local tbl = {}
-    for k,v in pairs(player.GetAll() ) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
-    end
-    
-    return tbl
-end
-
 -- Timing based on active players
 function GM:GetNewBombTime()
     local amount = player.GetCount()
@@ -40,11 +30,11 @@ function GM:PickBomber()
         v:StripWeapon('bt_bomb')
 	end
     
-    if #GAMEMODE:GetAlivePlayers() < 2 then return end
+    if GAMEMODE:GetNumberAlive() < 2 then return end
 	
 	-- Give the bomb & set the time randomly
-	local newply = table.Random( GAMEMODE:GetAlivePlayers() )
-	newply:SetCarrier( true )
+	local newply = table.Random(GAMEMODE:GetAlivePlayers())
+	newply:SetCarrier(true)
 	newply:SetTime(GAMEMODE:GetNewBombTime())
 	newply:StripWeapons()
 	newply:Give('bt_bomb')
@@ -85,6 +75,7 @@ end)
 function GM:StatsRoundWin(winners)
     for k,v in pairs(player.GetAll()) do
         if v:Alive() and !v.Spectating then
+            v:AddFrags(2)
             GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
         end
     end
@@ -108,7 +99,7 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
     ply:CreateRagdoll()
     
     -- Do not count deaths unless in round
-    if GetGlobalString( 'RoundState' ) != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'deaths', 1)
     
@@ -117,6 +108,22 @@ function GM:DoPlayerDeath( ply, attacker, dmginfo )
         if !v:Alive() or v == ply or v.Spectating then continue end
         v:AddFrags(1)
         GAMEMODE:AddStatPoints(v, 'Explosions Survived', 1)
+    end
+end
+
+-- Disable fall damage
+function GM:GetFallDamage()
+    return 0
+end
+
+-- Disable propkilling
+function GM:EntityTakeDamage(ent, dmg)
+    if IsValid(dmg:GetAttacker()) and dmg:GetAttacker():GetClass() == 'prop_physics' then
+        return true
+    end
+
+    if IsValid(dmg:GetInflictor()) and dmg:GetInflictor():GetClass() == 'prop_physics' then
+        return true
     end
 end
 

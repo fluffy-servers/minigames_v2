@@ -44,7 +44,7 @@ end)
 
 -- If one team has taken over, win the round
 function GM:CheckVictory(t)
-    if team.NumPlayers(t) >= GAMEMODE:GetLivingPlayers() then
+    if team.NumPlayers(t) >= GAMEMODE:GetNumberAlive() then
         GAMEMODE:EndRound(t)
     end
 end
@@ -69,6 +69,25 @@ function GM:EntityTakeDamage(ent, dmg)
         dmg:SetDamage(0)
         ent:SetHealth(100)
         ent:AddDeaths(1)
+
+        -- Fake spawn protection
+        ent:GodEnable()
+        ent:SetRenderMode(1)
+        ent:SetColor(Color(255, 255, 255, 50))
+        ent:StripWeapons()
+        ent:StripAmmo()
+
+        -- Have a brief delay before we bring the player back
+        local god_time = 1.5
+        timer.Simple(god_time, function()
+            if IsValid(ent) then 
+                ent:GodDisable()
+                ent:SetRenderMode(0)
+                ent:SetColor(color_white)
+
+                GAMEMODE:PlayerLoadout(ent)
+            end
+        end)
         
         -- Add points to inflictor
         attacker:AddFrags(1)

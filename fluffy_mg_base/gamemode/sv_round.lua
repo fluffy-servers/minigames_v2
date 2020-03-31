@@ -14,18 +14,32 @@ hook.Add('Think', 'MinigamesRoundThink', function()
     -- Check if the game is ready to start
     if GAMEMODE:GetRoundState() == 'GameNotStarted' then
         if GAMEMODE:CanRoundStart() then
-            -- Store the starting time of the game for TIMED gamemodes
-            -- Timed gamemodes don't have a fixed number of rounds
-            if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
-                SetGlobalFloat('GameStartTime', CurTime())
-            end
-            GAMEMODE:PreStartRound()
+            -- Transition into a warmup period before all goes well
+            GAMEMODE:SetRoundState('Warmup')
+            SetGlobalFloat('WarmupTime', CurTime())
+            timer.Simple(GAMEMODE.WarmupTime, function() GAMEMODE:StartGame() end)
         end
-    elseif GAMEMODE:GetRoundState() == 'InRound' then
+    elseif GAMEMODE:InRound() then
         -- Delegate this to each gamemode (defaults are provided lower down for reference)
         GAMEMODE:CheckRoundEnd()
     end
 end)
+
+-- Waiting cooldown period has now ended, start the game proper
+function GM:StartGame()
+    if not GAMEMODE:CanRoundStart() then
+        -- Uh oh, something went wrong in the cooldown period
+        GAMEMODE:SetRoundState('GameNotStarted')
+        return
+    end
+
+    -- Store the starting time of the game for TIMED gamemodes
+    -- Timed gamemodes don't have a fixed number of rounds
+    if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
+        SetGlobalFloat('GameStartTime', CurTime())
+    end
+    GAMEMODE:PreStartRound()
+end
 
 -- Check if there enough players to start a round
 function GM:CanRoundStart()
@@ -143,7 +157,7 @@ end
 -- End the round
 function GM:EndRound(reason, extra)
     -- Check that we're in a round
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
     
@@ -151,6 +165,7 @@ function GM:EndRound(reason, extra)
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
     local msg = "The round has ended!"
+    local extra = nil
     winners, msg, extra = GAMEMODE:HandleEndRound(reason)
     
     -- Send the result to the players
@@ -231,31 +246,6 @@ function GM:StatsRoundWin(winners)
     end
 end
 
--- Generates a lovely confetti effect
-function GM:ConfettiEffect(winners)
-    if GAMEMODE.DisableConfetti then return end
-    
-    -- Sort the winners into a nice table
-    local tbl = {}
-    if IsEntity(winners) then
-        tbl = {winners}
-    elseif type(winners) == 'number' then
-        tbl = team.GetPlayers(winners)
-    elseif type(winners) == 'table' then
-        tbl = winners
-    end
-    
-    -- Create confetti for all living winners
-    for k,v in pairs(tbl) do
-        if not v:IsPlayer() then continue end
-        if not v:Alive() then continue end
-        
-        local effectdata = EffectData()
-        effectdata:SetOrigin(v:GetPos())
-        util.Effect('win_confetti', effectdata)
-    end
-end
-
 --[[
     Example (basic) round end handlers
 ]]--
@@ -264,6 +254,7 @@ end
 function GM:HandleTeamWin(reason)
     local winners = reason -- Default: set to winning team in certain gamemodes
     local msg = 'The round has ended!'
+    local extra = nil
     
     if reason == 'TimeEnd' then
         --If team survival, surviving team wins, otherwise determine which team has more kills
@@ -283,6 +274,9 @@ function GM:HandleTeamWin(reason)
     elseif GAMEMODE.TeamSurvival then
         winners = GAMEMODE.HunterTeam
         msg = team.GetName(GAMEMODE.HunterTeam) .. ' win the round!'    
+        if GAMEMODE.LastSurvivor then
+            extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. ' was the last survivor'
+        end
     end
     
     if msg == 'The round has ended!' and type(winners) == 'number' then
@@ -292,7 +286,7 @@ function GM:HandleTeamWin(reason)
     end
     
     if winners and winners > 0 then team.AddScore(winners, 1) end
-    return winners, msg
+    return winners, msg, extra
 end
 
 -- Handles victory conditions for Free for All based gamemodes
@@ -319,7 +313,7 @@ end
 -- Handles FFA Elimination
 function GM:CheckFFAElimination()
     if GAMEMODE.WinBySurvival then
-        if GAMEMODE:GetLivingPlayers() <= 1 then
+        if GAMEMODE:GetNumberAlive() <= 1 then
             for k,v in pairs(player.GetAll()) do
                 if v:Alive() and !v.Spectating then
                     GAMEMODE:EndRound(v)
@@ -329,7 +323,7 @@ function GM:CheckFFAElimination()
             GAMEMODE:EndRound(nil)
         end
     elseif GAMEMODE.Elimination then
-        if GAMEMODE:GetLivingPlayers() == 0 then
+        if GAMEMODE:GetNumberAlive() == 0 then
             GAMEMODE:EndRound(nil)
         end
     end

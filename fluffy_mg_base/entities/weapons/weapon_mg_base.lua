@@ -2,6 +2,15 @@ if CLIENT then
 	SWEP.PrintName = "Base Weapon"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
+
+	SWEP.IconLetter = '-'
+	SWEP.IconFont = 'HL2MPTypeDeath'
+	surface.CreateFont("CSSelectIcons", {font="csd", size=72})
+
+
+	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+		draw.SimpleText(self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
+	end
 end
 
 -- Primary fire damage and aim settings
@@ -59,6 +68,18 @@ end
 -- Helper function to fire bullets
 -- Firing bullets can be a bit of a pain but this really helps
 function SWEP:ShootBullet(damage, numbullets, aimcone)
+	if self.StableAccuracy then
+    	-- Spread penalty for moving
+    	if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
+    	    aimcone = aimcone * 2.5
+    	end
+	
+    	-- Accuracy increase for crouching or walking
+    	if self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
+    	    aimcone = math.Clamp(aimcone/2.5, 0, 10)
+    	end
+	end
+
 	-- Setup the bullet table and fire it
 	local scale = aimcone
 	local bullet = {}
@@ -79,6 +100,18 @@ end
 
 -- Helper function with slightly more functionality
 function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
+	if self.StableAccuracy then
+    	-- Spread penalty for moving
+    	if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
+    	    aimcone = aimcone * 2.5
+    	end
+	
+    	-- Accuracy increase for crouching or walking
+    	if self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
+    	    aimcone = math.Clamp(aimcone/2.5, 0, 10)
+    	end
+	end
+
 	-- Setup the bullet table and fire it
 	local scale = aimcone
 	local bullet = {}

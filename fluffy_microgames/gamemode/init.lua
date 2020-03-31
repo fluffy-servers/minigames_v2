@@ -9,16 +9,24 @@ AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 
 include('shared.lua')
+include('sv_markers.lua')
 include('sv_modifiers.lua')
+include('sv_spawnpoints.lua')
 
--- Remove fall damage
-function GM:GetFallDamage( ply, speed )
-    return 0
-end
+GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 
 -- Reset the map before the round starts
 function GM:PreStartRound()
-    local round = GetGlobalInt('RoundNumber', 0 )
+    local round = GetGlobalInt('RoundNumber', 0)
+
+    -- Restore everyone back to the generic region (if applicable)
+    if GAMEMODE.CurrentRegion then
+        GAMEMODE.CurrentRegion = nil
+
+        for k,v in pairs(player.GetAll()) do
+            v:Spawn()
+        end
+    end
     
     -- Reset stuff
     game.CleanUpMap()
@@ -31,9 +39,9 @@ function GM:PreStartRound()
     end
     
     -- Set global round data
-    SetGlobalInt('RoundNumber', round + 1 )
-    SetGlobalString( 'RoundState', 'PreRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+    SetGlobalInt('RoundNumber', round + 1)
+    SetGlobalString('RoundState', 'PreRound')
+	SetGlobalFloat('RoundStart', CurTime())
     hook.Call('PreRoundStart')
     
     -- Respawn the dead
@@ -51,7 +59,7 @@ function GM:PreStartRound()
     end
     
     -- Start the round after a short cooldown
-    timer.Simple(2, function() GAMEMODE:StartRound() end )
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end )
 end
 
 -- Pick a new modifier each round
@@ -60,42 +68,30 @@ function GM:StartRound()
     GAMEMODE:NewModifier()
     
     -- Set global round data
-	SetGlobalString( 'RoundState', 'InRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+	SetGlobalString('RoundState', 'InRound')
+	SetGlobalFloat('RoundStart', CurTime())
     
     -- yay hooks
     hook.Call('RoundStart')
     
-    local roundtime = GAMEMODE.CurrentModifier.time or GAMEMODE.RoundTime
+    local roundtime = GAMEMODE.CurrentModifier.RoundTime or GAMEMODE.RoundTime
     
     -- End the round after a certain time
     -- Does not apply to endless round types
     timer.Create('GamemodeTimer', roundtime, 0, function()
         GAMEMODE:EndRound('TimeEnd')
-    end )
+    end)
 end
 
 -- End a round and check subgame functionality
 function GM:EndRound(reason)
     -- Check that we're in a round
-    if GetGlobalString('RoundState') != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     -- Stop the timer
     timer.Remove('GamemodeTimer')
-    
-	-- Call any win condition checks in the subgame
-    if GAMEMODE.CurrentModifier.func_check then
-        for k,v in pairs(player.GetAll()) do
-            GAMEMODE.CurrentModifier.func_check(v)
-        end
-    end
-    
-	-- Call any cleanup conditions in the subgame
-    if GAMEMODE.CurrentModifier.func_cleanup then
-        GAMEMODE.CurrentModifier.func_cleanup()
-    end
-    
-    -- The end of each round is honestly the painful part
-    -- Delegate this to each gamemode (defaults are provided lower down for reference)
+
+    GAMEMODE:TeardownModifier(GAMEMODE.CurrentModifier)
+
     local winners = nil
     local msg = "The round has ended!"
     winners, msg = GAMEMODE:HandleEndRound(reason)
@@ -112,98 +108,67 @@ function GM:EndRound(reason)
     GAMEMODE:StatsRoundWin(winners)
             
     -- Move to next round
-    SetGlobalString( 'RoundState', 'EndRound' )
+    SetGlobalString('RoundState', 'EndRound')
     hook.Call('RoundEnd')
-    GAMEMODE:EndModifier()
     
     -- No cooldown in this gamemode
-    timer.Simple(2, function() GAMEMODE:PreStartRound() end)
-end
-
--- Wind down from a subgame
--- This resets all the player data to defaults
-function GM:EndModifier()
-    local modifier = GAMEMODE.CurrentModifier
-    for k,v in pairs(player.GetAll()) do
-        v:StripWeapons()
-        v:StripAmmo()
-        v:SetRunSpeed(300)
-        v:SetWalkSpeed(200)
-        v:SetMoveType(2)
-        v:SetHealth(100)
-        v:SetMaxHealth(100)
-        v:SetJumpPower(200)
-        hook.Call('PlayerSetModel', GAMEMODE, v)
-        
-		-- Call any other subgame cleanups
-        if modifier.func_finish then
-            modifier.func_finish(v)
-        end
-    end
-    
-	-- Remove any subgame hooks
-    if modifier.hooks then
-        for k,v in pairs(modifier.hooks) do
-            hook.Remove(k, modifier.name)
-        end
-    end
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:PreStartRound() end)
 end
 
 -- Load up a new modifier
 function GM:NewModifier()
-    -- Make sure the same modifier doesn't come up twice
-    if not GAMEMODE.CurrentModifier then GAMEMODE.CurrentModifier = table.Random(GAMEMODE.Modifiers) end
-    local modifier = GAMEMODE.CurrentModifier
-    
-    while modifier == GAMEMODE.CurrentModifier do
-        modifier = table.Random(GAMEMODE.Modifiers)
-        
-        -- If the modifier is restricted to certain maps, ensure that the map is valid
-        if modifier.maps then
-            if not modifier.maps[game.GetMap()] then
-                modifier = GAMEMODE.CurrentModifier
-            end
-        end
+    -- Force modifiers if applicable
+    local force = GAMEMODE.ForceNextModifier:GetString()
+    if GAMEMODE.Modifiers[force] then
+        GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[force]
+        GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
+        return
     end
-    GAMEMODE.CurrentModifier = modifier
-        
-    -- Call the initialize function for the modifier
-    if modifier.func_init then
-        modifier.func_init()
+
+    -- Setup the queue if it doesn't exist
+    if not GAMEMODE.ModifierQueue then
+        local keys = table.GetKeys(GAMEMODE.Modifiers)
+        GAMEMODE.ModifierQueue = table.Shuffle(keys)
+        GAMEMODE.ModifierIndex = 1
     end
-    
-    -- Call the player function for the modifier
-    if modifier.func_player then
-        for k,v in pairs(player.GetAll()) do
-            modifier.func_player(v)
-        end
+
+    -- Shuffle the queue if moving too fast
+    if GAMEMODE.ModifierIndex > #GAMEMODE.ModifierQueue then
+        local keys = table.GetKeys(GAMEMODE.Modifiers)
+        GAMEMODE.ModifierQueue = table.Shuffle(keys)
+        GAMEMODE.ModifierIndex = 1
     end
-    
-    -- Register any hooks related to this modifier
-    if modifier.hooks then
-        for k,v in pairs(modifier.hooks) do
-            hook.Add(k, modifier.name, v)
-        end
-    end
-    
-	-- Pulse announcement with the subgame information
-    GAMEMODE:PulseAnnouncementTwoLine(3, modifier.name, modifier.subtext)
+
+    -- Play the next modifier in the queue
+    local modifier_key = GAMEMODE.ModifierQueue[GAMEMODE.ModifierIndex]
+    GAMEMODE.CurrentModifier = GAMEMODE.Modifiers[modifier_key]
+    GAMEMODE.ModifierIndex = GAMEMODE.ModifierIndex + 1
+    GAMEMODE:SetupModifier(GAMEMODE.CurrentModifier)
 end
 
---Handles victory conditions for Free for All based gamemodes
+-- Handles victory conditions for Free for All based gamemodes
 function GM:HandleFFAWin(reason)
     local winner = nil -- Default: everyone sucks
     local msg = 'The round has ended!'
+    local modifier = GAMEMODE.CurrentModifier
     
     -- If the time ran out, get the player with the most frags
     -- Otherwise, the reason is likely the winner entity
     if reason == 'TimeEnd' then
-        winner = GAMEMODE:GetWinningPlayer()
+        winner = GAMEMODE:GetWinningPlayer(modifier)
     elseif IsEntity(reason) and reason:IsPlayer() then
         winner = reason
-        winner:AddFrags(5)
     end
     
+    -- Award bonus win points based on modifier properties
+    if winner then
+        if modifier.SurviveValue then
+            winner:AddFrags(modifier.SurviveValue * 2)
+        elseif modifier.KillValue then
+            winner:AddFrags(modifier.KillValue * 2)
+        end
+    end
+
     if IsValid(winner) then
         msg = winner:Nick() .. ' wins the round!'
     else
@@ -212,32 +177,29 @@ function GM:HandleFFAWin(reason)
     return winner, msg
 end
 
--- Basic function to get the player with the most frags
-function GM:GetWinningPlayer()
-    -- Doesn't really make sense in Team gamemodes
-    -- if GAMEMODE.TeamBased then return nil end
+-- Handle death points
+function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
+    if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
+    if attacker == ply then return end -- Suicides aren't important
+    if !GAMEMODE:InRound() then return end
     
-    -- Check again that there isn't just one player alive
-    -- Useful for survival gamemodes
-    if GAMEMODE:GetLivingPlayers() <= 1 then
-        for k,v in pairs( player.GetAll() ) do
-            if v:Alive() and not v.Spectating then
-                return v
-            end
-        end
+    -- Add the frag to scoreboard
+    if GAMEMODE.CurrentModifier.KillValue then
+        attacker:AddFrags(GAMEMODE.CurrentModifier.KillValue)
+        GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
     end
-    
-    -- Loop through all players and return the one with the most frags
-    local bestscore = 0
-    local bestplayer = nil
-    for k,v in pairs( player.GetAll() ) do
-        local frags = v.RoundScore or 0
-        if frags > bestscore then
-            bestscore = frags
-            bestplayer = v
-        end
+end
+
+-- Players cannot respawn in the middle of rounds
+function GM:CanRespawn(ply)
+    return (GAMEMODE:GetRoundState() == 'PreRound')
+end
+
+-- Helper function to relay announcements
+function GM:Announce(title, subtext)
+    if subtext then
+        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext)
+    else
+        GAMEMODE:PulseAnnouncement(3, title, subtext)
     end
-    
-    -- Return the winner! Yay!
-    return bestplayer
 end

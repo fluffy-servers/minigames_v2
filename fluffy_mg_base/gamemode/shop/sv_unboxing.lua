@@ -38,7 +38,6 @@ function SHOP:OpenUnbox(cratekey, ply)
 	-- Take the 24th item in the queue
 	-- Why 24th? I have no idea it's a nice number ok
 	local item = items[queue[24]]
-	print(item)
 	if type(item) == 'string' then item = {VanillaID = item} end
 	
 	-- Add the item to the inventory

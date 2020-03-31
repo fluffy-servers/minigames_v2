@@ -11,14 +11,11 @@ GM.HelpText = [[
 ]]
 
 GM.TeamBased = false	-- Is the gamemode FFA or Teams?
-GM.RoundTime = 20      -- Seconds each round lasts for
+GM.RoundTime = 15      -- Seconds each round lasts for
+GM.RoundCooldown = 1.5
 GM.RoundType = 'timed'
 GM.GameTime  = 600
 GM.HUDStyle  = 3
-
-GM.Elimination = true
-GM.WinBySurvival = true
-GM.ThirdpersonEnabled = true
 
 function GM:Initialize()
 

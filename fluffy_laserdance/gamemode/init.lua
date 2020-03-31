@@ -7,11 +7,6 @@ function GM:PlayerLoadout(ply)
     ply:Give("weapon_laserdance")
 end
 
--- No fall damage
-function GM:GetFallDamage()
-    return 0
-end
-
 -- Add laser trails to players that spawn
 hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
 	-- Don't duplicate the laser trail

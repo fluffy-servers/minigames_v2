@@ -49,7 +49,12 @@ end
 function GM:HandleEndRound(reason)
     if type(reason) == 'number' then
         team.AddScore(reason, 1)
-        return reason, team.GetName(reason) .. ' win the round!'
+        local extra = nil
+        if GAMEMODE.LastSurvivor then
+            extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. ' was the last survivor'
+        end
+        
+        return reason, team.GetName(reason) .. ' win the round!', extra
     elseif type(reason) == 'Player' then
         -- Winning player gets 3 points
         reason:AddFrags(3)
@@ -67,7 +72,7 @@ function GM:HandleEndRound(reason)
             end
         end
         
-        return reason, reason:Nick() .. ' wins the round!'
+        return reason, reason:Nick() .. ' completed the course!'
     else
         return 0, "Nobody wins"
     end

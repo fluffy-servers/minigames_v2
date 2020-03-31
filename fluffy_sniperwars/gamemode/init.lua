@@ -4,21 +4,20 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Give the player these weapons on loadout
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
+    -- Give weapons
     ply:Give('weapon_cloaker')
     ply:Give('weapon_mg_knife')
     ply:Give('weapon_mg_pistol')
-    ply:Give('sw_sniper')
+    ply:Give('weapon_mg_sniper')
     ply:GiveAmmo(512, 'Pistol', true)
     
     ply:SetNoDraw(false)
     ply:SetRunSpeed(350)
     ply:SetWalkSpeed(325)
-end
 
--- Remove fall damage
-function GM:GetFallDamage( ply, speed )
-    return 0
+    -- Select the sniper rifle on spawn
+    ply:SelectWeapon('weapon_mg_sniper')
 end
 
 -- Add frags to player & team when someone dies

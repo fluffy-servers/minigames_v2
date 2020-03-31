@@ -31,14 +31,16 @@ GM.AutoRespawn = true   -- Should players automatically respawn?
 GM.RoundNumber = 5      -- How many rounds?
 GM.RoundTime = 90       -- How long should each round go for?
 GM.RoundCooldown = 5    -- How long between each round?
+GM.WarmupTime = 10      -- How long to wait for players to join before starting the game?
 
 GM.RoundType = 'default'    -- What system should be used for game/round logic?
 GM.GameTime = 600           -- If not using rounds, how long should the game go for?
 GM.EndOnTimeOut = false     -- If using 'timed' RoundType, should this cut off the middle of a round?
 
-GM.CanSuicide = true            -- Should players be able to die at will? :(
+GM.CanSuicide = false           -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
 GM.SpawnProtection = false      -- Should players have brief spawn protection?
+GM.EnableFallDamage = false     -- Should players take fall damage?
 
 GM.DeathSounds = true	-- Should voicelines play on player death?
 GM.KillValue = 1        -- How many points should be awarded for a kill?
@@ -146,18 +148,23 @@ function GM:CreateTeams()
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
+-- Get a table of all alive players
+function GM:GetAlivePlayers()
+    local tbl = {}
+    for k,v in pairs(player.GetAll() ) do
+        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
+    end
+    
+    return tbl
+end
+
 -- Convenience function to get number of living players
 -- This isn't fantastically efficient don't overuse
-function GM:GetLivingPlayers()
-    local alive = 0
-    for k,v in pairs( player.GetAll() ) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then alive = alive + 1 end
-    end
-    return alive
+function GM:GetNumberAlive()
+    return #GAMEMODE:GetAlivePlayers()
 end
 
 -- Convenience function to get number of non-spectators
--- I don't think there is actually a need for this anymore, but it's here
 function GM:NumNonSpectators()
     local num = 0
     for k,v in pairs( player.GetAll() ) do
@@ -172,12 +179,21 @@ function GM:NumNonSpectators()
 end
 
 -- Convenience function to get number of living players in a team
-function GM:GetTeamLivingPlayers( t )
+function GM:GetTeamLivingPlayers(t)
     local alive = 0
-    for k,v in pairs( team.GetPlayers( t ) ) do
+    for k,v in pairs(team.GetPlayers(t)) do
         if v:Alive() and !v.Spectating then alive = alive + 1 end
     end
     return alive
+end
+
+function GM:GetTeamSurvivors(t)
+    local tbl = {}
+    for k,v in pairs(team.GetPlayers(t)) do
+        if v:Alive() and !v.Spectating then table.insert(tbl, v) end
+    end
+    
+    return tbl
 end
 
 -- Much nicer wrapper for this function
@@ -185,13 +201,32 @@ function GM:GetRoundState()
     return GetGlobalString('RoundState', 'GameNotStarted')
 end
 
+function GM:SetRoundState(newstate)
+    return SetGlobalString('RoundState', newstate)
+end
+
 -- This is the most common use of the above function
 -- Helps clean up code
-function GM:IsInRound()
+function GM:InRound()
     return (GAMEMODE:GetRoundState() == 'InRound')
 end
 
 -- Another nice wrapper for a global variable
 function GM:GetRoundStartTime()
     return GetGlobalFloat('RoundStart', 0)
+end
+
+-- Fisher-Yates table shuffle
+function table.Shuffle(t)
+    for i = #t, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
+    end
+    return t
+end
+
+-- Helper function to scale data based on the number of players
+function GM:PlayerScale(ratio, min, max)
+    local players = GAMEMODE:GetNumberAlive()
+    return math.Clamp(math.ceil(players * ratio), min, max)
 end

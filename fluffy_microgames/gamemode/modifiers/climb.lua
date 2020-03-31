@@ -1,42 +1,52 @@
--- Climb
--- Players must climb onto a prop to survive
-MOD = {
-    name = 'Climb',
-    subtext = 'Get on a prop!',
-    time = 10,
+MOD.Name = 'Climb'
+MOD.RoundTime = 10
+MOD.Countdown = true
+
+MOD.SurviveValue = 1
+
+local function spawnProps()
+    local number = GAMEMODE:PlayerScale(0.3, 3, 20)
+    local positions = GAMEMODE:GetRandomLocations(number, 'sky')
+
+    for i=1,number do
+        local pos = positions[i]
+        local ent = ents.Create("prop_physics")
+        ent:SetPos(pos)
+        ent:SetModel('models/props_c17/FurnitureWashingmachine001a.mdl')
+        ent:Spawn()
+
+        -- Add downwards velocity to scatter the props better
+        local vel = VectorRand() * 1000
+        vel.z = -math.abs(vel.z)
+        ent:GetPhysicsObject():SetVelocity(vel)
+    end
+end
+
+function MOD:Initialize()
+    spawnProps()
+    GAMEMODE:Announce("Climb", "Get on a prop!")
+end
+
+function MOD:Loadout(ply)
+    ply:Give('weapon_crowbar')
+end
+
+function MOD:PlayerFinish(ply)
+    local ground = ply:GetGroundEntity()
+    if IsValid(ground) and ground:GetClass() == 'prop_physics' then
+        ply:AwardWin()
+    else
+        ply:Kill()
+    end
+end
+
+function MOD:EntityTakeDamage(ent, dmg)
+    if not ent:IsPlayer() then return end
+    if not dmg:GetAttacker():IsPlayer() then return end
     
-    func_player = function(ply)
-        ply:Give('weapon_crowbar')
-    end,
-    
-	-- Spawn a random number of washing machines
-    func_init = function()
-        local spawns = table.Shuffle(ents.FindByClass('marker_sky'))
-        local number = math.Clamp(player.GetCount() + math.random(-3, 2), 3, #spawns)
-        for i=1,number do
-            local crate = ents.Create('prop_physics')
-            crate:SetPos(spawns[i]:GetPos() - Vector(0, 0, 32))
-            crate:SetModel('models/props_c17/FurnitureWashingmachine001a.mdl')
-            crate:Spawn()
-        end
-    end,
-	
-	-- Verify a player is standing on a prop
-    func_check = function(ply)
-        local tr = util.TraceHull({
-            start = ply:GetPos() + Vector(0, 0, 24),
-            endpos = ply:GetPos() - Vector(0, 0, 128),
-            mins = Vector(-16, -16, -16),
-            maxs = Vector(16, 16, 16)
-            filter = function( ent ) if ( ent:GetClass() == "prop_physics" ) then return true end end
-        })
-        
-        if not IsValid(tr.Entity) or tr.HitWorld then
-            if not ply.Spectating and ply:Alive() then ply:Kill() end
-        elseif ply:Alive() and not ply.Spectating then
-            ply:AddFrags(2)
-        end
-    end,
-    
-    hooks = {EntityTakeDamage = function(ent, dmg) GAMEMODE:CrowbarKnockback(ent, dmg) end}
-}
+    dmg:SetDamage(0)
+    local v = dmg:GetDamageForce():GetNormalized()
+    v.z = math.max(math.abs(v.z) * 0.5, 0.0025)
+    ent:SetGroundEntity(nil)
+    ent:SetVelocity(v * 800)
+end

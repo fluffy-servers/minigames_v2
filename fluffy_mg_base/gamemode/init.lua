@@ -51,7 +51,7 @@ function GM:PlayerSpawn(ply)
     local state = GAMEMODE:GetRoundState()
     
     -- If elimination, block respawns during round
-    if state != 'PreRound' and GAMEMODE.Elimination == true then
+    if state != 'PreRound' and GAMEMODE.Elimination then
         self:PlayerSpawnAsSpectator(ply)
         return
     end
@@ -85,7 +85,7 @@ function GM:PlayerSpawn(ply)
         
         -- Calculate time to be in god mode for
         local god_time = GAMEMODE.SpawnProtectionTime or 3
-        if GAMEMODE:GetRoundState() != 'InRound' then 
+        if not GAMEMODE:InRound() then 
             god_time = god_time + GAMEMODE.RoundCooldown
         end
         
@@ -100,17 +100,32 @@ function GM:PlayerSpawn(ply)
     end
 end
 
--- Open up team menu
-hook.Add('PlayerInitialSpawn', 'DisplayTeamMenu', function(ply)
+-- Minigames team preparation
+function GM:PlayerInitialSpawn(ply)
+    -- Nobody can spawn unless allowed to later
+    ply:KillSilent()
+    ply.FirstSpawn = true
+
+    -- Set teams to unassigned if the gamemode is not team based
+    if not GAMEMODE.TeamBased then
+        ply:SetTeam(TEAM_UNASSIGNED)
+        return
+    end
+
     -- Assign teams
+    -- Bots get automatically assigned, players get to choose
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
     else
         ply:ConCommand("minigames_info")
     end
-    
-    if not GAMEMODE.TeamBased then
-        ply:SetTeam(TEAM_UNASSIGNED)
+end
+
+-- Ensure that players really stay dead
+hook.Add('PlayerSpawn', 'KeepInitialDead', function(ply)
+    if ply.FirstSpawn then
+        ply.FirstSpawn = nil
+        ply:KillSilent()
     end
 end)
 
@@ -153,6 +168,18 @@ function GM:PlayerRequestTeam(ply, teamid)
 	GAMEMODE:PlayerJoinTeam(ply, teamid)
 end
 
+function GM:OnPlayerChangedTeam(ply, old, new)
+    -- Spectators respawn in place
+    if new == TEAM_SPECTATOR then
+        local pos = ply:EyePos()
+        print('SPECTATOR RESPAWN', ply)
+        ply:Spawn()
+        ply:SetPos(pos)
+    end
+
+    PrintMessage(HUD_PRINTTALK, Format("%s joined '%s'", ply:Nick(), team.GetName(new)))
+end
+
 -- Disable friendly fire
 function GM:PlayerShouldTakeDamage(victim, ply)
     if !GAMEMODE.TeamBased then return true end
@@ -186,7 +213,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     end
 
     -- Do not count deaths unless in round
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
@@ -214,40 +241,9 @@ function GM:GetWinningPlayer()
     return bestplayer
 end
 
--- Fairly self-explanatory
-function GM:PlayerSpawnAsSpectator(ply)
-	ply:StripWeapons()
-	ply.Spectating = true
-    ply:Spectate(OBS_MODE_ROAMING)
-    --if !GAMEMODE.TeamBased then ply:SetTeam(TEAM_SPECTATOR) end
-end
-
 -- Override function to stop respawning for whatever reason
 function GM:CanRespawn(ply)
     return true
-end
-
--- Death thinking hook
--- Used as a replacement to slightly broken spectating
-function GM:PlayerDeathThink(ply)
-    ply.DeathTime = ply.DeathTime or CurTime()
-    local t = CurTime() - ply.DeathTime
-    
-    -- Move players to spectate mode
-    local dlt = GAMEMODE.DeathLingerTime or -1
-    if dlt > 0 and t > dlt and ply:GetObserverMode() != OBS_MODE_ROAMING then
-        ply:Spectate(OBS_MODE_ROAMING)
-    end
-    
-    -- Make sure players can respawn
-    if GAMEMODE.Elimination then return false end
-    if not GAMEMODE:CanRespawn(ply) then return false end
-    if t < (GAMEMODE.RespawnTime or 2) then return end
-    
-    -- Respawn players when pressing buttons
-    if GAMEMODE.AutoRespawn or ply:KeyPressed(IN_ATTACK) or ply:KeyPressed(IN_ATTACK2) or ply:KeyPressed(IN_JUMP) then
-        ply:Spawn()
-    end
 end
 
 -- Useful function to swap the current teams
@@ -335,7 +331,7 @@ function GM:GetRandomPlayer(num, forcetable)
     
     -- Return one player for compatibility
     if num == 1 and not forcetable then
-        local players = GAMEMODE:GetLivingPlayers()
+        local players = GAMEMODE:GetAlivePlayers()
         return players[math.random(1, #players)]
     end
     
@@ -401,6 +397,7 @@ end
 function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
     if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
+    if !GAMEMODE:InRound() then return end
     
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)
@@ -418,6 +415,12 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     end
 end
 
+hook.Add('GetFallDamage', 'MinigamesFallDamage', function(ply, vel)
+    if !GAMEMODE.EnableFallDamage then
+        return 0
+    end
+end)
+
 -- Import the component parts
 include('sv_database.lua')
 include('sv_stats.lua')
@@ -426,4 +429,5 @@ include('sv_voting.lua')
 include('sv_player.lua')
 include('sv_levels.lua')
 include('sv_announcements.lua')
+include('sv_spectating.lua')
 include('gametype_hunter.lua')

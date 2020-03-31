@@ -33,8 +33,3 @@ function GM:EntityTakeDamage(target, dmg)
         return true
     end
 end
-
--- Disable fall damage
-function GM:GetFallDamage()
-    return 0
-end

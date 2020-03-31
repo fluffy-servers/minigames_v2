@@ -1,4 +1,5 @@
 local hud_deathnotice_time = CreateConVar("hud_deathnotice_time", "6", FCVAR_REPLICATED, "Amount of time to show death notice")
+local have_killsound = CreateClientConVar("mg_killsound_enabled", 0, true, false)
 
 -- These are our kill icons
 local Color_Icon = Color( 255, 80, 0, 255 )
@@ -41,6 +42,10 @@ net.Receive('PlayerKilledByPlayer', function()
     local inflictor = net.ReadString()
     local attacker = net.ReadEntity()
     
+    if attacker == LocalPlayer() and have_killsound:GetBool() then
+        GAMEMODE:PlayKillSound()
+    end
+
     if not IsValid(attacker) or not IsValid(victim) then return end
     GAMEMODE:AddDeathNotice2(attacker, inflictor, victim)
 end)
@@ -56,7 +61,7 @@ net.Receive('PlayerKilled', function()
     local victim = net.ReadEntity()
     local inflictor = net.ReadString()
     local attacker = StringifyID(net.ReadString())
-    
+
     if not IsValid(victim) then return end
     GAMEMODE:AddDeathNotice2(attacker, inflictor, victim)
 end)
@@ -157,4 +162,8 @@ function GM:DrawDeathNotice(x, y)
         if death.time + hud_deathnotice_time > CurTime() then return end
     end
     Deaths = {}
+end
+
+function GM:PlayKillSound()
+    sound.Play('hl1/fvox/bell.wav', LocalPlayer():GetPos(), 75, math.random(120, 140))
 end

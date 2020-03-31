@@ -1,15 +1,10 @@
-AddCSLuaFile()
+SWEP.Base = 'weapon_mg_base'
 
 if CLIENT then
-    killicon.AddFont('sw_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
-    
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "r"
-    surface.CreateFont("CSSelectIcons", {font="csd", size=ScreenScale(60)})
     
-    function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
-		draw.SimpleText( self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color( 15, 20, 200, 255 ), TEXT_ALIGN_CENTER )
-	end
+    killicon.AddFont('weapon_mg_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
 end
 
 -- Model information
@@ -22,6 +17,7 @@ SWEP.WorldModel = "models/weapons/w_snip_awp.mdl"
 SWEP.UseHands = true
 SWEP.Slot = 0
 SWEP.DrawCrosshair = false
+SWEP.StableAccuracy = true
 
 -- Primary information
 SWEP.Primary.Sound = Sound("npc/sniper/echo1.wav")
@@ -98,7 +94,7 @@ function SWEP:PrimaryAttack()
     self:ZoomOut()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:EmitSound(self.Primary.Sound, 100, math.random(95, 105))
-    self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, 1, 'line_tracer')
+    self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, 'line_tracer')
     self:TakePrimaryAmmo(1)
     
     if SERVER then
@@ -106,36 +102,6 @@ function SWEP:PrimaryAttack()
         local strength2 = math.Rand(-0.15, 0.15) * self.Primary.Recoil
         self.Owner:ViewPunch(Angle(strength1, strength2, 0))
     end
-end
-
--- Useful function for shooting bullets
-function SWEP:ShootBullets(damage, number, aimcone, numtracer, tracername)
-    -- Spread penalty for moving
-    if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
-        aimcone = aimcone * 2.5
-    end
-    
-    -- Accuracy increase for crouching or walking
-    if self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
-        aimcone = math.Clamp(aimcone/2.5, 0, 10)
-    end
-    
-    -- Create the bullet table
-    local bullet = {}
-    bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
-    bullet.Spread = Vector(scale, scale, 0)
-    bullet.Force = math.Round(damage * 2)
-    bullet.Damage = math.Round(damage)
-    bullet.AmmoType = 'Pistol'
-    bullet.Tracer = 1
-    bullet.TracerName = 'line_tracer'
-    
-    self.Owner:FireBullets(bullet)
-    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    self.Owner:MuzzleFlash()
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 -- Handle scope in logic on right click

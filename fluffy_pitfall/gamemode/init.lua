@@ -55,11 +55,6 @@ function GM:PlayerSelectSpawn( pl )
     return selected
 end
 
--- Disable fall damage
-function GM:GetFallDamage(ply, vel)
-    return 0
-end
-
 -- Credit damage to players for Knockbacks
 hook.Add('EntityTakeDamage', 'CreditPitfallKills', function(ply, dmginfo)
     if not ply:IsPlayer() then return end
@@ -79,7 +74,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     ply:CreateRagdoll()
     
     -- Do not count deaths unless in round
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
     
@@ -115,7 +110,7 @@ end )
 
 -- Add platforms to the platforms at random intervals
 hook.Add('Think', 'PowerUpThink', function()
-    if GAMEMODE:GetRoundState() != 'InRound' then return end
+    if not GAMEMODE:InRound() then return end
     if not GAMEMODE.NextPowerUp then GAMEMODE.NextPowerUp = CurTime() + 5 return end
     
     if GAMEMODE.NextPowerUp < CurTime() then
