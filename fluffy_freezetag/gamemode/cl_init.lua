@@ -48,3 +48,19 @@ hook.Add('PostPlayerDraw', 'DrawFrozenMarkers', function(ply)
         render.PopFilterMin()
     cam.End3D2D()
 end)
+
+local ice_color = Color(129, 236, 236)
+-- Render a halo around frozen teammates
+hook.Add('PreDrawHalos', 'DrawFrozenHalos', function()
+    if not LocalPlayer():Alive() or LocalPlayer().Spectating then return end
+    if LocalPlayer():Team() != TEAM_RED and LocalPlayer():Team() != TEAM_BLUE then return end
+
+    local tbl = {}
+    for k,v in pairs(team.GetPlayers(LocalPlayer():Team())) do
+        if v:IsIceFrozen() then
+            table.insert(tbl, v)
+        end
+    end
+
+    halo.Add(tbl, ice_color, 2, 2, 2, true, true)
+end)
