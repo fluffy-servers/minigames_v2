@@ -16,8 +16,9 @@ include('cl_announcements.lua')
 include('cl_killfeed.lua')
 include('cl_chat.lua')
 
-include('vgui/avatar_circle.lua')
+include('vgui/AvatarCircle.lua')
 include('vgui/MapVotePanel.lua')
+include('vgui/ScoreboardRow.lua')
 
 -- Register universal fonts
 -- Coolvetica

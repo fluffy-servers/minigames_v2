@@ -4,48 +4,10 @@
 	This file is a bit of messy
 	I'll get around to reworking it one day I promise
 --]]
-include('vgui/avatar_circle.lua')
-
--- Cache icons
-local fs_icons = {}
-fs_icons['medal_gold'] = Material('icon16/medal_gold_2.png')
-fs_icons['medal_silver'] = Material('icon16/medal_silver_2.png')
-fs_icons['medal_bronze'] = Material('icon16/medal_bronze_2.png')
-
-fs_icons['star'] = Material('icon16/star.png')
-fs_icons['admin'] = Material('icon16/shield.png')
-fs_icons['dev'] = Material('icon16/wrench.png')
-fs_icons['user'] = Material('icon16/user_gray.png')
-fs_icons['donor'] = Material('icon16/heart.png') 
-fs_icons['map'] = Material('icon16/map.png')
-fs_icons['bot'] = Material('icon16/cog.png')
-
-local fs_users = {}
-fs_users['76561198067202125'] = 'dev'
-fs_users['76561198087419337'] = 'map'
-
 fluffy_scoreboard = nil
 
 -- Rank icons and other convienent functions
-local function GetRankIcon(ply)
-	local rank = ply:GetUserGroup()
-    if fs_users[ply:SteamID64()] then
-        return fs_users[ply:SteamID64()]
-    elseif ply:IsAdmin() then
-        return 'admin'
-    elseif ply:GetNWBool('Donor', false) then
-        return 'donor'
-    elseif ply:IsBot() then
-        return 'bot'
-    end
-    
-	return 'user'
-end
 
--- Useful function to shorten names
-local function GetShortName(ply, len)
-	return string.sub(ply:Nick() or '<disconnected>', 1, len or 16)
-end
 
 -- Update the position of the medals
 -- 1-2 players = 1 medal
@@ -121,109 +83,17 @@ function CreateFluffyScoreboard()
 	function fluffy_scoreboard:Think()
 		for k, v in pairs(player.GetAll()) do
 			if IsValid(self.players[v]) then continue end
-			self.players[v] = self:CreatePlayerRow(v)
-			self.PlayerList:AddItem(self.players[v])
+			local row = vgui.Create('ScoreboardRow')
+			row:SetPlayer(v)
+			row:Dock(TOP)
+			row:DockMargin(12, 4, 12, 0)
+			row:AddModule('ping')
+			row:AddModule('deaths')
+			row:AddModule('score')
+			self.PlayerList:AddItem(row)
+
+			self.players[v] = row
 		end
-	end
-	
-    -- Create a player row for a given player
-	function fluffy_scoreboard:CreatePlayerRow(ply)
-		if !IsValid(self.PlayerList) then return end
-		
-        -- Row panel
-		local row = vgui.Create('DPanel')
-		row.Player = ply
-		row:Dock(TOP)
-		row:SetHeight(52)
-		row:DockMargin(12, 4, 12, 0)
-		row:SetZPos(4 + ply:EntIndex())
-        
-        -- Add a clickable button for the avatar
-        row.AvatarButton = row:Add('DButton')
-        row.AvatarButton:SetSize(48, 48)
-        row.AvatarButton:SetPos(2, 2)
-        row.AvatarButton.DoClick = function() ply:ShowProfile() end
-        row.AvatarButton.Paint = function() end
-		
-        -- Add the avatar to the button
-		row.Avatar = vgui.Create('AvatarCircle', row.AvatarButton)
-        if IsValid(row.Avatar) then
-            row.Avatar:SetPlayer(ply, 64)
-            row.Avatar:Dock(FILL)
-            row.Avatar:SetMouseInputEnabled(false)
-        end
-		
-        -- Display the medals for this player
-		function row:PaintOver(w, h)
-			local ply = row.Player
-			surface.SetDrawColor(color_white)
-            local medal_mat = nil
-            
-            -- Determine the medal material
-            if fluffy_scoreboard.medals[1] == ply then medal_mat = fs_icons['medal_gold'] end
-            if fluffy_scoreboard.medals[2] == ply then medal_mat = fs_icons['medal_silver'] end
-            if fluffy_scoreboard.medals[3] == ply then medal_mat = fs_icons['medal_bronze'] end
-            
-            -- Draw the medal
-            if medal_mat then
-            	surface.SetMaterial(medal_mat)
-				surface.DrawTexturedRect(2, 0, 16, 16)
-            end
-		end
-        
-        -- Paint information on the row
-		function row:Paint(w, h)
-            if !IsValid(self.Player) then return end
-			draw.RoundedBox(8, 0, 0, w, h, Color(230, 230, 230, 255))
-            
-            -- Draw rank icon
-			surface.SetDrawColor(color_white)
-			surface.SetMaterial(fs_icons[GetRankIcon(self.Player)])
-			surface.DrawTexturedRect(54, 18, 16, 16)
-            
-            -- Draw player name
-			draw.SimpleText(GetShortName(self.Player, 20), 'FS_32', 76, 12, GAMEMODE.FCol2)
-			
-            -- Draw team information
-			if GAMEMODE.TeamBased then
-				local pt = self.Player:Team()
-				draw.SimpleText(team.GetShortName(pt), 'FS_24', 400, 6, team.GetColor(pt), TEXT_ALIGN_CENTER)
-				draw.SimpleText('Team', 'FS_16', 400, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
-			end
-			
-            -- Draw the score
-			draw.SimpleText(self.Player:Frags(), 'FS_32', 475, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
-			draw.SimpleText('Score', 'FS_16', 475, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
-			
-            -- Draw the deaths
-			draw.SimpleText(self.Player:Deaths(), 'FS_32', 550, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
-			draw.SimpleText('Deaths', 'FS_16', 550, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
-			
-            -- Draw the ping
-			if self.Player:IsBot() then
-				draw.SimpleText('BOT', 'FS_24', 625, 6, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
-			else
-				draw.SimpleText(self.Player:Ping(), 'FS_32', 625, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
-			end
-			draw.SimpleText('Ping', 'FS_16', 625, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
-		end
-		
-        -- Shuffle the row in the list depending on the score
-		function row:Think()
-			if !IsValid(self.Player) then
-				self:SetZPos(9999)
-				self:Remove()
-				return
-			end
-			if !IsValid(fluffy_scoreboard) then
-				self:Remove()
-				return
-			end
-			self:SetZPos((self.Player:Frags() * -50) + self.Player:EntIndex())
-		end
-        
-        -- Return the newly created row object
-		return row
 	end
 	
     -- Create the playerlist for the scoregboard
