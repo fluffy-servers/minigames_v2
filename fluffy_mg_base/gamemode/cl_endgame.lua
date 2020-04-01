@@ -33,7 +33,7 @@ function GM:OpenEndGamePanel()
     frame.offx = 0
     frame.offy = 0
     frame.bar_h = 64
-    frame.Background = Material('gamemodes/fluffy_mg_base/content/materials/fluffy/pattern1.png', 'noclamp')
+    frame.Background = Material('fluffy/pattern1.png', 'noclamp')
     
     -- Prepare variables to do with level information
     frame.CurrentXP = LocalPlayer():GetExperience()
