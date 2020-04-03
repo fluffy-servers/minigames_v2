@@ -21,8 +21,11 @@ include('vgui/MapVotePanel.lua')
 include('vgui/ScoreboardRow.lua')
 
 -- Register universal fonts
--- Coolvetica
 surface.CreateFont("FS_16", {
+	font = "Coolvetica",
+	size = 16,
+})
+surface.CreateFont("FS_20", {
 	font = "Coolvetica",
 	size = 20,
 })

@@ -260,13 +260,13 @@ function GM:OpenEndGamePanel()
             local tab_width = (w-40)/2
             draw.RoundedBox(8, 16, 48, tab_width, 52, team.GetColor(1))
             draw.SimpleText(team.GetName(1), 'FS_32', 24, 48, color_white)
-            draw.SimpleText('Kills: ' .. team.TotalFrags(1), 'FS_16', 24, 72, color_white)
+            draw.SimpleText('Kills: ' .. team.TotalFrags(1), 'FS_20', 24, 72, color_white)
             draw.SimpleText(team.GetScore(1), 'FS_60', 16 + tab_width - 4, 72, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
             
             local t2 = w - tab_width - 16
             draw.RoundedBox(8, t2, 48, tab_width, 52, team.GetColor(2))
             draw.SimpleText(team.GetName(2), 'FS_32', t2+8, 48, color_white, TEXT_ALIGN_LEFT )
-            draw.SimpleText('Kills: ' .. team.TotalFrags(2), 'FS_16', t2+8, 72, color_white, TEXT_ALIGN_LEFT )
+            draw.SimpleText('Kills: ' .. team.TotalFrags(2), 'FS_20', t2+8, 72, color_white, TEXT_ALIGN_LEFT )
             draw.SimpleText(team.GetScore(2), 'FS_60', t2 + tab_width - 4, 72, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
         end
     end
@@ -297,16 +297,16 @@ function GM:OpenEndGamePanel()
                     if pt == 2 then name = 'Blue' end
                     if pt == 1002 then name = 'Spec' end
                     draw.SimpleText(name, 'FS_24', 400, ty - 20, team.GetColor(pt), TEXT_ALIGN_CENTER)
-                    draw.SimpleText('Team', 'FS_16', 400, ty + 4, c1, TEXT_ALIGN_CENTER)
+                    draw.SimpleText('Team', 'FS_20', 400, ty + 4, c1, TEXT_ALIGN_CENTER)
                 end
                 
                 -- Draw the score
                 draw.SimpleText(self.Player:Frags(), 'FS_32', 475, ty - 24, c1, TEXT_ALIGN_CENTER)
-                draw.SimpleText('Score', 'FS_16', 475, ty + 4, c1, TEXT_ALIGN_CENTER)
+                draw.SimpleText('Score', 'FS_20', 475, ty + 4, c1, TEXT_ALIGN_CENTER)
                 
                 -- Draw the deaths
                 draw.SimpleText(self.Player:Deaths(), 'FS_32', 550, ty - 24, c1, TEXT_ALIGN_CENTER)
-                draw.SimpleText('Deaths', 'FS_16', 550, ty + 4, c1, TEXT_ALIGN_CENTER)
+                draw.SimpleText('Deaths', 'FS_20', 550, ty + 4, c1, TEXT_ALIGN_CENTER)
             end
         else
             function row:Paint(w, h)

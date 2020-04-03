@@ -210,7 +210,7 @@ function GM:CreateHelpPanel()
                 local name = team.GetName(id) or ''
                 draw.SimpleText(name, 'FS_32', w/2, h/2 - 6, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
                 local num = team.NumPlayers(id) or 0
-                draw.SimpleText(num .. ' players', 'FS_16', w/2, h/2 + 14, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+                draw.SimpleText(num .. ' players', 'FS_20', w/2, h/2 + 14, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
                 DisableClipping(false)
             end
             

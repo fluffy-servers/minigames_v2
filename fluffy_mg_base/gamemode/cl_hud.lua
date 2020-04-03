@@ -544,7 +544,7 @@ function GM:DrawAmmo()
     if ammo['PrimaryAmmo'] and ammo['PrimaryAmmo'] > -1 and ammo['PrimaryAmmo'] < 1000 and ammo['PrimaryClip'] > -1 then
         -- Clip & ammo
         GAMEMODE:DrawShadowText(ammo['PrimaryClip'], 'FS_40', ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        GAMEMODE:DrawShadowText(ammo['PrimaryAmmo'] or 72, 'FS_16', ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(ammo['PrimaryAmmo'] or 72, 'FS_20', ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     elseif ammo['PrimaryClip'] != -1 then
         -- Clip1 only
         GAMEMODE:DrawShadowText(ammo['PrimaryClip'], 'FS_60', ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -587,7 +587,7 @@ function GM:CreateRoundEndPanel(message, tagline)
             
             draw.SimpleText(self.Message, 'FS_B32', w/2 + 1, 20 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(self.Message, 'FS_B32', w/2, 20, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText(self.TagLine, 'FS_16', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText(self.TagLine, 'FS_20', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         else
             draw.RoundedBoxEx(16, 0, 0, w, h, GAMEMODE.FCol2, false, false, true, true)
             draw.SimpleText(self.Message, 'FS_B32', w/2 + 1, h/2 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)

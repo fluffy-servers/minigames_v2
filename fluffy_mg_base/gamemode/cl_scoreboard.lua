@@ -56,12 +56,12 @@ function CreateFluffyScoreboard()
         if GAMEMODE.TeamBased and GAMEMODE.ShowTeamScoreboard then
             draw.RoundedBox(8, 32, 36, 256, 52, team.GetColor(TEAM_BLUE))
             draw.SimpleText(team.GetName(TEAM_BLUE), 'FS_32', 40, 36, GAMEMODE.FCol1)
-            --draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_BLUE), 'FS_16', 40, 60, GAMEMODE.FCol1)
+            --draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_BLUE), 'FS_20', 40, 60, GAMEMODE.FCol1)
             draw.SimpleText(team.GetScore(TEAM_BLUE), 'FS_60', 284, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
             
             draw.RoundedBox(8, 412, 36, 256, 52, team.GetColor(TEAM_RED))
             draw.SimpleText(team.GetName(TEAM_RED), 'FS_32', 660, 36, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT)
-            --draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_RED), 'FS_16', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT)
+            --draw.SimpleText('Kills: ' .. team.TotalFrags(TEAM_RED), 'FS_20', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT)
             draw.SimpleText(team.GetScore(TEAM_RED), 'FS_60', 416, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         end
 	end

@@ -124,8 +124,8 @@ function GM:DrawRoundState()
     -- Draw the round wins for each team
     local red_score = team.GetScore(1)
     local blue_score = team.GetScore(2)
-    draw.SimpleText(red_score .. ' wins', "FS_16",  xx, yy + 36 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
-    draw.SimpleText(red_score .. ' wins', "FS_16",  xx, yy + 36, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    draw.SimpleText(blue_score .. ' wins', "FS_16", xx+64, yy + 36 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
-    draw.SimpleText(blue_score .. ' wins', "FS_16", xx+64, yy + 36, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(red_score .. ' wins', "FS_20",  xx, yy + 36 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+    draw.SimpleText(red_score .. ' wins', "FS_20",  xx, yy + 36, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(blue_score .. ' wins', "FS_20", xx+64, yy + 36 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
+    draw.SimpleText(blue_score .. ' wins', "FS_20", xx+64, yy + 36, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
