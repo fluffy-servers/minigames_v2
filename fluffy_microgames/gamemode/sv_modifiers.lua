@@ -78,6 +78,11 @@ function GM:SetupModifier(modifier)
         end)
     end
 
+    -- Turn on the scoring pane if requested
+    if modifier.ScoringPane then
+        SetGlobalBool("ScoringPaneActive", true)
+    end
+
     GAMEMODE.LastThink = CurTime()
     GAMEMODE.ModifierStart = CurTime()
 end
@@ -133,9 +138,14 @@ function GM:TeardownModifier(modifier)
             modifier:PlayerFinish(v)
         end
 
-        -- Survival bonus if applicable)
+        -- Survival bonus (if applicable)
         if modifier.SurviveValue and v:Alive() and not v.Spectating then
             v:AddFrags(modifier.SurviveValue)
+        end
+
+        -- Convert MScore (if applicable)
+        if modifier.ScoreValue then
+            v:ConvertMScore(modifier.ScoreValue)
         end
     end
 
@@ -146,9 +156,16 @@ function GM:TeardownModifier(modifier)
         end
         GAMEMODE.ModifierHooks = nil
     end
+
+    -- Disable scoring pane after a brief moment
+    timer.Simple(1.5, function()
+        SetGlobalBool("ScoringPaneActive", false)
+    end)
 end
 
--- Basic function to get the player with the most frags
+-- Return the winning player for a Microgames modifier
+-- This will check for a lone survivor if applicable
+-- Otherwise returns the player with the highest MScore
 function GM:GetWinningPlayer(modifier)
     -- Return modifier behaviour if it exists
     if modifier.GetWinningPlayer then
@@ -164,7 +181,7 @@ function GM:GetWinningPlayer(modifier)
         end
     end
     
-    -- Otherwise, loop through all players and return the one with the most frags
+    -- Otherwise, loop through all players and return the one with the most MScore
     local bestscore = 0
     local bestplayer = nil
     for k,v in pairs(player.GetAll()) do
