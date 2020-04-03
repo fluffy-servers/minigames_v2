@@ -26,6 +26,7 @@ AddCSLuaFile('shop/sh_init.lua')
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
 AddCSLuaFile('sh_levels.lua')
+AddCSLuaFile('sh_scorehelper.lua')
 
 -- Add workshop content
 resource.AddWorkshop('1518438705')
@@ -148,39 +149,6 @@ function GM:ShowTeam(ply)
     ply:ConCommand("minigames_info")
 end
 
-function GM:PlayerRequestTeam(ply, teamid)
-	if not GAMEMODE.TeamBased then return end
-    
-    -- Stop players joining weird teams
-	if not team.Joinable(teamid) then
-		ply:ChatPrint("You can't join that team")
-        return 
-    end
-    
-    -- Stop players changing teams in certain gamemodes
-    if not GAMEMODE.PlayerChooseTeams then
-        ply:ChatPrint("You can't change teams in this gamemode!")
-    end
-        
-	-- Run the can join hook
-	if not hook.Run('PlayerCanJoinTeam', ply, teamid) then
-        return
-    end
-	GAMEMODE:PlayerJoinTeam(ply, teamid)
-end
-
-function GM:OnPlayerChangedTeam(ply, old, new)
-    -- Spectators respawn in place
-    if new == TEAM_SPECTATOR then
-        local pos = ply:EyePos()
-        print('SPECTATOR RESPAWN', ply)
-        ply:Spawn()
-        ply:SetPos(pos)
-    end
-
-    PrintMessage(HUD_PRINTTALK, Format("%s joined '%s'", ply:Nick(), team.GetName(new)))
-end
-
 -- Disable friendly fire
 function GM:PlayerShouldTakeDamage(victim, ply)
     if !GAMEMODE.TeamBased then return true end
@@ -247,85 +215,6 @@ function GM:CanRespawn(ply)
     return true
 end
 
--- Useful function to swap the current teams
-function GM:SwapTeams(respawn)
-    local red_players = team.GetPlayers(TEAM_RED)
-    local blue_players = team.GetPlayers(TEAM_BLUE)
-    local respawn = respawn or true
-    
-    -- Move red players to blue
-    for k,v in pairs(red_players) do 
-        v:SetTeam(TEAM_BLUE)
-        if respawn then v:Spawn() end
-    end
-    
-    -- Move blue players to red
-    for k,v in pairs(blue_players) do 
-        v:SetTeam(TEAM_RED)
-        if respawn then v:Spawn() end
-    end
-end
-
--- Useful function to scramble the teams nicely
--- This is good for rebalancing if things go really badly
-function GM:ShuffleTeams(respawn)
-    -- Figure out what players are eligible for team swaps
-    local respawn = respawn or true
-    local players = {}
-    local num = 0
-    for k,v in pairs(player.GetAll()) do
-        if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then 
-            num = num + 1
-            table.insert(players, v)
-        end
-    end
-    
-    -- Reassign the teams
-    players = table.Shuffle(players)
-    for i = 1,num do
-        if i%2 == 0 then 
-            players[i]:SetTeam(TEAM_RED) 
-        else 
-            players[i]:SetTeam(TEAM_BLUE) 
-        end
-        
-        if respawn then players[i]:Spawn() end
-    end
-end
-
--- Fisher-Yates table shuffle
-function table.Shuffle(t)
-    for i = #t, 2, -1 do
-        local j = math.random(i)
-        t[i], t[j] = t[j], t[i]
-    end
-    return t
-end
-
--- Test the fairness of the shuffling
--- I'm pretty sure it's fair now
-function testShuffle()
-    local results1 = {}
-    local results2 = {}
-    local resultsN = {}
-    local tester = {'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H'}
-    
-    for i = 1, 10000 do
-        local t = table.Copy(tester)
-        t = table.Shuffle(t)
-        
-        results1[t[1]] = (results1[t[1]] or 0) + 1
-        results2[t[1]] = (results2[t[2]] or 0) + 1
-        resultsN[t[#t]] = (resultsN[t[#t]] or 0) + 1
-    end
-    
-    PrintTable(results1)
-    print('-')
-    PrintTable(results2)
-    print('-')
-    PrintTable(resultsN)
-end
-
 -- Pick a random player
 function GM:GetRandomPlayer(num, forcetable)
     num = num or 1
@@ -349,17 +238,6 @@ function GM:GetRandomPlayer(num, forcetable)
     end
     
     return output -- return table
-end
-
--- This is for rewarding melons at the end of a game
--- Override for gamemodes with better scores
-function GM:GetMVP()
-	if !IsValid(fluffy_scoreboard) then return end
-	
-	local tbl = player.GetAll()
-	local count = #tbl
-	table.sort(tbl, function(a, b) return a:Frags()*-50 + a:EntIndex() < b:Frags()*-50 + b:EntIndex() end)
-    return tbl[1]
 end
 
 -- Remove extra stuff on deathmatch maps
@@ -431,4 +309,5 @@ include('sv_player.lua')
 include('sv_levels.lua')
 include('sv_announcements.lua')
 include('sv_spectating.lua')
+include('sv_teams.lua')
 include('gametype_hunter.lua')

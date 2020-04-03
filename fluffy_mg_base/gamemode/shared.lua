@@ -9,6 +9,7 @@
 DeriveGamemode('base')
 include('sound_tables.lua')
 include('sh_levels.lua')
+include('sh_scorehelper.lua')
 include('shop/sh_init.lua')
 
 -- These variables should be altered in each sub gamemode's shared.lua file
@@ -60,25 +61,14 @@ function GM:Initialize()
 	-- There's nothing that needs to be handled here, hence the blank
 end
 
---[[
-CreateConVar('fluffy_gametype', 'suicidebarrels', FCVAR_REPLICATED, 'Fluffy Minigames gamemode controller')
-function GM:Initialize()
-    -- Determine the gamemode type from convar
-    local gtype = GetConVar('fluffy_gametype'):GetString()
-    local gamemode = GetConVar('gamemode'):GetString() -- i hate this
-    if not file.Exists(gamemode..'/gamemode/gametypes/'..gtype..'/shared.lua', 'LUA') then print('Could not find directory') return end
-    
-    -- Load the files
-    if SERVER then
-        AddCSLuaFile(gamemode..'/gamemode/gametypes/'..gtype..'/cl_init.lua')
-        AddCSLuaFile(gamemode..'/gamemode/gametypes/'..gtype..'/shared.lua')
-        include(gamemode..'/gamemode/gametypes/'..gtype..'/init.lua')
-    elseif CLIENT then
-        include(gamemode..'/gamemode/gametypes/'..gtype..'/cl_init.lua')
+-- Fisher-Yates table shuffle
+function table.Shuffle(t)
+    for i = #t, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
     end
-    include(gamemode..'/gamemode/gametypes/'..gtype..'/shared.lua')
+    return t
 end
---]]
 
 -- These teams should work fantastically for most gamemodes
 TEAM_RED = 1
@@ -214,15 +204,6 @@ end
 -- Another nice wrapper for a global variable
 function GM:GetRoundStartTime()
     return GetGlobalFloat('RoundStart', 0)
-end
-
--- Fisher-Yates table shuffle
-function table.Shuffle(t)
-    for i = #t, 2, -1 do
-        local j = math.random(i)
-        t[i], t[j] = t[j], t[i]
-    end
-    return t
 end
 
 -- Helper function to scale data based on the number of players
