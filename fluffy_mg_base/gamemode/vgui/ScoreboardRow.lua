@@ -56,6 +56,11 @@ modules['score'] = {
     'Score'
 }
 
+modules['level'] = {
+    function(p) return p:GetLevel() end,
+    'Level'
+}
+
 PANEL = {}
 
 function PANEL:Init()
@@ -68,6 +73,7 @@ function PANEL:Init()
     self.Avatar = vgui.Create('AvatarCircle', self.AvatarButton)
     self.Avatar:Dock(FILL)
     self.Avatar:SetMouseInputEnabled(false)
+    self.Avatar:DrawLevel(false)
     self.Modules = {}
 
     self:SetHeight(54)
@@ -127,7 +133,7 @@ function PANEL:Paint(w, h)
 
         if v[2] then
             draw.SimpleText(v[1](self.Player), 'FS_32', xx, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
-            draw.SimpleText(v[2], 'FS_16', xx, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
+            draw.SimpleText(v[2], 'FS_20', xx, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
         else
             draw.SimpleText(v[1](self.Player), 'FS_56', w - 40, h/2 + 1, GAMEMODE.FCol1, TEXT_ALIGN_CENTER) 
         end
