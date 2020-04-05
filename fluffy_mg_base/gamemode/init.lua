@@ -18,8 +18,9 @@ AddCSLuaFile('cl_announcements.lua')
 AddCSLuaFile('cl_killfeed.lua')
 AddCSLuaFile('cl_chat.lua')
 
-AddCSLuaFile('vgui/avatar_circle.lua')
+AddCSLuaFile('vgui/AvatarCircle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
+AddCSLuaFile('vgui/ScoreboardRow.lua')
 
 AddCSLuaFile('shop/sh_init.lua')
 
