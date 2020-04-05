@@ -6,36 +6,17 @@ ENT.Base = "base_anim"
 ENT.MinRespawn = 10
 ENT.MaxRespawn = 20
 
-local weapon_table = {}
-weapon_table['1'] = {'weapon_mg_knife', 'weapon_mg_pistol', 'weapon_mg_smg'}
-weapon_table['2'] = {'weapon_mg_shotgun', 'weapon_mg_smg', 'weapon_crossbow', 'weapon_357'}
-weapon_table['3'] = {'weapon_mg_sniper', 'weapon_rpg', 'weapon_mg_mortar', 'weapon_frag'}
-
-local models_table = {}
-models_table['weapon_mg_shotgun'] = 'models/weapons/w_shotgun.mdl'
-models_table['weapon_mg_knife'] = 'models/weapons/w_knife_t.mdl'
-models_table['weapon_mg_pistol'] = 'models/weapons/w_pistol.mdl'
-models_table['weapon_mg_smg'] = 'models/weapons/w_smg1.mdl'
-models_table['weapon_crossbow'] = 'models/weapons/w_crossbow.mdl'
-models_table['weapon_357'] = 'models/weapons/w_357.mdl'
-models_table['weapon_mg_sniper'] = 'models/weapons/w_snip_awp.mdl'
-models_table['weapon_rpg'] = 'models/weapons/w_rocket_launcher.mdl'
-models_table['weapon_mg_mortar'] = 'models/weapons/w_rocket_launcher.mdl'
-models_table['weapon_frag'] = 'models/weapons/w_grenade.mdl'
-
-local ammo_table = {}
-ammo_table['weapon_mg_shotgun'] = {'Buckshot', 12}
-ammo_table['weapon_mg_pistol'] = {'Pistol', 12}
-ammo_table['weapon_mg_smg'] = {'SMG1', 60}
-ammo_table['weapon_crossbow'] = {'XBowBolt', 5}
-ammo_table['weapon_357'] = {'357', 12}
-ammo_table['weapon_mg_sniper'] = {'Pistol', 12}
-ammo_table['weapon_rpg'] = {'RPG_Round', 3}
-ammo_table['weapon_mg_mortar'] = {'RPG_Round', 3}
-ammo_table['weapon_frag'] = {'Grenade', 3}
-
 if SERVER then
     function ENT:Initialize()
+        if not GAMEMODE.WeaponSpawners then
+            self:Remove()
+            return
+        end
+
+        self.WeaponTable = GAMEMODE.WeaponSpawners['spawns']
+        self.ModelsTable = GAMEMODE.WeaponSpawners['models']
+        self.AmmoTable = GAMEMODE.WeaponSpawners['ammo']
+
         self.CreationTime = CurTime()
         self.NextTime = self.CreationTime + math.random(self.MinRespawn, self.MaxRespawn)
         self:SetModel("models/hunter/blocks/cube075x2x075.mdl")

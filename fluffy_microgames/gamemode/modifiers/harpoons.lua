@@ -26,7 +26,7 @@ function MOD:Initialize()
     local positions = GAMEMODE:GetRandomLocations(1, 'center')
 
     for i=1,number do
-        local pos = positions[1] + Vector(0, 0, i*32)
+        local pos = positions[1] + Vector(math.random(-48, 48), math.random(-48, 48), i*32)
         local ang = Angle(0, math.random(360), 0)
         local ent = ents.Create("prop_physics")
         ent:SetPos(pos)
@@ -44,15 +44,20 @@ end
 function GM:AllowPlayerPickup(ply, ent)
     if ent.HarpoonOwner and ent.HarpoonOwner != ply then return false end
 
+    local pcolor = ply:GetPlayerColor()
+    local color = Color(pcolor[1]*255, pcolor[2]*255, pcolor[3]*255)
     ent.HarpoonOwner = ply
+    ent:SetColor(color)
+
     return true
 end
 
-GM.ThinkTime = 1
+GM.ThinkTime = 0.5
 function GM:Think()
     for k,v in pairs(ents.FindByClass('prop_physics')) do
         if not v:IsPlayerHolding() then
             v.HarpoonOwner = nil
+            v:SetColor(color_white)
         end
     end
 end

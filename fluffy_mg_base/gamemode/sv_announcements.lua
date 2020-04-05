@@ -5,13 +5,14 @@
 --]]
 
 -- Serverside function for making a countdown announcement
-function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
+function GM:CountdownAnnouncement(length, endtext, location, endsound, ticksound)
     local tbl = {
         type = 'countdown',
         length = length,
         endtext = endtext,
         endsound = endsound,
-        ticksound = ticksound
+        ticksound = ticksound,
+        location = location or 'center',
     }
     net.Start('MinigamesAnnouncement')
         net.WriteTable(tbl)
@@ -19,13 +20,14 @@ function GM:CountdownAnnouncement(length, endtext, endsound, ticksound)
 end
 
 -- Serverside function for making a pulse announcement
-function GM:PulseAnnouncement(duration, text, size, sound)
+function GM:PulseAnnouncement(duration, text, size, location, sound)
     local tbl = {
         type = 'pulse',
         duration = duration,
         sound = sound,
         text = text,
         size = size,
+        location = location or 'center'
     }
     net.Start('MinigamesAnnouncement')
         net.WriteTable(tbl)
@@ -33,7 +35,7 @@ function GM:PulseAnnouncement(duration, text, size, sound)
 end
 
 -- Serverside function for making a pulse with subtext announcement
-function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, sound)
+function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, location, sound)
     local tbl = {
         type = 'pulse_subtext',
         duration = duration,
@@ -41,6 +43,7 @@ function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, sound)
         text = text,
         subtext = subtext,
         size = size,
+        location = location or 'center'
     }
     net.Start('MinigamesAnnouncement')
         net.WriteTable(tbl)
@@ -48,13 +51,14 @@ function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, sound)
 end
 
 -- Send a pulse announcement to only one player
-function GM:PlayerOnlyAnnouncement(ply, duration, text, size, sound)
+function GM:PlayerOnlyAnnouncement(ply, duration, text, size, location, sound)
     local tbl = {
         type = 'pulse',
         duration = duration,
         sound = sound,
         text = text,
         size = size,
+        location = location or 'center'
     }
     net.Start('MinigamesAnnouncement')
         net.WriteTable(tbl)
@@ -62,13 +66,14 @@ function GM:PlayerOnlyAnnouncement(ply, duration, text, size, sound)
 end
 
 -- Send a pulse announcement to many players
-function GM:TableOnlyAnnouncement(recipients, duration, text, size, sound)
+function GM:TableOnlyAnnouncement(recipients, duration, text, size, location, sound)
     local tbl = {
         type = 'pulse',
         duration = duration,
         sound = sound,
         text = text,
         size = size,
+        location = location or 'center'
     }
     net.Start('MinigamesAnnouncement')
         net.WriteTable(tbl)

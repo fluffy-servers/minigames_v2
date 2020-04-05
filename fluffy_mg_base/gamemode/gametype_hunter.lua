@@ -78,7 +78,7 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
     if IsValid(last_player) and last_player != false then
         -- Award the last survivor bonus
         local name = string.sub(last_player:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8)
+        GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8, 'top')
         last_player:AddStatPoints('LastSurvivor', 1)
 
         GAMEMODE.LastSurvivor = last_player

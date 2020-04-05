@@ -34,7 +34,7 @@ function PANEL:SetNumSides(num, off)
 end
 
 -- Set whether this panel should draw the player level
-function PANEL:DrawLevel(bool)
+function PANEL:SetDrawLevel(bool)
     self.DrawLevel = bool
 end
 
@@ -90,6 +90,25 @@ function PANEL:Paint(w, h)
  
     render.SetStencilEnable(false)
     render.ClearStencil()
+end
+
+function PANEL:PaintOver(w, h)
+    if not self.Player then return end
+    if not self.DrawLevel then return end
+
+    local xx = w - 6
+    local yy = h - 6
+
+    DisableClipping(true)
+
+    draw.NoTexture()
+    surface.SetDrawColor(Color(95, 39, 205))
+    drawCircle(xx, yy, 10, 6, 0)
+
+    local level = self.Player:GetLevel()
+    draw.SimpleText(level, "FS_12", xx, yy, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+    DisableClipping(false)
 end
 
 -- Register this so we can reuse it later

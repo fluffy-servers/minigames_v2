@@ -162,7 +162,9 @@ function GM:HandleFFAWin(reason)
     
     -- Award bonus win points based on modifier properties
     if winner then
-        if modifier.SurviveValue then
+        if modifier.WinValue then
+            winner:AddFrags(modifier.WinValue)
+        elseif modifier.SurviveValue then
             winner:AddFrags(modifier.SurviveValue * 2)
         elseif modifier.KillValue then
             winner:AddFrags(modifier.KillValue * 2)
@@ -198,8 +200,8 @@ end
 -- Helper function to relay announcements
 function GM:Announce(title, subtext)
     if subtext then
-        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext)
+        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext, 'center')
     else
-        GAMEMODE:PulseAnnouncement(3, title, subtext)
+        GAMEMODE:PulseAnnouncement(3, title, subtext, 'center')
     end
 end

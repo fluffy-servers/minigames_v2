@@ -40,7 +40,7 @@ function GM:PickBomber()
 	newply:Give('bt_bomb')
     
     local name = string.sub(newply:Nick(), 1, 10)
-    GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1)
+    GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1, 'top')
 end
 
 -- Pick a new bomb carrier if the current one dies :(

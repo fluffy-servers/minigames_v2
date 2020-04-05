@@ -84,7 +84,7 @@ function SWEP:PassBomb(ply)
 	timer.Simple(0.1, function() ply:Give("bt_bomb") end)
     
     local name = string.sub(ply:Nick(), 1, 10)
-    GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1)
+    GAMEMODE:PulseAnnouncement(2, name .. ' has the bomb!', 1, 'top')
 end
 
 function SWEP:Trace()

@@ -74,7 +74,7 @@ function GM:SetupModifier(modifier)
     if modifier.Countdown then
         local time = modifier.RoundTime or GAMEMODE.RoundTime
         timer.Simple(time - 3, function()
-            GAMEMODE:CountdownAnnouncement(3)
+            GAMEMODE:CountdownAnnouncement(3, nil, "center")
         end)
     end
 

@@ -47,7 +47,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- If the King dies accidentally, make King up for grabs
     if ply:GetNWBool('IsKing', false) and (attacker == ply or !attacker:IsValid() or !attacker:IsPlayer()) then
         ply:SetNWBool('IsKing', false)
-        GAMEMODE:PulseAnnouncement(2, 'King is up for grabs!', 1)
+        GAMEMODE:PulseAnnouncement(2, 'King is up for grabs!', 1, 'top')
         GAMEMODE.CurrentKing = nil
         SetGlobalEntity("KingPlayer", NULL)
         return
@@ -67,7 +67,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1)
+        GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1, 'top')
         SetGlobalEntity("KingPlayer", attacker)
     end
     
@@ -80,7 +80,7 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         GAMEMODE:MakeKing(attacker)
         GAMEMODE.CurrentKing = attacker
         local name = string.sub(attacker:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1)
+        GAMEMODE:PulseAnnouncement(2, name .. ' is now King!', 1, 'top')
         SetGlobalEntity("KingPlayer", attacker)
     end
     

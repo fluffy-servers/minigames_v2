@@ -1,5 +1,5 @@
 if CLIENT then
-	SWEP.PrintName = "Base Weapon"
+	SWEP.PrintName = "Mingames Base Weapon"
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
 
@@ -39,7 +39,7 @@ SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 
 -- Apply the weapon hold type
-function SWEP:Initialize() 
+function SWEP:Initialize()
 	self:SetWeaponHoldType(self.HoldType)
 end 
 
