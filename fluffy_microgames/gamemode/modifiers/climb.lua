@@ -42,7 +42,7 @@ end
 
 function MOD:EntityTakeDamage(ent, dmg)
     if not ent:IsPlayer() then return end
-    if not dmg:GetAttacker():IsPlayer() then return end
+    if not dmg:GetAttacker():IsPlayer() then return true end
     
     dmg:SetDamage(0)
     local v = dmg:GetDamageForce():GetNormalized()
