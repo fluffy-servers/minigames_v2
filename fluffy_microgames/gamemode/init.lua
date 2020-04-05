@@ -200,8 +200,8 @@ end
 -- Helper function to relay announcements
 function GM:Announce(title, subtext)
     if subtext then
-        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext, 'center')
+        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext, 1, 'center')
     else
-        GAMEMODE:PulseAnnouncement(3, title, subtext, 'center')
+        GAMEMODE:PulseAnnouncement(3, title, 1, 'center')
     end
 end

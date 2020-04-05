@@ -60,6 +60,11 @@ function GM:SetupModifier(modifier)
             modifier:Loadout(v)
         end
     end
+
+    -- Reset modifier scores to 0
+    for k,v in pairs(player.GetAll()) do
+        v:SetMScore(0)
+    end
     
     -- Register any hooks related to this modifier
     GAMEMODE.ModifierHooks = {}
