@@ -13,3 +13,18 @@ function GM:PlayerLoadout(ply)
     ply:SetWalkSpeed(300)
     ply:SetJumpPower(200)
 end
+
+function GM:WeaponEquip(wep, ply)
+    if wep.SpawnerEntity then
+        wep.SpawnerEntity:CollectWeapon(ply)
+    end
+end
+
+function GM:PlayerCanPickupWeapon(ply, wep)
+    if ply:HasWeapon(wep:GetClass()) then
+        GAMEMODE:WeaponEquip(wep, ply)
+        wep:Remove()
+    else
+        return true
+    end
+end

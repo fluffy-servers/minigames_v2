@@ -1,6 +1,7 @@
-EFFECT.Mat = Material('sprites/glow04_noz')
+EFFECT.Mat = Material('sprites/physg_glow1')
 --sprites/light_ignorez
 --sprites/physg_glow1
+--sprites/glow04_noz
 
 function EFFECT:Init(data)
     self.Size = 24
@@ -10,6 +11,8 @@ function EFFECT:Init(data)
     self.Angle = 0
     self.AngOff = (math.pi / self.Number) * 2
     self.Z = -16
+
+    self.Color = HSVToColor(CurTime()*100 % 360, 1, 1)
 end
 
 function EFFECT:Think()
@@ -21,7 +24,10 @@ end
 
 function EFFECT:Render()
     local p = self.Pos
-    local c = Color(0, 255, 128, self.Alpha)
+
+    local c = self.Color
+    c.a = 255
+
     for i=1,self.Number do
         local angle = self.Angle + i*self.AngOff
         local p = self.Pos + Vector(self.Size * math.cos(angle), self.Size * math.sin(angle), self.Z + i)
