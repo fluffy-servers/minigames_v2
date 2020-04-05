@@ -73,7 +73,7 @@ function PANEL:Init()
     self.Avatar = vgui.Create('AvatarCircle', self.AvatarButton)
     self.Avatar:Dock(FILL)
     self.Avatar:SetMouseInputEnabled(false)
-    self.Avatar:DrawLevel(false)
+    self.Avatar:SetDrawLevel(false)
     self.Modules = {}
 
     self:SetHeight(54)

@@ -34,7 +34,7 @@ function PANEL:SetNumSides(num, off)
 end
 
 -- Set whether this panel should draw the player level
-function PANEL:DrawLevel(bool)
+function PANEL:SetDrawLevel(bool)
     self.DrawLevel = bool
 end
 
