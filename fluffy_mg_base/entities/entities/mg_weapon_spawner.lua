@@ -47,7 +47,6 @@ if SERVER then
         wep:Spawn()
 
         local phys = wep:GetPhysicsObject()
-        print(phys)
         if IsValid(phys) then
             phys:EnableMotion(false)
         end
@@ -70,7 +69,7 @@ if SERVER then
 
         -- Announce to the player
         local name = wep:GetPrintName()
-        GAMEMODE:PlayerOnlyAnnouncement(ply, 1, name, 1)
+        GAMEMODE:PlayerOnlyAnnouncement(ply, 1.5, name, 1, 'top')
     end
 
     -- KV properties for mapping data
