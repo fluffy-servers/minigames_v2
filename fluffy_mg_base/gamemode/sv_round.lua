@@ -220,7 +220,7 @@ hook.Add('Think', 'TimedGamemodeThink', function()
             GAMEMODE:EndRound('TimeEnd')
         elseif gametime > -1 and gametime + GAMEMODE.GameTime - 5 < CurTime() and not GAMEMODE.CountdownStarted then
             GAMEMODE.CountdownStarted = true
-            GAMEMODE:CountdownAnnouncement(5)
+            GAMEMODE:CountdownAnnouncement(5, nil, "center")
         end
     end
 end)
