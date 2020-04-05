@@ -20,10 +20,20 @@ function GM:WeaponEquip(wep, ply)
     end
 end
 
+function GM:GiveAmmo(wep, ply)
+    local ammo_table = GAMEMODE.WeaponSpawners["ammo"]
+    if ammo_table[wep:GetClass()] then
+        local ammo = ammo_table[wep:GetClass()]
+        ply:GiveAmmo(ammo[2], ammo[1])
+    end
+end
+
 function GM:PlayerCanPickupWeapon(ply, wep)
     if ply:HasWeapon(wep:GetClass()) then
         GAMEMODE:WeaponEquip(wep, ply)
         wep:Remove()
+
+        GAMEMODE:GiveAmmo(wep, ply)
     else
         return true
     end
