@@ -1,5 +1,6 @@
 SWEP.Base = 'weapon_mg_sck_base'
 SWEP.HoldType = "grenade"
+SWEP.PrintName = "Dynamite"
 
 if CLIENT then
 	SWEP.Slot = 4

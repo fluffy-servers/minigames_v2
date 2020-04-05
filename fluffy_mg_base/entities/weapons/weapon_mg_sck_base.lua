@@ -12,7 +12,6 @@
 SWEP.Base = "weapon_mg_base"
 
 function SWEP:Initialize()
-    print('MG SCK BASE INITIALIZING')
     if CLIENT then
         -- Create a new table for every weapon instance
         self.VElements = table.FullCopy(self.VElements)
