@@ -14,11 +14,13 @@ local function spawnChair(pos)
 end
 
 local function spawnChairs()
-    local max = GAMEMODE:NumNonSpectators() - 1
-    local number = GAMEMODE:PlayerScale(0.8, 1, max) + math.random(-2, 1)
-    number = math.Clamp(number, 1, max)
-    local positions = GAMEMODE:GetRandomLocations(number, 'crate')
+    local max = GAMEMODE:GetNumberAlive() - 1
+    if max < 1 then max = 1 end
 
+    local number = GAMEMODE:PlayerScale(0.75, 1, max) + math.random(-2, 1)
+    number = math.Clamp(number, 1, max)
+
+    local positions = GAMEMODE:GetRandomLocations(number, 'crate')
     for i=1,number do
         local pos = positions[i] + Vector(0, 0, 64)
         spawnChair(pos)
@@ -50,6 +52,7 @@ function MOD:PlayerFinish(ply)
         local chair = ply:GetVehicle()
         ply:AwardWin()
         ply:ExitVehicle()
+        ply:Spawn()
 
         if IsValid(chair) then
             chair:Remove()

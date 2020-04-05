@@ -22,7 +22,6 @@ function MOD:EntityTakeDamage(ent, dmg)
 
         local t = CurTime() - GetGlobalFloat('RoundStart', 0)
         local strength = 600 + (t * 50)
-        print(strength)
 
         -- Apply knockback
         local v = dmg:GetDamageForce():GetNormalized()
