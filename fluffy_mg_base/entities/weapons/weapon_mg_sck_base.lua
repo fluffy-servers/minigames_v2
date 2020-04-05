@@ -12,6 +12,7 @@
 SWEP.Base = "weapon_mg_base"
 
 function SWEP:Initialize()
+    print('MG SCK BASE INITIALIZING')
     if CLIENT then
         -- Create a new table for every weapon instance
         self.VElements = table.FullCopy(self.VElements)
@@ -53,6 +54,12 @@ end
 
 function SWEP:OnRemove()
     self:Holster()
+
+    if CLIENT then
+        -- Cleanup CS entities
+        self:RemoveModels(self.VElements)
+        self:RemoveModels(self.WElements)
+    end
 end
 
 if CLIENT then
@@ -61,7 +68,7 @@ if CLIENT then
 
     function SWEP:DrawClientModel(v, pos, ang)
         local model = v.modelEnt
-        if not model then return end
+        if not IsValid(model) then return end
 
         -- Adjust position and angles
         model:SetPos(pos)
@@ -311,6 +318,17 @@ if CLIENT then
 
                     v.createdSprite = v.sprite
                     v.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
+                end
+            end
+        end
+    end
+
+    function SWEP:RemoveModels(tab)
+        if not tab then return end
+        for k, v in pairs(tab) do
+            if v.type == "Model" then
+                if IsValid(v.modelEnt) then
+                    v.modelEnt:Remove()
                 end
             end
         end

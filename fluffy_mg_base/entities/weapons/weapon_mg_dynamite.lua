@@ -1,6 +1,15 @@
 SWEP.Base = 'weapon_mg_sck_base'
 SWEP.HoldType = "grenade"
 
+if CLIENT then
+	SWEP.Slot = 4
+	SWEP.SlotPos = 0
+	
+	SWEP.IconLetter = '4'
+	SWEP.IconFont = 'HL2MPTypeDeath'
+    killicon.AddFont("weapon_mg_dynamite", "HL2MPTypeDeath", "4", Color(255, 80, 0, 255))
+end
+
 SWEP.ViewModel = "models/weapons/c_grenade.mdl"
 SWEP.ViewModelFOV = 70
 SWEP.ViewModelFlip = false
