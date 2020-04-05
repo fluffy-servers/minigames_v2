@@ -162,7 +162,9 @@ function GM:HandleFFAWin(reason)
     
     -- Award bonus win points based on modifier properties
     if winner then
-        if modifier.SurviveValue then
+        if modifier.WinValue then
+            winner:AddFrags(modifier.WinValue)
+        elseif modifier.SurviveValue then
             winner:AddFrags(modifier.SurviveValue * 2)
         elseif modifier.KillValue then
             winner:AddFrags(modifier.KillValue * 2)
