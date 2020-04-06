@@ -48,7 +48,7 @@ function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
     
     self.Weapon:EmitSound(self.Primary.Sound)
-	self:ShootBullet(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone)
+	self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, self.Primary.Tracer)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
     self:TakePrimaryAmmo(1)
