@@ -56,16 +56,10 @@ function GM:CreateInfoFrame2()
             ["func"] = GAMEMODE.TeamPanel
         },
 
-        --[[{
-            ["name"] = "Player",
-            ["func"] = GAMEMODE.HelpPanel
-        },
-
         {
-            ["name"] = "Config",
-            ["func"] = GM.HelpPanel
-        }
-        ]]--
+            ["name"] = "Items",
+            ["func"] = GAMEMODE.ItemsPanel
+        },
     }
 
     -- Add all other header buttons
@@ -77,6 +71,10 @@ function GM:CreateInfoFrame2()
             if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or not GAMEMODE.PlayerChooseTeams then
                 continue
             end
+        end
+
+        if name == 'Items' then
+            if not LocalPlayer():IsAdmin() then continue end
         end
 
         local wide = surface.GetTextSize(name) + 24
@@ -342,6 +340,12 @@ function GM:TeamPanel()
     end
 end
 
+function GM:ItemsPanel()
+    local frame = GAMEMODE:GetInfoFrame()
+    local display = frame.ContentPanel
+    SHOP:OpenInventory(display)
+end
+
 -- Concommands to open these panels on server instruction
 concommand.Add('minigames_info', function()
     GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
@@ -353,4 +357,9 @@ concommand.Add('minigames_team', function()
     else
         GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
     end
+end)
+
+concommand.Add('minigames_inventory', function()
+    if not LocalPlayer():IsAdmin() then return end
+    GAMEMODE:OpenInfoOption('Items', GAMEMODE.ItemsPanel)
 end)
