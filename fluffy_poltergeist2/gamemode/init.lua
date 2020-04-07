@@ -88,21 +88,24 @@ end)
 function GM:EntityTakeDamage(ent, dmginfo)
     local attacker = dmginfo:GetAttacker()
 
-    -- Default handling for red players
-    -- This won't be called by default usually -> see below
-    if ent:IsPlayer() and ent:Team() == TEAM_RED and ent:Alive() then
-        print(ent, dmginfo)
-        print(dmginfo:GetDamage())
-        return
-    end
-
     if not ent:IsPlayer() then
         if ent:GetOwner() and ent:GetOwner():IsValid() then
-            print(ent:GetOwner(), 'attacked by', attacker)
             -- When a prop is attacked, forward the damage to the owner
             if IsValid(attacker) and attacker:IsPlayer() then
                 ent:EmitSound(table.Random(GAMEMODE.PropHit))
-                ent:GetOwner():TakeDamageInfo(dmginfo)
+
+                -- Fake the damage info
+                local ply = ent:GetOwner()
+                ply:SetHealth(ply:Health() - dmginfo:GetDamage())
+                if ply:Health() < 1 then
+                    ent:SetOwner(NULL)
+
+                    ply:EmitSound(table.Random(GAMEMODE.PropHit))
+                    ply:KillSilent()
+                    ply:KillProp(dmginfo:GetDamageForce())
+                    GAMEMODE:DoPlayerDeath(ply, attacker, dmginfo)
+                    GAMEMODE:PlayerDeath(ply, dmginfo:GetInflictor(), attacker)
+                end
             end
 
             return true

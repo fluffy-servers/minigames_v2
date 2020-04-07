@@ -16,8 +16,9 @@ function meta:SpawnProp(health)
     end)
 end
 
--- Set the prop of a palyer
+-- Set the prop of a playyer
 function meta:SetProp(prop)
+    if not GAMEMODE:InRound() then return end
     if not IsValid(prop) then return end
 
     -- Prepare spectating
@@ -31,6 +32,16 @@ end
 -- Get the current prop
 function meta:GetProp()
     return self:GetNWEntity("Prop", NULL)
+end
+
+-- Kill prop (eg. upon death)
+function meta:KillProp(force)
+    local prop = self:GetProp()
+    if not IsValid(prop) then return end
+
+    prop:GibBreakClient(force)
+    prop:Remove()
+    self:SetNWEntity("Prop", NULL)
 end
 
 -- Poltergeists: Player death hook
