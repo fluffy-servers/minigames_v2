@@ -19,17 +19,6 @@ local HEALTH_ICON = Material("fluffy/health.png", "noclamp smooth")
 local TIME_ICON = Material("fluffy/time.png", "noclamp smooth")
 local AMMO_ICON = Material("fluffy/ammo.png", "noclamp smooth")
 
-
--- Helper function to draw shadowed text
-function GM:DrawShadowText(text, font, x, y, color, horizontal_align, vertical_align, strength)
-    if not strength then
-        strength = 2
-    end
-
-    draw.SimpleText(text, font, x + (strength - 1), y + strength, GAMEMODE.FColShadow, horizontal_align, vertical_align) -- Shadow first, slightly offset
-	return draw.SimpleText(text, font, x, y, color, horizontal_align, vertical_align) -- Regular text
-end
-
 hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)
 	if hide[name] then return false end
 end )

@@ -121,6 +121,16 @@ surface.CreateFont( "CSKillIcons", {
   antialias = false,
 })
 
+-- Helper function to draw shadowed text
+function GM:DrawShadowText(text, font, x, y, color, horizontal_align, vertical_align, strength)
+    if not strength then
+        strength = 2
+    end
+
+    draw.SimpleText(text, font, x + (strength - 1), y + strength, GAMEMODE.FColShadow, horizontal_align, vertical_align) -- Shadow first, slightly offset
+	return draw.SimpleText(text, font, x, y, color, horizontal_align, vertical_align) -- Regular text
+end
+
 --[[
     Universal Colors
     Colors are defined in this file for use across the Minigames HUD
