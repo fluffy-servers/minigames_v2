@@ -79,6 +79,19 @@ function ENT:PhysicsCollide(data, physobj)
         self.CurrentBounces = 0
         self:SetNWString('CurrentTeam', nil)
         self:SetNWVector('RColor', Vector(1, 1, 1))
+
+        -- Reset tracer
+        if IsValid(self.tracer) then
+            self.tracer:SetParent(nil)
+
+            -- todo: cool little spark effect
+
+            timer.Simple(3, function()
+                if IsValid(self.tracer) then
+                    SafeRemoveEntity(self.tracer)
+                end
+            end)
+        end
     end
     
 	-- Play sounds or explode
