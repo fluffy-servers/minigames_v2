@@ -21,6 +21,11 @@ function meta:SetProp(prop)
     if not GAMEMODE:InRound() then return end
     if not IsValid(prop) then return end
 
+    -- Reset previous prop (if applicable)
+    if IsValid(self:GetProp()) then
+        self:GetProp():SetOwner(nil)
+    end
+
     -- Prepare spectating
     self:Spectate(OBS_MODE_CHASE)
     self:SpectateEntity(prop)
@@ -62,23 +67,75 @@ hook.Add('Move', 'GhostMove', function(ply, mv)
     ply:SetPos(prop:GetPos())
 
 	-- Calculate forward/backward movement
-	if ply:KeyDown( IN_FORWARD ) then
-		phys:ApplyForceCenter( ply:GetAimVector() * phys:GetMass() * ply.Speed )
-	elseif ply:KeyDown( IN_BACK ) then
-		phys:ApplyForceCenter( ply:GetAimVector() * phys:GetMass() * -ply.Speed )
+	if ply:KeyDown(IN_FORWARD) then
+		phys:ApplyForceCenter(ply:GetAimVector() * phys:GetMass() * ply.Speed)
+	elseif ply:KeyDown(IN_BACK) then
+		phys:ApplyForceCenter(ply:GetAimVector() * phys:GetMass() * -ply.Speed)
 	end
 	
 	-- Calculate movement angle
 	local ang = ply:GetAimVector():Angle()
 	ang.y = ang.y + 90
-	
-	-- Handle jump & left/right movement
-	if ply:KeyDown( IN_JUMP ) then
-		phys:ApplyForceCenter( Vector(0,0,1) * phys:GetMass() * ply.Speed * 1.5 )
-	elseif ply:KeyDown( IN_MOVELEFT ) then
-		phys:ApplyForceCenter( ang:Forward() * phys:GetMass() * ply.Speed )
-	elseif ply:KeyDown( IN_MOVERIGHT ) then
-		ang.y = ang.y + 180
-		phys:ApplyForceCenter( ang:Forward() * phys:GetMass() * ply.Speed )
-	end
+
+    -- Handle vertical movement
+    if ply:KeyDown(IN_JUMP) then
+        phys:ApplyForceCenter(Vector(0, 0, 1) * phys:GetMass() * ply.Speed * 1.5)
+    elseif ply:KeyDown(IN_DUCK) then
+        phys:ApplyForceCenter(Vector(0, 0, -1) * phys:GetMass() * ply.Speed * 3)
+    end
+
+    -- Handle horizontal movement
+    if ply:KeyDown(IN_MOVELEFT) then
+        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed )
+    elseif ply:KeyDown(IN_MOVERIGHT) then
+        ang.y = ang.y + 180
+        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed )
+    end
+end)
+
+hook.Add('KeyPress', 'GhostExtraControls', function(ply, key)
+    if not ply:Alive() then return end
+    if ply:Team() != TEAM_RED then return end
+
+    local prop = ply:GetProp()
+    if not prop or not IsValid(prop) then return end
+
+    if key == IN_RELOAD and (ply.SwapTime or 0) < CurTime() then
+        -- Handle prop swapping
+        -- Find the closest prop to the player
+        local choice = prop
+        local closest = 62501
+        for k,v in pairs(ents.FindInSphere(prop:GetPos(), 250)) do
+            if v:GetClass() != 'prop_physics' then continue end
+            if IsValid(v:GetOwner()) then continue end
+
+            local distance = prop:GetPos():DistToSqr(v:GetPos())
+            if distance < closest then
+                closest = distance
+                choice = v
+            end
+        end
+
+        -- Switch props
+        if choice != prop then
+            ply:EmitSound(table.Random(GAMEMODE.ChangeSounds), 100, math.random(110, 140))
+            ply:SetProp(choice)
+            ply.SwapTime = CurTime() + 5
+        else
+            ply.SwapTime = CurTime() + 2
+        end
+
+    elseif key == IN_ATTACK and (ply.AttackTime or 0) < CurTime() then
+        -- Handle dash attack
+        local phys = prop:GetPhysicsObject()
+        if not phys or not phys:IsValid() then return end
+
+        prop:EmitSound('ambient/machines/machine1_hit1.wav')
+        phys:SetVelocityInstantaneous(ply:GetAimVector() * 5000)
+        ply.AttackTime = CurTime() + 5
+    elseif key == IN_ATTACK2 and (ply.TauntTime or 0) < CurTime() then
+        -- Handle taunting
+        ply:EmitSound(table.Random(GAMEMODE.TauntSounds), 100, math.random(110, 140))
+        ply.TauntTime = CurTime() + 3
+    end
 end)

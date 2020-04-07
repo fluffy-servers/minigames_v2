@@ -89,6 +89,7 @@ function GM:EntityTakeDamage(ent, dmginfo)
     local attacker = dmginfo:GetAttacker()
 
     if not ent:IsPlayer() then
+        dmginfo:SetDamageForce(dmginfo:GetDamageForce() * 20)
         if ent:GetOwner() and ent:GetOwner():IsValid() then
             -- When a prop is attacked, forward the damage to the owner
             if IsValid(attacker) and attacker:IsPlayer() then
