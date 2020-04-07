@@ -83,6 +83,7 @@ function GM:GravGunOnPickedUp(ply, ent)
     
     if ent:GetClass() == 'db_dodgeball' then
         GAMEMODE:CollectBall(ent, ply:Team())
+        ent:ResetTracer()
         ent.LastTime = CurTime()
         ent.LastHolder = ply
         ent.CurrentBounces = 0
@@ -98,15 +99,7 @@ function GM:GravGunPunt(ply, ent)
         ent.LastTime = CurTime()
         ent.LastHolder = ply
         ent.CurrentBounces = 0
-
-        local tracer = ents.Create('db_tracer')
-        tracer:SetMoveType(MOVETYPE_NONE)
-        tracer:SetPos(ent:GetPos())
-        tracer:SetParent(ent)
-        tracer:BuildTracer(team.GetColor(ply:Team()))
-        tracer:Spawn()
-        ent.tracer = tracer
-
+        ent:MakeTracer(ply)
         return true
     end
 end

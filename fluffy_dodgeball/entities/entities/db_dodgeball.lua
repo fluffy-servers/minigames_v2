@@ -76,22 +76,10 @@ function ENT:PhysicsCollide(data, physobj)
     -- Balls can only bounce a handful of times before resetting
     self.CurrentBounces = self.CurrentBounces + 1
     if self.CurrentBounces > self.MaxBounces then
-        self.CurrentBounces = 0
+        self:ResetTracer()
         self:SetNWString('CurrentTeam', nil)
         self:SetNWVector('RColor', Vector(1, 1, 1))
-
-        -- Reset tracer
-        if IsValid(self.tracer) then
-            self.tracer:SetParent(nil)
-
-            -- todo: cool little spark effect
-
-            timer.Simple(3, function()
-                if IsValid(self.tracer) then
-                    SafeRemoveEntity(self.tracer)
-                end
-            end)
-        end
+        self.CurrentBounces = 0
     end
     
 	-- Play sounds or explode
@@ -109,6 +97,42 @@ function ENT:PhysicsCollide(data, physobj)
 	LastSpeed = math.max(NewVelocity:Length(), LastSpeed)
 	local TargetVelocity = NewVelocity * LastSpeed * 0.8
 	physobj:SetVelocity(TargetVelocity)
+end
+
+function ENT:MakeTracer(ply)
+    if IsValid(self.tracer) then
+        self:ResetTracer()
+    end
+
+    -- Make a new tracer
+    local tracer = ents.Create('db_tracer')
+    tracer:SetMoveType(MOVETYPE_NONE)
+    tracer:SetPos(self:GetPos())
+    tracer:SetParent(self)
+    tracer:BuildTracer(team.GetColor(ply:Team()))
+    tracer:Spawn()
+    self.tracer = tracer
+end
+
+function ENT:ResetTracer()
+    if IsValid(self.tracer) then
+        local tracer = self.tracer
+        tracer:SetParent(nil)
+
+        -- Cool little spark effect for the end of the trail
+        local effect = EffectData()
+        effect:SetOrigin(self:GetPos())
+        effect:SetStart(self:GetNWVector('RColor', Vector(1, 1, 1)))
+        util.Effect("db_spark", effect)
+
+        timer.Simple(3, function()
+            if IsValid(tracer) then
+                SafeRemoveEntity(tracer)
+            end
+        end)
+
+        self.tracer = nil
+    end
 end
 
 if CLIENT then
