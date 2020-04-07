@@ -19,6 +19,28 @@ function GM:PlayerRequestTeam(ply, teamid)
 	GAMEMODE:PlayerJoinTeam(ply, teamid)
 end
 
+function GM:PlayerCanJoinTeam(ply, teamid)
+    -- Stop rejoining same team
+    if ply:Team() == teamid then
+        return false
+    end
+
+    -- Team swap as frequently as you want before game starts
+    if GAMEMODE:GetRoundState() == 'GameNotStarted' or GAMEMODE:GetRoundState() == 'Warmup' then
+        ply.LastTeamSwitch = CurTime()
+        return true
+    end
+
+    -- Stop from frequently changing teams in game
+    if ply.LastTeamSwitch and CurTime() - ply.LastTeamSwitch < 15 then
+        ply:ChatPrint('Please wait before changing teams')
+        return false
+    else
+        ply.LastTeamSwitch = CurTime()
+        return true
+    end
+end
+
 function GM:OnPlayerChangedTeam(ply, old, new)
     -- Spectators respawn in place
     if new == TEAM_SPECTATOR then
