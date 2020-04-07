@@ -23,7 +23,6 @@ function GM:OnPlayerChangedTeam(ply, old, new)
     -- Spectators respawn in place
     if new == TEAM_SPECTATOR then
         local pos = ply:EyePos()
-        print('SPECTATOR RESPAWN', ply)
         ply:Spawn()
         ply:SetPos(pos)
     end
