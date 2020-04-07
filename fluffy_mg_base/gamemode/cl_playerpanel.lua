@@ -108,12 +108,12 @@ function GM:CreateInfoFrame2()
     close:SetText('')
 
     function close:Paint(w, h)
-        if GAMEMODE.TeamBased and LocalPlayer():Team() == TEAM_UNASSIGNED then return end
+        if GAMEMODE.TeamBased and (LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == TEAM_CONNECTING) then return end
         GAMEMODE:DrawShadowText('x', 'FS_L24', w/2, 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
     end
 
     function close:DoClick()
-        if GAMEMODE.TeamBased and LocalPlayer():Team() == TEAM_UNASSIGNED then return end
+        if GAMEMODE.TeamBased and (LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == TEAM_CONNECTING) then return end
         f:Close()
     end
     f.CloseButton = close
