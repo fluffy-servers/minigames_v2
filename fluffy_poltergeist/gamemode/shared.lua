@@ -1,4 +1,6 @@
 DeriveGamemode('fluffy_mg_base')
+include('tables.lua')
+include('ply_extension.lua')
 
 GM.Name = 'Poltergeist'
 GM.Author = 'FluffyXVI'
@@ -23,11 +25,9 @@ GM.TeamSurvival = true
 GM.SurvivorTeam = TEAM_BLUE
 GM.HunterTeam = TEAM_RED
 
-GM.NoSuicidePenalty = true
-
-GM.RoundNumber = 10      -- How many rounds?
-GM.RoundTime = 90      -- Seconds each round lasts for
-GM.ForceFFAColors = true -- Force team gamemodes to use FFA colors
+GM.RoundNumber = 7          -- How many rounds?
+GM.RoundTime = 90           -- Seconds each round lasts for
+GM.ForceFFAColors = true    -- Force team gamemodes to use FFA colors
 
 function GM:Initialize()
 

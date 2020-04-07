@@ -63,8 +63,8 @@ GM.PropModels = {
     "models/props_vehicles/carparts_muffler01a.mdl"
 }
 
-for k,v in pairs( GM.PropModels ) do
-	util.PrecacheModel( v )
+for k, v in pairs(GM.PropModels) do
+	util.PrecacheModel(v)
 end
 
 GM.PropDie = {"npc/roller/mine/rmine_explode_shock1.wav",

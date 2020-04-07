@@ -1,32 +1,25 @@
 AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-
-AddCSLuaFile('player_class/class_ghost.lua')
+AddCSLuaFile('init.lua')
+AddCSLuaFile('ply_extension.lua')
+AddCSLuaFile('tables.lua')
 
 include('shared.lua')
-include( "ply_extension.lua" ) 
-include( "tables.lua" )
 
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:StripWeapons()
-    
+
     if ply:Team() == TEAM_BLUE then
-		-- Give humans the prop killer weapon
-        ply:Give( "weapon_propkilla" )
-        ply:SetWalkSpeed( 250 )
-        ply:SetRunSpeed( 300 )
+        ply:Give('weapon_propkilla')
+        ply:SetWalkSpeed(250)
+        ply:SetRunSpeed(300)
     elseif ply:Team() == TEAM_RED then
-		-- Reset timers for Poltergeists
         ply.SwapTime = 0
-        ply.TauntTime = 0
-		ply.AttackTime = 0
-		ply.Exploding = false
+        ply.AttackTime = 0
         ply.Speed = 10
-        ply:SpawnProp( 100 )
+        ply:SpawnProp(100)
     end
 end
 
---[[ Called for round setup time ]]--
 -- Modified in Poltergeist to stop map cleanups
 function GM:PreStartRound()
     local round = GetGlobalInt('RoundNumber', 0 )
@@ -53,27 +46,30 @@ function GM:PreStartRound()
     end
     
     -- Start the round after a short cooldown
-    timer.Simple( GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end )
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end)
 end
 
--- Spawn props at all the prop spawners
 function GM:SpawnProps()
     for k,v in pairs(ents.FindByClass('prop_spawner')) do
         v:SpawnProp()
     end
 end
 
--- Spawn some initial props to populate the map at the very start
-hook.Add('InitPostEntity', 'PopulateStartingProps', function()
-    for i = 1,10 do
-        timer.Simple(i*2, function() GAMEMODE:SpawnProps() end)
+hook.Add('Think', 'SpawnPoltergeistProps', function()
+    local lasttime = GAMEMODE.LastSpawnTime or 0
+    if CurTime() - lasttime > 1 then
+        GAMEMODE:SpawnProps()
+        GAMEMODE.LastSpawnTime = CurTime()
     end
-end )
+end)
+
 
 -- Pick player models
 function GM:PlayerSetModel( ply )
     if ply:Team() == TEAM_RED then
-        ply:SetModel( "models/props_junk/wood_crate001a.mdl" )
+        local color = team.GetColor(TEAM_RED)
+        ply:SetModel("models/props_junk/wood_crate001a.mdl")
+        ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
     else
         GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
@@ -81,41 +77,52 @@ end
 
 -- Stop Poltergeists from exploding
 function GM:CanPlayerSuicide(ply)
-   if ply:Team() == TEAM_RED then return false end
-   return true
+    return true
 end
 
 -- Fix a spawning bug for Poltergeists
 hook.Add('RoundStart', 'FixGhostBug', function()
-    for k,v in pairs( team.GetPlayers( TEAM_RED ) ) do
+    for k,v in pairs(team.GetPlayers(TEAM_RED )) do
         v:Spawn()
     end
-end )
+end)
 
--- Damage hooks
--- Complicated mess for calculating attackers?
-function GM:EntityTakeDamage( ent, dmginfo )
-	local attacker = dmginfo:GetAttacker()
-	if not ent:IsPlayer() then
-		if ent:GetOwner() and ent:GetOwner():IsValid() then
-			if dmginfo:GetAttacker():IsValid() and dmginfo:GetAttacker():IsPlayer() then
-				ent:EmitSound( Sound( table.Random( GAMEMODE.PropHit ) ) )
-				ent:GetOwner():SetHealth( ent:GetOwner():Health() - dmginfo:GetDamage() )
-				if ent:GetOwner():Health() < 1 then
-					ent:EmitSound( Sound( table.Random( GAMEMODE.PropDie ) ) )
-					ent:GetOwner():Kill()
-				end
-			end
-			dmginfo:SetDamage( 0 )
-		end
-		return
-	end
-	
-	if not ent:Alive() then return end
-	if string.find( attacker:GetClass(), "prop_phys" ) then
-		if attacker:GetOwner() and attacker:GetOwner():IsValid() then
-			dmginfo:SetAttacker( attacker:GetOwner() ) 
-		end
-	end
+function GM:EntityTakeDamage(ent, dmginfo)
+    local attacker = dmginfo:GetAttacker()
+
+    if not ent:IsPlayer() then
+        dmginfo:SetDamageForce(dmginfo:GetDamageForce() * 20)
+        if ent:GetOwner() and ent:GetOwner():IsValid() then
+            -- When a prop is attacked, forward the damage to the owner
+            if IsValid(attacker) and attacker:IsPlayer() then
+                ent:EmitSound(table.Random(GAMEMODE.PropHit))
+
+                -- Fake the damage info
+                local ply = ent:GetOwner()
+                ply:SetHealth(ply:Health() - dmginfo:GetDamage())
+                if ply:Health() < 1 then
+                    ent:SetOwner(NULL)
+
+                    ply:EmitSound(table.Random(GAMEMODE.PropHit))
+                    ply:KillSilent()
+                    ply:KillProp(dmginfo:GetDamageForce())
+                    GAMEMODE:DoPlayerDeath(ply, attacker, dmginfo)
+                    GAMEMODE:PlayerDeath(ply, dmginfo:GetInflictor(), attacker)
+                end
+            end
+
+            return true
+        end
+    elseif ent:Alive() then
+        -- Check if the attacker is a prop
+        -- If so, set the true attacker to be the prop pilot (if applicable)
+        if string.find(attacker:GetClass(), "prop_phys") then
+            if attacker:GetOwner() and attacker:GetOwner():IsValid() then
+                dmginfo:SetAttacker(attacker:GetOwner())
+            else
+                -- Disable propkilling, only props with pilots can do damage
+                return true
+            end
+        end
+    end
 end
-
