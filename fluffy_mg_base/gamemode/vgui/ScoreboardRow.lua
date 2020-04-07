@@ -154,7 +154,7 @@ function PANEL:Paint(w, h)
             draw.SimpleText(v[1](self.Player), 'FS_32', xx, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
             draw.SimpleText(v[2], 'FS_20', xx, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
         else
-            draw.SimpleText(v[1](self.Player), 'FS_56', w - 40, h/2 + 1, GAMEMODE.FCol2, TEXT_ALIGN_CENTER) 
+            draw.SimpleText(v[1](self.Player), 'FS_56', w - 40, h/2 + 1, GAMEMODE.FCol2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) 
         end
     end
 end

@@ -265,13 +265,13 @@ function GM:OpenEndGamePanel()
         if GAMEMODE.TeamBased and scoreboard.ShowTeams then
             local tab_width = (w-40)/2
             draw.RoundedBox(8, 16, 48, tab_width, 48, team.GetColor(TEAM_BLUE))
-            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_L32', 24, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_L32', 28, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_L48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
             local t2 = w - tab_width - 16
             draw.RoundedBox(8, t2, 48, tab_width, 48, team.GetColor(TEAM_RED))
             GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_L48', t2+8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_L32', t2 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_L32', t2 + tab_width - 8, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         end
     end
 
