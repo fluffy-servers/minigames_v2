@@ -6,9 +6,9 @@ function EFFECT:Init(data)
     self.Position = data:GetStart()
     self.Weapon = data:GetEntity()
     self.Attachment = data:GetAttachment()
-    
+
     -- Calculate positions
-    self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
+    self.StartPos = self:GetTracerShootPos(self.Position, self.Weapon, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Norm = (self.StartPos - self.EndPos):GetNormalized()
     self.Entity:SetRenderBoundsWS(self.StartPos, self.EndPos)
