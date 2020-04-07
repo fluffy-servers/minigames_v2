@@ -67,7 +67,9 @@ end)
 -- Pick player models
 function GM:PlayerSetModel( ply )
     if ply:Team() == TEAM_RED then
-        ply:SetModel( "models/props_junk/wood_crate001a.mdl" )
+        local color = team.GetColor(TEAM_RED)
+        ply:SetModel("models/props_junk/wood_crate001a.mdl")
+        ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
     else
         GAMEMODE.BaseClass:PlayerSetModel(ply)
     end
