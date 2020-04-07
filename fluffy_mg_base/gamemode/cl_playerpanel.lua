@@ -341,3 +341,16 @@ function GM:TeamPanel()
         frame:Close()
     end
 end
+
+-- Concommands to open these panels on server instruction
+concommand.Add('minigames_info', function()
+    GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
+end)
+
+concommand.Add('minigames_team', function()
+    if GAMEMODE.TeamBased and (not GAMEMODE.TeamSurvival) and (GAMEMODE.PlayerChooseTeams) then
+        GAMEMODE:OpenInfoOption('Team', GAMEMODE.TeamPanel)
+    else
+        GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
+    end
+end)

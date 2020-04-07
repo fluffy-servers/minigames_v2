@@ -147,7 +147,7 @@ end
 
 -- Rebind team menu
 function GM:ShowTeam(ply)
-    ply:ConCommand("minigames_info")
+    ply:ConCommand("minigames_team")
 end
 
 -- Disable friendly fire
