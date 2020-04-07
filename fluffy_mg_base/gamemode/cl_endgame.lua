@@ -190,7 +190,13 @@ function GM:OpenEndGamePanel()
         self.scoreboard.yy = 56
         
         for k,v in pairs(data) do
-            self.scoreboard:CreatePlayerRow(k, v[1], v[2], false)
+            local row = vgui.Create('ScoreboardRow', self.scoreboard)
+            row:SetPos(16, self.scoreboard.yy)
+            row:SetWide(self.scoreboard:GetWide() - 32)
+            row:SetPlayer(v[1])
+            row:AddRawFunction(function() return v[2] end)
+
+            self.scoreboard.yy = self.scoreboard.yy + 60
         end
     end
     
@@ -258,110 +264,29 @@ function GM:OpenEndGamePanel()
     function scoreboard:PaintTeamInfo()
         if GAMEMODE.TeamBased and scoreboard.ShowTeams then
             local tab_width = (w-40)/2
-            draw.RoundedBox(8, 16, 48, tab_width, 52, team.GetColor(1))
-            draw.SimpleText(team.GetName(1), 'FS_32', 24, 48, color_white)
-            draw.SimpleText('Kills: ' .. team.TotalFrags(1), 'FS_20', 24, 72, color_white)
-            draw.SimpleText(team.GetScore(1), 'FS_60', 16 + tab_width - 4, 72, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-            
-            local t2 = w - tab_width - 16
-            draw.RoundedBox(8, t2, 48, tab_width, 52, team.GetColor(2))
-            draw.SimpleText(team.GetName(2), 'FS_32', t2+8, 48, color_white, TEXT_ALIGN_LEFT )
-            draw.SimpleText('Kills: ' .. team.TotalFrags(2), 'FS_20', t2+8, 72, color_white, TEXT_ALIGN_LEFT )
-            draw.SimpleText(team.GetScore(2), 'FS_60', t2 + tab_width - 4, 72, color_white, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER )
-        end
-    end
-    
-    local medal_icons = {Material('icon16/medal_gold_2.png'), Material('icon16/medal_silver_2.png'), Material('icon16/medal_bronze_2.png')}
-    
-    function scoreboard:CreatePlayerRow(k, ply, num, detailed)
-        local row = vgui.Create('DPanel', self)
-        --row:SetSize(self:GetWide() - 32, 52)
-        row:SetPos(16, self.yy)
-        row.Value = num
-        row.Player = ply
-        row.Position = k
-        
-        if detailed then
-            function row:Paint(w, h)
-                draw.RoundedBox(8, 0, 0, w, h, Color(236, 240, 241))
-                draw.SimpleText(self.Player:Nick() or 'Player?', 'FS_32', 72, h/2 + 2, c1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-                
-                local ty = h/2
-                
-                -- Draw team information
-                if GAMEMODE.TeamBased then
-                    local pt = self.Player:Team()
-                    local name = 'None'
-                    -- WHY DO GOOD PEOPLE DO BAD THINGS WTF
-                    if pt == 1 then name = 'Red' end
-                    if pt == 2 then name = 'Blue' end
-                    if pt == 1002 then name = 'Spec' end
-                    draw.SimpleText(name, 'FS_24', 400, ty - 20, team.GetColor(pt), TEXT_ALIGN_CENTER)
-                    draw.SimpleText('Team', 'FS_20', 400, ty + 4, c1, TEXT_ALIGN_CENTER)
-                end
-                
-                -- Draw the score
-                draw.SimpleText(self.Player:Frags(), 'FS_32', 475, ty - 24, c1, TEXT_ALIGN_CENTER)
-                draw.SimpleText('Score', 'FS_20', 475, ty + 4, c1, TEXT_ALIGN_CENTER)
-                
-                -- Draw the deaths
-                draw.SimpleText(self.Player:Deaths(), 'FS_32', 550, ty - 24, c1, TEXT_ALIGN_CENTER)
-                draw.SimpleText('Deaths', 'FS_20', 550, ty + 4, c1, TEXT_ALIGN_CENTER)
-            end
-        else
-            function row:Paint(w, h)
-                draw.RoundedBox(8, 0, 0, w, h, Color(236, 240, 241))
-                draw.SimpleText(self.Player:Nick() or 'Player?', 'FS_32', 72, h/2 + 2, c1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-                
-                if k == 1 then
-                    draw.SimpleText(num or 0, 'FS_56', w - 36, h/2 + 1, c1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                else
-                    draw.SimpleText(num or 0, 'FS_60', w - 32, h/2 + 1, c1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-                end
-            end    
-        end
-        
-        function row:PaintOver(w, h)
-            if self.Position <= 3 then
-                surface.SetDrawColor(color_white)
-                surface.SetMaterial(medal_icons[self.Position])
-				surface.DrawTexturedRect(2, 0, 16, 16)
-            end
-        end
-        
-        -- Add the avatar
-		row.Avatar = row:Add('AvatarCircle')
-        if IsValid(row.Avatar) then
-            row.Avatar:SetPlayer(ply, 64) -- Don't ask
-            row.Avatar:SetPos(2, 2)
-            --row.Avatar:SetSize(48, 48)
-        end
-        
-        if k == 1 then
-            row:SetSize(self:GetWide() - 32, 64)
-            row.Avatar:SetSize(60, 60)
-            self.yy = self.yy + 72
-        else
-            row:SetSize(self:GetWide() - 32, 52)
-            row.Avatar:SetSize(48, 48)
-            self.yy = self.yy + 60
-        end
+            draw.RoundedBox(8, 16, 48, tab_width, 48, team.GetColor(TEAM_BLUE))
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_L32', 24, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_L48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-        -- If a player leaves the game on this screen, remove this row
-        -- Future: Try and keep this data or leave a gap
-        function row:Think()
-		    if !IsValid(row.Player) then
-		    	self:Remove()
-		    	return
-		    end
+            local t2 = w - tab_width - 16
+            draw.RoundedBox(8, t2, 48, tab_width, 48, team.GetColor(TEAM_RED))
+            GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_L48', t2+8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_L32', t2 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
         end
     end
-    
+
     -- Start off with the default scoreboard display
     local players = player.GetAll()
     table.sort(players, function(a, b) return a:Frags() > b:Frags() end)
     for k,v in pairs(players) do
-        scoreboard:CreatePlayerRow(k, v, v:Frags(), true)
+        local row = vgui.Create('ScoreboardRow', scoreboard)
+        row:SetPos(16, scoreboard.yy)
+        row:SetWide(scoreboard:GetWide() - 32)
+        row:SetPlayer(v)
+        row:AddModule('deaths')
+        row:AddModule('score')
+
+        scoreboard.yy = scoreboard.yy + 60
     end
 end
 

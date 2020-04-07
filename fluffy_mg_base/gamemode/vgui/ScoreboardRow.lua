@@ -115,6 +115,10 @@ function PANEL:AddModule(type)
     end
 end
 
+function PANEL:AddRawFunction(func)
+    table.insert(self.CurrentModules, {func})
+end
+
 function PANEL:Paint(w, h)
     if !IsValid(self.Player) then return end
 
