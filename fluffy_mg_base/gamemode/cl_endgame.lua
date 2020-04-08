@@ -176,11 +176,18 @@ function GM:OpenEndGamePanel()
         for k,v in pairs(tbl) do
             local statistic = k
             local data = v
-            timer.Simple(i * stat_duration, function() self:UpdateScoreboardStat(statistic, data) end)
+            timer.Simple(i * stat_duration, function() 
+                if not IsValid(self) then return end 
+                self:UpdateScoreboardStat(statistic, data) 
+            end)
+            
             i = i + 1
         end
         
-        timer.Simple(duration, function() self:DisplayMapVote() end)
+        timer.Simple(duration, function()
+            if not IsValid(self) then return end 
+            self:DisplayMapVote() 
+        end)
     end
     
     function frame:UpdateScoreboardStat(category, data)
