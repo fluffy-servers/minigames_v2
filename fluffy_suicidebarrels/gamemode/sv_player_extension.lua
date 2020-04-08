@@ -29,7 +29,7 @@ hook.Add('PlayerDeath', 'SuicideBarrelsDeath', function(ply, inflictor, attacker
         boom:SetPos(ply:GetPos()) 
         boom:SetOwner(ply)
         boom:Spawn()
-        boom:SetKeyValue("iMagnitude", "150") 
+        boom:SetKeyValue("iMagnitude", "135") 
         boom:Fire("Explode", 0, 0)
         boom.PlayerCause = (attacker or nil)
     end
