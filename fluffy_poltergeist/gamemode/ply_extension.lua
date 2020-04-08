@@ -3,13 +3,21 @@ if not meta then return end
 
 -- Spawn the player as a prp with a given health
 function meta:SpawnProp(health)
+    if CLIENT then return end
     if not GAMEMODE:InRound() then return end
 
     local prop = ents.Create("prop_physics")
     prop:SetPos(self:GetPos() + Vector(0, 0, 50))
     prop:SetModel(table.Random(GAMEMODE.PropModels))
     prop:Spawn()
+
+    local health = 100
+    if prop:GetPhysicsObject():GetMass() < 100 then
+        health = 50
+    end
     prop:SetHealth(health)
+    self:SetMaxHealth(health)
+    self:SetHealth(health)
 
     timer.Simple(1/60, function()
         self:SetProp(prop)
@@ -18,6 +26,7 @@ end
 
 -- Set the prop of a playyer
 function meta:SetProp(prop)
+    if CLIENT then return end
     if not GAMEMODE:InRound() then return end
     if not IsValid(prop) then return end
 

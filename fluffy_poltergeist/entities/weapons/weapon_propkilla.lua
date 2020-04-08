@@ -16,7 +16,7 @@ SWEP.Primary.Sound = "weapons/ar1/ar1_dist1.wav"
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.005
 SWEP.Primary.Delay = 0.3
-SWEP.Primary.Damage = 35
+SWEP.Primary.Damage = 45
 SWEP.Primary.Tracer = "mg_tracer"
 
 SWEP.Primary.ClipSize = -1
@@ -27,10 +27,10 @@ SWEP.Primary.Ammo = 'none'
 SWEP.Secondary.Sound = "Weapon_AR2.Single"
 SWEP.Secondary.NumShots = 1
 SWEP.Secondary.Cone = 0.05
-SWEP.Secondary.Damage = 10
+SWEP.Secondary.Damage = 20
 SWEP.Secondary.Tracer = "mg_tracer"
 SWEP.Secondary.Delay = 3
-SWEP.Secondary.BurstTime = 0.1
+SWEP.Secondary.BurstTime = 0.125
 
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
