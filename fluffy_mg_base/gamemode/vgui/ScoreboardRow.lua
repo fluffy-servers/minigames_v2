@@ -80,7 +80,7 @@ function PANEL:Init()
     local parent = self
     function self.Avatar:PaintOver(w, h)
         if not GAMEMODE.Medals then return end
-        if not parent.Player then return end
+        if not IsValid(parent.Player) then return end
         if parent.Player:Frags() < 1 then return end
 
         local medal = nil
