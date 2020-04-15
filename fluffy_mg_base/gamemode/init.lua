@@ -107,7 +107,11 @@ end
 function GM:PlayerInitialSpawn(ply)
     -- Nobody can spawn unless allowed to later
     ply:KillSilent()
-    ply.FirstSpawn = true
+
+    -- Ensure that players don't respawn if it's an elimination gamemode
+    if GAMEMODE.Elimination then
+        ply.FirstSpawn = true
+    end
 
     -- Set teams to unassigned if the gamemode is not team based
     if not GAMEMODE.TeamBased then
