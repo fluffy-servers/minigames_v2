@@ -429,6 +429,7 @@ function GM:DrawHealth()
     end
     
     -- Draw the top layer of the circle
+    draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(health_circle)
     
