@@ -37,8 +37,7 @@ end
 function ENT:OnRemove()
     -- if anything happens to the ball, spawn a new one
     if CLIENT then return end
-    if not self.Number then return end
-    GAMEMODE:RespawnBall(self.Number)
+    GAMEMODE:SpawnBall()
 end
 
 -- Respawn balls if not touched for a long time
