@@ -4,9 +4,9 @@ ENT.Base 			= "base_anim"
 
 ENT.RespawnTime = 10
 ENT.LastTime = -1
-ENT.MaxBounces = 3
+ENT.MaxBounces = 4
 
-ENT.Size = 32
+ENT.Size = 28
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 -- Initialize the ball as a basic sphere
@@ -60,7 +60,7 @@ function ENT:PhysicsCollide(data, physobj)
 	-- Damage checks for player damage
 	-- Verify the speed is fine
 	-- Make sure teamkilling is disallowed
-    if data.HitEntity:IsPlayer() and data.Speed > 50 then
+    if data.HitEntity:IsPlayer() and data.Speed > 80 then
         local ply = data.HitEntity
         if (self:GetNWString('CurrentTeam') == 'blue' and ply:Team() == TEAM_RED) or (self:GetNWString('CurrentTeam') == 'red' and ply:Team() == TEAM_BLUE) then
             local info = DamageInfo()
@@ -82,7 +82,7 @@ function ENT:PhysicsCollide(data, physobj)
     end
     
 	-- Play sounds or explode
-    if data.Speed > 150 and self.Explosive then
+    if data.Speed > 250 and self.Explosive then
         self:Remove()
 	elseif data.Speed > 70 then
 		self:EmitSound("Rubber.BulletImpact")
