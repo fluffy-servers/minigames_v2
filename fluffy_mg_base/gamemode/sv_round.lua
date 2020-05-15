@@ -75,6 +75,7 @@ function GM:PreStartRound()
     
     -- Reset stuff
     game.CleanUpMap()
+    hook.Call('PostCleanup')
     
     -- End the game if needed
     -- Different gamemode round types have different logic
