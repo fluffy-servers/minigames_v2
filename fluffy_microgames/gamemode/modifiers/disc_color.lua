@@ -44,7 +44,7 @@ end
 
 function MOD:PlayerFinish(ply)
     if ply.Winner then
-        ply:AwardWin()
+        ply:AwardWin(true)
     elseif ply:Alive() then
         ply:Kill()
     end

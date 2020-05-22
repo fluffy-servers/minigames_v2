@@ -47,6 +47,11 @@ function MOD:Think()
             if v:GetMScore() == (number - 1) then
                 v:EmitSound("ambient/levels/canals/windchime2.wav", 100, 100 + (number*15))
                 v:SetMScore(number)
+
+                -- Confetti effect after passing the last node
+                if number == GAMEMODE.NumberNodes then
+                    GAMEMODE:ConfettiEffectSingle(v)
+                end
             end
         end
     end

@@ -32,7 +32,10 @@ if CLIENT then
                 surface.SetDrawColor(color_white)
                 surface.DrawTexturedRect(p.x - size/2, p.y - size/2, size, size)
 
-                draw.SimpleTextOutlined('Go here!', 'FS_24', p.x, p.y + size + 4, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+                local text = 'Go here!'
+                draw.SimpleTextOutlined(text, 'FS_24', p.x, p.y + size + 4, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+                draw.SimpleTextOutlined('#' .. point, 'FS_20', p.x, p.y + size + 20, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1, Color(0, 0, 0))
+
             cam.End2D()
         end
     end

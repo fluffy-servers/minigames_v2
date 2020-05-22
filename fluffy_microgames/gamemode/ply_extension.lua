@@ -22,5 +22,7 @@ end
 
 function meta:AwardWin(confetti)
     self:AddFrags(1)
-    GAMEMODE:ConfettiEffectSingle(self)
+    if confetti then
+        GAMEMODE:ConfettiEffectSingle(self)
+    end
 end

@@ -17,7 +17,7 @@ end
 function MOD:PlayerFinish(ply)
     local ground = ply:GetGroundEntity()
     if IsValid(ground) and ground:IsPlayer() then
-        ply:AwardWin()
+        ply:AwardWin(true)
     else
         ply:Kill()
     end

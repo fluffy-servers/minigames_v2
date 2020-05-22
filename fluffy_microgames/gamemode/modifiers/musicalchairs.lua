@@ -50,7 +50,7 @@ end
 function MOD:PlayerFinish(ply)
     if ply:InVehicle() then
         local chair = ply:GetVehicle()
-        ply:AwardWin()
+        ply:AwardWin(true)
         ply:ExitVehicle()
         ply:Spawn()
 
