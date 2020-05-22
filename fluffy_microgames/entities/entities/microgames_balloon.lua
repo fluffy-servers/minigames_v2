@@ -36,7 +36,7 @@ ENT.BalloonTypes = {
 -- Create the balloon
 function ENT:Initialize()
     -- Select the type of balloon
-    local r = math.random()
+    local r = util.SharedRandom("BalloonTypeRandom", 0, 1, self:EntIndex())
     local bType = 'classic'
     if r < 0.1 then
         btype = 'star'
@@ -46,7 +46,7 @@ function ENT:Initialize()
 
     -- Load balloon properties
     local bTable = self.BalloonTypes[btype]
-    self.Speed = math.random(bTable.minspeed, bTable.maxspeed)
+    self.Speed = util.SharedRandom("BalloonSpeedRandom", bTable.minspeed, bTable.maxspeed, self:EntIndex())
     self.Points = bTable.points
     self:SetModel(bTable.model)
     self:SetColor(HSVToColor(math.random(360), 1, 1))
@@ -63,7 +63,9 @@ function ENT:Initialize()
     self:StartMotionController()
 
     -- Add a little bit of sideways velocity
-    self.SideMotion = Vector(math.Rand(-1, 1), math.Rand(-1, 1), 0) * self.Speed
+    local xx = util.SharedRandom("BalloonXRandom", -1, 1, self:EntIndex())
+    local yy = util.SharedRandom("BalloonYRandom", -1, 1, self:EntIndex())
+    self.SideMotion = Vector(xx, yy, 0) * self.Speed
 end
 
 -- Pop the balloon if we hit the world
