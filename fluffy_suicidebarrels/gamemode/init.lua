@@ -88,9 +88,10 @@ hook.Add('EntityTakeDamage', 'BarrelLessSuicide', function(ply, dmg)
     if not cause:IsPlayer() then return end
 
     if cause == ply then
-        dmg:ScaleDamage(0.4)
-        dmg:SetDamageForce(dmg:GetDamageForce() * 3)
+        dmg:ScaleDamage(0.6)
+        dmg:SetDamageForce(dmg:GetDamageForce() * 2.5)
     elseif cause:Team() == TEAM_BLUE then
         dmg:ScaleDamage(0.8)
+        dmg:SetDamageForce(dmg:GetDamageForce() * 1.5)
     end
 end)

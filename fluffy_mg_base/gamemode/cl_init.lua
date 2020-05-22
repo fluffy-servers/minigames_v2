@@ -6,15 +6,16 @@
 
 -- Include useful files
 include('shared.lua')
+include('cl_announcements.lua')
+include('cl_chat.lua')
+include('cl_crosshair.lua')
 include('cl_endgame.lua')
 include('cl_hud.lua')
-include('cl_crosshair.lua')
-include('cl_thirdperson.lua')
+include('cl_killfeed.lua')
+include('cl_mapedits.lua')
 include('cl_playerpanel.lua')
 include('cl_scoreboard.lua')
-include('cl_announcements.lua')
-include('cl_killfeed.lua')
-include('cl_chat.lua')
+include('cl_thirdperson.lua')
 
 include('vgui/AvatarCircle.lua')
 include('vgui/MapVotePanel.lua')
