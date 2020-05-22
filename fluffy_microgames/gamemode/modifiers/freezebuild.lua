@@ -2,7 +2,7 @@ MOD.Name = "Rocket Jump!"
 MOD.Countdown = true
 
 MOD.SurviveValue = 2
-MOD.RoundTime = 20
+MOD.RoundTime = 25
 
 local function spawnPlatforms()
     local number = GAMEMODE:PlayerScale(0.3, 2, 25) + math.random(0, 2)
@@ -76,3 +76,13 @@ function MOD:PlayerFinish(ply)
     end
 end
 
+-- Disable propkilling
+function MOD:EntityTakeDamage(ent, dmg)
+    if IsValid(dmg:GetAttacker()) and dmg:GetAttacker():GetClass() == 'prop_physics' then
+        return true
+    end
+
+    if IsValid(dmg:GetInflictor()) and dmg:GetInflictor():GetClass() == 'prop_physics' then
+        return true
+    end
+end
