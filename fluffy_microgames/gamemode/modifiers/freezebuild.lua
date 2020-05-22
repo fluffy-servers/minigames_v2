@@ -19,6 +19,17 @@ local function spawnPlatforms()
     end
 end
 
+local function spawnSawblade(position)
+    if not position then
+        position = GAMEMODE:GetRandomLocations(1, 'crate')[1]
+    end
+
+    local saw = ents.Create("prop_physics")
+    saw:SetModel("models/props_junk/sawblade001a.mdl")
+    saw:SetPos(position + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 1) * 8)
+    saw:Spawn()
+end
+
 local function spawnInitialSawblades()
     local number = math.floor(GAMEMODE:PlayerScale(1, 3, 10) * 1.5)
     local positions = GAMEMODE:GetRandomLocations(number, 'crate')
@@ -28,24 +39,13 @@ local function spawnInitialSawblades()
     end
 end
 
-local function spawnSawblade(position)
-    if not position then
-        position = GAMEMODE:GetRandomLocations(1, 'crate')[0]
-    end
-
-    local saw = ents.Create("prop_physics")
-    saw:SetModel("models/props_junk/sawblade001a.mdl")
-    saw:SetPos(positions[i] + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 1) * 8)
-    saw:Spawn()
-end
-
 function MOD:Initialize()
     spawnPlatforms()
     spawnInitialSawblades()
     GAMEMODE:Announce("Build to the top!")
 end
 
-MOD.ThinkTime = 1
+MOD.ThinkTime = 2.5
 function MOD:Think()
     spawnSawblade()
 end
