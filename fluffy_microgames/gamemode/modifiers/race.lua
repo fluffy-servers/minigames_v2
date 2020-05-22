@@ -51,6 +51,7 @@ function MOD:Think()
                 -- Confetti effect after passing the last node
                 if number == GAMEMODE.NumberNodes then
                     GAMEMODE:ConfettiEffectSingle(v)
+                    GAMEMODE:EndRound(v)
                 end
             end
         end

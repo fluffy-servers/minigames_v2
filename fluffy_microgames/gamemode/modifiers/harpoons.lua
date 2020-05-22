@@ -36,27 +36,38 @@ local function HarpoonTouch(ent, data)
     end
 end
 
+local function spawnHarpoon(position)
+    local ang = Angle(0, math.random(360), 0)
+    local ent = ents.Create("prop_physics")
+    ent:SetPos(position)
+    ent:SetAngles(ang)
+    ent:SetModel('models/props_junk/harpoon002a.mdl')
+    ent:SetMaterial("models/debug/debugwhite")
+    ent:Spawn()
+
+    ent:GetPhysicsObject():SetMass(10)
+
+    -- Add the damage callback
+    ent:AddCallback("PhysicsCollide", HarpoonTouch)
+end
+
 function MOD:Initialize()
     GAMEMODE:Announce("Harpoons!", "Stab your enemies!")
     local number = GAMEMODE:PlayerScale(1, 3, 24) + math.random(1, 3)
-    local positions = GAMEMODE:GetRandomLocations(1, 'center')
+    local position = GAMEMODE:GetRandomLocations(1, 'center')[1]
 
+    -- Spawn some spiralling sorta upwards scattered in the center
     for i=1,number do
         local radius = 100
+        local pos = position + Vector(math.random(-radius, radius), math.random(-radius, radius), i*32)
+        spawnHarpoon(pos)
+    end
 
-        local pos = positions[1] + Vector(math.random(-radius, radius), math.random(-radius, radius), i*32)
-        local ang = Angle(0, math.random(360), 0)
-        local ent = ents.Create("prop_physics")
-        ent:SetPos(pos)
-        ent:SetAngles(ang)
-        ent:SetModel('models/props_junk/harpoon002a.mdl')
-        ent:SetMaterial("models/debug/debugwhite")
-        ent:Spawn()
-
-        ent:GetPhysicsObject():SetMass(10)
-
-        -- Add the damage callback
-        ent:AddCallback("PhysicsCollide", HarpoonTouch)
+    -- Spawn some fun ones in the edges too
+    local number2 = GAMEMODE:PlayerScale(0.4, 2, 5) + math.random(1, 3)
+    local positions = GAMEMODE:GetRandomLocations(number2, 'edge')
+    for i=1, number2 do
+        spawnHarpoon(positions[i])
     end
 end
 

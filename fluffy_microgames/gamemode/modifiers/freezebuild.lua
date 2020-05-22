@@ -31,7 +31,7 @@ local function spawnSawblade(position)
 end
 
 local function spawnInitialSawblades()
-    local number = math.floor(GAMEMODE:PlayerScale(1, 3, 10) * 1.5)
+    local number = math.floor(GAMEMODE:PlayerScale(1, 4, 10) * 2)
     local positions = GAMEMODE:GetRandomLocations(number, 'crate')
 
     for i=1, number do
@@ -45,7 +45,7 @@ function MOD:Initialize()
     GAMEMODE:Announce("Build to the top!")
 end
 
-MOD.ThinkTime = 2.5
+MOD.ThinkTime = 1.5
 function MOD:Think()
     spawnSawblade()
 end
@@ -61,8 +61,6 @@ function MOD:GravGunPunt(ply, ent)
     if phys:IsValid() then
         if phys:IsMotionEnabled() then
             phys:EnableMotion(false)
-        else
-            phys:EnableMotion(true)
         end
     end
 end

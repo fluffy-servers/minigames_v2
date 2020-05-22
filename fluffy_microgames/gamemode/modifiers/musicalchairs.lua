@@ -35,16 +35,9 @@ local function giveGravityGuns()
 end
 
 function MOD:Initialize()
-    GAMEMODE:Announce("Don't stop moving!")
-    timer.Create("MusicalChairsTimer", 5, 1, function()
-        spawnChairs()
-        giveGravityGuns()
-        GAMEMODE:Announce("Musical Chairs", "Get in a chair, quick!")
-    end)
-end
-
-function MOD:Cleanup()
-    timer.Destroy("MusicalChairsTimer")
+    spawnChairs()
+    giveGravityGuns()
+    GAMEMODE:Announce("Musical Chairs", "Get in a chair, quick!")
 end
 
 function MOD:PlayerFinish(ply)
@@ -59,18 +52,5 @@ function MOD:PlayerFinish(ply)
         end
     elseif ply:Alive() then
         ply:Kill()
-    end
-end
-
-MOD.ThinkTime = 0.1
-function MOD:Think()
-    if CurTime() < GAMEMODE.ModifierStart + 1.5 then return end
-    if CurTime() > GAMEMODE.ModifierStart + 5 then return end
-
-    for k,v in pairs(player.GetAll()) do
-        if not v:Alive() or v.Spectating then continue end
-        if v:GetVelocity():LengthSqr() < 5000 then
-            v:Kill()
-        end
     end
 end
