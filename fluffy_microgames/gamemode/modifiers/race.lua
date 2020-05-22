@@ -1,6 +1,8 @@
 MOD.Name = 'Race'
 MOD.Countdown = true
 
+MOD.ScoreValue = 0
+MOD.ScoringPane = true
 MOD.SurviveValue = 2
 MOD.RoundTime = 30
 
@@ -27,7 +29,7 @@ end
 
 function MOD:Initialize()
     self:SpawnCircles()
-    GAMEMODE:Announce("Race", "Go go go!")
+    GAMEMODE:Announce("Race", "Go through the " ..  GAMEMODE.NumberNodes.. " circles in order!")
 end
 
 function MOD:Loadout(ply)
@@ -42,8 +44,9 @@ function MOD:Think()
     for number, disc in pairs(GAMEMODE.RaceNodes) do
         local playersOnDisc = disc:GetPlayers()
         for k, v in pairs(playersOnDisc) do
-            if v:GetNWInt("RaceState", 0) == (number - 1) then
-                v:SetNWInt("RaceState", number)
+            if v:GetMScore() == (number - 1) then
+                v:EmitSound("ambient/levels/canals/windchime2.wav", 100, 100 + (number*15))
+                v:SetMScore(number)
             end
         end
     end
@@ -52,7 +55,7 @@ end
 function MOD:Cleanup()
     for k,v in pairs(player.GetAll()) do
         if not v:Alive() then continue end
-        if v:GetNWInt("RaceState", 0) != GAMEMODE.NumberNodes then
+        if v:GetMScore() != GAMEMODE.NumberNodes then
             v:Kill()
         end
     end

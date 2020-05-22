@@ -24,7 +24,7 @@ if CLIENT then
         local p = center:ToScreen()
         local size = 24
 
-        if (point - 1) == LocalPlayer():GetNWInt("RaceState", 0) then
+        if (point - 1) == LocalPlayer():GetMScore() then
             cam.Start2D()
                 -- Mark this race point
                 draw.NoTexture()
