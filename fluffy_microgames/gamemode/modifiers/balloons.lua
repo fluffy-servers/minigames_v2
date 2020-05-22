@@ -25,7 +25,7 @@ function MOD:Initialize()
 end
 
 function MOD:Loadout(ply)
-    ply:Give('weapon_mg_pistol')
+    ply:Give('balloon_popper')
 end
 
 function MOD:PropBreak(ply, prop)

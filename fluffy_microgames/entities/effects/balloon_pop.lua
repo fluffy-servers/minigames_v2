@@ -13,7 +13,7 @@ function EFFECT:Init(data)
 			particle:SetVelocity(pos * 500)
 
 			particle:SetLifeTime(0)
-			particle:SetDieTime(8)
+			particle:SetDieTime(3)
 
 			particle:SetStartAlpha(255)
 			particle:SetEndAlpha(255)

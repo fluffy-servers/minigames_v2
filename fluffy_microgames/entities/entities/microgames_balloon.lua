@@ -49,7 +49,8 @@ function ENT:Initialize()
     self.Speed = util.SharedRandom("BalloonSpeedRandom", bTable.minspeed, bTable.maxspeed, self:EntIndex())
     self.Score = bTable.points
     self:SetModel(bTable.model)
-    self:SetColor(HSVToColor(math.random(360), 1, 1))
+    local hue = util.SharedRandom("BalloonColorRandom", 0, 360, self:EntIndex())
+    self:SetColor(HSVToColor(hue, 1, 1))
     self:SetRenderMode(RENDERMODE_TRANSALPHA)
 
     -- Create physics object
