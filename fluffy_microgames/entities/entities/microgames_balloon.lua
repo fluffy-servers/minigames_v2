@@ -19,17 +19,17 @@ ENT.BalloonTypes = {
     },
 
     heart = {
-        points = 1,
-        minspeed = 20,
-        maxspeed = 30,
-        model = "models/maxofs2d/balloon_classic.mdl"
+        points = 3,
+        minspeed = 50,
+        maxspeed = 80,
+        model = "models/balloons/balloon_classicheart.mdl"
     },
 
     star = {
-        points = 1,
-        minspeed = 20,
-        maxspeed = 30,
-        model = "models/maxofs2d/balloon_classic.mdl"
+        points = 5,
+        minspeed = 100,
+        maxspeed = 200,
+        model = "models/balloons/balloon_star.mdl"
     }
 }
 
@@ -38,16 +38,16 @@ function ENT:Initialize()
     -- Select the type of balloon
     local r = util.SharedRandom("BalloonTypeRandom", 0, 1, self:EntIndex())
     local bType = 'classic'
-    if r < 0.1 then
-        btype = 'star'
-    elseif r < 0.25 then
-        btype = 'heart'
+    if r < 0.15 then
+        bType = 'star'
+    elseif r < 0.50 then
+        bType = 'heart'
     end
 
     -- Load balloon properties
-    local bTable = self.BalloonTypes[btype]
+    local bTable = self.BalloonTypes[bType]
     self.Speed = util.SharedRandom("BalloonSpeedRandom", bTable.minspeed, bTable.maxspeed, self:EntIndex())
-    self.Points = bTable.points
+    self.Score = bTable.points
     self:SetModel(bTable.model)
     self:SetColor(HSVToColor(math.random(360), 1, 1))
     self:SetRenderMode(RENDERMODE_TRANSALPHA)
@@ -66,6 +66,11 @@ function ENT:Initialize()
     local xx = util.SharedRandom("BalloonXRandom", -1, 1, self:EntIndex())
     local yy = util.SharedRandom("BalloonYRandom", -1, 1, self:EntIndex())
     self.SideMotion = Vector(xx, yy, 0) * self.Speed
+
+    self:SetVelocity(self.SideMotion + Vector(0, 0, self.Speed * 1000))
+    
+    local yaw = util.SharedRandom("BalloonYaw", 0, 360, self:EntIndex())
+    self:SetAngles(Angle(0, yaw, 0))
 end
 
 -- Pop the balloon if we hit the world
