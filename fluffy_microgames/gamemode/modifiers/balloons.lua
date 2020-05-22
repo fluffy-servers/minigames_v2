@@ -5,7 +5,7 @@ MOD.ScoreValue = 0.1
 MOD.ScoringPane = true
 
 MOD.WinValue = 3
-MOD.RoundTime = 25
+MOD.RoundTime = 20
 
 local function spawnBalloons()
     local number = GAMEMODE:PlayerScale(0.4, 3, 8)
