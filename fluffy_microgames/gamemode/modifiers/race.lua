@@ -57,12 +57,10 @@ function MOD:Think()
     end
 end
 
-function MOD:Cleanup()
-    for k,v in pairs(player.GetAll()) do
-        if not v:Alive() then continue end
-        if v:GetMScore() != GAMEMODE.NumberNodes then
-            v:Kill()
-        end
+function MOD:PlayerFinish(ply)
+    if not ply:Alive() then return end
+    if ply:GetMScore() != GAMEMODE.NumberNodes then
+        ply:Kill()
     end
 end
 
