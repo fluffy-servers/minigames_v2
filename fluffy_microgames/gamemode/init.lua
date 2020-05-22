@@ -7,6 +7,7 @@
 
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
+AddCSLuaFile('ply_extension.lua')
 
 include('shared.lua')
 include('sv_markers.lua')
