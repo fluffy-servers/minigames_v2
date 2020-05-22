@@ -6,6 +6,14 @@ MOD.KillValue = 1
 local prop_list = {
     "models/props_junk/sawblade001a.mdl",
     "models/props_junk/watermelon01.mdl",
+    "models/props_lab/monitor01a.mdl",
+    "models/props_c17/cashregister01a.mdl",
+    "models/props_c17/oildrum001.mdl",
+    "models/Combine_Helicopter/helicopter_bomb01.mdl",
+    "models/props_interiors/BathTub01a.mdl",
+    "models/props_interiors/Radiator01a.mdl",
+    "models/props_wasteland/controlroom_filecabinet001a.mdl",
+    "models/props_vehicles/carparts_door01a.mdl"
 }
 
 local function spawnProps()
