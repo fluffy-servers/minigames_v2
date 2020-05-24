@@ -5,10 +5,30 @@
 --]]
 
 -- Fairly self-explanatory
-function GM:PlayerSpawnAsSpectator(ply)
+function GM:PlayerSpawnAsSpectator(ply, mode, target)
 	ply:StripWeapons()
-	ply.Spectating = true
-    ply:Spectate(OBS_MODE_ROAMING)
+    GAMEMODE:StartSpectate(ply, mode, target)
+end
+
+function GM:StartSpectate(ply, mode, target)
+    mode = mode or OBS_MODE_ROAMING
+    ply:Spectate(mode)
+
+    if IsValid(target) then
+        ply:SpectateEntity(target)
+        ply.SpectateTarget = target
+    else
+        ply.SpectateTarget = nil
+    end
+    ply.SpectateMode = mode
+    ply.Spectating = true
+end
+
+function GM:EndSpectate(ply)
+    ply:UnSpectate()
+    ply.SpectateMode = nil
+    ply.SpectateTarget = nil
+    ply.Spectating = false
 end
 
 -- Death thinking hook
