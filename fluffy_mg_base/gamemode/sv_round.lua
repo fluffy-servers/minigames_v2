@@ -114,19 +114,22 @@ function GM:PreStartRound()
     hook.Call('PreRoundStart')
     
     -- Respawn everybody & freeze them until the round actually starts
-    for k,v in pairs(player.GetAll()) do
-        if !GAMEMODE.TeamBased then 
-            if v:Team() != TEAM_SPECTATOR then v:SetTeam(TEAM_UNASSIGNED) end
-            v:SetNWInt("RoundKills", 0) 
+    -- This has a timer to allow for any map entity editing to take place
+    timer.Simple(FrameTime(), function()
+        for k,v in pairs(player.GetAll()) do
+            if !GAMEMODE.TeamBased then 
+                if v:Team() != TEAM_SPECTATOR then v:SetTeam(TEAM_UNASSIGNED) end
+                v:SetNWInt("RoundKills", 0) 
+            end
+            v:Spawn()
+            v:Freeze(true)
+            v.FFAKills = 0
+
+            if (not GAMEMODE.TeamBased) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
+                v:AddStatPoints('Rounds Played', 1)
+            end
         end
-        v:Spawn()
-        v:Freeze(true)
-        v.FFAKills = 0
-        
-        if (not GAMEMODE.TeamBased) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
-            v:AddStatPoints('Rounds Played', 1)
-        end
-    end
+    end)
     
     -- Start the round after a short cooldown
     timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end)
