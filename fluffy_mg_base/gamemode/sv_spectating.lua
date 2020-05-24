@@ -24,7 +24,7 @@ function GM:StartSpectate(ply, mode, target)
     end
     ply.SpectateMode = mode
     ply.Spectating = true
-    
+
     GAMEMODE:NetworkSpectate(ply, mode, target)
 end
 
@@ -125,7 +125,7 @@ end
 -- Used as a replacement to slightly broken spectating
 function GM:PlayerDeathThink(ply)
     -- If outside of round, respawn dead players as spectators
-    if not GAMEMODE:InRound() then
+    if not GAMEMODE:InRound() and not ply.Spectating then
         GAMEMODE:PlayerSpawnAsSpectator(ply)
         return
     end
