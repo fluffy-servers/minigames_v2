@@ -106,23 +106,30 @@ function GM:SpectateControls(ply)
         -- This will cycle through the list of possible players if applicable
         -- If in roaming mode, clicking on a player will jump into them
         if ply.SpectateMode == OBS_MODE_ROAMING then
-            if ply:GetEyeTrace().Entity:IsPlayer() then
-                GAMEMODE:StartSpectate(ply, OBS_MODE_CHASE, ply:GetEyeTrace().Entity)
-                ply.SpectateLastEyes = ply:EyeAngles()
+            local eyetarget = ply:GetEyeTrace().Entity
+            if eyetarget:IsPlayer() then
+                if ply:Team() == TEAM_SPECATOR or (eyetarget:Team() == ply:Team()) then
+                    GAMEMODE:StartSpectate(ply, OBS_MODE_CHASE, ply:GetEyeTrace().Entity)
+                    return
+                end
             else
                 GAMEMODE:NextSpectateTarget(ply, 1)
             end
         else
             GAMEMODE:NextSpectateTarget(ply, 1)
         end
+
     elseif ply:KeyPressed(IN_ATTACK2) then
         -- Similar to the above code, except moving in reverse, and without roam jump
         GAMEMODE:NextSpectateTarget(ply, -1)
     end
 
     -- If we have an invalid spectate target, skip to the next one
-    if not IsValid(ply.SpectateTarget) or (ply.SpectateTarget:IsPlayer() and !ply.SpectateTarget:Alive()) then
-        GAMEMODE:NextSpectateTarget(ply, 1)
+    if ply.SpectateMode != OBS_MODE_ROAMING then
+        local target = ply.SpectateTarget
+        if not IsValid(target) or (target:IsPlayer() and !target:Alive()) then
+            GAMEMODE:NextSpectateTarget(ply, 1)
+        end
     end
 end
 
