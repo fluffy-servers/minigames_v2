@@ -46,8 +46,14 @@ function GM:HUDPaint()
     
     -- Draw some of the parts
     self:DrawRoundState()
-    self:DrawHealth()
-    self:DrawAmmo()
+
+    -- Draw health and ammo if applicable, otherwise draw spectator info
+    if LocalPlayer().Spectating then
+        self:DrawSpectateState()
+    else
+        self:DrawHealth()
+        self:DrawAmmo()
+    end
     
     -- Crosshair - account for third person too
     if LocalPlayer().Thirdperson then
@@ -73,7 +79,7 @@ function GM:HUDPaint()
 	elseif IsValid(GAMEMODE.ScorePane) then
         GAMEMODE.ScorePane:Hide()
     end
-    
+
     -- Hooks! Yay!
     hook.Run("HUDDrawTargetID")
 	hook.Run("HUDDrawPickupHistory")
@@ -164,11 +170,6 @@ function GM:DrawRoundState()
         local t = GAMEMODE.WarmupTime - (CurTime() - start_time)
         GAMEMODE:DrawShadowText('Round starting in ' .. math.ceil(t) .. '...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
-    end
-    
-    -- Draw spectating message on bottom (very rare)
-    if LocalPlayer():Team() == TEAM_SPECTATOR then
-        GAMEMODE:DrawShadowText('You are spectating', 'FS_40', ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
     
     -- There are four default round state styles
@@ -784,6 +785,11 @@ end
 
 -- Hook to call the above function when a player is looked at
 function GM:HUDDrawTargetID()
+    -- Spectators only see TargetID in free roam mode
+    if LocalPlayer().Spectating and LocalPlayer().SpectateMode != OBS_MODE_ROAMING then
+        return
+    end
+
     -- Check if the player is looking at a player
 	local tr = util.GetPlayerTrace(LocalPlayer())
 	local trace = util.TraceLine(tr)
@@ -802,4 +808,26 @@ function GM:HUDDrawTargetID()
     local panel = GAMEMODE:GetPlayerInfoPanel(trace.Entity)
     panel:SetPos(xx - panel:GetWide()/2, yy - panel:GetTall()/2)
     panel:PaintManual()
+end
+
+-- Helper functions to handle drawing spectate state
+function GM:DrawSpectateState()
+    -- Don't draw for non-spectators (duh)
+    if not LocalPlayer().Spectating then return end
+
+    -- Find the name of the target to draw
+    -- This will be a player name 99% of the time
+    local targetname = 'Free Roam'
+    if LocalPlayer().SpectateMode != OBS_MODE_ROAMING then
+        local e = LocalPlayer().SpectateTarget
+        if e:IsPlayer() then
+            targetname = e:Nick() or 'Player'
+        else
+            targetname = 'Entity'
+        end
+    end
+
+    -- Draw text
+    GAMEMODE:DrawShadowText('Spectating', 'FS_32', 4, ScrH() - 58, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText(targetname, 'FS_64', 4, ScrH(), GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 end
