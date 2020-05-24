@@ -206,8 +206,13 @@ net.Receive('SpectateState', function()
     LocalPlayer().Spectating = false
     LocalPlayer().SpectateTarget = nil
 
-    if mode > 0 and mode != OBS_MODE_ROAMING then
+    -- minus one mode disables spectating
+    if mode > 0 then
         LocalPlayer().Spectating = true
+    end
+
+    -- Load target for all modes except roaming
+    if mode > 0 and mode != OBS_MODE_ROAMING then
         LocalPlayer().SpectateTarget = net.ReadEntity()
     end
 end)

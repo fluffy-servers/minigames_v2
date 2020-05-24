@@ -828,6 +828,6 @@ function GM:DrawSpectateState()
     end
 
     -- Draw text
-    GAMEMODE:DrawShadowText('Spectating', 'FS_32', 4, ScrH() - 58, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-    GAMEMODE:DrawShadowText(targetname, 'FS_64', 4, ScrH(), GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText('Spectating', 'FS_32', 8, ScrH() - 58, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText(targetname, 'FS_64', 8, ScrH(), GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 end
