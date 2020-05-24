@@ -119,6 +119,11 @@ function GM:SpectateControls(ply)
         -- Similar to the above code, except moving in reverse, and without roam jump
         GAMEMODE:NextSpectateTarget(ply, -1)
     end
+
+    -- If we have an invalid spectate target, skip to the next one
+    if not IsValid(ply.SpectateTarget) or (ply.SpectateTarget:IsPlayer() and !ply.SpectateTarget:Alive()) then
+        GAMEMODE:NextSpectateTarget(ply, 1)
+    end
 end
 
 -- Death thinking hook
@@ -155,4 +160,27 @@ function GM:PlayerDeathThink(ply)
     if GAMEMODE.AutoRespawn or ply:KeyPressed(IN_ATTACK) or ply:KeyPressed(IN_ATTACK2) or ply:KeyPressed(IN_JUMP) then
         ply:Spawn()
     end
+end
+
+-- Add player metatable functions for spectating
+local meta = FindMetaTable('Player')
+
+function meta:StartSpectate(mode, target)
+    GAMEMODE:StartSpectate(self, mode, target)
+end
+
+function meta:EndSpectate()
+    GAMEMODE:EndSpectate(self)
+end
+
+function meta:IsSpectating()
+    return self.Spectating
+end
+
+function meta:GetSpectateMode()
+    return self.SpectateMode
+end
+
+function meta:GetSpectateTarget()
+    return self.SpectateTarget
 end

@@ -80,8 +80,7 @@ function GM:PlayerSpawn(ply)
     ply:SetupHands()
     
     -- Exit out of spectate
-    ply:UnSpectate()
-    ply.Spectating = false
+    ply:EndSpectate()
     
     -- Spawn protection
     if GAMEMODE.SpawnProtection then

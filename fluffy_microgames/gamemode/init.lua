@@ -48,8 +48,7 @@ function GM:PreStartRound()
     -- Respawn the dead
     for k,v in pairs(player.GetAll()) do
         if v.Spectating and v:Team() != TEAM_SPECTATOR then
-            v.Spectating = false
-            v:UnSpectate()
+            v:EndSpectate()
             v:KillSilent()
         end
         v.RoundScore = 0
