@@ -23,7 +23,7 @@ local function spawnProps()
     for i=1,number1 do
         local ent = ents.Create("prop_physics")
         ent:SetModel(table.Random(prop_list))
-        ent:SetPos(positions1[i] + Vector(0, 0, 16))
+        ent:SetPos(positions1[i] + Vector(0, 0, 32))
         ent:SetAngles(AngleRand())
         ent:Spawn()
     end
@@ -34,7 +34,7 @@ local function spawnProps()
     for i=1,number2 do
         local ent = ents.Create("prop_physics")
         ent:SetModel(table.Random(prop_list))
-        ent:SetPos(positions2[i]+ Vector(0, 0, 16))
+        ent:SetPos(positions2[i]+ Vector(0, 0, 32))
         ent:SetAngles(AngleRand())
         ent:Spawn()
     end

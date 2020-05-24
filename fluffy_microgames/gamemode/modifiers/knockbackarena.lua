@@ -21,7 +21,7 @@ function MOD:EntityTakeDamage(ent, dmg)
         ent.LastAttacker = dmg:GetAttacker()
 
         local t = CurTime() - GetGlobalFloat('RoundStart', 0)
-        local strength = 600 + (t * 50)
+        local strength = 800 + (t * 40)
 
         -- Apply knockback
         local v = dmg:GetDamageForce():GetNormalized()

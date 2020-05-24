@@ -54,7 +54,7 @@ function ENT:Initialize()
     self:SetRenderMode(RENDERMODE_TRANSALPHA)
 
     -- Create physics object
-    self:PhysicsInit(SOLID_VPHYSICS)
+    self:PhysicsInitSphere(10, 'rubber')
     local phys = self:GetPhysicsObject()
     if IsValid(phys) then
         phys:SetMass(100)

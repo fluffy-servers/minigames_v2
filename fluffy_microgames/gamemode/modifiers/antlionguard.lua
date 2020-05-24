@@ -4,7 +4,7 @@ MOD.Region = 'empty'
 MOD.SurviveValue = 3
 
 local function spawnAntlionGuard()
-    local number = GAMEMODE:PlayerScale(0.75, 5, 16)
+    local number = GAMEMODE:PlayerScale(0.5, 4, 8)
     local positions = GAMEMODE:GetRandomLocations(number, 'ground')
 
     for i=1,number do
