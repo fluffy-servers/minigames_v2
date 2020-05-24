@@ -198,3 +198,16 @@ end
 concommand.Add("minigames_hud_color", function( ply, cmd, args )
     GAMEMODE:UpdateColorSet(args[1])
 end )
+
+-- Handle spectating messages
+net.Receive('SpectateState', function()
+    local mode = net.ReadInt(8)
+    LocalPlayer().SpectateMode = mode
+    LocalPlayer().Spectating = false
+    LocalPlayer().SpectateTarget = nil
+
+    if mode > 0 and mode != OBS_MODE_ROAMING then
+        LocalPlayer().Spectating = true
+        LocalPlayer().SpectateTarget = net.ReadEntity()
+    end
+end)

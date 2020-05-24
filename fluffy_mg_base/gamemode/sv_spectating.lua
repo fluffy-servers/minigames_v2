@@ -6,7 +6,9 @@
 
 -- Fairly self-explanatory
 function GM:PlayerSpawnAsSpectator(ply, mode, target)
-	ply:StripWeapons()
+    if ply:Alive() then
+        ply:KillSilent()
+    end
     GAMEMODE:StartSpectate(ply, mode, target)
 end
 
@@ -22,6 +24,8 @@ function GM:StartSpectate(ply, mode, target)
     end
     ply.SpectateMode = mode
     ply.Spectating = true
+
+    GAMEMODE:NetworkSpectate(ply, mode, target)
 end
 
 function GM:EndSpectate(ply)
@@ -29,6 +33,15 @@ function GM:EndSpectate(ply)
     ply.SpectateMode = nil
     ply.SpectateTarget = nil
     ply.Spectating = false
+
+    GAMEMODE:NetworkSpectate(ply, -1)
+end
+
+function GM:NetworkSpectate(ply, mode, target)
+    net.Start('SpectateState')
+    net.WriteInt(mode or -1, 8)
+    net.WriteEntity(target or Entity(-1))
+    net.Send(ply)
 end
 
 -- Death thinking hook
