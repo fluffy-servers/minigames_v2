@@ -115,7 +115,11 @@ function GM:PlayerInitialSpawn(ply)
         if not ply:IsBot() then
             ply:ConCommand("mg_info")
         end
-        GAMEMODE:PlayerSpawnAsSpectator(ply)
+
+        -- Spawn as a spectator in elimination
+        if GAMEMODE.Elimination then
+            GAMEMODE:PlayerSpawnAsSpectator(ply)
+        end
     end)
     
 
