@@ -18,10 +18,14 @@ local crosshair_mat = Material('crosshair_outline/crosshair012.png', 'noclamp sm
 
 -- Main function to actually draw the crosshair on the screen
 -- To draw in center of screen: DrawCrossHair(ScrW()/2, ScrH()/2)
-function GM:DrawCrosshair(x, y, size, force, color )
-    if not LocalPlayer():Alive() or LocalPlayer():Team() == TEAM_SPECTATOR then return end
-    if GAMEMODE.CoolTransition != nil then return end
-    if IsValid(GAMEMODE.RoundEndPanel) then return end
+function GM:DrawCrosshair(x, y, size, force, color)
+    local wep = LocalPlayer():GetActiveWeapon()
+    if not force then
+        if not LocalPlayer():Alive() or LocalPlayer():Team() == TEAM_SPECTATOR then return end
+        if GAMEMODE.CoolTransition != nil then return end
+        if IsValid(GAMEMODE.RoundEndPanel) then return end
+        if not IsValid(wep) then return end
+    end
     
     local crosshair_enabled = GetConVar('crosshair')
     
@@ -57,11 +61,7 @@ function GM:DrawCrosshair(x, y, size, force, color )
     if mat_name != (mode .. string.sub(image, 0, -5)) then
         crosshair_mat = Material(mode .. image, 'noclamp smooth')
     end
-    
-    -- Render the crosshair
-    local wep = LocalPlayer():GetActiveWeapon()
-    if not IsValid(wep) and not force then return end
-    
+
     if wep.DrawCrosshair != false or force then
         draw.NoTexture()
         surface.SetDrawColor(color_white)
