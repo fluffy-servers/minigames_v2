@@ -60,6 +60,8 @@ end
 -- This is usually for adding and/or removing entities
 function GM:ApplyMapOverrideEntities()
     local props = GAMEMODE.MapOverrideProperties
+    if not props then return end
+    
     -- Remove spawns from the map (if applicable)
     if props['cleanSpawns'] then
         for _, class in pairs(spawnpoint_classes) do
@@ -83,7 +85,17 @@ function GM:ApplyMapOverrideEntities()
 
     -- Add defined entities into the map (if applicable)
     if props['addEntities'] then
-        -- Todo
+        local pos = v[1]
+        local class = v[2]
+        local kvs = v[3]
+
+        local e = ents.Create(class)
+        e:SetPos(pos)
+        e:Spawn()
+
+        for k, v in pairs(kvs) do
+            e:SetKeyValue(k, v)
+        end
     end
 end
 
