@@ -191,7 +191,7 @@ function GM:OpenCrosshairEditor()
 end
 
 -- Add the concommand to open the crosshair editor
-concommand.Add("crosshair_editor", function( ply, cmd, args )
+concommand.Add("mg_crosshair_editor", function( ply, cmd, args )
     if not CLIENT then return end -- ??? why
     GAMEMODE:OpenCrosshairEditor()
 end )

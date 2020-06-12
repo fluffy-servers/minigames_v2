@@ -17,5 +17,5 @@ util.AddNetworkString('SHOP_AnnounceUnbox')
 
 -- Open the shop on client when F4 is pressed
 function GM:ShowSpare2(ply)
-    ply:ConCommand('minigames_shop')
+    ply:ConCommand('mg_inventory')
 end

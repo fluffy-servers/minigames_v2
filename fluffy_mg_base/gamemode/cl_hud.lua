@@ -151,8 +151,8 @@ local ammo_circle = draw.CirclePoly(ScrW() - c_pos, ScrH() - c_pos, radius, seg)
 local ammo_circle_shadow = draw.CirclePoly(ScrW() - c_pos+3, ScrH() - c_pos+3, radius, seg)
 
 -- Convar to disable the fancy arcs
--- This used to be important before, but now the arcs barely drop the frame rates
-local fast_hud = CreateClientConVar("minigames_fast_hud", "0", true, false, "Set to 1 to stop drawing arcs")
+-- This used to be important before, but now it has a lot less impact
+local fast_hud = CreateClientConVar("mg_fast_hud", "0", true, false, "Whether to use an optimised HUD. Enable if you have poor performance")
 
 -- Draw the state of the round, including time and round number etc.
 -- This is in the top left corner

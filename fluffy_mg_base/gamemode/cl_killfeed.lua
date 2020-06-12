@@ -1,5 +1,5 @@
-local hud_deathnotice_time = CreateConVar("hud_deathnotice_time", "6", FCVAR_REPLICATED, "Amount of time to show death notice")
-local have_killsound = CreateClientConVar("mg_killsound_enabled", 1, true, false)
+local hud_deathnotice_time = CreateClientConVar("mg_deathnotice_time", "6", true, false, "Amount of time to show death notice")
+local have_killsound = CreateClientConVar("mg_killsound_enabled", 1, true, false, "Enable a sound effect when you get a kill")
 
 -- These are our kill icons
 local Color_Icon = Color( 255, 80, 0, 255 )

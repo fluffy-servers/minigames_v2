@@ -1,5 +1,5 @@
 local minigames_chat_commands = {}
-minigames_chat_commands['!crosshair'] = "crosshair_editor"
+minigames_chat_commands['!crosshair'] = "mg_crosshair_editor"
 
 hook.Add("OnPlayerChat", "MinigamesChatCommands", function(ply, text, team, dead)
     if ply != LocalPlayer() then return end

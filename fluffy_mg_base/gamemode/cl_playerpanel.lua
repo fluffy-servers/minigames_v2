@@ -347,11 +347,11 @@ function GM:ItemsPanel()
 end
 
 -- Concommands to open these panels on server instruction
-concommand.Add('minigames_info', function()
+concommand.Add('mg_info', function()
     GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
 end)
 
-concommand.Add('minigames_team', function()
+concommand.Add('mg_team', function()
     if GAMEMODE.TeamBased and (not GAMEMODE.TeamSurvival) and (GAMEMODE.PlayerChooseTeams) then
         GAMEMODE:OpenInfoOption('Team', GAMEMODE.TeamPanel)
     else
@@ -359,7 +359,7 @@ concommand.Add('minigames_team', function()
     end
 end)
 
-concommand.Add('minigames_inventory', function()
+concommand.Add('mg_inventory', function()
     if not LocalPlayer():IsAdmin() then return end
     GAMEMODE:OpenInfoOption('Items', GAMEMODE.ItemsPanel)
 end)

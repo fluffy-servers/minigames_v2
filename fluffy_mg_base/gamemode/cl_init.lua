@@ -194,11 +194,6 @@ function team.GetShortName(id)
     end
 end
 
--- Concommand to update colors! Yay for choice!
-concommand.Add("minigames_hud_color", function( ply, cmd, args )
-    GAMEMODE:UpdateColorSet(args[1])
-end )
-
 -- Handle spectating messages
 net.Receive('SpectateState', function()
     local mode = net.ReadInt(8)
