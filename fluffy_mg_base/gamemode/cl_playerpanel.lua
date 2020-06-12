@@ -66,12 +66,6 @@ function GM:CreateInfoFrame2()
     local xx = wide
     for k, v in pairs(header_buttons) do
         local name = v['name']
-        -- Skip the team category in FFA gamemodes
-        if name == 'Team' then
-            if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or not GAMEMODE.PlayerChooseTeams then
-                continue
-            end
-        end
 
         if name == 'Items' then
             if not LocalPlayer():IsAdmin() then continue end
@@ -203,6 +197,14 @@ function GM:HelpPanel()
 end
 
 function GM:TeamPanel()
+    -- Quick check to pass it over to the FFA panel
+    -- If this gamemode has *chooseable* teams then use THIS panel
+    -- Otherwise use the generic playing/spectating version
+    if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or (not GAMEMODE.PlayerChooseTeams) then
+        GAMEMODE:TeamPanelFFA()
+        return
+    end
+
     local frame = GAMEMODE:GetInfoFrame()
     local panel = frame.ContentPanel
     local bottom = frame.BottomBar
@@ -340,6 +342,119 @@ function GM:TeamPanel()
     end
 end
 
+-- FFA team panel is *similar* to the basic team panel
+-- Instead of listing all teams it instead displays Playing/Spectating
+-- Take care not to mess this up for gamemodes where players can't pick teams!
+function GM:TeamPanelFFA()
+    local frame = GAMEMODE:GetInfoFrame()
+    local panel = frame.ContentPanel
+    local bottom = frame.BottomBar
+
+    -- numbers
+    local total_wide = panel:GetWide()
+    local team_wide = total_wide / 2
+
+    -- Create a panel for each team
+    local i = 0
+    for k,v in pairs({TEAM_UNASSIGNED, TEAM_SPECTATOR}) do
+        -- Make a panel for each team
+        local team_panel = vgui.Create('DPanel', panel)
+        team_panel:SetWide(team_wide)
+        team_panel:SetTall(panel:GetTall())
+        team_panel:SetPos(team_wide * i, 0)
+
+        local name = 'Players'
+        if v == TEAM_SPECTATOR then name = 'Spectators' end
+        local color = Color(0, 168, 255)
+
+        function team_panel:Paint(w, h)
+            draw.SimpleText(name, 'FS_32', w/2, 24, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
+            surface.SetDrawColor(offwhite)
+            -- Side lines
+            surface.DrawLine(0, 0, 0, h)
+            surface.DrawLine(1, 0, 1, h)
+            surface.DrawLine(w, 0, w, h)
+            surface.DrawLine(w - 1, 0, w - 1, h)
+
+            -- Bottom line
+            surface.DrawLine(0, h-1, w, h-1)
+            surface.DrawLine(0, h-2, w, h-2)
+        end
+
+        -- Scoreboard of all current players in the team
+        local scoreboard = vgui.Create('DScrollPanel', team_panel)
+        scoreboard:SetSize(team_wide * 0.95, team_panel:GetTall() - 64)
+        scoreboard:SetPos(team_wide * 0.025, 48)
+        scoreboard.players = {}
+        
+        function scoreboard:Paint(w, h)
+            draw.RoundedBox(8, 0, 0, w, h, offwhite)
+        end
+
+        function scoreboard:Think()
+            for _,ply in pairs(player.GetAll()) do
+                if IsValid(self.players[ply]) then continue end
+                if v == TEAM_SPECTATOR and ply:Team() != TEAM_SPECTATOR then continue end
+                if v != TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then continue end
+
+                local row = vgui.Create('ScoreboardRow')
+                row:SetPlayer(ply)
+                row:Dock(TOP)
+                row:DockMargin(12, 4, 12, 0)
+                row:AddModule('deaths')
+                row:AddModule('score')
+                self:AddItem(row)
+                self.players[ply] = row
+
+                function row:Think()
+                    if v == TEAM_SPECTATOR and not ply:Team() == TEAM_SPECTATOR then 
+                        self:Remove()
+                        return
+                    end
+
+                    if v != TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then 
+                        self:Remove() 
+                        return 
+                    end
+                end
+            end
+        end
+
+        -- Put a hidden button over the whole panel
+        -- This allows players to change teams easily
+        local team_button = vgui.Create('DButton', team_panel)
+        team_button:Dock(FILL)
+        team_button:SetText('')
+        team_button.Paint = nil
+
+        function team_button:DoClick()
+            RunConsoleCommand('changeteam', v)
+        end
+
+        -- Make sure panels move further over
+        i = i + 1
+    end
+    
+    -- Create the play button
+    local play_button = vgui.Create('DButton', bottom)
+    play_button:SetWide(128)
+    play_button:Dock(RIGHT)
+    play_button:SetText('')
+
+    function play_button:Paint(w, h)
+        DisableClipping(true)
+        draw.RoundedBoxEx(8, 0, 4, w, h, Color(68, 189, 50), false, false, false, true)
+        draw.RoundedBoxEx(8, 0, 0, w, h, Color(76, 209, 55), false, false, false, true)
+        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w/2, h/2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+        DisableClipping(false)
+    end
+
+    function play_button:DoClick()
+        frame:Close()
+    end
+end
+
 function GM:ItemsPanel()
     local frame = GAMEMODE:GetInfoFrame()
     local display = frame.ContentPanel
@@ -352,11 +467,15 @@ concommand.Add('mg_info', function()
 end)
 
 concommand.Add('mg_team', function()
+    GAMEMODE:OpenInfoOption('Team', GAMEMODE.TeamPanel)
+
+    --[[
     if GAMEMODE.TeamBased and (not GAMEMODE.TeamSurvival) and (GAMEMODE.PlayerChooseTeams) then
         GAMEMODE:OpenInfoOption('Team', GAMEMODE.TeamPanel)
     else
         GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
     end
+    ]]--
 end)
 
 concommand.Add('mg_inventory', function()
