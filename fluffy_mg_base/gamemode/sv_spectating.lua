@@ -108,7 +108,7 @@ function GM:SpectateControls(ply)
         if ply.SpectateMode == OBS_MODE_ROAMING then
             local eyetarget = ply:GetEyeTrace().Entity
             if eyetarget:IsPlayer() then
-                if ply:Team() == TEAM_SPECATOR or (eyetarget:Team() == ply:Team()) then
+                if (ply:Team() == TEAM_SPECTATOR) or (eyetarget:Team() == ply:Team()) then
                     GAMEMODE:StartSpectate(ply, OBS_MODE_CHASE, ply:GetEyeTrace().Entity)
                     return
                 end
