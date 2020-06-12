@@ -126,7 +126,7 @@ function GM:PlayerInitialSpawn(ply)
     if ply:IsBot() then
         GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
     else
-        ply:ConCommand("minigames_info")
+        ply:ConCommand("mg_info")
     end
 end
 
@@ -148,12 +148,12 @@ end)
 
 -- Rebind help menu
 function GM:ShowHelp(ply)
-    ply:ConCommand("minigames_info")
+    ply:ConCommand("mg_info")
 end
 
 -- Rebind team menu
 function GM:ShowTeam(ply)
-    ply:ConCommand("minigames_team")
+    ply:ConCommand("mg_team")
 end
 
 -- Disable friendly fire
