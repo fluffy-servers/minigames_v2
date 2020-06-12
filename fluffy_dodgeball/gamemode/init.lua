@@ -21,13 +21,13 @@ function GM:SpawnBall()
     local pos = GAMEMODE.SpawnEntities[GAMEMODE.CurrentSpawn]:GetPos()
     GAMEMODE.CurrentSpawn = GAMEMODE.CurrentSpawn + 1
     if GAMEMODE.CurrentSpawn >= #GAMEMODE.SpawnEntities then
-        GAMEMODE.CurrentSpawn = 0
+        GAMEMODE.CurrentSpawn = 1
     end
 
     -- Spawn a ball at the given position
     local ball = ents.Create('db_dodgeball')
     if not IsValid(ball) then return end
-    ball:SetPos(pos)
+    ball:SetPos(pos + (VectorRand() * 32))
     ball:Spawn()
     ball:SetNWString('CurrentTeam', 'none')
     return ball
@@ -36,7 +36,7 @@ end
 -- Reset the ball counter on round start
 hook.Add('RoundStart', 'InitialSpawnFlag', function()
     GAMEMODE.BallNumber = 0
-    GAMEMODE.CurrentSpawn = 0
+    GAMEMODE.CurrentSpawn = 1
     GAMEMODE.SpawnEntities = table.Shuffle(ents.FindByClass('db_ballspawn'))
 
     timer.Simple(1, function() GAMEMODE:SpawnBall() end)
@@ -53,7 +53,7 @@ hook.Add("Think", "ThinkBallSpawn", function()
     
 	if CurTime() > GAMEMODE.NextSpawn then
         GAMEMODE:SpawnBall()
-        GAMEMODE.NextSpawn = CurTime() + math.random(4, 10)
+        GAMEMODE.NextSpawn = CurTime() + math.random(2, 5)
 	end
 end )
 

@@ -20,6 +20,7 @@ function ENT:Initialize()
     self:SetCollisionBounds(Vector(-hsize, -hsize, -hsize), Vector(hsize, hsize, hsize))
     self:PhysWake()
     self.CurrentBounces = 0
+    self.LastTime = CurTime()
 end
 
 -- Destroy the ball if damaged by trigger_hurt entities, otherwise apply physics damage
@@ -37,7 +38,7 @@ end
 function ENT:OnRemove()
     -- if anything happens to the ball, spawn a new one
     if CLIENT then return end
-    GAMEMODE:SpawnBall()
+    -- GAMEMODE:SpawnBall()
 end
 
 -- Respawn balls if not touched for a long time
