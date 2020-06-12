@@ -110,23 +110,27 @@ function GM:PlayerInitialSpawn(ply)
     -- Nobody can spawn unless allowed to later
     ply:KillSilent()
 
+    -- Open up the menu
+    timer.Simple(1, function()
+        if not ply:IsBot() then
+            ply:ConCommand("mg_info")
+        end
+        GAMEMODE:PlayerSpawnAsSpectator(ply)
+    end)
+    
+
     -- Ensure that players don't respawn if it's an elimination gamemode
     if GAMEMODE.Elimination then
         ply.FirstSpawn = true
     end
 
     -- Set teams to unassigned if the gamemode is not team based
+    -- Otherwise, automatically assign teams (hopefully evenly..)
     if not GAMEMODE.TeamBased then
         ply:SetTeam(TEAM_UNASSIGNED)
         return
-    end
-
-    -- Assign teams
-    -- Bots get automatically assigned, players get to choose
-    if ply:IsBot() then
-        GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
     else
-        ply:ConCommand("mg_info")
+        GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
     end
 end
 
