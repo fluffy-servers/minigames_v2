@@ -42,7 +42,7 @@ function GM:CreateInfoFrame2()
     end
 
     function discord_ad:DoClick()
-        gui.OpenURL('https://discord.gg/rMy4nH5')
+        gui.OpenURL('https://discord.gg/UdMTckn')
     end
 
     local header_buttons = {
