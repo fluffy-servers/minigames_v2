@@ -10,13 +10,14 @@ function GM:PlayerLoadout( ply )
     
     if ply:Team() == TEAM_BLUE then
         -- Survivors
-        ply:Give('weapon_mg_pistol')
-        ply:Give('weapon_mg_smg')
-        ply:Give('weapon_mg_shotgun')
+        -- ply:Give('weapon_mg_pistol')
+        -- ply:Give('weapon_mg_smg')
+        -- ply:Give('weapon_mg_shotgun')
         ply:Give('inf_shotgun')
         ply:Give('inf_magnum')
-        ply:GiveAmmo(512, 'Pistol', true)
-        ply:GiveAmmo(512, 'Buckshot', true)
+        ply:Give('inf_smg')
+        ply:GiveAmmo(80, 'Pistol', true)
+        ply:GiveAmmo(2400, 'Buckshot', true)
         ply:GiveAmmo(1024, 'SMG1', true)
         
         ply:SetRunSpeed(300)
