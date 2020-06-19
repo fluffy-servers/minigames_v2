@@ -77,3 +77,21 @@ hook.Add('RegisterStatsConversions', 'AddSuicideBarrelsStatConversions', functio
     GAMEMODE:AddStatConversion('Humans Killed', 'Humans Killed', 3)
     GAMEMODE:AddStatConversion('Barrels Killed', 'Barrels Killed', 0.5)
 end)
+
+hook.Add('EntityTakeDamage', 'BarrelLessSuicide', function(ply, dmg)
+    if not ply:IsPlayer() then return end
+    local inflictor = dmg:GetInflictor()
+    if inflictor:GetClass() != 'env_explosion' then return end
+
+    -- Reduce damage depending on who caused this explosion
+    local cause = inflictor.PlayerCause
+    if not cause:IsPlayer() then return end
+
+    if cause == ply then
+        dmg:ScaleDamage(0.6)
+        dmg:SetDamageForce(dmg:GetDamageForce() * 2.5)
+    elseif cause:Team() == TEAM_BLUE then
+        dmg:ScaleDamage(0.8)
+        dmg:SetDamageForce(dmg:GetDamageForce() * 1.5)
+    end
+end)

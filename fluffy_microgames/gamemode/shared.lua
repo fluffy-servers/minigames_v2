@@ -14,7 +14,7 @@ GM.TeamBased = false	-- Is the gamemode FFA or Teams?
 GM.RoundTime = 15      -- Seconds each round lasts for
 GM.RoundCooldown = 1.5
 GM.RoundType = 'timed'
-GM.GameTime  = 600
+GM.GameTime  = 900
 GM.HUDStyle  = 3
 
 function GM:Initialize()

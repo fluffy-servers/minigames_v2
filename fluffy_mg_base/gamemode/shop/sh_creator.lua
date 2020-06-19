@@ -386,7 +386,7 @@ function SHOP.OpenCreatorPanel()
 end
 
 -- Allow opening with a concommand
-concommand.Add('minigames_item_creator', function() SHOP.OpenCreatorPanel() end)
+concommand.Add('mg_item_creator', function() SHOP.OpenCreatorPanel() end)
 
 -- Receive broadcasts on client
 net.Receive('ItemCreatorBroadcast', function()

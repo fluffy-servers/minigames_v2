@@ -14,35 +14,34 @@ end
 -- Add a new ball to the field
 function GM:SpawnBall()
     if not GAMEMODE:InRound() then return end
-    
+
+    -- Pick spawns in a 'sequential order', looping around
+    -- This should allow random ball spawns while limiting collisions
+    -- Spawn 'queue' is shuffled at the start of each round
+    local pos = GAMEMODE.SpawnEntities[GAMEMODE.CurrentSpawn]:GetPos()
+    GAMEMODE.CurrentSpawn = GAMEMODE.CurrentSpawn + 1
+    if GAMEMODE.CurrentSpawn >= #GAMEMODE.SpawnEntities then
+        GAMEMODE.CurrentSpawn = 1
+    end
+
+    -- Spawn a ball at the given position
     local ball = ents.Create('db_dodgeball')
     if not IsValid(ball) then return end
-    GAMEMODE.BallNumber = GAMEMODE.BallNumber + 1
-    if GAMEMODE.BallNumber > #GAMEMODE.SpawnQueue then return end
-    
-    return GAMEMODE:RespawnBall(GAMEMODE.BallNumber)
-end
-
--- Create a ball entity at a position
-function GM:RespawnBall(number)
-    if not GAMEMODE:InRound() then return end
-    
-    local ball = ents.Create('db_dodgeball')
-    
-    local pos = GAMEMODE.SpawnQueue[number]:GetPos()
-    ball:SetPos(pos)
+    ball:SetPos(pos + (VectorRand() * 32))
     ball:Spawn()
     ball:SetNWString('CurrentTeam', 'none')
-    ball.Number = number
     return ball
 end
 
 -- Reset the ball counter on round start
 hook.Add('RoundStart', 'InitialSpawnFlag', function()
     GAMEMODE.BallNumber = 0
-    GAMEMODE.SpawnQueue = table.Shuffle(ents.FindByClass('db_ballspawn'))
+    GAMEMODE.CurrentSpawn = 1
+    GAMEMODE.SpawnEntities = table.Shuffle(ents.FindByClass('db_ballspawn'))
+
     timer.Simple(1, function() GAMEMODE:SpawnBall() end)
     timer.Simple(2, function() GAMEMODE:SpawnBall() end)
+    timer.Simple(3, function() GAMEMODE:SpawnBall() end)
     
     GAMEMODE.NextSpawn = CurTime() + 5
 end )
@@ -54,7 +53,7 @@ hook.Add("Think", "ThinkBallSpawn", function()
     
 	if CurTime() > GAMEMODE.NextSpawn then
         GAMEMODE:SpawnBall()
-        GAMEMODE.NextSpawn = CurTime() + math.random(5, 15)
+        GAMEMODE.NextSpawn = CurTime() + math.random(2, 5)
 	end
 end )
 
@@ -83,6 +82,7 @@ function GM:GravGunOnPickedUp(ply, ent)
     
     if ent:GetClass() == 'db_dodgeball' then
         GAMEMODE:CollectBall(ent, ply:Team())
+        ent:ResetTracer()
         ent.LastTime = CurTime()
         ent.LastHolder = ply
         ent.CurrentBounces = 0
@@ -98,6 +98,7 @@ function GM:GravGunPunt(ply, ent)
         ent.LastTime = CurTime()
         ent.LastHolder = ply
         ent.CurrentBounces = 0
+        ent:MakeTracer(ply)
         return true
     end
 end

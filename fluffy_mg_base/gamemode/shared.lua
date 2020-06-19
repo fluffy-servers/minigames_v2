@@ -9,6 +9,7 @@
 DeriveGamemode('base')
 include('sound_tables.lua')
 include('sh_levels.lua')
+include('sh_scorehelper.lua')
 include('shop/sh_init.lua')
 
 -- These variables should be altered in each sub gamemode's shared.lua file
@@ -60,25 +61,14 @@ function GM:Initialize()
 	-- There's nothing that needs to be handled here, hence the blank
 end
 
---[[
-CreateConVar('fluffy_gametype', 'suicidebarrels', FCVAR_REPLICATED, 'Fluffy Minigames gamemode controller')
-function GM:Initialize()
-    -- Determine the gamemode type from convar
-    local gtype = GetConVar('fluffy_gametype'):GetString()
-    local gamemode = GetConVar('gamemode'):GetString() -- i hate this
-    if not file.Exists(gamemode..'/gamemode/gametypes/'..gtype..'/shared.lua', 'LUA') then print('Could not find directory') return end
-    
-    -- Load the files
-    if SERVER then
-        AddCSLuaFile(gamemode..'/gamemode/gametypes/'..gtype..'/cl_init.lua')
-        AddCSLuaFile(gamemode..'/gamemode/gametypes/'..gtype..'/shared.lua')
-        include(gamemode..'/gamemode/gametypes/'..gtype..'/init.lua')
-    elseif CLIENT then
-        include(gamemode..'/gamemode/gametypes/'..gtype..'/cl_init.lua')
+-- Fisher-Yates table shuffle
+function table.Shuffle(t)
+    for i = #t, 2, -1 do
+        local j = math.random(i)
+        t[i], t[j] = t[j], t[i]
     end
-    include(gamemode..'/gamemode/gametypes/'..gtype..'/shared.lua')
+    return t
 end
---]]
 
 -- These teams should work fantastically for most gamemodes
 TEAM_RED = 1
@@ -216,17 +206,40 @@ function GM:GetRoundStartTime()
     return GetGlobalFloat('RoundStart', 0)
 end
 
--- Fisher-Yates table shuffle
-function table.Shuffle(t)
-    for i = #t, 2, -1 do
-        local j = math.random(i)
-        t[i], t[j] = t[j], t[i]
-    end
-    return t
-end
-
 -- Helper function to scale data based on the number of players
 function GM:PlayerScale(ratio, min, max)
     local players = GAMEMODE:GetNumberAlive()
     return math.Clamp(math.ceil(players * ratio), min, max)
+end
+
+-- Valid playermodels
+GM.ValidModels = {
+    male01 = "models/player/Group01/male_01.mdl",
+    male02 = "models/player/Group01/male_02.mdl",
+    male03 = "models/player/Group01/male_03.mdl",
+    male04 = "models/player/Group01/male_04.mdl",
+    male05 = "models/player/Group01/male_05.mdl",
+    male06 = "models/player/Group01/male_06.mdl",
+    male07 = "models/player/Group01/male_07.mdl",
+    male08 = "models/player/Group01/male_08.mdl",
+    male09 = "models/player/Group01/male_09.mdl",
+    
+    female01 = "models/player/Group01/female_01.mdl",
+    female02 = "models/player/Group01/female_02.mdl",
+    female03 = "models/player/Group01/female_03.mdl",
+    female04 = "models/player/Group01/female_04.mdl",
+    female05 = "models/player/Group01/female_05.mdl",
+    female06 = "models/player/Group01/female_06.mdl",
+}
+
+-- Convert the playermodel name into a model
+function GM:TranslatePlayerModel(name, ply)
+    if GAMEMODE.ValidModels[name] != nil then
+        return GAMEMODE.ValidModels[name]
+    elseif ply.TemporaryModel then
+        return ply.TemporaryModel
+    else
+        ply.TemporaryModel = table.Random(GAMEMODE.ValidModels)
+        return ply.TemporaryModel
+    end
 end

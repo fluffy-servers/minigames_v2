@@ -7,6 +7,7 @@
 
 AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
+AddCSLuaFile('ply_extension.lua')
 
 include('shared.lua')
 include('sv_markers.lua')
@@ -47,8 +48,7 @@ function GM:PreStartRound()
     -- Respawn the dead
     for k,v in pairs(player.GetAll()) do
         if v.Spectating and v:Team() != TEAM_SPECTATOR then
-            v.Spectating = false
-            v:UnSpectate()
+            v:EndSpectate()
             v:KillSilent()
         end
         v.RoundScore = 0
@@ -162,7 +162,9 @@ function GM:HandleFFAWin(reason)
     
     -- Award bonus win points based on modifier properties
     if winner then
-        if modifier.SurviveValue then
+        if modifier.WinValue then
+            winner:AddFrags(modifier.WinValue)
+        elseif modifier.SurviveValue then
             winner:AddFrags(modifier.SurviveValue * 2)
         elseif modifier.KillValue then
             winner:AddFrags(modifier.KillValue * 2)
@@ -198,8 +200,8 @@ end
 -- Helper function to relay announcements
 function GM:Announce(title, subtext)
     if subtext then
-        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext)
+        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext, 1, 'center')
     else
-        GAMEMODE:PulseAnnouncement(3, title, subtext)
+        GAMEMODE:PulseAnnouncement(3, title, 1, 'center')
     end
 end

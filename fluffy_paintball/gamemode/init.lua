@@ -32,8 +32,7 @@ function GM:PlayerSpawn( ply )
     ply:SetupHands()
     
     -- Exit out of spectate
-    ply:UnSpectate()
-    ply.Spectating = false
+    ply:EndSpectate()
 end
 
 function GM:PlayerLoadout(ply)
@@ -70,126 +69,47 @@ function GM:GeneratePlayerColor(ply)
     ply:SetNWVector('WeaponColor', v)
 end
 
--- Set the player into ghost mode
-function GM:SetPlayerGhost(ply)
-    -- Reset ghost variables
-    ply.DeathPos = nil
-    ply.DeathAng = nil
-    
-    -- Permadeath
-    if not ply.PaintballLives then ply.PaintballLives = 3 end
-    if ply.PaintballLives < 1 then
-        ply:Kill()
-    end
-    
-    ply:StripWeapons()
-    
-    -- Ghost visuals
-    ply:GodEnable()
-    ply:SetRenderMode(1)
-    ply:SetColor(Color(255, 255, 255, 50))
-    
-    -- Mild speed buff
-    ply:SetRunSpeed(400)
-    ply:SetWalkSpeed(400)
-    ply:SetJumpPower(200)
-    
-    -- Network ghost state
-    ply:SetNWBool('IsGhost', true)
-    ply:SetNWFloat('GhostStart', CurTime())
-    ply:SetNWInt('GhostTime', 20)
-    
-    -- Eliminate the player PERMAMENTLY after this amount of time
-    timer.Create(ply:AccountID() .. 'GHOST', 20, 1, function()
-        ply:Kill()
-    end)
-end
-
--- Unghost the player
-function GM:SetPlayerUnGhost(ply)
-    -- Essentially respawn the player
-    ply:SetNWBool('IsGhost', false)
-    timer.Simple(0.1, function() GAMEMODE:PlayerLoadout(ply) end)
-    
-    -- Remove ghost timer
-    if timer.Exists(ply:AccountID() .. 'GHOST') then
-        timer.Remove(ply:AccountID() .. 'GHOST')
-    end
-    
-    ply:SetColor(color_white)
-    ply:SetMaterial('models/props_combine/portalball001_sheet', true)
-    
-    -- Reduce number of lives by 1
-    ply.PaintballLives = ply.PaintballLives - 1
-    
-    -- Ungodmode after given time
-    timer.Simple(3, function()
-        if IsValid(ply) then 
-            ply:GodDisable()
-            ply:SetRenderMode(0)
-            ply:SetColor(color_white)
-            ply:SetMaterial()
-        end
-    end)
-end
-
 -- Reset paintball data on spawn
 hook.Add('PreRoundStart', 'ResetPaintball', function()
     for k,v in pairs(player.GetAll()) do
-        -- Clear death data
-        v.DeathPos = nil
-        v.DeathAng = nil
-        v.DeathTimer = GAMEMODE.LifeTimer
-        v.PaintballLives = 3
-        
-        -- Clear ghost effects
-        v:SetNWBool('IsGhost', false)
-        v:GodDisable()
-        v:SetRenderMode(0)
-        v:SetColor(color_white)
-        v:SetMaterial()
-        
-        -- Generate colour for this round
+        v:SetNWInt('PaintballLives', 3)
         GAMEMODE:GeneratePlayerColor(v)
-        
-        -- Remove ghost timer
-        if timer.Exists(v:AccountID() .. 'GHOST') then
-            timer.Remove(v:AccountID() .. 'GHOST')
-        end
     end
 end)
 
--- If killed by another player, enter ghost mode before dying
-hook.Add('PlayerDeath', 'PaintballDeath', function(ply, inflictor, attacker)
-    if not GAMEMODE:InRound() then return end
-    
-    if ply:GetNWBool('IsGhost', false) or not attacker:IsPlayer() then
-        GAMEMODE:PulseAnnouncement(2, (ply:Nick() or '?') .. ' has been eliminated', 0.8)
-        ply:SetNWBool('IsGhost', false)
+hook.Add('PlayerDeath', 'PlayerDeathTime', function(ply)
+    ply:SetNWFloat('DeathTime', CurTime())
+    ply:SetNWInt('PaintballLives', ply:GetNWInt('PaintballLives', 3) - 1)
+end)
+
+-- Death thinking function
+-- Handles spectating stuff + lives timing
+function GM:PlayerDeathThink(ply)
+    -- If outside of round, respawn dead players as spectators
+    if not GAMEMODE:InRound() and not ply.Spectating then
+        GAMEMODE:PlayerSpawnAsSpectator(ply)
         return
     end
-    
-    if ply == attacker then
-        if IsValid(inflictor) and inflictor == ply then
-            GAMEMODE:PulseAnnouncement(2, (ply:Nick() or '?') .. ' has been eliminated', 0.8)
-            ply:SetNWBool('IsGhost', false)
-            return
-        end
-    end
-    
-    ply.DeathPos = ply:GetPos()
-    ply.DeathAng = ply:EyeAngles()
-end)
 
--- Trigger ghost mode if applicable
-hook.Add('PostPlayerDeath', 'PaintballSpawnGhost', function(ply)
-    if not ply.DeathPos or not ply.DeathAng then return end
-    
-    ply:Spawn()
-    ply:SetPos(ply.DeathPos)
-    ply:SetEyeAngles(ply.DeathAng)
-    GAMEMODE:SetPlayerGhost(ply)
-end)
+    -- Handle spectating controls
+    if ply.Spectating then
+        GAMEMODE:SpectateControls(ply)
+        return
+    end
+
+    -- Out of lives? Spawn as spectator
+    if ply:GetNWInt('PaintballLives', 3) <= 0 then
+        GAMEMODE:PlayerSpawnAsSpectator(ply)
+        return
+    end
+
+    -- Wait for the spawn timer to finish before respawning again
+    local t = CurTime() - ply:GetNWFloat('DeathTime', CurTime())
+    if t > GAMEMODE.LifeTimer then
+        ply:Spawn()
+        ply:SetNWFloat('DeathTime', -1)
+    end
+end
 
 -- Register XP for Paintball
 hook.Add('RegisterStatsConversions', 'AddPaintballStatConversions', function()

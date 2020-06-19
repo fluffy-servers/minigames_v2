@@ -4,9 +4,9 @@ ENT.Base 			= "base_anim"
 
 ENT.RespawnTime = 10
 ENT.LastTime = -1
-ENT.MaxBounces = 3
+ENT.MaxBounces = 4
 
-ENT.Size = 32
+ENT.Size = 28
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 
 -- Initialize the ball as a basic sphere
@@ -20,6 +20,7 @@ function ENT:Initialize()
     self:SetCollisionBounds(Vector(-hsize, -hsize, -hsize), Vector(hsize, hsize, hsize))
     self:PhysWake()
     self.CurrentBounces = 0
+    self.LastTime = CurTime()
 end
 
 -- Destroy the ball if damaged by trigger_hurt entities, otherwise apply physics damage
@@ -37,8 +38,7 @@ end
 function ENT:OnRemove()
     -- if anything happens to the ball, spawn a new one
     if CLIENT then return end
-    if not self.Number then return end
-    GAMEMODE:RespawnBall(self.Number)
+    -- GAMEMODE:SpawnBall()
 end
 
 -- Respawn balls if not touched for a long time
@@ -61,7 +61,7 @@ function ENT:PhysicsCollide(data, physobj)
 	-- Damage checks for player damage
 	-- Verify the speed is fine
 	-- Make sure teamkilling is disallowed
-    if data.HitEntity:IsPlayer() and data.Speed > 50 then
+    if data.HitEntity:IsPlayer() and data.Speed > 80 then
         local ply = data.HitEntity
         if (self:GetNWString('CurrentTeam') == 'blue' and ply:Team() == TEAM_RED) or (self:GetNWString('CurrentTeam') == 'red' and ply:Team() == TEAM_BLUE) then
             local info = DamageInfo()
@@ -76,13 +76,14 @@ function ENT:PhysicsCollide(data, physobj)
     -- Balls can only bounce a handful of times before resetting
     self.CurrentBounces = self.CurrentBounces + 1
     if self.CurrentBounces > self.MaxBounces then
-        self.CurrentBounces = 0
+        self:ResetTracer()
         self:SetNWString('CurrentTeam', nil)
         self:SetNWVector('RColor', Vector(1, 1, 1))
+        self.CurrentBounces = 0
     end
     
 	-- Play sounds or explode
-    if data.Speed > 150 and self.Explosive then
+    if data.Speed > 250 and self.Explosive then
         self:Remove()
 	elseif data.Speed > 70 then
 		self:EmitSound("Rubber.BulletImpact")
@@ -96,6 +97,42 @@ function ENT:PhysicsCollide(data, physobj)
 	LastSpeed = math.max(NewVelocity:Length(), LastSpeed)
 	local TargetVelocity = NewVelocity * LastSpeed * 0.8
 	physobj:SetVelocity(TargetVelocity)
+end
+
+function ENT:MakeTracer(ply)
+    if IsValid(self.tracer) then
+        self:ResetTracer()
+    end
+
+    -- Make a new tracer
+    local tracer = ents.Create('db_tracer')
+    tracer:SetMoveType(MOVETYPE_NONE)
+    tracer:SetPos(self:GetPos())
+    tracer:SetParent(self)
+    tracer:BuildTracer(team.GetColor(ply:Team()))
+    tracer:Spawn()
+    self.tracer = tracer
+end
+
+function ENT:ResetTracer()
+    if IsValid(self.tracer) then
+        local tracer = self.tracer
+        tracer:SetParent(nil)
+
+        -- Cool little spark effect for the end of the trail
+        local effect = EffectData()
+        effect:SetOrigin(self:GetPos())
+        effect:SetStart(self:GetNWVector('RColor', Vector(1, 1, 1)))
+        util.Effect("db_spark", effect)
+
+        timer.Simple(3, function()
+            if IsValid(tracer) then
+                SafeRemoveEntity(tracer)
+            end
+        end)
+
+        self.tracer = nil
+    end
 end
 
 if CLIENT then

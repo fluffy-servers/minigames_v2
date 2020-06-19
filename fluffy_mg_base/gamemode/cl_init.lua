@@ -6,21 +6,27 @@
 
 -- Include useful files
 include('shared.lua')
+include('cl_announcements.lua')
+include('cl_chat.lua')
+include('cl_crosshair.lua')
 include('cl_endgame.lua')
 include('cl_hud.lua')
-include('cl_crosshair.lua')
-include('cl_thirdperson.lua')
+include('cl_killfeed.lua')
+include('cl_mapedits.lua')
 include('cl_playerpanel.lua')
 include('cl_scoreboard.lua')
-include('cl_announcements.lua')
-include('cl_killfeed.lua')
+include('cl_thirdperson.lua')
 
-include('vgui/avatar_circle.lua')
+include('vgui/AvatarCircle.lua')
 include('vgui/MapVotePanel.lua')
+include('vgui/ScoreboardRow.lua')
 
 -- Register universal fonts
--- Coolvetica
 surface.CreateFont("FS_16", {
+	font = "Coolvetica",
+	size = 16,
+})
+surface.CreateFont("FS_20", {
 	font = "Coolvetica",
 	size = 20,
 })
@@ -116,6 +122,16 @@ surface.CreateFont( "CSKillIcons", {
   antialias = false,
 })
 
+-- Helper function to draw shadowed text
+function GM:DrawShadowText(text, font, x, y, color, horizontal_align, vertical_align, strength)
+    if not strength then
+        strength = 2
+    end
+
+    draw.SimpleText(text, font, x + (strength - 1), y + strength, GAMEMODE.FColShadow, horizontal_align, vertical_align) -- Shadow first, slightly offset
+	return draw.SimpleText(text, font, x, y, color, horizontal_align, vertical_align) -- Regular text
+end
+
 --[[
     Universal Colors
     Colors are defined in this file for use across the Minigames HUD
@@ -178,7 +194,20 @@ function team.GetShortName(id)
     end
 end
 
--- Concommand to update colors! Yay for choice!
-concommand.Add("minigames_hud_color", function( ply, cmd, args )
-    GAMEMODE:UpdateColorSet(args[1])
-end )
+-- Handle spectating messages
+net.Receive('SpectateState', function()
+    local mode = net.ReadInt(8)
+    LocalPlayer().SpectateMode = mode
+    LocalPlayer().Spectating = false
+    LocalPlayer().SpectateTarget = nil
+
+    -- minus one mode disables spectating
+    if mode > 0 then
+        LocalPlayer().Spectating = true
+    end
+
+    -- Load target for all modes except roaming
+    if mode > 0 and mode != OBS_MODE_ROAMING then
+        LocalPlayer().SpectateTarget = net.ReadEntity()
+    end
+end)

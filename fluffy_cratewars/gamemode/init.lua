@@ -100,7 +100,7 @@ hook.Add('PreRoundStart', 'PrepareCratePhase', function()
     
     -- Set a timer for when the battle begins
     local time = math.random(40, 60)
-    timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!") end)
+    timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!", "center") end)
     timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
 end )
 

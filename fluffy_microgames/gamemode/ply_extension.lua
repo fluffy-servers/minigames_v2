@@ -11,10 +11,18 @@ function meta:SetMScore(amount)
 end
 
 function meta:AddMScore(amount)
-    return self:SetNWInt("Microscore", self:GetScore() + amount)
+    return self:SetNWInt("Microscore", self:GetMScore() + amount)
+end
+
+function meta:ConvertMScore(scale)
+    local mscore = self:GetMScore()
+    local scaled = math.Round(scale * mscore)
+    self:AddFrags(scaled)
 end
 
 function meta:AwardWin(confetti)
     self:AddFrags(1)
-    GAMEMODE:ConfettiEffectSingle(self)
+    if confetti then
+        GAMEMODE:ConfettiEffectSingle(self)
+    end
 end

@@ -19,13 +19,6 @@ local HEALTH_ICON = Material("fluffy/health.png", "noclamp smooth")
 local TIME_ICON = Material("fluffy/time.png", "noclamp smooth")
 local AMMO_ICON = Material("fluffy/ammo.png", "noclamp smooth")
 
-
--- Helper function to draw shadowed text
-function GM:DrawShadowText(text, font, x, y, color, horizontal_align, vertical_align)
-    draw.SimpleText(text, font, x+1, y+2, GAMEMODE.FColShadow, horizontal_align, vertical_align) -- Shadow first, slightly offset
-	return draw.SimpleText(text, font, x, y, color, horizontal_align, vertical_align) -- Regular text
-end
-
 hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)
 	if hide[name] then return false end
 end )
@@ -53,8 +46,14 @@ function GM:HUDPaint()
     
     -- Draw some of the parts
     self:DrawRoundState()
-    self:DrawHealth()
-    self:DrawAmmo()
+
+    -- Draw health and ammo if applicable, otherwise draw spectator info
+    if LocalPlayer().Spectating then
+        self:DrawSpectateState()
+    else
+        self:DrawHealth()
+        self:DrawAmmo()
+    end
     
     -- Crosshair - account for third person too
     if LocalPlayer().Thirdperson then
@@ -80,7 +79,7 @@ function GM:HUDPaint()
 	elseif IsValid(GAMEMODE.ScorePane) then
         GAMEMODE.ScorePane:Hide()
     end
-    
+
     -- Hooks! Yay!
     hook.Run("HUDDrawTargetID")
 	hook.Run("HUDDrawPickupHistory")
@@ -152,8 +151,8 @@ local ammo_circle = draw.CirclePoly(ScrW() - c_pos, ScrH() - c_pos, radius, seg)
 local ammo_circle_shadow = draw.CirclePoly(ScrW() - c_pos+3, ScrH() - c_pos+3, radius, seg)
 
 -- Convar to disable the fancy arcs
--- This used to be important before, but now the arcs barely drop the frame rates
-local fast_hud = CreateClientConVar("minigames_fast_hud", "0", true, false, "Set to 1 to stop drawing arcs")
+-- This used to be important before, but now it has a lot less impact
+local fast_hud = CreateClientConVar("mg_fast_hud", "0", true, false, "Whether to use an optimised HUD. Enable if you have poor performance")
 
 -- Draw the state of the round, including time and round number etc.
 -- This is in the top left corner
@@ -171,11 +170,6 @@ function GM:DrawRoundState()
         local t = GAMEMODE.WarmupTime - (CurTime() - start_time)
         GAMEMODE:DrawShadowText('Round starting in ' .. math.ceil(t) .. '...', 'FS_40', 4,4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
-    end
-    
-    -- Draw spectating message on bottom (very rare)
-    if LocalPlayer():Team() == TEAM_SPECTATOR then
-        GAMEMODE:DrawShadowText('You are spectating', 'FS_40', ScrW()/2, ScrH() - 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
     
     -- There are four default round state styles
@@ -436,6 +430,7 @@ function GM:DrawHealth()
     end
     
     -- Draw the top layer of the circle
+    draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.HColLight)
     surface.DrawPoly(health_circle)
     
@@ -544,7 +539,7 @@ function GM:DrawAmmo()
     if ammo['PrimaryAmmo'] and ammo['PrimaryAmmo'] > -1 and ammo['PrimaryAmmo'] < 1000 and ammo['PrimaryClip'] > -1 then
         -- Clip & ammo
         GAMEMODE:DrawShadowText(ammo['PrimaryClip'], 'FS_40', ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        GAMEMODE:DrawShadowText(ammo['PrimaryAmmo'] or 72, 'FS_16', ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(ammo['PrimaryAmmo'] or 72, 'FS_20', ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     elseif ammo['PrimaryClip'] != -1 then
         -- Clip1 only
         GAMEMODE:DrawShadowText(ammo['PrimaryClip'], 'FS_60', ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -587,7 +582,7 @@ function GM:CreateRoundEndPanel(message, tagline)
             
             draw.SimpleText(self.Message, 'FS_B32', w/2 + 1, 20 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             draw.SimpleText(self.Message, 'FS_B32', w/2, 20, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText(self.TagLine, 'FS_16', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+            draw.SimpleText(self.TagLine, 'FS_20', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         else
             draw.RoundedBoxEx(16, 0, 0, w, h, GAMEMODE.FCol2, false, false, true, true)
             draw.SimpleText(self.Message, 'FS_B32', w/2 + 1, h/2 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
@@ -790,6 +785,11 @@ end
 
 -- Hook to call the above function when a player is looked at
 function GM:HUDDrawTargetID()
+    -- Spectators only see TargetID in free roam mode
+    if LocalPlayer().Spectating and LocalPlayer().SpectateMode != OBS_MODE_ROAMING then
+        return
+    end
+
     -- Check if the player is looking at a player
 	local tr = util.GetPlayerTrace(LocalPlayer())
 	local trace = util.TraceLine(tr)
@@ -808,4 +808,26 @@ function GM:HUDDrawTargetID()
     local panel = GAMEMODE:GetPlayerInfoPanel(trace.Entity)
     panel:SetPos(xx - panel:GetWide()/2, yy - panel:GetTall()/2)
     panel:PaintManual()
+end
+
+-- Helper functions to handle drawing spectate state
+function GM:DrawSpectateState()
+    -- Don't draw for non-spectators (duh)
+    if not LocalPlayer().Spectating then return end
+
+    -- Find the name of the target to draw
+    -- This will be a player name 99% of the time
+    local targetname = 'Free Roam'
+    if LocalPlayer().SpectateMode != OBS_MODE_ROAMING then
+        local e = LocalPlayer().SpectateTarget
+        if e:IsPlayer() then
+            targetname = e:Nick() or 'Player'
+        else
+            targetname = 'Entity'
+        end
+    end
+
+    -- Draw text
+    GAMEMODE:DrawShadowText('Spectating', 'FS_32', 8, ScrH() - 58, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText(targetname, 'FS_64', 8, ScrH(), GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 end

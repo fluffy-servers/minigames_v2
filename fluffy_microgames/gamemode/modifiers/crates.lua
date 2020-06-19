@@ -30,7 +30,7 @@ function MOD:PlayerFinish(ply)
     if not ply.BrokeCrate then
         ply:Kill()
     else
-        ply:AwardWin()
+        ply:AwardWin(false)
     end
     ply.BrokeCrate = false
 end
@@ -38,6 +38,7 @@ end
 function MOD:PropBreak(ply, prop)
     if ply.BrokeCrate then return end
     ply.BrokeCrate = true
+    GAMEMODE:ConfettiEffectSingle(ply)
 end
 
 function MOD:EntityTakeDamage(ent, dmg)

@@ -75,6 +75,7 @@ function GM:PreStartRound()
     
     -- Reset stuff
     game.CleanUpMap()
+    hook.Call('PostCleanup')
     
     -- End the game if needed
     -- Different gamemode round types have different logic
@@ -113,19 +114,28 @@ function GM:PreStartRound()
     hook.Call('PreRoundStart')
     
     -- Respawn everybody & freeze them until the round actually starts
-    for k,v in pairs(player.GetAll()) do
-        if !GAMEMODE.TeamBased then 
-            if v:Team() != TEAM_SPECTATOR then v:SetTeam(TEAM_UNASSIGNED) end
-            v:SetNWInt("RoundKills", 0) 
+    -- This has a timer to allow for any map entity editing to take place
+    timer.Simple(FrameTime(), function()
+        for k,v in pairs(player.GetAll()) do
+            -- Reset FFA kill tracking
+            if !GAMEMODE.TeamBased then 
+                if v:Team() != TEAM_SPECTATOR then v:SetTeam(TEAM_UNASSIGNED) end
+                v:SetNWInt("RoundKills", 0)
+                v.FFAKills = 0
+            end
+            
+            -- Respawn non-spectators
+            if v:Team() != TEAM_SPECTATOR then
+                v:Spawn()
+                v:Freeze(true)
+            end
+
+            -- Add round points to anyone that isn't spectating
+            if (not GAMEMODE.TeamBased and v:Team() != TEAM_SPECTATOR) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
+                v:AddStatPoints('Rounds Played', 1)
+            end
         end
-        v:Spawn()
-        v:Freeze(true)
-        v.FFAKills = 0
-        
-        if (not GAMEMODE.TeamBased) or (GAMEMODE.TeamBased and v:Team() != TEAM_UNASSIGNED and v:Team() != TEAM_SPECTATOR) then
-            v:AddStatPoints('Rounds Played', 1)
-        end
-    end
+    end)
     
     -- Start the round after a short cooldown
     timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end)
@@ -220,7 +230,7 @@ hook.Add('Think', 'TimedGamemodeThink', function()
             GAMEMODE:EndRound('TimeEnd')
         elseif gametime > -1 and gametime + GAMEMODE.GameTime - 5 < CurTime() and not GAMEMODE.CountdownStarted then
             GAMEMODE.CountdownStarted = true
-            GAMEMODE:CountdownAnnouncement(5)
+            GAMEMODE:CountdownAnnouncement(5, nil, "center")
         end
     end
 end)

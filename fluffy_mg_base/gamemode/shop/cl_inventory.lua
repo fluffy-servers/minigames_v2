@@ -73,46 +73,30 @@ end
 
 -- Main function for opening up the inventory
 -- Large and painful :(
-function SHOP:OpenInventory()
-    if not LocalPlayer():IsSuperAdmin() then return end -- disable this function for now
-    
-    if IsValid(SHOP.InventoryPanel) then return end
+function SHOP:OpenInventory(display)
+    if not IsValid(display) then return end
     SHOP:VerifyInventory()
+
+    local display_width = display:GetWide()
+    local display_height = display:GetTall()
     
     -- Scaling stuff
-    local sw = math.floor(ScrW()/256) - 1
-    local margin = ScrW() - sw*256
-    local xx = sw*256
-    local yy = ScrH() - margin
-    
-    -- Create the frame
-    local frame = vgui.Create('DFrame')
-    frame:SetSize(xx, yy)
-    frame:Center()
-    frame:MakePopup()
-    frame:SetDraggable(false)
-    frame:SetTitle('')
-    
-    function frame:Paint(w, h)
-        DisableClipping(true)
-        local bs = 4
-        draw.RoundedBox(16, -bs, 4, w+(bs*2), h+(bs*2), SHOP.Color4)
-        draw.RoundedBox(16, -bs, -bs, w+(bs*2), h+(bs*2), SHOP.Color3)
-        DisableClipping(false)
-        draw.RoundedBox(16, 0, 0, w, h, SHOP.Color1)
-    end
-    
+    local sw = math.floor(display_width/256) - 1
+    local margin = display_width - sw*256
+    local xx = display_width
+    local yy = display_height
+
     -- Create the mirror -> see vgui/ShopMirror.lua
-    local mirror = vgui.Create('ShopMirror', frame)
-    mirror:SetPos(0, 0)
+    local mirror = vgui.Create('ShopMirror', display)
+    mirror:SetWide(320)
+    mirror:Dock(LEFT)
     mirror:SetCamera(default_cam.x, default_cam.y)
     mirror:SetAngle(default_cam.z)
-    mirror:SetSize(320, yy)
     
     -- Scrollable category list
-    local tabs = vgui.Create('DScrollPanel', frame)
-    tabs:SetSize(128, yy)
-    tabs:SetPos(320, 0)
+    local tabs = vgui.Create('DScrollPanel', display)
+    tabs:SetWide(128)
+    tabs:Dock(LEFT)
     tabs:GetVBar():SetVisible(false)
     function tabs:Paint(w, h)
         draw.RoundedBox(0, 0, 0, w, h, SHOP.Color3)
@@ -231,27 +215,19 @@ function SHOP:OpenInventory()
     
     
     -- Create the scrollable inventory display
-    local scroll_w = xx - 448
-    local scroll = vgui.Create('DScrollPanel', frame)
-    scroll:SetSize(scroll_w, yy - 24)
-    scroll:SetPos(448, 24)
+    local scroll = vgui.Create('DScrollPanel', display)
+    scroll:Dock(FILL)
+
+    local icons_display = vgui.Create('DIconLayout', scroll)
+    icons_display:Dock(FILL)
+    icons_display:SetSpaceX(8)
+    icons_display:SetSpaceY(8)
+    icons_display:DockMargin(8, 8, 8, 8)
+    icons_display:DockPadding(8, 8, 8, 8)
+    icons_display:Layout()
     
-    local s_offset = 16
-    local psize = (128+8)
-    local maxpanels = math.floor((scroll_w - s_offset) / psize) - 1
-    local twidth = psize*maxpanels
-    local border = (scroll_w - s_offset - twidth)/2
-    
-    local display = vgui.Create('DIconLayout', scroll)
-    display:SetSize(twidth, yy - 24)
-    display:SetPos(border, 0)
-    display:SetSpaceX(8)
-    display:SetSpaceY(8)
-    display:DockPadding(0, 0, 0, border/2)
-    display:Layout()
-    
-    SHOP.InventoryPanel = frame
-    SHOP.InventoryPanel.display = display
+    SHOP.InventoryPanel = display
+    SHOP.InventoryPanel.display = icons_display
     SHOP:PopulateInventory()
 end
 
@@ -316,11 +292,6 @@ function SHOP:OpenPaintBox(topaint)
 		end
     end
 end
-
--- Concommand to open the shop
-concommand.Add('minigames_shop', function()
-    SHOP:OpenInventory()
-end)
 
 -- Request functions for server interfacing
 -- Golden rule: Never trust the client

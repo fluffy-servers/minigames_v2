@@ -11,6 +11,6 @@ function MOD:PlayerFinish(ply)
     if ply:GetVelocity():LengthSqr() > 100 then
         ply:Kill()
     else
-        ply:AwardWin()
+        ply:AwardWin(true)
     end
 end

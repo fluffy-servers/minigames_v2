@@ -34,14 +34,14 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
 end)
 
 -- Stop Hunters from switching back to the other team
-hook.Add('PlayerCanJoinTeam', 'StopHunterSwap', function(ply, team)
+hook.Add('PlayerCanJoinTeam', 'StopHunterSwap', function(ply, new_team)
     if not GAMEMODE.TeamSurvival then return end
     
     local current_team = ply:Team()
-    if current_team == GAMEMODE.HunterTeam then
+    if current_team == GAMEMODE.HunterTeam and new_team != TEAM_SPECTATOR then
         ply:ChatPrint('You cannot change teams currently')
         return false
-    end 
+    end
 end)
 
 -- Assign dead survivors to the hunter team
@@ -78,7 +78,7 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
     if IsValid(last_player) and last_player != false then
         -- Award the last survivor bonus
         local name = string.sub(last_player:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8)
+        GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8, 'top')
         last_player:AddStatPoints('LastSurvivor', 1)
 
         GAMEMODE.LastSurvivor = last_player
