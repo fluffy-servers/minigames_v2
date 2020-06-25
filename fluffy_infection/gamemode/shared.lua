@@ -23,7 +23,7 @@ GM.TeamSurvival = true
 GM.SurvivorTeam = TEAM_BLUE
 GM.HunterTeam = TEAM_RED
 
-GM.RoundNumber = 10 -- How many rounds?
+GM.RoundNumber = 999 -- How many rounds?
 GM.RoundTime = 90 -- How long should each round go for?
 
 GM.CanSuicide = false -- Should players be able to die at will? :(
