@@ -129,7 +129,7 @@ function SWEP:Think()
     end
 end
 
--- Fire both shells on secondary attack
+-- Need this to disable secondary attack
 function SWEP:CanSecondaryAttack()
     if self:Clip1() > -1 then
         self.Weapon:EmitSound('Weapon_Shotgun.Empty')

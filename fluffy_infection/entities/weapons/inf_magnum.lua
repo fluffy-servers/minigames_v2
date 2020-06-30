@@ -26,9 +26,19 @@ SWEP.Primary.Automatic = false
 SWEP.Secondary.Automatic = true -- ???
 
 -- Set the model for the gun
--- Using hands is preferred
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
 SWEP.HoldType = 'pistol'
+
+function SWEP:CanPrimaryAttack()
+    if self:Clip1() <= 0 then
+        self:Reload()
+        return false
+	end
+	
+	-- For the screen shaky effect when firing
+    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil*2, math.Rand(-0.1, 0.1) * self.Primary.Recoil*2, 0))
+    return true
+end

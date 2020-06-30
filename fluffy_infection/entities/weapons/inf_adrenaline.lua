@@ -38,7 +38,7 @@ function SWEP:Initialize()
 end
 
 -- Effect data
-SWEP.Primary.Sound = Sound("combined/k_lab/k_lab_kl_charger01_cc.wav")
+SWEP.Primary.Sound = Sound("items/medshot4.wav")
 SWEP.Primary.Delay = 1.5
 
 -- Reset utility on player spawn
@@ -79,10 +79,9 @@ function SWEP:Cloak()
     util.Effect('teleport_flash', ed, true, true)
     
     -- Make the player invisible
-    self.Owner:SetNoDraw(true)
-    self.Owner:StripWeapons()
-    self.Owner:SetWalkSpeed(500)
-    self.Owner:SetRunSpeed(500)
+    self.Owner:SetWalkSpeed(400)
+    self.Owner:SetRunSpeed(400)
+    self.Owner:SetFov(120 , 3)
     
     -- Uncloak after 8 seconds
     local ply = self.Owner
@@ -96,7 +95,7 @@ end
 
 -- Only allow the player to cloak if the device is fully charged
 function SWEP:CanPrimaryAttack()
-    return math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100) >= 100
+    return math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100) >= 10
 end
 
 -- Cloak the player

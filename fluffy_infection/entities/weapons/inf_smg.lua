@@ -15,7 +15,7 @@ SWEP.Primary.Damage = 6
 SWEP.Primary.Cone = 0.045
 SWEP.Primary.Delay = 0.05
 SWEP.Primary.NumShots = 1
-SWEP.Primary.Sound = Sound("Weapon_SMG1.Single")
+SWEP.Primary.Sound = Sound("Weapon_AR2.Single")
 SWEP.Primary.Recoil = 1
 
 -- Primary ammo settings

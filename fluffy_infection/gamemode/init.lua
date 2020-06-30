@@ -21,8 +21,8 @@ function GM:PlayerLoadout( ply )
         ply:GiveAmmo(2400, 'Buckshot', true)
         ply:GiveAmmo(1024, 'SMG1', true)
         
-        ply:SetRunSpeed(300)
-        ply:SetWalkSpeed(200)
+        ply:SetRunSpeed(275)
+        ply:SetWalkSpeed(275)
         ply:SetBloodColor(BLOOD_COLOR_RED)
     elseif ply:Team() == TEAM_RED then
         -- Infected
@@ -37,7 +37,7 @@ function GM:PlayerLoadout( ply )
             ply:SetMaxHealth(50)
             ply:SetHealth(50)
             ply:SetRunSpeed(325)
-            ply:SetWalkSpeed(300)
+            ply:SetWalkSpeed(325)
         end
         ply:Give('weapon_fists')
     end
