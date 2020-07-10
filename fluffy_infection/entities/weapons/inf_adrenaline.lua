@@ -5,7 +5,6 @@ if CLIENT then
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "H"
 
-
     SWEP.PrintName = 'Adrenaline'
     SWEP.Slot = 2
     SWEP.SlotPos = 2
@@ -41,6 +40,8 @@ end
 SWEP.Primary.Sound = Sound("items/medshot4.wav")
 SWEP.Primary.Delay = 1.5
 
+SWEP.AdrenalineLength = 8
+
 -- Reset utility on player spawn
 -- Players spawn with 50% of the device charged
 hook.Add('PlayerSpawn', 'Utility', function(ply)
@@ -61,31 +62,32 @@ function SWEP:CustomAmmoDisplay()
     return self.AmmoDisplay
 end
 
--- Local function to handle uncloak logic
-local function Uncloak(ply)
+-- Local function to handle exiting adrenaline state
+local function Unadrenaline(ply)
     if not IsValid(ply) then return end
     if not ply:Alive() then return end
-    
-    GAMEMODE:PlayerLoadout(ply)
+    if ply:Team() != TEAM_BLUE then return end
+
+    -- Reset speed
+    GAMEMODE:SetHumanSpeed(ply)
+
+    -- Reset FOV
+    print('test')
+    GAMEMODE:SetAdrenalineFOV(ply, 0)
 end
 
--- Actual cloaking logic
-function SWEP:Cloak()
-    if CLIENT then return end
-    
-    -- Create a cool effect
-    local ed = EffectData()
-    ed:SetOrigin(self.Owner:GetPos())
-    util.Effect('teleport_flash', ed, true, true)
-    
-    -- Make the player invisible
+-- Handle adrenaline usage
+function SWEP:Adrenaline()
+    -- Speed boost
     self.Owner:SetWalkSpeed(400)
     self.Owner:SetRunSpeed(400)
-    self.Owner:SetFov(120 , 3)
-    
-    -- Uncloak after 8 seconds
+
+    -- Set FOV
+    GAMEMODE:SetAdrenalineFOV(self.Owner, 100)
+
+    -- Adrenaline lasts for 8 seconds
     local ply = self.Owner
-    timer.Simple(8, function() Uncloak(ply) end)
+    timer.Simple(self.AdrenalineLength, function() Unadrenaline(ply) end)
 end
 
 -- Sync weapon and player last utility times
@@ -95,20 +97,22 @@ end
 
 -- Only allow the player to cloak if the device is fully charged
 function SWEP:CanPrimaryAttack()
-    return math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100) >= 10
+    return math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100) >= 100
 end
 
--- Cloak the player
+-- Adrenaline usage
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
     
     self.Weapon:EmitSound(self.Primary.Sound)
-    self:Cloak()
     self.Owner:SetNWFloat('LastUtility', CurTime() + 5)
     self.LastUtility = self.Owner:GetNWFloat('LastUtility')
+    if SERVER then
+        self:Adrenaline()
+    end
 end
 
--- Disable shotgun
+-- No secondary fire
 function SWEP:SecondaryAttack()
     return false
 end
