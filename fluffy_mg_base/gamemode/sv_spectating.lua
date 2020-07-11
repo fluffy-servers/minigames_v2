@@ -141,7 +141,7 @@ function GM:PlayerDeathThink(ply)
         GAMEMODE:PlayerSpawnAsSpectator(ply)
         return
     end
-
+    
     -- Handle spectating controls
     if ply.Spectating then
         GAMEMODE:SpectateControls(ply)
