@@ -1,7 +1,7 @@
 SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
-	SWEP.Slot = 1
+	SWEP.Slot = 0
 	SWEP.SlotPos = 0
     
 	SWEP.IconLetter = '0'
@@ -9,14 +9,14 @@ if CLIENT then
     killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
 end
 
-SWEP.PrintName = "Shotgun"
+SWEP.PrintName = "Shotty"
 SWEP.Knockback = 300
 
 -- Primary fire damage and aim settings
-SWEP.Primary.Damage = 10
+SWEP.Primary.Damage = 15
 SWEP.Primary.Cone = 0.1
-SWEP.Primary.Delay = 0.75
-SWEP.Primary.NumShots = 6
+SWEP.Primary.Delay = 0.65
+SWEP.Primary.NumShots = 5
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Recoil = 8
 
@@ -129,7 +129,7 @@ function SWEP:Think()
     end
 end
 
--- Fire both shells on secondary attack
+-- Need this to disable secondary attack
 function SWEP:CanSecondaryAttack()
     if self:Clip1() > -1 then
         self.Weapon:EmitSound('Weapon_Shotgun.Empty')

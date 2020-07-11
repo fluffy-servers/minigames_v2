@@ -32,6 +32,11 @@ end
 -- Unequip a trail
 function SHOP:UnequipTrail(ply)
     ply.EquippedTrail = nil
+    SHOP:RemoveTrail(ply)
+end
+
+-- Remove a trail - without permamently unequipping it
+function SHOP:RemoveTrail(ply)
     if ply.TrailEntity then
         SafeRemoveEntity(ply.TrailEntity)
     end
@@ -64,9 +69,7 @@ end)
 
 -- Remove trails on player death
 hook.Add('DoPlayerDeath', 'RemoveEquippedTrail', function(ply)
-    if ply.TrailEntity then
-        SafeRemoveEntity(ply.TrailEntity)
-    end
+    SHOP:RemoveTrail(ply)
 end)
 
 -- Serverside tracer effect
@@ -80,4 +83,4 @@ hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
 	data.Tracer = 1
 	data.TracerName = effect
 	return true
-end )
+end)

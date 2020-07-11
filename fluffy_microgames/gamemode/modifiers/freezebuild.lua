@@ -1,4 +1,4 @@
-MOD.Name = "Rocket Jump!"
+MOD.Name = "Freeze Build"
 MOD.Countdown = true
 
 MOD.SurviveValue = 2

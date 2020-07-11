@@ -10,17 +10,19 @@ function GM:PlayerLoadout( ply )
     
     if ply:Team() == TEAM_BLUE then
         -- Survivors
-        ply:Give('weapon_mg_pistol')
-        ply:Give('weapon_mg_smg')
-        ply:Give('weapon_mg_shotgun')
+        -- ply:Give('weapon_mg_pistol')
+        -- ply:Give('weapon_mg_smg')
+        -- ply:Give('weapon_mg_shotgun')
         ply:Give('inf_shotgun')
         ply:Give('inf_magnum')
-        ply:GiveAmmo(512, 'Pistol', true)
-        ply:GiveAmmo(512, 'Buckshot', true)
+        ply:Give('inf_smg')
+        ply:Give('inf_adrenaline')
+        ply:GiveAmmo(80, 'Pistol', true)
+        ply:GiveAmmo(2400, 'Buckshot', true)
         ply:GiveAmmo(1024, 'SMG1', true)
         
-        ply:SetRunSpeed(300)
-        ply:SetWalkSpeed(200)
+        GAMEMODE:SetHumanSpeed(ply)
+        GAMEMODE:SetAdrenalineFOV(ply, 0)
         ply:SetBloodColor(BLOOD_COLOR_RED)
     elseif ply:Team() == TEAM_RED then
         -- Infected
@@ -35,11 +37,28 @@ function GM:PlayerLoadout( ply )
             ply:SetMaxHealth(50)
             ply:SetHealth(50)
             ply:SetRunSpeed(325)
-            ply:SetWalkSpeed(300)
+            ply:SetWalkSpeed(325)
         end
         ply:Give('weapon_fists')
     end
 end
+
+function GM:SetHumanSpeed(ply)
+    ply:SetRunSpeed(275)
+    ply:SetWalkSpeed(275)
+end
+
+function GM:SetAdrenalineFOV(ply, fov)
+    print(ply, fov)
+    ply.adrenaline_fov = fov
+    ply:SetFOV(fov, 0.5)
+end
+
+hook.Add('PlayerSwitchWeapon', 'AdrenalineWeaponSwitch', function(ply, old, new)
+    if ply.adrenaline_fov then
+        ply:SetFOV(ply.adrenaline_fov, 0)
+    end
+end)
 
 -- Pick player models
 function GM:PlayerSetModel(ply)
