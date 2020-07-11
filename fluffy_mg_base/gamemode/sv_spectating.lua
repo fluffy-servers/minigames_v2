@@ -83,6 +83,8 @@ end
 
 -- Spectating controls
 function GM:SpectateControls(ply)
+    if ply:IsBot() then return end
+
     if ply:KeyPressed(IN_JUMP) and ply.SpectateMode != OBS_MODE_ROAMING then
         -- "Jump" out of chase spectate mode
         -- This preserves eye angles to keep this nice and smooth
@@ -141,7 +143,7 @@ function GM:PlayerDeathThink(ply)
         GAMEMODE:PlayerSpawnAsSpectator(ply)
         return
     end
-    
+
     -- Handle spectating controls
     if ply.Spectating then
         GAMEMODE:SpectateControls(ply)
