@@ -44,6 +44,11 @@ end
 local function Uncloak(ply)
     if not IsValid(ply) then return end
     if not ply:Alive() then return end
+
+    -- Add back trail
+    if SHOP then
+        SHOP:WearTrail(ply)
+    end
     
     GAMEMODE:PlayerLoadout(ply)
 end
@@ -62,6 +67,11 @@ function SWEP:Cloak()
     self.Owner:StripWeapons()
     self.Owner:SetWalkSpeed(500)
     self.Owner:SetRunSpeed(500)
+
+    -- Hide trails
+    if SHOP then
+        SHOP:RemoveTrail(self.Owner)
+    end
     
     -- Uncloak after 8 seconds
     local ply = self.Owner
