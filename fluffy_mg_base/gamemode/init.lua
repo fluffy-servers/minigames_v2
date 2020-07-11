@@ -116,7 +116,7 @@ function GM:PlayerInitialSpawn(ply)
             ply:ConCommand("mg_info")
         end
 
-        if GAMEMODE.Elimination then
+        if not GAMEMODE:InRound() or GAMEMODE.Elimination then
             GAMEMODE:PlayerSpawnAsSpectator(ply)
         end
     end)
