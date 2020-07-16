@@ -25,7 +25,8 @@ function MOD:Initialize()
 end
 
 function MOD:Loadout(ply)
-    ply:Give('balloon_popper')
+    ply:Give("balloon_popper")
+    ply:GiveAmmo(256, "Pistol")
 end
 
 function MOD:PropBreak(ply, prop)
@@ -36,4 +37,9 @@ end
 MOD.ThinkTime = 1
 function MOD:Think()
     spawnBalloons()
+end
+
+function MOD:EntityTakeDamage(ent, dmg)
+    if not ent:IsPlayer() then return end
+    if dmg:GetAttacker():IsPlayer() then return true end
 end

@@ -42,8 +42,8 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 	bullet.Num 		= numbullets
 	bullet.Src 		= self.Owner:GetShootPos()
 	bullet.Dir 		= self.Owner:GetAimVector()
-	bullet.Spread 	= Vector(scale, scale, 0)	
-	bullet.Force	= math.Round(damage/10)							
+	bullet.Spread 	= Vector(scale, scale, 0)
+	bullet.Force	= math.Round(damage/10)
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = self.Primary.Ammo
     bullet.HullSize = 32

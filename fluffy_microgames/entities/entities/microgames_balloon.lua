@@ -46,7 +46,7 @@ function ENT:Initialize()
 
     -- Load balloon properties
     local bTable = self.BalloonTypes[bType]
-    self.Speed = util.SharedRandom("BalloonSpeedRandom", bTable.minspeed, bTable.maxspeed, self:EntIndex())
+    self.Accelerate = util.SharedRandom("BalloonSpeedRandom", bTable.minspeed, bTable.maxspeed, self:EntIndex())
     self.Score = bTable.points
     self:SetModel(bTable.model)
     local hue = util.SharedRandom("BalloonColorRandom", 0, 360, self:EntIndex())
@@ -66,10 +66,12 @@ function ENT:Initialize()
     -- Add a little bit of sideways velocity
     local xx = util.SharedRandom("BalloonXRandom", -1, 1, self:EntIndex())
     local yy = util.SharedRandom("BalloonYRandom", -1, 1, self:EntIndex())
-    self.SideMotion = Vector(xx, yy, 0) * self.Speed
+    self.SideMotion = Vector(xx, yy, 0) * self.Accelerate
 
-    self:SetVelocity(self.SideMotion + Vector(0, 0, self.Speed * 1000))
-    
+    print("test")
+    print(self.Accelerate)
+    self.Speed = Vector(0, 0, self.Accelerate * 5)
+
     local yaw = util.SharedRandom("BalloonYaw", 0, 360, self:EntIndex())
     self:SetAngles(Angle(0, yaw, 0))
 end
@@ -107,8 +109,7 @@ end
 
 -- Make the balloon physically float upwards
 function ENT:PhysicsSimulate(phys, delta)
-    local vLinear = Vector(0, 0, (self.Speed or 5) * 5000 * delta) + (self.SideMotion * 500 * delta)
-    local vAngular = Vector(0, 0, 0)
-
-    return vAngular, vLinear, SIM_GLOBAL_FORCE
+    self.Speed = self.Speed -- + Vector(0, 0, self.Accelerate * delta) + (self.SideMotion * delta)
+    print(self.Speed)
+    return Vector(0, 0, 0), self.Speed, SIM_GLOBAL_FORCE
 end
