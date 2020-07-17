@@ -1,6 +1,6 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Capture The Flag'
+GM.Name = 'Capture The Flag (1F)'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
     A classic game of Capture The Flag!
