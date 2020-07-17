@@ -1,5 +1,6 @@
 AddCSLuaFile('cl_inventory.lua')
 AddCSLuaFile('cl_render.lua')
+AddCSLuaFile('cl_images.lua')
 AddCSLuaFile('vgui/ShopItemPanel.lua')
 AddCSLuaFile('vgui/ShopMirror.lua')
 

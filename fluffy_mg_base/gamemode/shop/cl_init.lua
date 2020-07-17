@@ -1,6 +1,7 @@
 include('sh_creator.lua')
 include('cl_inventory.lua')
 include('cl_render.lua')
+include('cl_images.lua')
 include('vgui/ShopMirror.lua')
 include('vgui/ShopItemPanel.lua')
 
