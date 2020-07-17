@@ -13,7 +13,7 @@ SWEP.PrintName = "Pistol"
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 20
 SWEP.Primary.Cone = 0.015
-SWEP.Primary.Delay = 0.1
+SWEP.Primary.Delay = 0.125
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Sound = Sound("Weapon_Pistol.Single")
 SWEP.Primary.Recoil = 1

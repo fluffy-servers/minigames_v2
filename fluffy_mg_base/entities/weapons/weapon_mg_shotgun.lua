@@ -15,7 +15,7 @@ SWEP.Knockback = 300
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 10
 SWEP.Primary.Cone = 0.1
-SWEP.Primary.Delay = 0.75
+SWEP.Primary.Delay = 0.800
 SWEP.Primary.NumShots = 6
 SWEP.Primary.Sound = Sound("Weapon_Shotgun.Single")
 SWEP.Primary.Recoil = 8
