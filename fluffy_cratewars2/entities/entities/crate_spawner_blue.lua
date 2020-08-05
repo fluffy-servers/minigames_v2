@@ -2,9 +2,9 @@ AddCSLuaFile()
 ENT.Type = "point"
 
 ENT.Model = "models/props_junk/wood_crate001a.mdl"
+ENT.Team  = TEAM_BLUE
 
 function ENT:Initialize()
-
 end
 
 function ENT:SpawnCrate()
@@ -15,12 +15,23 @@ function ENT:SpawnCrate()
 	if phys and phys:IsValid() then
 		phys:AddAngleVelocity(Vector((VectorRand() * 200):Angle()))
 	end
+
+    -- Increment team score
+    team.AddScore(self.Team, 1)
 end
 
 function ENT:CreateProp(pos, ang, model)
-	local prop = ents.Create("prop_physics")
+    local class
+    if self.Team == TEAM_BLUE then
+        class = 'crate_blue'
+    else
+        class = 'crate_red'
+    end
+
+	local prop = ents.Create(class)
 	prop:SetPos(pos)
 	prop:SetAngles(ang)
+    prop.Model = model
 	prop:SetModel(model)
 	prop:Spawn()
 	
