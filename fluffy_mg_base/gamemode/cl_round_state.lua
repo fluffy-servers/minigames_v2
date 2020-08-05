@@ -142,13 +142,13 @@ function GM:DrawTeamClockScores(func)
     local blue_shadow = Color(blue_col.r - 35, blue_col.g - 35, blue_col.b - 35)
     local score_h = 36
 
-    draw.RoundedBox(8, c_pos-radius, c_pos + 56, radius, score_h+2, red_shadow)
-    draw.RoundedBox(8, c_pos-radius, c_pos + 56, radius, score_h, red_col)
-    draw.RoundedBox(8, c_pos, c_pos + 56, radius, score_h+2, blue_shadow)
-    draw.RoundedBox(8, c_pos, c_pos + 56, radius, score_h, blue_col)
+    draw.RoundedBoxEx(8, c_pos-radius, c_pos + 56, radius, score_h+2, red_shadow, true, false, true, false)
+    draw.RoundedBoxEx(8, c_pos-radius, c_pos + 56, radius, score_h, red_col, true, false, true, false)
+    draw.RoundedBoxEx(8, c_pos, c_pos + 56, radius, score_h+2, blue_shadow, false, true, false, true)
+    draw.RoundedBoxEx(8, c_pos, c_pos + 56, radius, score_h, blue_col, false, true, false, true)
 
-    GAMEMODE:DrawShadowText(func(TEAM_RED), 'FS_40', c_pos-16, c_pos + score_h/2 + 58, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    GAMEMODE:DrawShadowText(func(TEAM_BLUE), 'FS_40', c_pos+48, c_pos + score_h/2 + 58, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(func(TEAM_RED), 'FS_32', c_pos - 24, c_pos + score_h/2 + 58, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(func(TEAM_BLUE), 'FS_32', c_pos + 24, c_pos + score_h/2 + 58, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 end
 
 -- Handler functions for the different HUD styles
@@ -204,12 +204,12 @@ end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE] = function()
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
-    GAMEMODE:DrawTeamScores(team.GetRoundScore, c_pos + 48, true)
+    GAMEMODE:DrawTeamClockScores(team.GetRoundScore)
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE_ROUNDS] = function()
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
-    GAMEMODE:DrawTeamScores(team.GetScore, c_pos + 56, true)
+    GAMEMODE:DrawTeamClockScores(team.GetScore)
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE] = function()

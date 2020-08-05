@@ -26,17 +26,17 @@ function GM:CreateScoreboard(force)
 		-- For gamemodes with one round (eg. Sniper Wars) it will show the score from that round only
         if GAMEMODE.TeamBased and GAMEMODE.ShowTeamScoreboard then
 			draw.RoundedBox(8, 32, 36, 256, 48, team.GetColor(TEAM_BLUE))
-			GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_L32', 40, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+			GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_32', 40, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 
 			draw.RoundedBox(8, 412, 36, 256, 48, team.GetColor(TEAM_RED))
-			GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_L32', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+			GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_32', 660, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 			
 			if GAMEMODE.RoundType == 'timed_endless' then
-				GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), 'FS_L48', 272, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-				GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_RED), 'FS_L48', 424, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), 'FS_48', 272, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_RED), 'FS_48', 424, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			else
-				GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_L48', 272, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-				GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_L48', 424, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+				GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_48', 272, 60, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+				GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_48', 424, 60, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
 			end
         end
 	end

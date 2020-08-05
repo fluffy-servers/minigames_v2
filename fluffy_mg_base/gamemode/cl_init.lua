@@ -26,22 +26,32 @@ surface.CreateFont("FS_16", {
 	font = "Coolvetica",
 	size = 16,
 })
+
 surface.CreateFont("FS_20", {
 	font = "Coolvetica",
 	size = 20,
 })
+
 surface.CreateFont("FS_24", {
 	font = "Coolvetica",
 	size = 24,
 })
+
 surface.CreateFont("FS_32", {
 	font = "Coolvetica",
 	size = 32,
 })
+
 surface.CreateFont("FS_40", {
 	font = "Coolvetica",
 	size = 40,
 })
+
+surface.CreateFont("FS_48", {
+	font = "Coolvetica",
+	size = 48,
+})
+
 surface.CreateFont("FS_60", {
 	font = "Coolvetica",
 	size = 48, -- hmmm
@@ -56,6 +66,7 @@ surface.CreateFont("FS_64", {
 	font = "Coolvetica",
 	size = 64,
 })
+
 surface.CreateFont("FS_128", {
 	font = "Coolvetica",
 	size = 128,
