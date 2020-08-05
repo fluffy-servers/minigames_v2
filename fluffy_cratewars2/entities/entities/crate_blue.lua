@@ -42,6 +42,6 @@ function ENT:Break(force)
     self:Remove()
 
     -- Decrement team score
-    team.AddScore(self.Team, -1)
+    team.AddRoundScore(self.Team, -1)
     GAMEMODE:CheckRoundEnd()
 end

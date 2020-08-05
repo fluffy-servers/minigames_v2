@@ -12,9 +12,9 @@ function GM:PlayerLoadout( ply )
 end
 
 function GM:CheckRoundEnd()
-    if team.GetScore(TEAM_BLUE) < 1 then
+    if team.GetRoundScore(TEAM_BLUE) < 1 then
         GAMEMODE:EndRound(TEAM_RED)
-    elseif team.GetScore(TEAM_RED) < 1 and not GAMEMODE.Asymmetric then
+    elseif team.GetRoundScore(TEAM_RED) < 1 and not GAMEMODE.Asymmetric then
         GAMEMODE:EndRound(TEAM_BLUE)
     end
 end
@@ -22,13 +22,13 @@ end
 hook.Add('PreRoundStart', 'RegisterTeamCrates', function()
     local blue_crates = ents.FindByClass('crate_blue')
     local red_crates = ents.FindByClass('crate_red')
-    team.SetScore(TEAM_BLUE, #blue_crates)
+    team.SetRoundScore(TEAM_BLUE, #blue_crates)
 
     -- Check if this map is asymmetric or not
     if #red_crates < 1 then
         GAMEMODE.Asymmetric = true
     else
-        team.SetScore(TEAM_RED, #red_crates)
+        team.SetRoundScore(TEAM_RED, #red_crates)
     end
 
     -- Check if this map has any crate spawners
@@ -70,8 +70,7 @@ end
 hook.Add('EntityTakeDamage', 'CrowbarBuff', function(target, dmg)
     local wep = dmg:GetInflictor()
     if wep:IsPlayer() then wep = wep:GetActiveWeapon() end
-    
-    print(wep)
+
     if wep:GetClass() == 'weapon_crowbar' then
         dmg:SetDamage(25)
     end
