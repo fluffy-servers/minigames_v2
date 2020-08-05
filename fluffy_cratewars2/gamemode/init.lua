@@ -3,7 +3,7 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
-GM.CRATE_DELAY = 1
+GM.CRATE_DELAY = 3
 
 function GM:PlayerLoadout( ply )
     ply:StripAmmo()
@@ -22,13 +22,13 @@ end
 hook.Add('PreRoundStart', 'RegisterTeamCrates', function()
     local blue_crates = ents.FindByClass('crate_blue')
     local red_crates = ents.FindByClass('crate_red')
-    team.SetScore(TEAM_BLUE, blue_crates)
+    team.SetScore(TEAM_BLUE, #blue_crates)
 
     -- Check if this map is asymmetric or not
-    if red_crates < 1 then
+    if #red_crates < 1 then
         GAMEMODE.Asymmetric = true
     else
-        team.SetScore(TEAM_RED, red_crates)
+        team.SetScore(TEAM_RED, #red_crates)
     end
 
     -- Check if this map has any crate spawners
@@ -57,9 +57,22 @@ end)
 
 function GM:SpawnCrate()
     if GAMEMODE.Asymmetric then
+        if #ents.FindByClass('crate_blue') >= 100 then return end
         table.Random(GAMEMODE.BlueSpawners):SpawnCrate()
     else
+        if #ents.FindByClass('crate_blue') >= 100 then return end
+        if #ents.FindByClass('crate_red') >= 100 then return end
         table.Random(GAMEMODE.BlueSpawners):SpawnCrate()
         table.Random(GAMEMODE.RedSpawners):SpawnCrate()
     end
 end
+
+hook.Add('EntityTakeDamage', 'CrowbarBuff', function(target, dmg)
+    local wep = dmg:GetInflictor()
+    if wep:IsPlayer() then wep = wep:GetActiveWeapon() end
+    
+    print(wep)
+    if wep:GetClass() == 'weapon_crowbar' then
+        dmg:SetDamage(25)
+    end
+end)
