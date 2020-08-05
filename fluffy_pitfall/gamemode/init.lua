@@ -106,7 +106,7 @@ hook.Add('PreRoundStart', 'CreatePlatforms', function()
     SetGlobalString('PitfallType', gametype)
     GAMEMODE:ClearLevel()
     GAMEMODE:SpawnPlatforms()
-end )
+end)
 
 -- Add platforms to the platforms at random intervals
 hook.Add('Think', 'PowerUpThink', function()
