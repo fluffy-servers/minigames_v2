@@ -9,6 +9,9 @@ function GM:PlayerLoadout( ply )
     ply:StripAmmo()
     ply:StripWeapons()
     ply:Give("weapon_crowbar")
+    ply:Give("weapon_mg_pistol")
+    ply:GiveAmmo(512, "Pistol", true)
+    ply:Give("weapon_physcannon")
 end
 
 function GM:CheckRoundEnd()
@@ -73,5 +76,16 @@ hook.Add('EntityTakeDamage', 'CrowbarBuff', function(target, dmg)
 
     if wep:GetClass() == 'weapon_crowbar' then
         dmg:SetDamage(25)
+    end
+end)
+
+hook.Add('EntityTakeDamage', 'PistolBuff', function(target, dmg)
+    if not target:IsPlayer() then return end
+
+    local wep = dmg:GetInflictor()
+    if wep:IsPlayer() then wep = wep:GetActiveWeapon() end
+
+    if wep:GetClass() == 'weapon_mg_pistol' then
+        dmg:ScaleDamage(1.5)
     end
 end)
