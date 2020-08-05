@@ -52,7 +52,7 @@ function GM:GetTimeRemaining()
 end
 
 function GM:GetRoundInfo()
-    local round = GetGlobalInt('RoundNumber') or 1
+    local round = GAMEMODE:GetRoundNumber()
 	local rmax = GAMEMODE.RoundNumber or 5
 
     local round_message = "Round " .. round .. " / " .. rmax, "FS_24"
@@ -173,7 +173,7 @@ GM.HUDStyleFuncs[HUD_STYLE_TIMER_ONLY] = function()
         draw.RoundedBoxEx(8, c_pos-48, c_pos-3, 128, 32+3, GAMEMODE.HColDark, false, false, true, true)
         draw.RoundedBoxEx(8, c_pos-48, c_pos-2, 128, 32, GAMEMODE.HColLight, false, false, true, true)
         
-        local round = GetGlobalInt('RoundNumber') or 1
+        local round = GAMEMODE:GetRoundNumber()
         draw.SimpleText('Round ' .. round, "FS_24", c_pos + 16, c_pos + 15, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
 end

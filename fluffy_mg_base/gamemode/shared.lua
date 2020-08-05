@@ -220,6 +220,10 @@ function GM:GetRoundStartTime()
     return GetGlobalFloat('RoundStart', 0)
 end
 
+function GM:GetRoundNumber()
+    return GetGlobalInt('RoundNumber', 0)
+end
+
 -- Helper function to scale data based on the number of players
 function GM:PlayerScale(ratio, min, max)
     local players = GAMEMODE:GetNumberAlive()

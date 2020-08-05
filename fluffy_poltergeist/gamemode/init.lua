@@ -22,7 +22,7 @@ end
 
 -- Modified in Poltergeist to stop map cleanups
 function GM:PreStartRound()
-    local round = GetGlobalInt('RoundNumber', 0 )
+    local round = GAMEMODE:GetRoundNumber()
     -- End the game if enough rounds have been played
     if round >= GAMEMODE.RoundNumber then
         GAMEMODE:EndGame()

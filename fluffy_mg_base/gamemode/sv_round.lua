@@ -65,7 +65,7 @@ end
 -- Called just before the round starts
 -- Cleans up the map and resets round data
 function GM:PreStartRound()
-    local round = GetGlobalInt('RoundNumber', 0)
+    local round = GAMEMODE:GetRoundNumber()
     
     -- Make sure we have enough players to start the next round
     if not GAMEMODE:CanRoundStart() then

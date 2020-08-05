@@ -66,11 +66,11 @@ function GM:DrawRoundState()
     draw.RoundedBoxEx(0, xx, yy, 128, 24, GAMEMODE.FCol2, false, false, true, true)
     
     local rmax = GAMEMODE.RoundNumber or 5
-    local round = GetGlobalInt('RoundNumber', 0)
+    local round = GAMEMODE:GetRoundNumber()
     local round_message = "Round " .. round .. " / " .. rmax, "FS_24"
     if round == rmax then round_message = "Final Round!" end
     
-    local round = GetGlobalInt('RoundNumber') or 1
+    local round = GAMEMODE:GetRoundNumber()
     draw.SimpleText(round_message, "FS_24", xx + 64, yy+14, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     yy = yy + 25
     
