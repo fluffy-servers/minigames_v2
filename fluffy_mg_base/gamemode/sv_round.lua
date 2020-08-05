@@ -100,11 +100,10 @@ function GM:PreStartRound()
             return
         end
     end
-    
-    -- Probably bugged
+
     if GAMEMODE.TeamBased then
-        SetGlobalInt('1TeamKills', 0)
-        SetGlobalInt('2TeamKills', 0)
+        team.SetRoundScore(1, 0)
+        team.SetRoundScore(2, 0)
     end
     
     -- Set global round data
@@ -271,10 +270,10 @@ function GM:HandleTeamWin(reason)
         if GAMEMODE.TeamSurvival then
             winners = GAMEMODE.SurvivorTeam
             msg = team.GetName(GAMEMODE.SurvivorTeam) .. ' win the round!'
-        elseif GetGlobalInt('1TeamKills', 0) > GetGlobalInt('2TeamKills', 0) then
+        elseif team.GetRoundScore(2) < team.GetRoundScore(1) then
             winners = 1
             msg = team.GetName(1) .. ' win the round!'
-        elseif GetGlobalInt('1TeamKills', 0) < GetGlobalInt('2TeamKills', 0) then
+        elseif team.GetRoundScore(2) > team.GetRoundScore(1) then
             winners = 2
             msg = team.GetName(2) .. ' win the round!'
         else

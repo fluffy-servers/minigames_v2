@@ -300,8 +300,7 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
         -- Add the kill to the team
         local team = attacker:Team()
         if team == TEAM_SPECTATOR or team == TEAM_UNASSIGNED then return end
-        local team_kills_current = GetGlobalInt(team .. 'TeamKills')
-        SetGlobalInt(team .. 'TeamKills', team_kills_current + 1)
+        team.AddRoundScore(team, 1)
     else
         if not attacker.FFAKills then attacker.FFAKills = 0 end
         attacker.FFAKills = attacker.FFAKills + 1
