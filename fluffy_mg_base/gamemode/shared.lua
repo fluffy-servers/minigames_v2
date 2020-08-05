@@ -80,14 +80,14 @@ TEAM_BLUE_SPAWNS = {"info_player_terrorist", "info_player_blue"}
 -- Extra team colors
 -- These can be selected with mg_team_control
 TEAM_COLORS = {}
-TEAM_COLORS['orange'] = Color(250, 130, 49)
-TEAM_COLORS['red'] = Color(255, 80, 80)
-TEAM_COLORS['blue'] = Color(80, 80, 255)
-TEAM_COLORS['green'] = Color(46, 213, 115)
+TEAM_COLORS['orange'] = Color(253, 150, 68)
+TEAM_COLORS['red'] = Color(252, 92, 101)
+TEAM_COLORS['blue'] = Color(0, 168, 255)
+TEAM_COLORS['green'] = Color(38, 222, 129)
 TEAM_COLORS['purple'] = Color(165, 94, 234)
-TEAM_COLORS['pink'] = Color(243, 104, 224)
+TEAM_COLORS['pink'] = Color(255, 159, 243)
 TEAM_COLORS['cyan'] = Color(72, 219, 251)
-TEAM_COLORS['yellow'] = Color(254, 202, 87)
+TEAM_COLORS['yellow'] = Color(254, 211, 48)
 
 -- Upsettingly, Garry's Mod by default doesn't provide a way to change the name of teams
 -- This overrides the functions to create global variables for team names
