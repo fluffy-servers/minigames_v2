@@ -182,6 +182,8 @@ function GM:DrawRoundState()
     elseif GAMEMODE.HUDStyle == 3 then
         GAMEMODE:RoundStateTimerOnly()
     elseif GAMEMODE.HUDStyle == 4 then
+        GAMEMODE:RoundStateTimerTeamRoundScore()
+    elseif GAMEMODE.HUDStyle == 5 then
         GAMEMODE:RoundStateTimerTeamScore()
     end
 end
@@ -350,6 +352,46 @@ function GM:RoundStateTimerOnly()
 end
 
 -- Similar to the above
+function GM:RoundStateTimerTeamRoundScore()
+    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
+    
+    local GAME_STATE = GAMEMODE:GetRoundState()
+    local GameTime = GetGlobalFloat('GameStartTime')
+    
+    if !GameTime then return end
+    --if GAME_STATE == 'EndRound' then return end
+    
+    -- Fancy formatting for the time
+    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    local round_message = string.FormattedTime(time_left, '%02i:%02i')
+    
+    -- Draw the box
+    draw.RoundedBoxEx(8, c_pos-48, c_pos-48, 128, 48, GAMEMODE.HColLight, true, true, false, false)
+    
+    -- Draw the time text
+    if time_left > 0 then
+        GAMEMODE:DrawShadowText(round_message, 'FS_32', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    else
+        GAMEMODE:DrawShadowText('Overtime!', 'FS_24', c_pos+16, c_pos-22, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    end
+    
+    -- Draw the team boxes
+    local red_col = team.GetColor(TEAM_RED)
+    local blue_col = team.GetColor(TEAM_BLUE)
+    local red_shadow = Color(red_col.r - 35, red_col.g - 35, red_col.b - 35)
+    local blue_shadow = Color(blue_col.r - 35, blue_col.g - 35, blue_col.b - 35)
+    local score_h = 36
+    draw.RoundedBoxEx(8, c_pos-48, c_pos, 64, score_h+2, red_shadow, false, false, true, false)
+    draw.RoundedBoxEx(8, c_pos-48, c_pos, 64, score_h, red_col, false, false, true, false)
+    draw.RoundedBoxEx(8, c_pos+16, c_pos, 64, score_h+2, blue_shadow, false, false, false, true)
+    draw.RoundedBoxEx(8, c_pos+16, c_pos, 64, score_h, blue_col, false, false, false, true)
+    
+    -- Draw the scores for each team
+    GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_RED), 'FS_40', c_pos-16, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), 'FS_40', c_pos+48, c_pos + score_h/2 + 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+end
+
+-- Similar to the above, but using overall score rather than round score
 function GM:RoundStateTimerTeamScore()
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     
