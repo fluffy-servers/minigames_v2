@@ -17,7 +17,7 @@ end
 function GM:CheckRoundEnd()
     if team.GetRoundScore(TEAM_BLUE) < 1 then
         GAMEMODE:EndRound(TEAM_RED)
-    elseif team.GetRoundScore(TEAM_RED) < 1 and not GAMEMODE.Asymmetric then
+    elseif team.GetRoundScore(TEAM_RED) < 1 and not GetGlobalBool('CW_Asymmetric', false) then
         GAMEMODE:EndRound(TEAM_BLUE)
     end
 end
@@ -29,15 +29,20 @@ hook.Add('PreRoundStart', 'RegisterTeamCrates', function()
 
     -- Check if this map is asymmetric or not
     if #red_crates < 1 then
-        GAMEMODE.Asymmetric = true
+        SetGlobalBool('CW_Asymmetric', true)
     else
         team.SetRoundScore(TEAM_RED, #red_crates)
+    end
+
+    -- Swap teams at the start of Round 4 if asymmetric
+    if GetGlobalBool('CW_Asymmetric', false) and GAMEMODE:GetRoundNumber() == 4 then
+        GAMEMODE:SwapTeams(true, true)
     end
 
     -- Check if this map has any crate spawners
     local blue_spawners = ents.FindByClass('crate_spawner_blue')
     local red_spawners = ents.FindByClass('crate_spawner_red')
-    if #blue_spawners > 0 and (GAMEMODE.Asymmetric or #red_spawners > 0) then
+    if #blue_spawners > 0 and (GetGlobalBool('CW_Asymmetric', false) or #red_spawners > 0) then
         GAMEMODE.SpawnCrates = true
         GAMEMODE.NextCrateSpawn = CurTime() + 15
 
