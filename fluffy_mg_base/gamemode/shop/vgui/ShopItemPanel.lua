@@ -63,6 +63,10 @@ function PANEL:Ready()
         return
     end
     
+    if IsValid(self.icon) then
+        self.icon:Remove()
+    end
+    
     -- Parse the item and store
     ITEM = SHOP:ParseVanillaItem(ITEM)
     self.ITEM = ITEM
@@ -192,18 +196,23 @@ function PANEL:WearableRender(ITEM, ent, CSModel)
     
     -- Apply custom colours
     if ITEM.Paintable and ITEM.Color then
-        -- to do
+        render.SetColorModulation(ITEM.Color.r/255, ITEM.Color.g/255, ITEM.Color.b/255)
     end
     
     -- Apply override material
     if ITEM.MaterialOverride then
-        -- to do
+        CSModel:SetMaterial(ITEM.MaterialOverride)
     end
     
     -- Draw the model!
     CSModel:SetPos(pos)
     CSModel:SetAngles(ang)
     CSModel:DrawModel()
+    
+    -- Reset paintable colors
+    if ITEM.Paintable and ITEM.Color then
+        render.SetColorModulation(1, 1, 1)
+    end
 end
 
 function PANEL:WearableIcon(ITEM)
@@ -240,6 +249,7 @@ function PANEL:WearableIcon(ITEM)
 	function self.icon:LayoutEntity() return end
     function self.icon.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
     
+    if not ITEM.Model then return end
     self.icon.CSModel = ClientsideModel(ITEM.Model, RENDERGROUP_OPAQUE)
     function self.icon:OnRemove()
         SafeRemoveEntity(self.CSModel)
@@ -266,6 +276,13 @@ function PANEL:DoClick()
 		derma.SkinHook( "Paint", "Menu", self, w, h )
 		draw.RoundedBox( 0, 1, 1, w-2, 21, rarity_color )
 	end
+    
+    -- No other options if this is a 0 key item
+    -- Used for imaginary item displays e.g creator, unboxing
+    if self.key < 0 then
+        Menu:Open()
+        return
+    end
     
     if ITEM.Type == 'Crate' then
         -- Add unbox button

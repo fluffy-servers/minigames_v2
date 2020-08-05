@@ -4,7 +4,6 @@ AddCSLuaFile('cl_images.lua')
 AddCSLuaFile('vgui/ShopItemPanel.lua')
 AddCSLuaFile('vgui/ShopMirror.lua')
 
-include('sh_creator.lua')
 include('sv_equip.lua')
 include('sv_inventory.lua')
 include('sv_unboxing.lua')

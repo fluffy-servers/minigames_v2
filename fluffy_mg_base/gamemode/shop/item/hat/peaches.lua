@@ -71,3 +71,48 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat( ITEM )
+
+-- Generated with the ingame creator
+ITEM = {}
+ITEM.VanillaID = 'sawbladepeach'
+ITEM.Name = 'Spooky Saw Man'
+ITEM.Model = 'models/props_junk/sawblade001a.mdl'
+ITEM.Attachment = 'eyes'
+
+ITEM.Modify = {
+    scale = 0.5,
+    offset = Vector(-5.3, 0, 5.5),
+    angle = Angle(21, -12, 0),
+}
+
+SHOP:RegisterHat( ITEM )
+
+-- Generated with the ingame creator
+ITEM = {}
+ITEM.VanillaID = 'lightman'
+ITEM.Name = 'Let There Be Light'
+ITEM.Model = 'models/props_wasteland/prison_lamp001c.mdl'
+ITEM.Attachment = 'eyes'
+
+ITEM.Modify = {
+    scale = 0.7,
+    offset = Vector(-4.4, 0, 5.1),
+    angle = Angle(21, -12, 0),
+}
+
+SHOP:RegisterHat( ITEM )
+
+-- Generated with the ingame creator
+ITEM = {}
+ITEM.VanillaID = 'bombman'
+ITEM.Name = 'bombgoestheboom'
+ITEM.Model = 'models/Combine_Helicopter/helicopter_bomb01.mdl'
+ITEM.Attachment = 'eyes'
+
+ITEM.Modify = {
+    scale = 0.4,
+    offset = Vector(-2.1, 0, -0.5),
+    angle = Angle(0, -12, 0),
+}
+
+SHOP:RegisterHat( ITEM )
