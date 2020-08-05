@@ -122,6 +122,20 @@ function team.SetColor(id, color)
     return SetGlobalVector("Team" .. tostring(id) .. ".GColor", color)
 end
 
+-- Additional score tracking utilities
+-- This allows for team round-scores and team rounds won to be tracked
+function team.SetRoundScore(id, score)
+    return SetGlobalInt("Team" .. tostring(id) .. ".RScore", score)
+end
+
+function team.AddRoundScore(id, amount)
+    team.SetRoundScore(id, team.GetRoundScore(id) + amount)
+end
+
+function team.GetRoundScore(id)
+    return GetGlobalInt("Team" .. tostring(id) .. ".RScore", 0)
+end
+
 -- Note that RED is CT and BLUE is T
 -- Not sure why I did this but oh well, way too late to change it
 -- seriously don't change it you'll break a lot of maps
