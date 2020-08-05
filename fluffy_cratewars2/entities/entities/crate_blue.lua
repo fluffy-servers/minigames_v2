@@ -12,16 +12,27 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
+    self:PrecacheGibs()
 
     -- Apply team color
     self:SetColor(team.GetColor(self.Team))
 end
 
 function ENT:OnTakeDamage(dmg)
-    -- todo
+    local attacker = dmg:GetAttacker()
+    if attacker:IsPlayer() then
+        if attacker:Team() == self.Team then return end
+    end
+    
+    self.Health = self.Health - dmg:GetDamage()
+    if self.Health <= 0 then
+        self:Remove()
+    end
 end
 
 function ENT:OnRemove()
+    self:GibBreakClient()
+
     -- Decrement team score
     team.AddScore(self.Team, 1)
     GAMEMODE:CheckRoundEnd()
