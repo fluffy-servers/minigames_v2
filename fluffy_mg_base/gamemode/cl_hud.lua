@@ -325,15 +325,20 @@ end
 -- Uses a square instead of a circle
 -- If timed, adds a smaller box underneath to indicate the Round number (no limit)
 function GM:RoundStateTimerOnly()
-    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
-    
     local GAME_STATE = GAMEMODE:GetRoundState()
-    local GameTime = GetGlobalFloat('GameStartTime')
     
-    if !GameTime then return end
-    --if GAME_STATE == 'EndRound' then return end
-    
-    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    -- Fancy formatting for the time
+    local time_left
+    if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
+        local GameTime = GetGlobalFloat('GameStartTime')
+        if !GameTime then return end
+        time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    else
+        local RoundTime = GetGlobalFloat('RoundStart')
+        local RoundMax = GAMEMODE.RoundTime or 60
+        if !RoundTime then return end
+        time_left = RoundMax - (CurTime() - RoundTime)
+    end
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
     
     -- Draw the box
@@ -361,13 +366,19 @@ end
 -- Similar to the above
 function GM:RoundStateTimerTeamRoundScore()
     local GAME_STATE = GAMEMODE:GetRoundState()
-    local GameTime = GetGlobalFloat('GameStartTime')
-    
-    if !GameTime then return end
-    --if GAME_STATE == 'EndRound' then return end
     
     -- Fancy formatting for the time
-    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    local time_left
+    if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
+        local GameTime = GetGlobalFloat('GameStartTime')
+        if !GameTime then return end
+        time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    else
+        local RoundTime = GetGlobalFloat('RoundStart')
+        local RoundMax = GAMEMODE.RoundTime or 60
+        if !RoundTime then return end
+        time_left = RoundMax - (CurTime() - RoundTime)
+    end
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
     
     -- Draw the box
@@ -398,16 +409,20 @@ end
 
 -- Similar to the above, but using overall score rather than round score
 function GM:RoundStateTimerTeamScore()
-    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
-    
     local GAME_STATE = GAMEMODE:GetRoundState()
-    local GameTime = GetGlobalFloat('GameStartTime')
-    
-    if !GameTime then return end
-    --if GAME_STATE == 'EndRound' then return end
     
     -- Fancy formatting for the time
-    local time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    local time_left
+    if GAMEMODE.RoundType == 'timed' or GAMEMODE.RoundType == 'timed_endless' then
+        local GameTime = GetGlobalFloat('GameStartTime')
+        if !GameTime then return end
+        time_left = (GameTime + GAMEMODE.GameTime) - CurTime()
+    else
+        local RoundTime = GetGlobalFloat('RoundStart')
+        local RoundMax = GAMEMODE.RoundTime or 60
+        if !RoundTime then return end
+        time_left = RoundMax - (CurTime() - RoundTime)
+    end
     local round_message = string.FormattedTime(time_left, '%02i:%02i')
     
     -- Draw the box
@@ -597,52 +612,6 @@ function GM:DrawAmmo()
     -- What about secondary ammo?? :(
     -- Todo: add a check for 'infinite' ammo (I think this is done)
 end
-
--- Create the round end panel with information
--- This a popup at the top of the screen
---[[
-function GM:CreateRoundEndPanel(message, tagline)
-    surface.PlaySound('friends/friend_join.wav')
-    if IsValid(GAMEMODE.RoundEndPanel) then
-        GAMEMODE.RoundEndPanel:Remove()
-    end
-    
-    -- Create the panel
-    local w = 288
-    local h = 64
-    local bar_h = 24
-    local p = vgui.Create('DPanel')
-    p:SetSize(w, h)
-    p:SetPos(ScrW()/2 - w/2, -h)
-    
-    -- Message & tagline handling
-    p.Message = message
-    p.TagLine = tagline or nil
-    if p.TagLine == '' or p.TagLine == ' ' then p.TagLine = nil end
-    
-    -- Paint the message
-    -- Slight sizing changes based on if there is a second line or not
-    function p:Paint(w, h)
-        if self.TagLine then
-            draw.RoundedBoxEx(16, 0, 0, w, h-bar_h, GAMEMODE.FCol2, false, false, false, false)
-            draw.RoundedBoxEx(16, 0, h-bar_h, w, bar_h, GAMEMODE.FCol3, false, false, true, true)
-            
-            draw.SimpleText(self.Message, 'FS_B32', w/2 + 1, 20 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText(self.Message, 'FS_B32', w/2, 20, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText(self.TagLine, 'FS_20', w/2, h-bar_h+2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
-        else
-            draw.RoundedBoxEx(16, 0, 0, w, h, GAMEMODE.FCol2, false, false, true, true)
-            draw.SimpleText(self.Message, 'FS_B32', w/2 + 1, h/2 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            draw.SimpleText(self.Message, 'FS_B32', w/2, h/2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        end
-    end
-    
-    -- Slide in, wait, slide out
-    p:MoveTo(ScrW()/2 - w/2, 0, 1, 0, -1, function(anim, p)
-        p:MoveTo(ScrW()/2 - w/2, -h, 1, GAMEMODE.RoundCooldown - 1, -1, function(anim, p) p:Remove() end)
-    end)
-end
---]]
 
 function GM:CreateRoundEndPanel(message, tagline)
     surface.PlaySound('friends/friend_join.wav')
