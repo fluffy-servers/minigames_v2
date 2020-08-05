@@ -33,15 +33,16 @@ function ENT:OnTakeDamage(dmg)
 
     self:SetHealth(self:Health() - dmg:GetDamage())
     if self:Health() <= 0 then
-        self:Break(dmg:GetDamageForce())
+        self:Break(dmg:GetDamageForce(), attacker)
     end
 end
 
-function ENT:Break(force)
+function ENT:Break(force, attacker)
     self:GibBreakClient(force * 0.1)
     self:Remove()
 
-    -- Decrement team score
+    -- Award points as required
+    attacker:AddFrags(1)
     team.AddRoundScore(self.Team, -1)
     GAMEMODE:CheckRoundEnd()
 end

@@ -4,6 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 GM.CRATE_DELAY = 3
+GM.KillValue = 3
 
 function GM:PlayerLoadout( ply )
     ply:StripAmmo()
@@ -94,3 +95,14 @@ hook.Add('EntityTakeDamage', 'PistolBuff', function(target, dmg)
         dmg:ScaleDamage(1.5)
     end
 end)
+
+-- Override the base scoring function
+function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
+    if !attacker:IsValid() or !attacker:IsPlayer() then return end
+    if attacker == ply then return end
+    if !GAMEMODE:InRound() then return end
+    
+    -- Add the frag to scoreboard
+    attacker:AddFrags(GAMEMODE.KillValue)
+    GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
+end
