@@ -17,7 +17,7 @@ function ENT:SpawnCrate()
 	end
 
     -- Increment team score
-    team.AddScore(self.Team, 1)
+    team.AddRoundScore(self.Team, 1)
 end
 
 function ENT:CreateProp(pos, ang, model)

@@ -38,7 +38,7 @@ function ENT:OnTakeDamage(dmg)
 end
 
 function ENT:Break(force)
-    self:GibBreakClient(force)
+    self:GibBreakClient(force * 0.1)
     self:Remove()
 
     -- Decrement team score
