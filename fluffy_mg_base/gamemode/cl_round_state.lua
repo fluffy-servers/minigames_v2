@@ -20,9 +20,12 @@ local TIME_ICON = Material("fluffy/time.png", "noclamp smooth")
 -- COMPONENTS
 function GM:GetRoundTimeRemaining()
     local RoundTime = GetGlobalFloat('RoundStart')
-    local RoundMax = GAMEMODE.RoundTime or 60
     if !RoundTime then return end
-    return math.max(RoundMax - (CurTime() - RoundTime), 0)
+    local RoundMax = GAMEMODE.RoundTime or 60
+    if GAMEMODE:GetRoundState() == 'PreRound' then
+        RoundMax = GAMEMODE.RoundCooldown or 5
+    end
+    return math.max(RoundMax - (CurTime() - RoundTime), 0), RoundMax
 end
 
 function GM:GetGameTimeRemaining()
@@ -87,8 +90,7 @@ function GM:DrawClock(text)
     surface.DrawPoly(round_circle)
 
     -- Calculate time remaining
-    local tmax = GAMEMODE.RoundTime or 60
-	local t = GAMEMODE:GetRoundTimeRemaining()
+	local t, tmax = GAMEMODE:GetRoundTimeRemaining()
     
     -- Draw background icon
     local icon_size = 40

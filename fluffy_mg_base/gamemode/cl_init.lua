@@ -164,13 +164,13 @@ local possible_colors = {
 
 -- Default is blue
 -- This changes based on team in some gamemodes
-GM.HColLight = possible_colors['blue'][1]
-GM.HColDark = possible_colors['blue'][2]
+GM.HColLight = GM.HColLight or possible_colors['blue'][1]
+GM.HColDark = GM.HColDark or possible_colors['blue'][2]
 
 -- Default is blue
-GM.FCol1 = Color(245, 246, 250)
-GM.FCol2 = possible_colors['blue'][1]
-GM.FCol3 = possible_colors['blue'][2]
+GM.FCol1 = GM.FCol1 or Color(245, 246, 250)
+GM.FCol2 = GM.FCol2 or possible_colors['blue'][1]
+GM.FCol3 = GM.FCol3 or possible_colors['blue'][2]
 GM.FColShadow = Color(0, 0, 0, 150)
 
 -- Function to update the color set to any in the table
