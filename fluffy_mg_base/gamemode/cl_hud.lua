@@ -360,8 +360,6 @@ end
 
 -- Similar to the above
 function GM:RoundStateTimerTeamRoundScore()
-    if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
-    
     local GAME_STATE = GAMEMODE:GetRoundState()
     local GameTime = GetGlobalFloat('GameStartTime')
     

@@ -298,9 +298,9 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     
     if GAMEMODE.TeamBased then
         -- Add the kill to the team
-        local team = attacker:Team()
-        if team == TEAM_SPECTATOR or team == TEAM_UNASSIGNED then return end
-        team.AddRoundScore(team, 1)
+        local t = attacker:Team()
+        if t == TEAM_SPECTATOR or t == TEAM_UNASSIGNED then return end
+        team.AddRoundScore(t, 1)
     else
         if not attacker.FFAKills then attacker.FFAKills = 0 end
         attacker.FFAKills = attacker.FFAKills + 1
