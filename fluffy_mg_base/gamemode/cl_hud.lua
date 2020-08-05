@@ -19,6 +19,13 @@ local HEALTH_ICON = Material("fluffy/health.png", "noclamp smooth")
 local TIME_ICON = Material("fluffy/time.png", "noclamp smooth")
 local AMMO_ICON = Material("fluffy/ammo.png", "noclamp smooth")
 
+-- HUD enums so the numbers make actual sense
+HUD_STYLE_DEFAULT = 1
+HUD_STYLE_TIMER = 2
+HUD_STYLE_TIMER_ONLY = 3
+HUD_STYLE_TEAM_SCORE = 4
+HUD_STYLE_TEAM_SCORE_ROUNDS = 5
+
 hook.Add("HUDShouldDraw", "FluffyHideHUD", function(name)
 	if hide[name] then return false end
 end )
@@ -175,15 +182,15 @@ function GM:DrawRoundState()
     -- There are four default round state styles
     -- See the functions below
     -- Gamemodes can pick a HUDStyle to use
-    if not GAMEMODE.HUDStyle or GAMEMODE.HUDStyle == 1 then
+    if not GAMEMODE.HUDStyle or GAMEMODE.HUDStyle == HUD_STYLE_DEFAULT then
         GAMEMODE:RoundStateDefault()
-    elseif GAMEMODE.HUDStyle == 2 then
+    elseif GAMEMODE.HUDStyle == HUD_STYLE_TIMER then
         GAMEMODE:RoundStateWithTimer()
-    elseif GAMEMODE.HUDStyle == 3 then
+    elseif GAMEMODE.HUDStyle == HUD_STYLE_TIMER_ONLY then
         GAMEMODE:RoundStateTimerOnly()
-    elseif GAMEMODE.HUDStyle == 4 then
+    elseif GAMEMODE.HUDStyle == HUD_STYLE_TEAM_SCORE then
         GAMEMODE:RoundStateTimerTeamRoundScore()
-    elseif GAMEMODE.HUDStyle == 5 then
+    elseif GAMEMODE.HUDStyle == HUD_STYLE_TEAM_SCORE_ROUNDS then
         GAMEMODE:RoundStateTimerTeamScore()
     end
 end

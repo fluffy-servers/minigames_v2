@@ -15,7 +15,7 @@ GM.RoundTime = 15      -- Seconds each round lasts for
 GM.RoundCooldown = 1.5
 GM.RoundType = 'timed'
 GM.GameTime  = 900
-GM.HUDStyle  = 3
+GM.HUDStyle  = HUD_STYLE_TIMER_ONLY
 
 function GM:Initialize()
 

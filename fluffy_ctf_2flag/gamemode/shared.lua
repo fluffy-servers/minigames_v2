@@ -13,7 +13,7 @@ GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundType = 'timed'
 GM.RoundTime = 120
 GM.GameTime = 600
-GM.HUDStyle = 4
+GM.HUDStyle = HUD_STYLE_TEAM_SCORE_ROUNDS
 GM.RoundCooldown = 3
 
 GM.ThirdpersonEnabled = true

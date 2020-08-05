@@ -15,7 +15,7 @@ GM.RoundNumber = 3
 GM.RoundType = 'timed_endless'
 GM.EndOnTimeOut = true
 GM.GameTime = 500
-GM.HUDStyle = 4
+GM.HUDStyle = HUD_STYLE_TEAM_SCORE
 
 GM.RespawnTime = 2
 GM.AutoRespawn = true
