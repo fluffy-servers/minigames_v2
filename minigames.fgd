@@ -26,12 +26,6 @@
 [
 ]
 
-// Other base entities
-@PointClass iconsprite("editor/info_target.vmt") = mg_powerup_spawnpoint:
-    "Spawnpoint for Minigames powerup crates."
-[
-]
-
 // Paintball entities
 @SolidClass = func_red_home:
     "The home entity for the RED team. Respawns red players. Spawnpoints should be inside this volume."
@@ -51,9 +45,27 @@
     maxspawn(integer) : "Max. Time" : 20 : "Maximum time to wait between weapon spawns."
 ]
 
-// Crate Wars entities
-@PointClass studioprop() = crate_spawner:
-    "Crate spawner for Crate Wars."
+// Crate Wars 2 entities
+@PointClass studioprop() = crate_spawner_blue:
+    "Crate spawner for Crate Wars. Creates BLUE crates."
+[
+    model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
+]
+
+@PointClass studioprop() = crate_spawner_red:
+    "Crate spawner for Crate Wars. Creates RED crates."
+[
+    model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
+]
+
+@PointClass studioprop() = crate_blue:
+    "Simple crate entity for Crate Wars. Owned by BLUE team."
+[
+    model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
+]
+
+@PointClass studioprop() = crate_spawner_blue:
+    "Simple crate entity for Crate Wars. Owned by RED team."
 [
     model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
 ]
@@ -67,29 +79,7 @@
     colorbonus(string) : "Color Bonus" : "255,128,0" : "Color of platforms with bonuses. RGB comma separated no spaces."
 ]
 
-@PointClass = pf_marker:
-    "Marker entity for Pitfall platforms."
-[
-    maxlevels(integer) : "Max Levels" : 1 : "Maximum number of levels that can spawn for this platform. 1-5."
-    size(integer) : "Size" : 1 : "Sizing level. Gamemode picks a number from 1 to 5; then spawns any platforms with a size <= that number."
-]
-
-@SolidClass = pf_platform:
-    "Custom brush entity for Pitfall platforms."
-[
-]
-
-@SolidClass = til_tile:
-    "Custom brush entity for Pitfall platforms."
-[
-]
-
 // Duck Hunt entities
-@SolidClass = svr_wintrigger:
-    "Winning trigger for Duck Hunt. Any runner that reaches this trigger will win the round."
-[
-]
-
 @SolidClass = duckhunt_win:
     "Winning trigger for Duck Hunt. Any runner that reaches this trigger will win the round."
 [
@@ -101,17 +91,7 @@
 [
 ]
 
-@PointClass iconsprite("editor/env_shooter.vmt") = slope_prop_spawner:
-    "Spawnpoint for Incoming props."
-[
-]
-
 @SolidClass = inc_prop_remover:
-    "Removes any props that come into contact with the trigger."
-[
-]
-
-@SolidClass = slope_prop_remover:
     "Removes any props that come into contact with the trigger."
 [
 ]
@@ -121,18 +101,7 @@
 [
 ]
 
-@SolidClass = slope_winners_area:
-    "Winning zone for Incoming. First player to reach this wins the round."
-[
-]
-
 // Poltergeist entities
-@PointClass iconsprite("editor/env_shooter.vmt") = prop_spawner:
-    "Spawn point for Poltergeist entities"
-[
-    frequency(integer) : "Spawn Frequency" : 3 : "How often to respawn props at this location?"
-]
-
 @PointClass iconsprite("editor/env_shooter.vmt") = pg_spawner:
     "Spawn point for Poltergeist entities"
 [
@@ -172,7 +141,17 @@
 ]
 
 @PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn:
-    "Spawnpoint for the CTF flag"
+    "Spawnpoint for the CTF flag. Only applies to 1Flag CTF."
+[
+]
+
+@PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn_blue:
+    "Spawnpoint for the Blue Team's CTF flag."
+[
+]
+
+@PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn_red:
+    "Spawnpoint for the Blue Team's CTF flag."
 [
 ]
 
@@ -199,7 +178,7 @@
 [
 ]
 
-// Deathmatch entities
+// Generic weapon spawner entity
 @PointClass iconsprite("editor/bullseye.vmt") = mg_weapon_spawner:
     "Weapon spawning entity for Deathmatch"
 [
