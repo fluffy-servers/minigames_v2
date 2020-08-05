@@ -4,6 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 GM.CRATE_DELAY = 3
+GM.CHECK_DELAY = 5
 GM.KillValue = 3
 
 function GM:PlayerLoadout( ply )
@@ -54,10 +55,19 @@ hook.Add('PreRoundStart', 'RegisterTeamCrates', function()
     end
 end)
 
-hook.Add('Think', 'CrateSpawn', function()
-    if not GAMEMODE.SpawnCrates then return end
+hook.Add('Think', 'CrateThink', function()
     if not GAMEMODE:InRound() then return end
 
+    -- Update crate scores to ensure we're in sync
+    -- This stops weird things from affecting the scores
+    if (GAMEMODE.NextCrateCheck or 0 < CurTime()) then
+        team.SetRoundScore(TEAM_BLUE, #ents.FindByClass('crate_blue'))
+        team.SetRoundScore(TEAM_RED, # ents.FindByClass('crate_red'))
+        GAMEMODE.NextCrateCheck = CurTime() + GAMEMODE.CHECK_DELAY
+    end
+    
+    -- Fire crate spawners when applicable
+    if not GAMEMODE.SpawnCrates then return end
     if GAMEMODE.NextCrateSpawn < CurTime() then
         GAMEMODE.NextCrateSpawn = CurTime() + GAMEMODE.CRATE_DELAY
         GAMEMODE:SpawnCrate()
