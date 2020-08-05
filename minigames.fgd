@@ -64,7 +64,7 @@
     model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
 ]
 
-@PointClass studioprop() = crate_spawner_blue:
+@PointClass studioprop() = crate_red:
     "Simple crate entity for Crate Wars. Owned by RED team."
 [
     model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
