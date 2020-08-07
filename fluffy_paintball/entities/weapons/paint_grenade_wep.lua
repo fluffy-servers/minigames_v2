@@ -1,6 +1,10 @@
-AddCSLuaFile()
+SWEP.Base = "weapon_mg_base"
 
-SWEP.PrintName = 'Paint Bomb'
+if CLIENT then
+    SWEP.PrintName = 'Paint Bomb'
+    SWEP.Slot = 5
+    SWEP.IconLetter = '2'
+end
 SWEP.ViewModel = 'models/weapons/c_grenade.mdl'
 SWEP.WorldModel = 'models/weapons/w_grenade.mdl'
 SWEP.UseHands = true
@@ -10,8 +14,6 @@ SWEP.Primary.ClipSize = 3
 SWEP.Primary.DefaultClip = 3
 SWEP.Primary.Ammo = "Grenade"
 SWEP.Primary.Automatic = false
-
-SWEP.Slot = 5
 
 function SWEP:Initialize()
     self:SetHoldType('grenade')

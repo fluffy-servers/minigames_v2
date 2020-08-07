@@ -1,7 +1,9 @@
+SWEP.Base = "weapon_mg_base"
+
 if CLIENT then
 	SWEP.Slot = 0
 	SWEP.SlotPos = 0
-	SWEP.IconLetter = "f"
+	SWEP.IconLetter = "!"
     killicon.AddFont("paint_baton", "HL2MPTypeDeath", "!", Color( 255, 80, 0, 255 ))
     
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
@@ -20,10 +22,7 @@ SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.Automatic = true
 
--- We don't have anything that uses secondary ammo so there's nothing here for it
-
 -- Set the model for the gun
--- Using hands is preferred
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_stunstick.mdl"
 SWEP.ViewModelFOV = 62
@@ -46,11 +45,6 @@ function SWEP:PreDrawViewModel(vm, wep)
 end
 
 function SWEP:PrimaryAttack()
-    --models/debug/debugwhite
-    --weapons/357/357_fire2.wav
-	--self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
-	--self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
-    
     local startpos = self.Owner:GetShootPos()
     local endpos = startpos + self.Owner:GetAimVector()*88
     local tr = util.TraceLine({start=startpos, endpos=endpos, filter=self.Owner, mask=MASK_SHOT_HULL})
