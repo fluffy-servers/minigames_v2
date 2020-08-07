@@ -314,6 +314,31 @@ hook.Add('GetFallDamage', 'MinigamesFallDamage', function(ply, vel)
     end
 end)
 
+hook.Add('WeaponEquip', 'WeaponSpawnerEquip', function(wep, ply)
+    if wep.SpawnerEntity then
+        wep.SpawnerEntity:CollectWeapon(ply)
+    end
+end)
+
+hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
+    print(wep, wep.SpawnerEntity)
+    if wep.SpawnerEntity then
+        if ply:HasWeapon(wep:GetClass()) then
+            print('Collecting from spawner...')
+            wep.SpawnerEntity:CollectWeapon(ply)
+            wep:Remove()
+            
+            local ammo_table = GAMEMODE.WeaponSpawners["ammo"]
+            if ammo_table[wep:GetClass()] then
+                local ammo = ammo_table[wep:GetClass()]
+                ply:GiveAmmo(ammo[2], ammo[1])
+            end
+        else
+            return true
+        end
+    end
+end)
+
 -- Import the component parts
 include('sv_database.lua')
 include('sv_stats.lua')

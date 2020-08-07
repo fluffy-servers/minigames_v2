@@ -56,6 +56,7 @@ if SERVER then
     end
 
     function ENT:CollectWeapon(ply)
+        print('Collecting weapon!')
         if not ply:IsPlayer() then return end
 
         local wep = self.WeaponEntity
