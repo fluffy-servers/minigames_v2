@@ -321,10 +321,8 @@ hook.Add('WeaponEquip', 'WeaponSpawnerEquip', function(wep, ply)
 end)
 
 hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
-    print(wep, wep.SpawnerEntity)
     if wep.SpawnerEntity then
         if ply:HasWeapon(wep:GetClass()) then
-            print('Collecting from spawner...')
             wep.SpawnerEntity:CollectWeapon(ply)
             wep:Remove()
             
