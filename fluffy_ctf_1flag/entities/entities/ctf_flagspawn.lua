@@ -1,2 +1,0 @@
-AddCSLuaFile()
-ENT.Type = "point"
