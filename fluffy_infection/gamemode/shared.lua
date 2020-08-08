@@ -32,10 +32,10 @@ GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do wi
 function GM:CreateTeams()
 	if ( !GAMEMODE.TeamBased ) then return end
 	
-	team.SetUp( TEAM_RED, "Infected", Color( 16, 172, 82 ), true )
+	team.SetUp( TEAM_RED, "Infected", TEAM_COLORS['green'], true )
 	team.SetSpawnPoint( TEAM_RED, {"info_player_start"} )
 	
-	team.SetUp( TEAM_BLUE, "Survivors", Color( 80, 80, 255 ), true )
+	team.SetUp( TEAM_BLUE, "Survivors", TEAM_COLORS['blue'], true )
 	team.SetSpawnPoint( TEAM_BLUE, {"info_player_start"} )
 	
 	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
