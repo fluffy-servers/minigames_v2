@@ -25,8 +25,8 @@ GM.TeamSurvival = true
 GM.SurvivorTeam = TEAM_BLUE
 GM.HunterTeam = TEAM_RED
 
-GM.RoundNumber = 7          -- How many rounds?
-GM.RoundTime = 90           -- Seconds each round lasts for
+GM.RoundNumber = 10         -- How many rounds?
+GM.RoundTime = 60           -- Seconds each round lasts for
 GM.ForceFFAColors = true    -- Force team gamemodes to use FFA colors
 
 function GM:Initialize()
