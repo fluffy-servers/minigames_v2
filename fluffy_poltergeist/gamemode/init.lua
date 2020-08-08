@@ -90,39 +90,49 @@ end)
 function GM:EntityTakeDamage(ent, dmginfo)
     local attacker = dmginfo:GetAttacker()
 
-    if not ent:IsPlayer() then
-        dmginfo:SetDamageForce(dmginfo:GetDamageForce() * 20)
-        if ent:GetOwner() and ent:GetOwner():IsValid() then
-            -- When a prop is attacked, forward the damage to the owner
-            if IsValid(attacker) and attacker:IsPlayer() then
-                ent:EmitSound(table.Random(GAMEMODE.PropHit))
-
-                -- Fake the damage info
-                local ply = ent:GetOwner()
-                ply:SetHealth(ply:Health() - dmginfo:GetDamage())
-                if ply:Health() < 1 then
-                    ent:SetOwner(NULL)
-
-                    ply:EmitSound(table.Random(GAMEMODE.PropHit))
-                    ply:KillSilent()
-                    ply:KillProp(dmginfo:GetDamageForce())
-                    GAMEMODE:DoPlayerDeath(ply, attacker, dmginfo)
-                    GAMEMODE:PlayerDeath(ply, dmginfo:GetInflictor(), attacker)
-                end
-            end
-
-            return true
-        end
-    elseif ent:Alive() then
-        -- Check if the attacker is a prop
-        -- If so, set the true attacker to be the prop pilot (if applicable)
+    if ent:IsPlayer() and ent:Alive() and ent:Team() == TEAM_BLUE then
+        -- Check for Poltergeist damage
         if string.find(attacker:GetClass(), "prop_phys") then
             if attacker:GetOwner() and attacker:GetOwner():IsValid() then
                 dmginfo:SetAttacker(attacker:GetOwner())
+
+                -- Increase damage for smaller props
+                local mass = attacker:GetPhysicsObject():GetMass()
+                if mass < 25 then
+                    dmginfo:ScaleDamage(1.75)
+                elseif mass < 50 then
+                    dmginfo:ScaleDamage(1.25)
+                end
             else
                 -- Disable propkilling, only props with pilots can do damage
                 return true
             end
         end
+
+    elseif string.find(ent:GetClass(), "prop_phys") then
+        -- Only humans can break props
+        if not attacker:IsPlayer() then
+            return true
+        end
+
+        -- Apply damage to props
+        dmginfo:SetDamageForce(dmginfo:GetDamageForce() * 15)
+        if ent:GetOwner() and ent:GetOwner():IsValid() then
+            ent:EmitSound(table.Random(GAMEMODE.PropHit))
+
+            -- Fake the damage info
+            local ply = ent:GetOwner()
+            ply:SetHealth(ply:Health() - dmginfo:GetDamage())
+            if ply:Health() < 1 then
+                ent:SetOwner(NULL)
+
+                ply:EmitSound(table.Random(GAMEMODE.PropDie))
+                ply:KillSilent()
+                ply:KillProp(dmginfo:GetDamageForce())
+                GAMEMODE:DoPlayerDeath(ply, attacker, dmginfo)
+                GAMEMODE:PlayerDeath(ply, dmginfo:GetInflictor(), attacker)
+            end
+        end
+
     end
 end
