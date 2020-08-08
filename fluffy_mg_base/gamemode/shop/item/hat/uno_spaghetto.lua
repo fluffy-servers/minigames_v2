@@ -11,7 +11,7 @@ ITEM.Modify = {
 	angle = Angle(12, -95, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -28,7 +28,7 @@ ITEM.Modify = {
     offset = Vector(0.9, 0.5, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -46,7 +46,7 @@ ITEM.Modify = {
 	angle = Angle(-90, 4, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -64,7 +64,7 @@ ITEM.Modify = {
 	angle = Angle(0, 4, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -82,7 +82,7 @@ ITEM.Modify = {
 	angle = Angle(0, 4, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -100,7 +100,7 @@ ITEM.Modify = {
 	angle = Angle(37, 0, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -118,7 +118,7 @@ ITEM.Modify = {
 	angle = Angle(0, -91, 8),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -------------------------------------
 
@@ -135,4 +135,4 @@ ITEM.Modify = {
 	offset = Vector(-3, 0.2, -5.5),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)

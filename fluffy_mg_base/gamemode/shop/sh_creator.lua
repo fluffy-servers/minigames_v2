@@ -172,21 +172,21 @@ local function UpdateInfo(frame)
     
 	local mdl = frame.Model:GetValue()
 	if !mdl or #mdl < 1 then return end
-	if !file.Exists( mdl, "GAME" ) then return end
+	if !file.Exists(mdl, "GAME") then return end
 	SHOP.CreatorData['mdl'] = mdl
 	
 	SHOP.CreatorData['attach'] = frame.Attachment:GetValue()
-	SHOP.CreatorData['scale'] = math.Round( math.Clamp( frame.Scale:GetValue(), 0, 5 ), 2 )
-	SHOP.CreatorData['skin'] = math.Round( math.Clamp( frame.Skin:GetValue(), 0, 8 ), 0 )
-	SHOP.CreatorData['bg1'] = math.Round( math.Clamp( frame.BG1:GetValue(), 0, 8 ), 0 )
+	SHOP.CreatorData['scale'] = math.Round(math.Clamp(frame.Scale:GetValue(), 0, 5), 2)
+	SHOP.CreatorData['skin'] = math.Round(math.Clamp(frame.Skin:GetValue(), 0, 8), 0)
+	SHOP.CreatorData['bg1'] = math.Round(math.Clamp(frame.BG1:GetValue(), 0, 8), 0)
 	
-	SHOP.CreatorData['x'] = math.Round( frame.XOffset:GetValue(), 1 )
-	SHOP.CreatorData['y'] = math.Round( frame.YOffset:GetValue(), 1 )
-	SHOP.CreatorData['z'] = math.Round( frame.ZOffset:GetValue(), 1 )
+	SHOP.CreatorData['x'] = math.Round(frame.XOffset:GetValue(), 1)
+	SHOP.CreatorData['y'] = math.Round(frame.YOffset:GetValue(), 1)
+	SHOP.CreatorData['z'] = math.Round(frame.ZOffset:GetValue(), 1)
 	
-	SHOP.CreatorData['p'] = math.Round( frame.Pitch:GetValue() )
-	SHOP.CreatorData['r'] = math.Round( frame.Roll:GetValue() )
-	SHOP.CreatorData['yaw'] = math.Round( frame.Yaw:GetValue() )
+	SHOP.CreatorData['p'] = math.Round(frame.Pitch:GetValue())
+	SHOP.CreatorData['r'] = math.Round(frame.Roll:GetValue())
+	SHOP.CreatorData['yaw'] = math.Round(frame.Yaw:GetValue())
     
     SHOP.CreatorData['camera_ang'] = frame.Camera:GetValue()
     SHOP.CreatorData['camera_dist'] = frame.Camera2:GetValue()
@@ -204,9 +204,9 @@ local function UpdateInfo(frame)
     frame.icon.ITEM = DataToItem(SHOP.CreatorData)
     frame.icon:Ready()
 	
-	local ent = ClientsideModel( mdl, RENDERGROUP_OPAQUE )
+	local ent = ClientsideModel(mdl, RENDERGROUP_OPAQUE)
 	ent:SetNoDraw(true)
-	ent:SetSkin( SHOP.CreatorData['skin'] )
+	ent:SetSkin(SHOP.CreatorData['skin'])
 	
 	SHOP.CreatorEntity = ent
 end
@@ -271,148 +271,148 @@ local function BasicTab(frame)
     local panel = vgui.Create("DPanel")
     function panel:Paint() end
     
-    local ModelLabel = vgui.Create( "DLabel", panel )
-	ModelLabel:SetPos( 24, 32 )
-	ModelLabel:SetText( "Model Path:" )
+    local ModelLabel = vgui.Create("DLabel", panel)
+	ModelLabel:SetPos(24, 32)
+	ModelLabel:SetText("Model Path:")
 	
-	local Model = vgui.Create( "DTextEntry", panel )
-	Model:SetPos( 24, 48 )
-	Model:SetSize( 252, 24 )
-	Model:SetText( SHOP.CreatorData['mdl'] or '' )
-	Model.OnEnter = function( self )
+	local Model = vgui.Create("DTextEntry", panel)
+	Model:SetPos(24, 48)
+	Model:SetSize(252, 24)
+	Model:SetText(SHOP.CreatorData['mdl'] or '')
+	Model.OnEnter = function(self)
 		frame:UpdateInfo()
 	end
 	frame.Model = Model
 	
-	local AttachmentLabel = vgui.Create( "DLabel", panel )
-	AttachmentLabel:SetPos( 24, 72 )
-	AttachmentLabel:SetText( "Attachment:" )
+	local AttachmentLabel = vgui.Create("DLabel", panel)
+	AttachmentLabel:SetPos(24, 72)
+	AttachmentLabel:SetText("Attachment:")
 	
-	local Attachments = vgui.Create( "DComboBox", panel )
-	Attachments:SetPos( 24, 96 )
-	Attachments:SetSize( 252, 24 )
-	Attachments:SetValue( SHOP.CreatorData['attach'] or 'eyes' )
-	Attachments:AddChoice( "eyes" )
-    Attachments:AddChoice( "mouth" )
-    Attachments:AddChoice( "chest" )
-    Attachments:AddChoice( "forward" )
-	Attachments.OnSelect = function( panel, index, value )
+	local Attachments = vgui.Create("DComboBox", panel)
+	Attachments:SetPos(24, 96)
+	Attachments:SetSize(252, 24)
+	Attachments:SetValue(SHOP.CreatorData['attach'] or 'eyes')
+	Attachments:AddChoice("eyes")
+    Attachments:AddChoice("mouth")
+    Attachments:AddChoice("chest")
+    Attachments:AddChoice("forward")
+	Attachments.OnSelect = function(panel, index, value)
 		frame:UpdateInfo()
 	end
 	frame.Attachment = Attachments
 	
-	local ScaleSlider = vgui.Create( "DNumSlider", panel )
-	ScaleSlider:SetPos( 24, 128 )
-	ScaleSlider:SetSize( 252, 24 )
-	ScaleSlider:SetText( "Scale" ) 
-	ScaleSlider:SetMin( 0 )
-	ScaleSlider:SetMax( 5 )
-	ScaleSlider:SetDecimals( 2 )
-	ScaleSlider:SetValue( SHOP.CreatorData['scale'] or 1 )
+	local ScaleSlider = vgui.Create("DNumSlider", panel)
+	ScaleSlider:SetPos(24, 128)
+	ScaleSlider:SetSize(252, 24)
+	ScaleSlider:SetText("Scale") 
+	ScaleSlider:SetMin(0)
+	ScaleSlider:SetMax(5)
+	ScaleSlider:SetDecimals(2)
+	ScaleSlider:SetValue(SHOP.CreatorData['scale'] or 1)
 	ScaleSlider.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.Scale = ScaleSlider
 	
-	local XSlider = vgui.Create( "DNumSlider", panel )
-	XSlider:SetPos( 24, 160 )
-	XSlider:SetSize( 252, 24 )
-	XSlider:SetText( "X Offset" ) 
-	XSlider:SetMin( -10 )
-	XSlider:SetMax( 10 )
-	XSlider:SetDecimals( 1 )
-	XSlider:SetValue( SHOP.CreatorData['x'] or 0 )
+	local XSlider = vgui.Create("DNumSlider", panel)
+	XSlider:SetPos(24, 160)
+	XSlider:SetSize(252, 24)
+	XSlider:SetText("X Offset") 
+	XSlider:SetMin(-10)
+	XSlider:SetMax(10)
+	XSlider:SetDecimals(1)
+	XSlider:SetValue(SHOP.CreatorData['x'] or 0)
 	XSlider.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.XOffset = XSlider
 	
-	local YSlider = vgui.Create( "DNumSlider", panel )
-	YSlider:SetPos( 24, 192 )
-	YSlider:SetSize( 252, 24 )
-	YSlider:SetText( "Y Offset" ) 
-	YSlider:SetMin( -10 )
-	YSlider:SetMax( 10 )
-	YSlider:SetDecimals( 1 )
-	YSlider:SetValue( SHOP.CreatorData['y'] or 0 )
+	local YSlider = vgui.Create("DNumSlider", panel)
+	YSlider:SetPos(24, 192)
+	YSlider:SetSize(252, 24)
+	YSlider:SetText("Y Offset") 
+	YSlider:SetMin(-10)
+	YSlider:SetMax(10)
+	YSlider:SetDecimals(1)
+	YSlider:SetValue(SHOP.CreatorData['y'] or 0)
 	YSlider.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.YOffset = YSlider
 	
-	local ZSlider = vgui.Create( "DNumSlider", panel )
-	ZSlider:SetPos( 24, 224 )
-	ZSlider:SetSize( 252, 24 )
-	ZSlider:SetText( "Z Offset" ) 
-	ZSlider:SetMin( -20 )
-	ZSlider:SetMax( 20 )
-	ZSlider:SetDecimals( 1 )
-	ZSlider:SetValue( SHOP.CreatorData['z'] or 0 )
+	local ZSlider = vgui.Create("DNumSlider", panel)
+	ZSlider:SetPos(24, 224)
+	ZSlider:SetSize(252, 24)
+	ZSlider:SetText("Z Offset") 
+	ZSlider:SetMin(-20)
+	ZSlider:SetMax(20)
+	ZSlider:SetDecimals(1)
+	ZSlider:SetValue(SHOP.CreatorData['z'] or 0)
 	ZSlider.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.ZOffset = ZSlider
 	
-	local Pitch = vgui.Create( "DNumSlider", panel )
-	Pitch:SetPos( 24, 272 )
-	Pitch:SetSize( 252, 24 )
-	Pitch:SetText( "Pitch" ) 
-	Pitch:SetMin( -180 )
-	Pitch:SetMax( 180 )
-	Pitch:SetDecimals( 0 )
-	Pitch:SetValue( SHOP.CreatorData['p'] or 0 )
+	local Pitch = vgui.Create("DNumSlider", panel)
+	Pitch:SetPos(24, 272)
+	Pitch:SetSize(252, 24)
+	Pitch:SetText("Pitch") 
+	Pitch:SetMin(-180)
+	Pitch:SetMax(180)
+	Pitch:SetDecimals(0)
+	Pitch:SetValue(SHOP.CreatorData['p'] or 0)
 	Pitch.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.Pitch = Pitch
 	
-	local Roll = vgui.Create( "DNumSlider", panel )
-	Roll:SetPos( 24, 304 )
-	Roll:SetSize( 252, 24 )
-	Roll:SetText( "Roll" ) 
-	Roll:SetMin( -180 )
-	Roll:SetMax( 180 )
-	Roll:SetDecimals( 0 )
-	Roll:SetValue( SHOP.CreatorData['r'] or 0 )
+	local Roll = vgui.Create("DNumSlider", panel)
+	Roll:SetPos(24, 304)
+	Roll:SetSize(252, 24)
+	Roll:SetText("Roll") 
+	Roll:SetMin(-180)
+	Roll:SetMax(180)
+	Roll:SetDecimals(0)
+	Roll:SetValue(SHOP.CreatorData['r'] or 0)
 	Roll.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.Roll = Roll
 	
-	local Yaw = vgui.Create( "DNumSlider", panel )
-	Yaw:SetPos( 24, 336 )
-	Yaw:SetSize( 252, 24 )
-	Yaw:SetText( "Yaw" ) 
-	Yaw:SetMin( -180 )
-	Yaw:SetMax( 180 )
-	Yaw:SetDecimals( 0 )
-	Yaw:SetValue( SHOP.CreatorData['yaw'] or 0 )
+	local Yaw = vgui.Create("DNumSlider", panel)
+	Yaw:SetPos(24, 336)
+	Yaw:SetSize(252, 24)
+	Yaw:SetText("Yaw") 
+	Yaw:SetMin(-180)
+	Yaw:SetMax(180)
+	Yaw:SetDecimals(0)
+	Yaw:SetValue(SHOP.CreatorData['yaw'] or 0)
 	Yaw.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.Yaw = Yaw
 	
-	local Skin = vgui.Create( "DNumSlider", panel )
-	Skin:SetPos( 24, 400 )
-	Skin:SetSize( 252, 24 )
-	Skin:SetText( "Skin" ) 
-	Skin:SetMin( 0 )
-	Skin:SetMax( 8 )
-	Skin:SetDecimals( 0 )
-	Skin:SetValue( SHOP.CreatorData['skin'] or 0 )
+	local Skin = vgui.Create("DNumSlider", panel)
+	Skin:SetPos(24, 400)
+	Skin:SetSize(252, 24)
+	Skin:SetText("Skin") 
+	Skin:SetMin(0)
+	Skin:SetMax(8)
+	Skin:SetDecimals(0)
+	Skin:SetValue(SHOP.CreatorData['skin'] or 0)
 	Skin.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
 	frame.Skin = Skin
 	
-	local BG1 = vgui.Create( "DNumSlider", panel )
-	BG1:SetPos( 24, 432 )
-	BG1:SetSize( 252, 24 )
-	BG1:SetText( "Bodygroup1" ) 
-	BG1:SetMin( 0 )
-	BG1:SetMax( 8 )
-	BG1:SetDecimals( 0 )
-	BG1:SetValue( SHOP.CreatorData['bg1'] or 0 )
+	local BG1 = vgui.Create("DNumSlider", panel)
+	BG1:SetPos(24, 432)
+	BG1:SetSize(252, 24)
+	BG1:SetText("Bodygroup1") 
+	BG1:SetMin(0)
+	BG1:SetMax(8)
+	BG1:SetDecimals(0)
+	BG1:SetValue(SHOP.CreatorData['bg1'] or 0)
 	BG1.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
@@ -425,58 +425,58 @@ local function PropertiesTab(frame)
     local panel = vgui.Create("DPanel")
     function panel:Paint() end
     
-    local IDLabel = vgui.Create( "DLabel", panel )
-	IDLabel:SetPos( 24, 24 )
-	IDLabel:SetText( "Vanilla ID:" )
+    local IDLabel = vgui.Create("DLabel", panel)
+	IDLabel:SetPos(24, 24)
+	IDLabel:SetText("Vanilla ID:")
 	
-	local ID = vgui.Create( "DTextEntry", panel )
-	ID:SetPos( 24, 48 )
-	ID:SetSize( 252, 24 )
-	ID:SetText( SHOP.CreatorData['vanillaid'] or 'vanillaid' )
-	ID.OnEnter = function( self )
+	local ID = vgui.Create("DTextEntry", panel)
+	ID:SetPos(24, 48)
+	ID:SetSize(252, 24)
+	ID:SetText(SHOP.CreatorData['vanillaid'] or 'vanillaid')
+	ID.OnEnter = function(self)
 		frame:UpdateInfo()
 	end
 	frame.ID = ID
     
-    local NameLabel = vgui.Create( "DLabel", panel )
-	NameLabel:SetPos( 24, 80 )
-	NameLabel:SetText( "Name:" )
+    local NameLabel = vgui.Create("DLabel", panel)
+	NameLabel:SetPos(24, 80)
+	NameLabel:SetText("Name:")
 	
-	local Name = vgui.Create( "DTextEntry", panel )
-	Name:SetPos( 24, 104 )
-	Name:SetSize( 252, 24 )
-	Name:SetText( SHOP.CreatorData['name'] or '?' )
-	Name.OnEnter = function( self )
+	local Name = vgui.Create("DTextEntry", panel)
+	Name:SetPos(24, 104)
+	Name:SetSize(252, 24)
+	Name:SetText(SHOP.CreatorData['name'] or '?')
+	Name.OnEnter = function(self)
 		frame:UpdateInfo()
 	end
 	frame.Name = Name
     
-    local SlotLabel = vgui.Create( "DLabel", panel )
-	SlotLabel:SetPos( 24, 128 )
-	SlotLabel:SetText( "Slot:" )
+    local SlotLabel = vgui.Create("DLabel", panel)
+	SlotLabel:SetPos(24, 128)
+	SlotLabel:SetText("Slot:")
 	
-	local Slots = vgui.Create( "DComboBox", panel )
-	Slots:SetPos( 24, 152 )
-	Slots:SetSize( 252, 24 )
-	Slots:SetValue( SHOP.CreatorData['slot'] or 'face' )
-    Slots:AddChoice( "back" )
-    Slots:AddChoice( "body" )
-    Slots:AddChoice( "face" )
-    Slots:AddChoice( "hat" )
-    Slots:AddChoice( "head")
-	Slots.OnSelect = function( panel, index, value )
+	local Slots = vgui.Create("DComboBox", panel)
+	Slots:SetPos(24, 152)
+	Slots:SetSize(252, 24)
+	Slots:SetValue(SHOP.CreatorData['slot'] or 'face')
+    Slots:AddChoice("back")
+    Slots:AddChoice("body")
+    Slots:AddChoice("face")
+    Slots:AddChoice("hat")
+    Slots:AddChoice("head")
+	Slots.OnSelect = function(panel, index, value)
 		frame:UpdateInfo()
 	end
 	frame.Slot = Slots
     
-	local Rarity = vgui.Create( "DNumSlider", panel )
-	Rarity:SetPos( 24, 196 )
-	Rarity:SetSize( 252, 24 )
-	Rarity:SetText( "Rarity" ) 
-	Rarity:SetMin( 1 )
-	Rarity:SetMax( 5 )
-	Rarity:SetDecimals( 0 )
-	Rarity:SetValue( SHOP.CreatorData['rarity'] or 0 )
+	local Rarity = vgui.Create("DNumSlider", panel)
+	Rarity:SetPos(24, 196)
+	Rarity:SetSize(252, 24)
+	Rarity:SetText("Rarity") 
+	Rarity:SetMin(1)
+	Rarity:SetMax(5)
+	Rarity:SetDecimals(0)
+	Rarity:SetValue(SHOP.CreatorData['rarity'] or 0)
 	Rarity.OnValueChanged = function()
 		frame:UpdateInfo()
 	end
@@ -533,18 +533,18 @@ local function MaterialTab(frame)
     local panel = vgui.Create("DPanel")
     function panel:Paint() end
     
-    local CModeLabel = vgui.Create( "DLabel", panel )
-	CModeLabel:SetPos( 24, 16 )
-	CModeLabel:SetText( "Color Mode:" )
+    local CModeLabel = vgui.Create("DLabel", panel)
+	CModeLabel:SetPos(24, 16)
+	CModeLabel:SetText("Color Mode:")
 	
-	local CModes = vgui.Create( "DComboBox", panel )
-	CModes:SetPos( 24, 32 )
-	CModes:SetSize( 252, 24 )
-	CModes:SetValue( SHOP.CreatorData['cmode'] or 'No Color' )
-    CModes:AddChoice( "No Color" )
-    CModes:AddChoice( "Paintable" )
-    --CModes:AddChoice( "Force Color (WIP)" )
-	CModes.OnSelect = function( panel, index, value )
+	local CModes = vgui.Create("DComboBox", panel)
+	CModes:SetPos(24, 32)
+	CModes:SetSize(252, 24)
+	CModes:SetValue(SHOP.CreatorData['cmode'] or 'No Color')
+    CModes:AddChoice("No Color")
+    CModes:AddChoice("Paintable")
+    --CModes:AddChoice("Force Color (WIP)")
+	CModes.OnSelect = function(panel, index, value)
 		frame:UpdateInfo()
 	end
 	frame.CMode = CModes
@@ -552,22 +552,22 @@ local function MaterialTab(frame)
     local Mixer = vgui.Create("DColorMixer", panel)
     Mixer:SetPos(24, 64)
     Mixer:SetSize(236, 128)
-    Mixer:SetColor( SHOP.CreatorData['color'] or color_white )
+    Mixer:SetColor(SHOP.CreatorData['color'] or color_white)
     Mixer:SetPalette(false)
     Mixer.ValueChanged = function()
 		frame:UpdateInfo()
 	end
     frame.ColorMixer = Mixer
 
-    local MaterialLabel = vgui.Create( "DLabel", panel )
-	MaterialLabel:SetPos( 24, 224 )
-	MaterialLabel:SetText( "Material:" )
+    local MaterialLabel = vgui.Create("DLabel", panel)
+	MaterialLabel:SetPos(24, 224)
+	MaterialLabel:SetText("Material:")
 	
-	local MaterialPicker = vgui.Create( "DTextEntry", panel )
-	MaterialPicker:SetPos( 24, 256 )
-	MaterialPicker:SetSize( 252, 24 )
-	MaterialPicker:SetText( SHOP.CreatorData['material'] or '' )
-	MaterialPicker.OnEnter = function( self )
+	local MaterialPicker = vgui.Create("DTextEntry", panel)
+	MaterialPicker:SetPos(24, 256)
+	MaterialPicker:SetSize(252, 24)
+	MaterialPicker:SetText(SHOP.CreatorData['material'] or '')
+	MaterialPicker.OnEnter = function(self)
 		frame:UpdateInfo()
 	end
 	frame.Material = MaterialPicker
@@ -651,7 +651,7 @@ hook.Add('PostPlayerDraw', 'FS_ItemBroadcast', function(ply)
     
     if not ply.CreatorItem.entity then
         local mdl = ply.CreatorItem['mdl']
-        local ent = ClientsideModel( mdl, RENDERGROUP_OPAQUE )
+        local ent = ClientsideModel(mdl, RENDERGROUP_OPAQUE)
 		ent:SetNoDraw(true)
         ply.CreatorItem.entity = ent
     end
@@ -660,7 +660,7 @@ hook.Add('PostPlayerDraw', 'FS_ItemBroadcast', function(ply)
     local ent = ply.CreatorItem.entity
     
 	if !ITEM['attach'] then return end
-	local attach_id = ply:LookupAttachment( ITEM['attach'] )
+	local attach_id = ply:LookupAttachment(ITEM['attach'])
 	if not attach_id then return end
 		
 	local attach = ply:GetAttachment(attach_id)
@@ -668,12 +668,12 @@ hook.Add('PostPlayerDraw', 'FS_ItemBroadcast', function(ply)
 	local pos = attach.Pos
 	local ang = attach.Ang
 	
-	ent:SetModelScale( ITEM['scale'] )
+	ent:SetModelScale(ITEM['scale'])
 	pos = pos + (ang:Forward()*ITEM['x']) + (ang:Right()*ITEM['y']) + (ang:Up()*ITEM['z'])
 	
-	ang:RotateAroundAxis( ang:Right(), ITEM['p'] )
-	ang:RotateAroundAxis( ang:Forward(), ITEM['r'] )
-	ang:RotateAroundAxis( ang:Up(), ITEM['yaw'] )
+	ang:RotateAroundAxis(ang:Right(), ITEM['p'])
+	ang:RotateAroundAxis(ang:Forward(), ITEM['r'])
+	ang:RotateAroundAxis(ang:Up(), ITEM['yaw'])
     
     if ITEM['material'] then
         ent:SetMaterial(ITEM['material'])
@@ -684,14 +684,14 @@ hook.Add('PostPlayerDraw', 'FS_ItemBroadcast', function(ply)
         render.SetColorModulation(c.r/255, c.g/255, c.b/255)
     end
 	
-	ent:SetPos( pos )
-    ent:SetAngles( ang )
+	ent:SetPos(pos)
+    ent:SetAngles(ang)
 	ent:DrawModel()
     
     if ITEM['cmode'] == 'Paintable' then
         render.SetColorModulation(1, 1, 1)
     end
-end )
+end)
 
 -- Handles drawing of own items
 hook.Add('PostPlayerDraw', 'FS_ItemCreator', function(ply)
@@ -699,7 +699,7 @@ hook.Add('PostPlayerDraw', 'FS_ItemCreator', function(ply)
 	if !SHOP.CreatorEntity then return end
 	
 	if !SHOP.CreatorData['attach'] then return end
-	local attach_id = ply:LookupAttachment( SHOP.CreatorData['attach'] )
+	local attach_id = ply:LookupAttachment(SHOP.CreatorData['attach'])
 	if not attach_id then return end
 		
 	local attach = ply:GetAttachment(attach_id)
@@ -707,12 +707,12 @@ hook.Add('PostPlayerDraw', 'FS_ItemCreator', function(ply)
 	local pos = attach.Pos
 	local ang = attach.Ang
 	
-	SHOP.CreatorEntity:SetModelScale( SHOP.CreatorData['scale'] )
+	SHOP.CreatorEntity:SetModelScale(SHOP.CreatorData['scale'])
 	pos = pos + (ang:Forward()*SHOP.CreatorData['x']) + (ang:Right()*SHOP.CreatorData['y']) + (ang:Up()*SHOP.CreatorData['z'])
 	
-	ang:RotateAroundAxis( ang:Right(), SHOP.CreatorData['p'] )
-	ang:RotateAroundAxis( ang:Forward(), SHOP.CreatorData['r'] )
-	ang:RotateAroundAxis( ang:Up(), SHOP.CreatorData['yaw'] )
+	ang:RotateAroundAxis(ang:Right(), SHOP.CreatorData['p'])
+	ang:RotateAroundAxis(ang:Forward(), SHOP.CreatorData['r'])
+	ang:RotateAroundAxis(ang:Up(), SHOP.CreatorData['yaw'])
     
     if SHOP.CreatorData['material'] then
         SHOP.CreatorEntity:SetMaterial(SHOP.CreatorData['material'])
@@ -723,14 +723,14 @@ hook.Add('PostPlayerDraw', 'FS_ItemCreator', function(ply)
         render.SetColorModulation(c.r/255, c.g/255, c.b/255)
     end
 	
-	SHOP.CreatorEntity:SetPos( pos )
-    SHOP.CreatorEntity:SetAngles( ang )
+	SHOP.CreatorEntity:SetPos(pos)
+    SHOP.CreatorEntity:SetAngles(ang)
 	SHOP.CreatorEntity:DrawModel()
     
     if SHOP.CreatorData['cmode'] == 'Paintable' then
         render.SetColorModulation(1, 1, 1)
     end
-end )
+end)
 
 -- Handles the camera when the player is inside the creation frame
 hook.Add('CalcView', 'CreatorCamera', function(ply, origin, angles, fov)

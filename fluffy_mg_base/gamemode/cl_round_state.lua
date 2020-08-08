@@ -8,6 +8,7 @@ HUD_STYLE_TEAM_SCORE_SINGLE = 6         -- Large timer, with single team score u
 HUD_STYLE_CLOCK_TEAM_SCORE = 7          -- Simple clock, with team scores underneath
 HUD_STYLE_CLOCK_TEAM_SCORE_ROUNDS = 8   -- Simple clock, with team round wins underneath
 HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE = 9   -- Simple clock, with single team score underneath
+HUD_STYLE_CLOCK_ALIVE = 10              -- Simple clock, with number of alive players underneath
 
 -- These should match cl_hud
 local c_pos = 72
@@ -224,6 +225,20 @@ GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE] = function()
     draw.RoundedBox(8, c_pos-48, c_pos + 56, radius*2, score_h+2, blue_shadow, false, false, false, true)
     draw.RoundedBox(8, c_pos-48, c_pos + 56, radius*2, score_h, blue_col, false, false, false, true)
     GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), 'FS_40', c_pos, c_pos + score_h/2 + 2 + 56, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+end
+
+GM.HUDStyleFuncs[HUD_STYLE_CLOCK_ALIVE] = function()
+    GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
+
+    -- Draw blue team score underneath
+    local blue_col = team.GetColor(TEAM_BLUE)
+    local blue_shadow = Color(blue_col.r - 35, blue_col.g - 35, blue_col.b - 35)
+    local score_h = radius
+    local alive = GAMEMODE:GetTeamLivingPlayers(TEAM_BLUE)
+    draw.RoundedBox(8, c_pos-48, c_pos + 56, radius*2, score_h+2, blue_shadow, false, false, false, true)
+    draw.RoundedBox(8, c_pos-48, c_pos + 56, radius*2, score_h, blue_col, false, false, false, true)
+    GAMEMODE:DrawShadowText(alive, 'FS_32', c_pos, c_pos + score_h + 56 - 14, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText('Alive', 'FS_20', c_pos, c_pos + score_h + 56, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
 end
 
 -- Draw the state of the round, including time and round number etc.

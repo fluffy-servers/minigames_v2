@@ -82,7 +82,7 @@ function SHOP:LoadResources()
         -- Add every item file in subdirectories
         local files = file.Find(path .. v .. '/*', 'LUA')
         for k, item in pairs(files) do
-            if SERVER then AddCSLuaFile(path .. v .. '/' .. item, 'LUA' ) end
+            if SERVER then AddCSLuaFile(path .. v .. '/' .. item, 'LUA') end
             include(path .. v .. '/' .. item)
         end
     end

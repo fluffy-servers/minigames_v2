@@ -318,9 +318,9 @@ function TestEndGameScreen()
 end
 
 -- Open up the end game panel when the server says the game has ended
-net.Receive("MinigamesGameEnd", function( len, ply )
+net.Receive("MinigamesGameEnd", function(len, ply)
     GAMEMODE:OpenEndGamePanel()
-end )
+end)
 
 -- Get the map vote options information from the server
 net.Receive("SendMapVoteTable", function()

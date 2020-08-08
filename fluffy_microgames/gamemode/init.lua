@@ -59,7 +59,7 @@ function GM:PreStartRound()
     end
     
     -- Start the round after a short cooldown
-    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end )
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end)
 end
 
 -- Pick a new modifier each round

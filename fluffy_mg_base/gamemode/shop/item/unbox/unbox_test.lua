@@ -15,4 +15,4 @@ UNBOX.Chances = {
     2,
     1,
 }
-SHOP:RegisterUnbox( UNBOX )
+SHOP:RegisterUnbox(UNBOX)

@@ -55,14 +55,14 @@ function GM:CreateTeams()
     team.SetUp(TEAM_CYAN, "Cyan Team", TEAM_COLORS['cyan'], true)
 	team.SetSpawnPoint(TEAM_CYAN, TEAM_SPAWNS)
 	
-	team.SetUp(TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true)
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
 -- Override the non-spectating function
 function GM:NumNonSpectators()
     local num = 0
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         if v:Team() != TEAM_SPECTATOR then num = num + 1 end
     end
 

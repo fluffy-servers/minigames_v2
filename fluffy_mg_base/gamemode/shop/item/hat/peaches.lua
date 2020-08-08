@@ -12,7 +12,7 @@ ITEM.Modify = {
     angle = Angle(-8, 180, 4),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.VanillaID = 'trashcan'
@@ -26,7 +26,7 @@ ITEM.Modify = {
     angle = Angle(-157, 0, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -41,7 +41,7 @@ ITEM.Modify = {
     offset = Vector(-2.8, 0, -7.4),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -55,7 +55,7 @@ ITEM.Modify = {
     angle = Angle(112, 66, -4),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -70,7 +70,7 @@ ITEM.Modify = {
     angle = Angle(21, -12, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -85,7 +85,7 @@ ITEM.Modify = {
     angle = Angle(21, -12, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -100,7 +100,7 @@ ITEM.Modify = {
     angle = Angle(21, -12, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -115,4 +115,4 @@ ITEM.Modify = {
     angle = Angle(0, -12, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)

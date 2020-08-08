@@ -51,7 +51,7 @@ end
 local PANEL = {}
 
 function PANEL:Init()
-	self:SetSize( 128, 128 )
+	self:SetSize(128, 128)
     self:SetText('')
 end
 
@@ -97,41 +97,41 @@ function PANEL:CrateIcon(ITEM)
     self.icon:Dock(FILL)
     self.icon:SetModel('models/props_junk/cardboard_box003a.mdl')
     self.icon.Entity:SetAngles(Angle(0, 90, 0))
-    self.icon:SetCamPos(Vector( 0, 48, 20))
+    self.icon:SetCamPos(Vector(0, 48, 20))
     self.icon:SetFOV(60)
-    self.icon:SetLookAt(Vector( 0, 0, -10 ))
+    self.icon:SetLookAt(Vector(0, 0, -10))
     
     function self.icon:LayoutEntity() return end
 end
 
 function PANEL:PaintIcon(ITEM)
-	self.icon = vgui.Create("DModelPanel", self )
+	self.icon = vgui.Create("DModelPanel", self)
 	self.icon:Dock(FILL)
-	self.icon:SetModel( "models/paintcan/paint_can.mdl" )
-	self.icon:SetCamPos(Vector( 0, 32, 24 ))
+	self.icon:SetModel("models/paintcan/paint_can.mdl")
+	self.icon:SetCamPos(Vector(0, 32, 24))
 	self.icon:SetFOV(60)
-	self.icon:SetLookAt(Vector( 0, 0, -10 ))
+	self.icon:SetLookAt(Vector(0, 0, -10))
 	self.icon:SetColor(ITEM.Color or color_white)
     
     function self.icon:LayoutEntity() return end
 end
 
 function PANEL:TracerIcon(ITEM)
-	self.icon = vgui.Create("DModelPanel", self )
+	self.icon = vgui.Create("DModelPanel", self)
 	self.icon:Dock(FILL)
 	self.icon:SetModel('models/weapons/c_357.mdl')
-	self.icon.Entity:SetPos(Vector( -22, 0, -5 ))
+	self.icon.Entity:SetPos(Vector(-22, 0, -5))
 	self.icon.Entity:SetAngles(Angle(0, 0, 0))
-	self.icon:SetCamPos(Vector( 0, 40, 0 ))
+	self.icon:SetCamPos(Vector(0, 40, 0))
 	self.icon:SetFOV(20)
-	self.icon:SetLookAt(Vector( 0, 0, -10 ))
+	self.icon:SetLookAt(Vector(0, 0, -10))
 
 	function self.icon:LayoutEntity() return end
 end
 
 function PANEL:TrailIcon(ITEM)
     local off = 24
-	self.icon = vgui.Create("DButton", self )
+	self.icon = vgui.Create("DButton", self)
     self.icon:Dock(FILL)
     self.icon:SetText('')
 	self.icon.Material = Material(ITEM.Material)
@@ -216,7 +216,7 @@ function PANEL:WearableRender(ITEM, ent, CSModel)
 end
 
 function PANEL:WearableIcon(ITEM)
-    self.icon = vgui.Create("DModelPanel", self )
+    self.icon = vgui.Create("DModelPanel", self)
 	self.icon:Dock(FILL)
     
     local model = LocalPlayer():GetModel()
@@ -225,7 +225,7 @@ function PANEL:WearableIcon(ITEM)
     end
     
 	self.icon:SetModel(model)
-	self.icon:SetAnimated( false )
+	self.icon:SetAnimated(false)
     self.icon.Entity:SetPlaybackRate(0)
     
     if camera_changes[ITEM.Slot] then
@@ -244,7 +244,7 @@ function PANEL:WearableIcon(ITEM)
     self.icon.panel = self
     
     if !IsValid(self.icon.Entity) then return end
-    self.icon.Entity:SetPos( Vector(-50, 0, -75) )
+    self.icon.Entity:SetPos(Vector(-50, 0, -75))
     
 	function self.icon:LayoutEntity() return end
     function self.icon.Entity:GetPlayerColor() return LocalPlayer():GetPlayerColor() end
@@ -270,11 +270,11 @@ function PANEL:DoClick()
 	local rarity_box = Menu:AddOption(rarity_names[ITEM.Rarity or 1])
 	rarity_box:SetTextColor(color_white)
 	rarity_box:SetIcon("icon16/star.png")
-	rarity_box.Paint = function(self, w, h ) end
-	rarity_box.PaintOver = function(self, w, h ) end
-	Menu.Paint = function( self, w, h )
-		derma.SkinHook( "Paint", "Menu", self, w, h )
-		draw.RoundedBox( 0, 1, 1, w-2, 21, rarity_color )
+	rarity_box.Paint = function(self, w, h) end
+	rarity_box.PaintOver = function(self, w, h) end
+	Menu.Paint = function(self, w, h)
+		derma.SkinHook("Paint", "Menu", self, w, h)
+		draw.RoundedBox(0, 1, 1, w-2, 21, rarity_color)
 	end
     
     -- No other options if this is a 0 key item
@@ -286,7 +286,7 @@ function PANEL:DoClick()
     
     if ITEM.Type == 'Crate' then
         -- Add unbox button
-        Menu:AddOption("Unbox", function() SHOP:RequestUnbox(self.key) end ):SetIcon("icon16/box.png")
+        Menu:AddOption("Unbox", function() SHOP:RequestUnbox(self.key) end):SetIcon("icon16/box.png")
     elseif ITEM.Type == 'Paint' then
         -- Add no buttons :(
     else

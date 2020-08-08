@@ -4,7 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Give the player these weapons on loadout
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     ply:StripAmmo()
     ply:Give('weapon_physcannon')
@@ -44,7 +44,7 @@ hook.Add('RoundStart', 'InitialSpawnFlag', function()
     timer.Simple(3, function() GAMEMODE:SpawnBall() end)
     
     GAMEMODE.NextSpawn = CurTime() + 5
-end )
+end)
 
 -- Add a new ball to the field every 20 seconds
 hook.Add("Think", "ThinkBallSpawn", function()
@@ -55,7 +55,7 @@ hook.Add("Think", "ThinkBallSpawn", function()
         GAMEMODE:SpawnBall()
         GAMEMODE.NextSpawn = CurTime() + math.random(2, 5)
 	end
-end )
+end)
 
 -- Change color and team when a ball is picked up
 function GM:CollectBall(ball, team)

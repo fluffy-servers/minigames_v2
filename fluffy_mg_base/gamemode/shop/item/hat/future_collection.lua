@@ -10,7 +10,7 @@ ITEM.Modify = {
 	offset = Vector(-2.6, 0, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -25,7 +25,7 @@ ITEM.Modify = {
 	angle = Angle(180, 0, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -40,7 +40,7 @@ ITEM.Modify = {
 	angle = Angle(0, 0, 90),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.VanillaID = 'monitor1'
@@ -55,7 +55,7 @@ ITEM.Modify = {
 	offset = Vector(-3.2, 0, -7),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.VanillaID = 'monitor2'
@@ -70,7 +70,7 @@ ITEM.Modify = {
 	offset = Vector(-3.2, 0, -7),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.VanillaID = 'monitor3'
@@ -84,7 +84,7 @@ ITEM.Modify = {
 	offset = Vector(-7.2, -1, -1),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.VanillaID = 'pluggedin'
@@ -99,4 +99,4 @@ ITEM.Modify = {
 	angle = Angle(180, 0, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)

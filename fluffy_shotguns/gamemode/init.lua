@@ -4,7 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Give the player these weapons on loadout
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:Give('super_shotgun')
     ply:GiveAmmo(1000, 'Buckshot')
     ply:SetRunSpeed(350)

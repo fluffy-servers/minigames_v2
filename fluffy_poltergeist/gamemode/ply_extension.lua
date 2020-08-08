@@ -122,10 +122,10 @@ hook.Add('Move', 'GhostMove', function(ply, mv)
 
     -- Handle horizontal movement
     if ply:KeyDown(IN_MOVELEFT) then
-        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed )
+        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed)
     elseif ply:KeyDown(IN_MOVERIGHT) then
         ang.y = ang.y + 180
-        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed )
+        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed)
     end
 end)
 

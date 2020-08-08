@@ -4,7 +4,7 @@ SWEP.PrintName = "Paintbrush"
 if CLIENT then
     SWEP.Slot = 0
 	SWEP.IconLetter = "j"
-    killicon.AddFont("paint_knife", "CSKillIcons", "j", Color( 255, 80, 0, 255 ))
+    killicon.AddFont("paint_knife", "CSKillIcons", "j", Color(255, 80, 0, 255))
     
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end

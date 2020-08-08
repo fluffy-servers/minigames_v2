@@ -30,14 +30,14 @@ GM.CanSuicide = false -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do with this
 
 function GM:CreateTeams()
-	if ( !GAMEMODE.TeamBased ) then return end
+	if (!GAMEMODE.TeamBased) then return end
 	
-	team.SetUp( TEAM_RED, "Infected", TEAM_COLORS['green'], true )
-	team.SetSpawnPoint( TEAM_RED, {"info_player_start"} )
+	team.SetUp(TEAM_RED, "Infected", TEAM_COLORS['green'], true)
+	team.SetSpawnPoint(TEAM_RED, {"info_player_start"})
 	
-	team.SetUp( TEAM_BLUE, "Survivors", TEAM_COLORS['blue'], true )
-	team.SetSpawnPoint( TEAM_BLUE, {"info_player_start"} )
+	team.SetUp(TEAM_BLUE, "Survivors", TEAM_COLORS['blue'], true)
+	team.SetSpawnPoint(TEAM_BLUE, {"info_player_start"})
 	
-	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
-	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_combine" } ) 
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
+	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_combine"}) 
 end

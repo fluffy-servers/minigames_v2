@@ -14,7 +14,7 @@ if CLIENT then
 
 	SWEP.IconLetter = 'j'
 	SWEP.IconFont = 'CSSelectIcons'
-    killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color( 255, 80, 0, 255 ))
+    killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color(255, 80, 0, 255))
 end
 SWEP.PrintName			= "Knife" 
 
@@ -119,8 +119,8 @@ function SWEP:PrimaryAttack()
 end
 
 function SWEP:SecondaryAttack()
-	self:SetNextPrimaryFire( CurTime() + self.Secondary.Delay )
-    self:SetNextSecondaryFire( CurTime() + self.Secondary.Delay )
+	self:SetNextPrimaryFire(CurTime() + self.Secondary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
     
     self.Owner:SetAnimation(PLAYER_ATTACK1)
     self:AttackTrace()

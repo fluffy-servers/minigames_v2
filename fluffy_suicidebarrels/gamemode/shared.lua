@@ -41,19 +41,19 @@ GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do wi
 GM.ForceFFAColors = true -- Force team gamemodes to use FFA colors
 
 function GM:CreateTeams()
-	if ( !GAMEMODE.TeamBased ) then return end
+	if (!GAMEMODE.TeamBased) then return end
 	
-	team.SetUp( TEAM_RED, "Barrels", Color( 255, 80, 80 ), true )
-	team.SetSpawnPoint( TEAM_RED, {"info_player_counterterrorist", "info_player_rebel"} )
+	team.SetUp(TEAM_RED, "Barrels", TEAM_COLORS['red'], true)
+	team.SetSpawnPoint(TEAM_RED, {"info_player_counterterrorist", "info_player_rebel"})
 	
-	team.SetUp( TEAM_BLUE, "Humans", Color( 80, 80, 255 ), true )
-	team.SetSpawnPoint( TEAM_BLUE, {"info_player_terrorist", "info_player_combine"} )
+	team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS['blue'], true)
+	team.SetSpawnPoint(TEAM_BLUE, {"info_player_terrorist", "info_player_combine"})
 	
-	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
-	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_combine" } ) 
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
+	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_combine"}) 
 end
 
-function GM:PlayerFootstep( ply, pos, foot, sound, volume, rf )
+function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
     if ply:Team() == TEAM_RED then return true end
 end
 

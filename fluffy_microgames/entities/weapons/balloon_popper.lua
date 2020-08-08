@@ -63,14 +63,14 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 		local mins = Vector(-10, -10, -10)
 		local maxs = Vector(10, 10, 10)
 		
-		local tr = util.TraceHull( {
+		local tr = util.TraceHull({
 			start = startpos,
 			endpos = endpos,
 			filter = self.Owner,
 			mins = mins,
 			maxs = maxs,
 			mask = MASK_SHOT_HULL
-		} )
+		})
 		
 		-- If the tracer hits a balloon - apply damage to it
 		if tr.Hit and !tr.HitWorld then

@@ -3,7 +3,7 @@ SWEP.PrintName = "Paintball SMG"
 
 if CLIENT then
 	SWEP.IconLetter = "/"
-    killicon.AddFont("paint_smg", "HL2MPTypeDeath", "/", Color( 255, 80, 0, 255 ))
+    killicon.AddFont("paint_smg", "HL2MPTypeDeath", "/", Color(255, 80, 0, 255))
     
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end

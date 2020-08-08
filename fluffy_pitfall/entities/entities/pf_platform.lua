@@ -20,21 +20,21 @@ local props = {
 }
 
 ENT.FallSounds = {
-    Sound( "doors/vent_open1.wav" ),
-    Sound( "doors/vent_open2.wav" ),
-    Sound( "doors/vent_open3.wav" )
+    Sound("doors/vent_open1.wav"),
+    Sound("doors/vent_open2.wav"),
+    Sound("doors/vent_open3.wav")
 }
 
 ENT.ActivateSounds = {
-    Sound( "physics/metal/sawblade_stick1.wav" ),
-    Sound( "physics/metal/sawblade_stick2.wav" ),
-    Sound( "physics/metal/sawblade_stick3.wav" ),
+    Sound("physics/metal/sawblade_stick1.wav"),
+    Sound("physics/metal/sawblade_stick2.wav"),
+    Sound("physics/metal/sawblade_stick3.wav"),
 }
 
 local gametypefunctions = {}
 gametypefunctions['square'] = function(p) p:SetModel("models/hunter/blocks/cube2x2x025.mdl") end
 gametypefunctions['circle'] = function(p) p:SetModel("models/hunter/tubes/circle2x2.mdl") end
-gametypefunctions['mixed'] = function(p) p:SetModel( table.Random( mixedmodels ) ); p:SetAngles( Angle(0, math.random(360), 0 ) ) end
+gametypefunctions['mixed'] = function(p) p:SetModel(table.Random(mixedmodels)); p:SetAngles(Angle(0, math.random(360), 0)) end
 gametypefunctions['hexagon'] = function(p) p:SetModel("models/hunter/geometric/hex1x1.mdl") end
 
 function ENT:Initialize()
@@ -47,13 +47,13 @@ function ENT:Initialize()
     self:SetColor(GAMEMODE.PColorStart)
     
     -- Initialize physics
-	self:PhysicsInit(SOLID_VPHYSICS )
+	self:PhysicsInit(SOLID_VPHYSICS)
 	self:SetMoveType(MOVETYPE_NONE)
 	self:SetSolid(SOLID_VPHYSICS)
 	
 	local phys = self:GetPhysicsObject()
 	if phys:IsValid() then
-		phys:EnableMotion( false )
+		phys:EnableMotion(false)
 		phys:Sleep()
 	end
 	

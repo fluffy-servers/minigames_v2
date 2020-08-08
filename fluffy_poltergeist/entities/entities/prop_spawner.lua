@@ -4,7 +4,7 @@ ENT.RespawnTime = 3
 
 function ENT:KeyValue(key, value)
 	if key == "frequency" then
-		self.RespawnTime = math.Clamp(tonumber( value ), 1, 60)
+		self.RespawnTime = math.Clamp(tonumber(value), 1, 60)
 	end
 end
 
@@ -21,7 +21,7 @@ function ENT:SpawnProp()
 	local phys = prop:GetPhysicsObject()
 	
 	if phys and phys:IsValid() then
-		phys:AddAngleVelocity( Vector( (VectorRand() * 200 ):Angle() ))
+		phys:AddAngleVelocity(Vector((VectorRand() * 200):Angle()))
 	end
 end
 

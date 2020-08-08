@@ -40,7 +40,7 @@ function GM:PreStartRound()
     hook.Call('PreRoundStart')
     
     -- Respawn everybody & freeze them until the round actually starts
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         v:Spawn()
         v:Freeze(true)
     end

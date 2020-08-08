@@ -8,7 +8,7 @@ if CLIENT then
 	surface.CreateFont("CSSelectIcons", {font="csd", size=72})
 
 
-	function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )
+	function SWEP:DrawWeaponSelection(x, y, wide, tall, alpha)
 		draw.SimpleText(self.IconLetter, self.IconFont, x + wide/2, y + tall/2.5, Color(241, 196, 15), TEXT_ALIGN_CENTER)
 	end
 end

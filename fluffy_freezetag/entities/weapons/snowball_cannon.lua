@@ -4,7 +4,7 @@ if CLIENT then
 	SWEP.Slot = 1
 	SWEP.SlotPos = 0
 	SWEP.IconLetter = "f"
-    killicon.AddFont("snowball_cannon", "HL2MPTypeDeath", "-", Color( 255, 80, 0, 255 ))
+    killicon.AddFont("snowball_cannon", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
 
 -- Primary fire damage and aim settings

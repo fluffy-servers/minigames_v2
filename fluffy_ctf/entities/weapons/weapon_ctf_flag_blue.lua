@@ -70,7 +70,7 @@ function SWEP:PrimaryAttack()
     end
     
     --Animate
-    self.Owner:SetAnimation( PLAYER_ATTACK1 )
+    self.Owner:SetAnimation(PLAYER_ATTACK1)
     
     --Damage entity
     if HitEnt and HitEnt:IsValid() then

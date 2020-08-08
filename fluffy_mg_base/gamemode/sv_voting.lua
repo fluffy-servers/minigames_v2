@@ -139,7 +139,7 @@ end
 net.Receive('MapVoteSendVote', function(len, ply)
     local vote = net.ReadInt(8)
     GAMEMODE:CountVote(ply, vote)
-end )
+end)
 
 -- Pick a winner from the results
 function GM:PickWinningVote()
@@ -217,7 +217,7 @@ hook.Add('PlayerDisconnected', 'RemoveRTVVotes', function(ply)
 		GAMEMODE.RTV[ply] = nil
 		GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 1) - 1
 	end
-end )
+end)
 
 hook.Add('PlayerSay', 'TrackRTV', function(ply, txt)
 	if txt == '!rtv' or txt == '/rtv' then

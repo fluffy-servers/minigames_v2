@@ -9,7 +9,7 @@ end
 
 function ENT:SpawnCrate()
 	if table.Count(ents.FindByClass("prop_phys*")) > 200 then return end
-	local prop = self.Entity:CreateProp( self:GetPos(), self:GetAngles(), self.Model)
+	local prop = self.Entity:CreateProp(self:GetPos(), self:GetAngles(), self.Model)
 	
 	local phys = prop:GetPhysicsObject()
 	if phys and phys:IsValid() then

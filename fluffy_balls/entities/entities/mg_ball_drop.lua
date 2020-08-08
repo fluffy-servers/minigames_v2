@@ -13,8 +13,8 @@ ENT.LifeTime = 15
 
 -- Setup networked variables
 function ENT:SetupDataTables()
-	self:NetworkVar("Float", 0, "BallSize", { KeyName = "ballsize", Edit = { type = "Float", min = self.MinSize, max = self.MaxSize, order = 1 } })
-	self:NetworkVar("Vector", 0, "BallColor", { KeyName = "ballcolor", Edit = { type = "VectorColor", order = 2 } })
+	self:NetworkVar("Float", 0, "BallSize", {KeyName = "ballsize", Edit = {type = "Float", min = self.MinSize, max = self.MaxSize, order = 1}})
+	self:NetworkVar("Vector", 0, "BallColor", {KeyName = "ballcolor", Edit = {type = "VectorColor", order = 2}})
 
 	self:NetworkVarNotify("BallSize", self.OnBallSizeChanged)
 end
@@ -45,7 +45,7 @@ function ENT:Initialize()
 end
 
 -- Borrowed from Sandbox implementation
-function ENT:RebuildPhysics( value )
+function ENT:RebuildPhysics(value)
 	self.ConstraintSystem = nil
 
 	local size = math.Clamp(value or self:GetBallSize(), self.MinSize, self.MaxSize) / 2.1

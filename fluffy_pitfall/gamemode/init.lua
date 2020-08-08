@@ -35,7 +35,7 @@ GM.BlockOptions = {
 }
 
 -- Players start with a platform breaker weapon
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:Give('weapon_platformbreaker')
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
@@ -43,12 +43,12 @@ function GM:PlayerLoadout( ply )
 end
 
 -- Handle spawns slightly differently due to the random platforms
-function GM:PlayerSelectSpawn( pl )
-    local spawns = ents.FindByClass( "info_player_start" )
+function GM:PlayerSelectSpawn(pl)
+    local spawns = ents.FindByClass("info_player_start")
     if(#spawns <= 0) then return false end
-    local selected = table.Random( spawns )
+    local selected = table.Random(spawns)
     while selected.spawnUsed do
-        selected = table.Random( spawns )
+        selected = table.Random(spawns)
     end
     
     selected.spawnUsed = true
@@ -121,19 +121,19 @@ end)
 
 -- Remove any leftover entities when the level is cleared
 function GM:ClearLevel()
-	for k,v in pairs(ents.FindByClass( "pf_platform" )) do
+	for k,v in pairs(ents.FindByClass("pf_platform")) do
 		v:Remove()
 	end
-	for k,v in pairs(ents.FindByClass( "info_player_start" )) do
+	for k,v in pairs(ents.FindByClass("info_player_start")) do
 		v:Remove()
 	end
-	for k,v in pairs(ents.FindByClass( "gmod_player_start" )) do
+	for k,v in pairs(ents.FindByClass("gmod_player_start")) do
 		v:Remove()
 	end
-	for k,v in pairs(ents.FindByClass( "info_player_terrorist" )) do
+	for k,v in pairs(ents.FindByClass("info_player_terrorist")) do
 		v:Remove()
 	end
-	for k,v in pairs(ents.FindByClass( "info_player_counterterrorist" )) do
+	for k,v in pairs(ents.FindByClass("info_player_counterterrorist")) do
 		v:Remove()
 	end
 end
@@ -185,7 +185,7 @@ function GM:RandomPlatforms(pos)
     for level = 1,levels do
         for row = 1, rows do
             for col = 1, columns do
-                self:SpawnPlatform( Vector(px, py, pz), (level == 1) )
+                self:SpawnPlatform(Vector(px, py, pz), (level == 1))
                 py = py + size
             end
             
@@ -222,10 +222,10 @@ end
 -- Spawn a platform at a given position
 function GM:SpawnPlatform(pos, addspawn)
 	-- Create the platform entity
-	local prop = ents.Create( "pf_platform" )
+	local prop = ents.Create("pf_platform")
 	if not IsValid(prop) then return end
-	prop:SetAngles( Angle( 0, 0, 0 ) )
-	prop:SetPos( pos + Vector(0, 0, math.random()*math.random(-2, 2)) )
+	prop:SetAngles(Angle(0, 0, 0))
+	prop:SetPos(pos + Vector(0, 0, math.random()*math.random(-2, 2)))
 	prop:Spawn()
 	prop:Activate()
     

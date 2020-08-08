@@ -4,7 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Appropiate weapon stuff
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     ply:StripAmmo()
     

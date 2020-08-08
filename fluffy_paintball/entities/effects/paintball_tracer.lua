@@ -1,7 +1,7 @@
 AddCSLuaFile()
 EFFECT.Mat = Material("sprites/sent_ball")
 
-function EFFECT:Init( data )
+function EFFECT:Init(data)
     -- Get data from the weapon
     self.Position = data:GetStart()
     self.Weapon = data:GetEntity()

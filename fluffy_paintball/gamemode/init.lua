@@ -5,30 +5,30 @@ include('shared.lua')
 
 -- Called each time a player spawns
 -- Overrides the base gamemode stuff
-function GM:PlayerSpawn( ply )
+function GM:PlayerSpawn(ply)
     local state = GAMEMODE:GetRoundState()
     
     -- If elimination, block respawns during round
     if state != 'PreRound' and (GAMEMODE.Elimination and not ply.DeathPos) then
-        self:PlayerSpawnAsSpectator( ply )
+        self:PlayerSpawnAsSpectator(ply)
         return
     end
     
     -- Spectators should be spawned as spectators (duh)
     if ply:Team() == TEAM_SPECTATOR then
-        self:PlayerSpawnAsSpectator( ply )
+        self:PlayerSpawnAsSpectator(ply)
         return
     end
     
     -- Make sure players have a team
-    if GAMEMODE.TeamBased and ( ply:Team() == TEAM_UNASSIGNED or ply:Team() == 0 ) then
-        self:PlayerSpawnAsSpectator( ply )
+    if GAMEMODE.TeamBased and (ply:Team() == TEAM_UNASSIGNED or ply:Team() == 0) then
+        self:PlayerSpawnAsSpectator(ply)
         return
     end
     
     -- Call functions to setup model and loadout
-	hook.Call('PlayerLoadout', GAMEMODE, ply )
-    hook.Call('PlayerSetModel', GAMEMODE, ply )
+	hook.Call('PlayerLoadout', GAMEMODE, ply)
+    hook.Call('PlayerSetModel', GAMEMODE, ply)
     ply:SetupHands()
     
     -- Exit out of spectate

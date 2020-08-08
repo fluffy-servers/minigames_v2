@@ -126,7 +126,7 @@ surface.CreateFont("FS_L64", {
 
 -- Font for CSS Kill Icons
 -- Needed for some weapons
-surface.CreateFont( "CSKillIcons", {
+surface.CreateFont("CSKillIcons", {
   font = "csd",
   size = 100,
   weight = 500,

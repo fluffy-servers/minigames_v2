@@ -51,7 +51,7 @@ function SWEP:PrimaryAttack()
         end
     end
     
-    self.Owner:ViewPunch( Angle( -self.Primary.Recoil, math.Rand(-1,1)*self.Primary.Recoil, 0))
+    self.Owner:ViewPunch(Angle(-self.Primary.Recoil, math.Rand(-1,1)*self.Primary.Recoil, 0))
     self:SetNextPrimaryFire(CurTime()+ self.Primary.Delay)
 end
 
@@ -65,25 +65,25 @@ function SWEP:Knockback()
     --[[
 	local tr = {}
 	tr.start = self.Owner:GetShootPos()
-	tr.endpos = self.Owner:GetShootPos() + ( self.Owner:GetAimVector() * 100 )
-	tr.filter = { self.Owner }
+	tr.endpos = self.Owner:GetShootPos() + (self.Owner:GetAimVector() * 100)
+	tr.filter = {self.Owner }
 	
-	for k,v in pairs(ents.FindByClass( "pf_platform" )) do
+	for k,v in pairs(ents.FindByClass("pf_platform")) do
 		table.insert(tr.filter,v)
 	end
 	tr.mask = MASK_SHOT
 	
-	local trace = util.TraceLine( tr )
+	local trace = util.TraceLine(tr)
     --]]
     
     local ents = ents.FindInCone(self.Owner:GetShootPos(), self.Owner:GetAimVector(), 100, 0.3)
 	
 	local effectdata = EffectData()
-	effectdata:SetStart( self.Owner:GetShootPos() )
-	effectdata:SetEntity( self.Weapon )
-	effectdata:SetOrigin( self.Owner:GetShootPos() + self.Owner:GetAimVector()*150 )
-	effectdata:SetAttachment( 1 )
-	util.Effect( "mg_tracer", effectdata )
+	effectdata:SetStart(self.Owner:GetShootPos())
+	effectdata:SetEntity(self.Weapon)
+	effectdata:SetOrigin(self.Owner:GetShootPos() + self.Owner:GetAimVector()*150)
+	effectdata:SetAttachment(1)
+	util.Effect("mg_tracer", effectdata)
     
     
     for k,v in pairs(ents) do
@@ -120,5 +120,5 @@ function SWEP:Knockback()
         end
     ]]--
     
-    self.Owner:SetAnimation( PLAYER_ATTACK1 )
+    self.Owner:SetAnimation(PLAYER_ATTACK1)
 end

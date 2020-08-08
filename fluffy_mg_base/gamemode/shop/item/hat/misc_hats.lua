@@ -10,7 +10,7 @@ ITEM.Modify = {
 	offset = Vector(-3, 0, -3.5),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -24,9 +24,9 @@ ITEM.Modify = {
 	offset = Vector(-3, 0, -3.5),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.VanillaID = 'deadhead'
@@ -37,11 +37,11 @@ ITEM.Slot = 'head'
 
 ITEM.Modify = {
 	scale = 1.6,
-	offset = Vector( -2.5, 0, 0 ),
-	angle = Angle( 0, -15, 0 )
+	offset = Vector(-2.5, 0, 0),
+	angle = Angle(0, -15, 0)
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -56,7 +56,7 @@ ITEM.Modify = {
 	offset = Vector(-1.4, 0, 8.5),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -71,7 +71,7 @@ ITEM.Modify = {
 	angle = Angle(90, 80, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -86,4 +86,4 @@ ITEM.Modify = {
 	angle = Angle(-4, 0, 0),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)

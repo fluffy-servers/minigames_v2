@@ -126,16 +126,16 @@ GM.DefaultProps['CubesAndSpheres'] = {
 
 GM.MapInfo = {}
 GM.MapInfo['inc_duo'] = {
-    endpos = Vector( -1650, 5950, 6656 ),
+    endpos = Vector(-1650, 5950, 6656),
     distance = 9000
 }
 
 GM.MapInfo['inc_rectangular'] = {
-    endpos = Vector( 158, 1027, 3815 ),
+    endpos = Vector(158, 1027, 3815),
     distance = 8420
 }
 
 GM.MapInfo['inc_linear'] = {
-    endpos = Vector( 0, 4991, 3456 ),
+    endpos = Vector(0, 4991, 3456),
     distance = 12500
 }

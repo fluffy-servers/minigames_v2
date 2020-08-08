@@ -11,7 +11,7 @@ ITEM.Modify = {
     offset = Vector(-4.6, 0.7, 3.2),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -27,7 +27,7 @@ ITEM.Modify = {
     angle = Angle(8, 8, -4),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -41,7 +41,7 @@ ITEM.Modify = {
     offset = Vector(10, -1.4, -20),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}
@@ -56,4 +56,4 @@ ITEM.Modify = {
     angle = Angle(8, 8, -4),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)

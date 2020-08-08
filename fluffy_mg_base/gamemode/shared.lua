@@ -148,14 +148,14 @@ function GM:CreateTeams()
 	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
 	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
 
-	team.SetUp(TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true)
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
 -- Get a table of all alive players
 function GM:GetAlivePlayers()
     local tbl = {}
-    for k,v in pairs(player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
     end
     
@@ -171,7 +171,7 @@ end
 -- Convenience function to get number of non-spectators
 function GM:NumNonSpectators()
     local num = 0
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         if GAMEMODE.TeamBased then
             if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then num = num + 1 end
         else

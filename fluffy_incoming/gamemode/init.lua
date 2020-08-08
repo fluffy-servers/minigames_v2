@@ -11,7 +11,7 @@ function GM:GetWinningPlayer()
 end
 
 -- No weapons
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     --ply:Give('weapon_crowbar')
 end
 
@@ -37,10 +37,10 @@ hook.Add("Tick", "TickPropSpawn", function()
     
 	if INCPropSpawnTimer < CurTime() then
         -- Spawn a prop at every spawner
-		for k, v in pairs( ents.FindByClass('inc_prop_spawner') ) do
+		for k, v in pairs(ents.FindByClass('inc_prop_spawner')) do
 			local ent = ents.Create('prop_physics')
 			ent:SetModel(props[math.random(1, #props)])
-			ent:SetPos( v:GetPos() )
+			ent:SetPos(v:GetPos())
 			ent:Spawn()
 			ent:GetPhysicsObject():SetMass(40000)
             
@@ -52,7 +52,7 @@ hook.Add("Tick", "TickPropSpawn", function()
         
         INCPropSpawnTimer = CurTime() + delay
 	end
-end )
+end)
 
 -- Randomly pick a group of props
 hook.Add('PreRoundStart', 'IncomingPropsChange', function()
@@ -61,14 +61,14 @@ hook.Add('PreRoundStart', 'IncomingPropsChange', function()
     if GAMEMODE.MapInfo[game.GetMap()].categories then
         category = table.Random(GAMEMODE.MapInfo[game.GetMap()].categories)
     else
-        category = table.Random( table.GetKeys( GAMEMODE.DefaultProps ) )
+        category = table.Random(table.GetKeys(GAMEMODE.DefaultProps))
     end
     GAMEMODE.CurrentPropsCategory = category
     
     for k,v in pairs(player.GetAll()) do
         v.BestDistance = nil
     end
-end )
+end)
 
 -- Get the distance the player has to the end
 -- This function also tracks the current best distance
@@ -130,8 +130,8 @@ function GM:IncomingVictory(ply)
 end
 
 -- Network resources
-function IncludeResFolder( dir )
-	local files = file.Find( dir.."*", "GAME" )
+function IncludeResFolder(dir)
+	local files = file.Find(dir.."*", "GAME")
 	local FindFileTypes = 
 	{
 		".mdl",
@@ -146,10 +146,10 @@ function IncludeResFolder( dir )
 		".mp3",
 	}
 	
-	for k, v in pairs( files ) do
-		for k2, v2 in pairs( FindFileTypes ) do
-			if ( string.find( v, v2 ) ) then
-				resource.AddFile( dir .. v )
+	for k, v in pairs(files) do
+		for k2, v2 in pairs(FindFileTypes) do
+			if (string.find(v, v2)) then
+				resource.AddFile(dir .. v)
 			end
 		end
 	end
@@ -160,11 +160,11 @@ hook.Add('RegisterStatsConversions', 'AddIncomingStatConversions', function()
     GAMEMODE:AddStatConversion('Distance', 'Distance Travelled', 0.01)
 end)
 
-IncludeResFolder( "materials/models/clannv/incoming/" )
-IncludeResFolder( "models/clannv/incoming/box/" )
-IncludeResFolder( "models/clannv/incoming/cone/" )
-IncludeResFolder( "models/clannv/incoming/cylinder/" )
-IncludeResFolder( "models/clannv/incoming/hexagon/" )
-IncludeResFolder( "models/clannv/incoming/pentagon/" )
-IncludeResFolder( "models/clannv/incoming/sphere/" )
-IncludeResFolder( "models/clannv/incoming/triangle/" )
+IncludeResFolder("materials/models/clannv/incoming/")
+IncludeResFolder("models/clannv/incoming/box/")
+IncludeResFolder("models/clannv/incoming/cone/")
+IncludeResFolder("models/clannv/incoming/cylinder/")
+IncludeResFolder("models/clannv/incoming/hexagon/")
+IncludeResFolder("models/clannv/incoming/pentagon/")
+IncludeResFolder("models/clannv/incoming/sphere/")
+IncludeResFolder("models/clannv/incoming/triangle/")

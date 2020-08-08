@@ -42,7 +42,7 @@
 -- 
 -- function MOD:Initialize()
 --     spawnNPCs()
---     GAMEMODE:Announce("Who's who?" , "Kill the spys!")
+--     GAMEMODE:Announce("Who's who?", "Kill the spys!")
 -- end
 -- 
 -- function MOD:Loadout(ply)

@@ -132,7 +132,7 @@ function GM:GetWinningPlayer()
     -- Loop through all players and return the one with the most balls
     local bestscore = 0
     local bestplayer = nil
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         local frags = v:GetNWInt("KingPoints")
         if frags > bestscore then
             bestscore = frags

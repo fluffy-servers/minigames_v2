@@ -1,12 +1,12 @@
 -- Return a weighted random result from a table
-local function PickWeightedRandom( tbl )
+local function PickWeightedRandom(tbl)
 	local sum = 0
-	for k, v in pairs( tbl ) do
+	for k, v in pairs(tbl) do
 		sum = sum + v
 	end
 	
 	local select = math.random() * sum
-	for k, v in pairs( tbl ) do
+	for k, v in pairs(tbl) do
 		select = select - v
 		if select < 0 then return k end
 	end

@@ -1,7 +1,7 @@
 include('shared.lua')
 
-surface.CreateFont('GunGameFont', { font='HL2MP', size=32 })
-surface.CreateFont('GunGameFontBig', { font='HL2MP', size=72 })
+surface.CreateFont('GunGameFont', {font='HL2MP', size=32 })
+surface.CreateFont('GunGameFontBig', {font='HL2MP', size=72 })
 
 GM.ScoringPaneEnabled = true
 

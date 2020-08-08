@@ -7,7 +7,7 @@ GM.CRATE_DELAY = 3
 GM.CHECK_DELAY = 5
 GM.KillValue = 3
 
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:StripWeapons()
     ply:Give("weapon_crowbar")

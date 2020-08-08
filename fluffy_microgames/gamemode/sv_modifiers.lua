@@ -179,7 +179,7 @@ function GM:GetWinningPlayer(modifier)
 
     -- Check for a lone survivor, and return them
     if GAMEMODE:GetNumberAlive() <= 1 then
-        for k,v in pairs( player.GetAll() ) do
+        for k,v in pairs(player.GetAll()) do
             if v:Alive() and not v.Spectating then
                 return v
             end

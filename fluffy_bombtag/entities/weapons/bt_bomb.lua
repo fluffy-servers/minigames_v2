@@ -4,7 +4,7 @@ if CLIENT then
 	SWEP.IconLetter = 'G'
 	SWEP.IconFont = 'CSSelectIcons'
 
-    killicon.AddFont("bt_bomb", "HL2MPTypeDeath", "*", Color( 255, 80, 0, 255 ))
+    killicon.AddFont("bt_bomb", "HL2MPTypeDeath", "*", Color(255, 80, 0, 255))
 end
 
 SWEP.HoldType       = "slam"
@@ -23,11 +23,11 @@ SWEP.NextTick   = 0
 SWEP.EndingTime = 0
 
 function SWEP:Initialize()
-	self:SetWeaponHoldType( self.HoldType )
+	self:SetWeaponHoldType(self.HoldType)
 end
 
 function SWEP:Deploy()
-	self.Weapon:SendWeaponAnim( ACT_VM_DRAW )
+	self.Weapon:SendWeaponAnim(ACT_VM_DRAW)
 	self.Weapon:EmitSound(self.Primary.Deploy)
 	
 	self.Weapon:SetNextPrimaryFire(CurTime() + 0.5)

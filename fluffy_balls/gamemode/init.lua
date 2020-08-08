@@ -41,8 +41,8 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     for i=1,balls do
 		local b = ents.Create('mg_ball_drop')
 		local p = ply:GetPos() + Vector(0, 0, 50)
-		local v = Vector( math.random(-40, 40), math.random(-40, 40), math.random(-40, 40) )
-		local vel = Vector( math.random(-30, 50), math.random(-30, 50), math.random(-20, 80) )
+		local v = Vector(math.random(-40, 40), math.random(-40, 40), math.random(-40, 40))
+		local vel = Vector(math.random(-30, 50), math.random(-30, 50), math.random(-20, 80))
 		b:SetPos(p + v)
 		b:SetVelocity(vel)
 		b:Spawn()
@@ -76,7 +76,7 @@ hook.Add('PreRoundStart', 'ResetBalls', function()
 	for k,v in pairs(player.GetAll()) do
 		v:SetNWInt("Balls", 0)
 	end
-end )
+end)
 
 -- The winning player is the player with the most balls at the end of a round
 function GM:GetWinningPlayer()

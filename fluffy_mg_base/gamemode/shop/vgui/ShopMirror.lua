@@ -17,7 +17,7 @@ end
 
 function PANEL:LayoutEntity(ent)
     self:RunAnimation()
-    ent:SetEyeTarget( Vector(24, 0, 64) )
+    ent:SetEyeTarget(Vector(24, 0, 64))
 
     if not self.Angles then
         self.Angles = Angle(0, 0, 0)
@@ -37,8 +37,8 @@ function PANEL:LayoutEntity(ent)
 end
 
 function PANEL:SetCamera(height, distance)
-    self:SetCamPos( Vector(distance or 0, 0, height) )
-    self:SetLookAt( Vector(0, 0, height) )
+    self:SetCamPos(Vector(distance or 0, 0, height))
+    self:SetLookAt(Vector(0, 0, height))
 end
 
 function PANEL:SetAngle(angle)
