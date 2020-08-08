@@ -42,7 +42,9 @@ function ENT:Break(force, attacker)
     self:Remove()
 
     -- Award points as required
-    attacker:AddFrags(1)
+    if attacker:IsPlayer() then
+        attacker:AddFrags(1)
+    end
     team.AddRoundScore(self.Team, -1)
     GAMEMODE:CheckRoundEnd()
 end
