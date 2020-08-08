@@ -79,11 +79,11 @@ end
 -- Handle adrenaline usage
 function SWEP:Adrenaline()
     -- Speed boost
-    self.Owner:SetWalkSpeed(400)
-    self.Owner:SetRunSpeed(400)
+    self.Owner:SetWalkSpeed(475)
+    self.Owner:SetRunSpeed(475)
 
     -- Set FOV
-    GAMEMODE:SetAdrenalineFOV(self.Owner, 100)
+    GAMEMODE:SetAdrenalineFOV(self.Owner, 115)
 
     -- Adrenaline lasts for 8 seconds
     local ply = self.Owner

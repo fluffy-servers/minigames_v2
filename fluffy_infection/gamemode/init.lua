@@ -24,21 +24,25 @@ function GM:PlayerLoadout( ply )
         GAMEMODE:SetHumanSpeed(ply)
         GAMEMODE:SetAdrenalineFOV(ply, 0)
         ply:SetBloodColor(BLOOD_COLOR_RED)
+        ply:SetJumpPower(200)
     elseif ply:Team() == TEAM_RED then
         -- Infected
         -- Initial infected are stronger but slower
+        local color = team.GetColor(TEAM_RED)
+        ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
         ply:SetBloodColor(BLOOD_COLOR_GREEN)
+
         if ply.InitialHunter then
-            ply:SetMaxHealth(75)
-            ply:SetHealth(75)
-            ply:SetRunSpeed(305)
-            ply:SetWalkSpeed(255)
+            ply:SetMaxHealth(85)
+            ply:SetHealth(85)
         else
             ply:SetMaxHealth(50)
             ply:SetHealth(50)
-            ply:SetRunSpeed(325)
-            ply:SetWalkSpeed(325)
         end
+
+        ply:SetRunSpeed(400)
+        ply:SetWalkSpeed(400)
+        ply:SetJumpPower(300)
         ply:Give('weapon_fists')
     end
 end

@@ -6,7 +6,7 @@ if CLIENT then
 	
 	SWEP.IconLetter = '-'
 	SWEP.IconFont = 'HL2MPTypeDeath'
-    killicon.AddFont("weapon_mg_pistol", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
+    killicon.AddFont("inf_magnum", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
 SWEP.PrintName = "Magnum"
 
