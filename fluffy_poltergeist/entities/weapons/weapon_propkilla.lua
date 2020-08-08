@@ -36,6 +36,33 @@ SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Ammo = 'none'
 
+-- We need to be certain about the weapon so we use this to set the bullet attacker as well
+-- Welcome to hackland
+function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
+	-- Setup the bullet table and fire it
+	local scale = aimcone
+	local bullet = {}
+    bullet.Attacker = self
+	bullet.Num 		= numbullets
+	bullet.Src 		= self.Owner:GetShootPos()
+	bullet.Dir 		= self.Owner:GetAimVector()
+	bullet.Spread 	= Vector(scale, scale, 0)
+	bullet.Force	= math.Round(damage/10)
+	bullet.Damage	= math.Round(damage)
+	bullet.AmmoType = self.Primary.Ammo
+	bullet.Tracer = 1
+	bullet.TracerName = tracer
+    if callback then
+        bullet.Callback = callback
+    end
+	self.Owner:FireBullets(bullet)
+    
+	-- Make the firing look nice
+	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+	--self.Owner:MuzzleFlash()
+	self.Owner:SetAnimation(PLAYER_ATTACK1)
+end
+
 function SWEP:CanPrimaryAttack()
     return true
 end

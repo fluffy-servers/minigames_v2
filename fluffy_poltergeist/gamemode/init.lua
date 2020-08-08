@@ -16,7 +16,7 @@ function GM:PlayerLoadout(ply)
         ply.SwapTime = 0
         ply.AttackTime = 0
         ply.Speed = 10
-        ply:SpawnProp(100)
+        ply:PossessProp(100)
     end
 end
 
@@ -34,15 +34,15 @@ function GM:PreStartRound()
     end
     
     -- Set global round data
-    SetGlobalInt('RoundNumber', round + 1 )
-    SetGlobalString( 'RoundState', 'PreRound' )
-	SetGlobalFloat( 'RoundStart', CurTime() )
+    SetGlobalInt('RoundNumber', round + 1)
+    SetGlobalString('RoundState', 'PreRound')
+	SetGlobalFloat('RoundStart', CurTime())
     hook.Call('PreRoundStart')
     
     -- Respawn everybody & freeze them until the round actually starts
     for k,v in pairs( player.GetAll() ) do
         v:Spawn()
-        v:Freeze( true )
+        v:Freeze(true)
     end
     
     -- Start the round after a short cooldown
@@ -65,7 +65,7 @@ end)
 
 
 -- Pick player models
-function GM:PlayerSetModel( ply )
+function GM:PlayerSetModel(ply)
     if ply:Team() == TEAM_RED then
         local color = team.GetColor(TEAM_RED)
         ply:SetModel("models/props_junk/wood_crate001a.mdl")
@@ -82,7 +82,7 @@ end
 
 -- Fix a spawning bug for Poltergeists
 hook.Add('RoundStart', 'FixGhostBug', function()
-    for k,v in pairs(team.GetPlayers(TEAM_RED )) do
+    for k,v in pairs(team.GetPlayers(TEAM_RED)) do
         v:Spawn()
     end
 end)
@@ -110,8 +110,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
         end
 
     elseif string.find(ent:GetClass(), "prop_phys") then
-        -- Only humans can break props
-        if not attacker:IsPlayer() then
+        -- Only the gun can stop props
+        if not attacker:IsWeapon() then
             return true
         end
 
