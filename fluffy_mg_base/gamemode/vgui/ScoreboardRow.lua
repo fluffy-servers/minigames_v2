@@ -3,6 +3,74 @@
     This is designed to be used and extended for use anywhere where a player row is needed
     Scoreboard, end game screen, team menu, etc.
 --]]
+local name_color_funcs = {}
+name_color_funcs['G'] = function(name, cd)
+    local new = {}
+
+    -- Do a cool gradient
+    for i=1,#name do
+        local char = name[i]
+        local n = i/(#name)
+
+        local r = cd[1] + (cd[4] - cd[1]) * n
+        local g = cd[2] + (cd[5] - cd[2]) * n
+        local b = cd[3] + (cd[6] - cd[3]) * n
+        table.insert(new, Color(r, g, b))
+        table.insert(new, char)
+    end
+
+    return new
+end
+
+name_color_funcs['H'] = function(name, cd)
+    local new = {}
+
+    -- Do a cool rainbow effect
+    for i=1,#name do
+        local char = name[i]
+        local n = (i-1)/(#name)
+
+        local col = HSVToColor(cd[1] + (cd[2]-cd[1]) *n, 1, 1)
+        table.insert(new, col)
+        table.insert(new, char)
+    end
+
+    return new
+end
+
+name_color_funcs['M'] = function(name, cd)
+    local new = {}
+
+    local stops = math.floor(#cd/3) - 1
+    local size = 1/stops
+
+    for i=1,#name do
+        local char = name[i]
+        local n = (i-1)/#name
+
+        for i=1,stops do
+            local s = i/stops
+
+            if n <= s then
+                -- Use the sth stop of the gradient
+                local stop = (i-1)*3
+                local sn = (size - (s - n))/size
+
+                local r = cd[stop+1] + (cd[stop+4] - cd[stop+1]) * sn
+                local g = cd[stop+2] + (cd[stop+5] - cd[stop+2]) * sn
+                local b = cd[stop+3] + (cd[stop+6] - cd[stop+3]) * sn
+
+                table.insert(new, Color(r, g, b))
+                table.insert(new, char)
+                break
+            end
+        end
+    end
+
+    return new
+end
+
+
 PANEL = {}
 
 PANEL.Icons = {
@@ -65,8 +133,33 @@ function PANEL:GetShortName(ply, len)
     return string.sub(ply:Nick() or '<disconnected>', 1, len or 16)
 end
 
+function PANEL:DrawPlayerName(ply, x, y)
+    local cd = ply:GetNWString('NameColor', nil) 
+    local name = self:GetShortName(ply, 20)
+    local tbl = {name}
+    if cd and cd != '' and cd != ' ' then
+        local mode = cd[1]
+        cd = string.sub(cd, 2)
+        cd = string.Split(cd, ',')
+        if name_color_funcs[mode] then tbl = name_color_funcs[mode](name, cd) end
+    end
+
+    -- Draw name shadow
+    local xx = x
+    local c = GAMEMODE.FCol2
+    for k,v in pairs(tbl) do
+        if IsColor(v) then
+            c = v
+            continue
+        end
+        local w = draw.SimpleText(v, 'FS_32', xx, y, c)
+        xx = xx + w
+    end
+end
+
 function PANEL:Init()
     self.AvatarButton = self:Add('DButton')
+    self.AvatarButton:SetText('')
     self.AvatarButton:SetSize(48, 48)
     self.AvatarButton:SetPos(2, 2)
     self.AvatarButton.DoClick = function() self.Player:ShowProfile() end
@@ -144,7 +237,8 @@ function PANEL:Paint(w, h)
     end
 
     -- Draw player name
-	draw.SimpleText(self:GetShortName(self.Player, 20), 'FS_32', 76, 12, GAMEMODE.FCol2)
+    self:DrawPlayerName(self.Player, 76, 12)
+	-- draw.SimpleText(self:GetShortName(self.Player, 20), 'FS_32', 76, 12, GAMEMODE.FCol2)
 
     -- Other information is handled in a wack fashion
     for k,v in pairs(self.CurrentModules) do
