@@ -18,7 +18,7 @@ GM.RoundTime = 120
 
 GM.RoundType = 'timed'
 GM.GameTime = 500
-GM.HUDStyle = HUD_STYLE_TIMER
+GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
 
 GM.ThirdpersonEnabled = true
 GM.DeathSounds = true

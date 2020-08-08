@@ -23,6 +23,10 @@ GM.RoundTime = 90      -- Seconds each round lasts for
 
 GM.ThirdpersonEnabled = true
 
+GM.RoundType = 'timed'
+GM.GameTime = 500
+GM.HUDStyle = HUD_STYLE_CLOCK_TIMER_ALIVE
+
 function GM:Initialize()
 
 end

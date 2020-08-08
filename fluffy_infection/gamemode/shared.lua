@@ -29,6 +29,8 @@ GM.RoundTime = 90 -- How long should each round go for?
 GM.CanSuicide = false -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do with this
 
+GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
+
 function GM:CreateTeams()
 	if (!GAMEMODE.TeamBased) then return end
 	

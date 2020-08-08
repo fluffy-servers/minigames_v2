@@ -39,6 +39,8 @@ GM.ThirdPersonEnabled = false   -- This gamemode overrides some functions to do 
 GM.SpawnProtection = true       -- Spawn protection enabled
 GM.SpawnProtectionTime = 5     -- Increased spawn protection time for runners
 
+GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
+
 function GM:CreateTeams()
 	if (!GAMEMODE.TeamBased) then return end
 	
