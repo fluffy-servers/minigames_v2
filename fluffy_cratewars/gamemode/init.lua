@@ -12,8 +12,12 @@ function GM:PlayerLoadout( ply )
     ply:StripWeapons()
     ply:Give("weapon_crowbar")
     ply:Give("weapon_mg_pistol")
-    ply:GiveAmmo(512, "Pistol", true)
     ply:Give("weapon_physcannon")
+    ply:GiveAmmo(512, "Pistol", true)
+
+    ply:SetRunSpeed(400)
+    ply:SetWalkSpeed(300)
+    ply:SetJumpPower(250)
 end
 
 function GM:CheckRoundEnd()
