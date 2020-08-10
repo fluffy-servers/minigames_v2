@@ -159,10 +159,12 @@ end
 GM.HUDStyleFuncs = {}
 
 GM.HUDStyleFuncs[HUD_STYLE_DEFAULT] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_TIMER] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     if GAMEMODE.RoundType != 'timed' and GAMEMODE.RoundType != 'timed_endless' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetGameTimeRemainingFormatted())
 end
@@ -207,16 +209,19 @@ GM.HUDStyleFuncs[HUD_STYLE_TEAM_SCORE_SINGLE] = function()
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
     GAMEMODE:DrawTeamClockScores(team.GetRoundScore)
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE_ROUNDS] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
     GAMEMODE:DrawTeamClockScores(team.GetScore)
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
 
     -- Draw blue team score underneath
@@ -229,6 +234,7 @@ GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE] = function()
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_ALIVE] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetRoundInfo())
 
     local alive
@@ -252,6 +258,7 @@ GM.HUDStyleFuncs[HUD_STYLE_CLOCK_ALIVE] = function()
 end
 
 GM.HUDStyleFuncs[HUD_STYLE_CLOCK_TIMER_ALIVE] = function()
+    if GAMEMODE:GetRoundState() == 'EndRound' then return end
     GAMEMODE:DrawClock(GAMEMODE:GetGameTimeRemainingFormatted())
 
     local alive
