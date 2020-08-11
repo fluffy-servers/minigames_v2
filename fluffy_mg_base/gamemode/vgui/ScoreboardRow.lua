@@ -80,7 +80,7 @@ function PANEL:DrawPlayerName(ply, x, y)
     local xx = x
     local c = GAMEMODE.FCol2
     for k,v in pairs(tbl) do
-        if IsColor(v) then
+        if IsColor(v) or istable(v) then
             c = v
             continue
         end
