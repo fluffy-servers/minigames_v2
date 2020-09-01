@@ -10,10 +10,10 @@ end
 /*---------------------------------------------------------
    Name: Touch
 ---------------------------------------------------------*/
-function ENT:StartTouch( entity )
-	if IsValid( self ) && entity:IsPlayer() then
+function ENT:StartTouch(entity)
+	if IsValid(self) && entity:IsPlayer() then
         self:Remove()
-		GAMEMODE:EndRound( entity )
+		GAMEMODE:EndRound(entity)
 	end
 end
 
@@ -21,7 +21,7 @@ end
    Name: PassesTriggerFilters
    Desc: Return true if this object should trigger us
 ---------------------------------------------------------*/
-function ENT:PassesTriggerFilters( entity )
+function ENT:PassesTriggerFilters(entity)
 	return true
 end
 
@@ -29,7 +29,7 @@ end
    Name: KeyValue
    Desc: Called when a keyvalue is added to us
 ---------------------------------------------------------*/
-function ENT:KeyValue( key, value )
+function ENT:KeyValue(key, value)
 end
 
 /*---------------------------------------------------------

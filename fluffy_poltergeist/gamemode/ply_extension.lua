@@ -1,6 +1,33 @@
 local meta = FindMetaTable("Player")
 if not meta then return end
 
+-- Possess a prop, or spawn a new one
+function meta:PossessProp(health)
+    if CLIENT then return end
+    if not GAMEMODE:InRound() then return end
+
+    -- Five attempts to find a prop without an owner
+    local props = ents.FindByClass("prop_physics")
+    local found = false
+    for i=1,5 do
+        local test = table.Random(props)
+        if not IsValid(test:GetOwner()) then
+            found = test
+            break
+        end
+    end
+
+    -- Posess the found prop or spawn a new one
+    if found then
+        found:SetHealth(health)
+        timer.Simple(1/60, function()
+            self:SetProp(found)
+        end)
+    else
+        self:SpawnProp(health)
+    end
+end
+
 -- Spawn the player as a prp with a given health
 function meta:SpawnProp(health)
     if CLIENT then return end
@@ -11,9 +38,9 @@ function meta:SpawnProp(health)
     prop:SetModel(table.Random(GAMEMODE.PropModels))
     prop:Spawn()
 
-    local health = 100
+    -- Small props have only half health to compensate
     if prop:GetPhysicsObject():GetMass() < 100 then
-        health = 50
+        health = math.floor(health / 2)
     end
     prop:SetHealth(health)
     self:SetMaxHealth(health)
@@ -95,10 +122,10 @@ hook.Add('Move', 'GhostMove', function(ply, mv)
 
     -- Handle horizontal movement
     if ply:KeyDown(IN_MOVELEFT) then
-        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed )
+        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed)
     elseif ply:KeyDown(IN_MOVERIGHT) then
         ang.y = ang.y + 180
-        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed )
+        phys:ApplyForceCenter(ang:Forward() * phys:GetMass() * ply.Speed)
     end
 end)
 

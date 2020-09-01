@@ -11,4 +11,4 @@ ITEM.Modify = {
 	angle = Angle(0, 0, -90),
 }
 
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)

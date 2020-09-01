@@ -18,7 +18,7 @@ GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 
 -- Reset the map before the round starts
 function GM:PreStartRound()
-    local round = GetGlobalInt('RoundNumber', 0)
+    local round = GAMEMODE:GetRoundNumber()
 
     -- Restore everyone back to the generic region (if applicable)
     if GAMEMODE.CurrentRegion then
@@ -59,7 +59,7 @@ function GM:PreStartRound()
     end
     
     -- Start the round after a short cooldown
-    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end )
+    timer.Simple(GAMEMODE.RoundCooldown, function() GAMEMODE:StartRound() end)
 end
 
 -- Pick a new modifier each round

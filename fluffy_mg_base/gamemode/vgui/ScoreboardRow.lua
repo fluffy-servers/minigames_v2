@@ -65,8 +65,33 @@ function PANEL:GetShortName(ply, len)
     return string.sub(ply:Nick() or '<disconnected>', 1, len or 16)
 end
 
+function PANEL:DrawPlayerName(ply, x, y)
+    local cd = ply:GetNWString('NameColor', nil) 
+    local name = self:GetShortName(ply, 20)
+    local tbl = {name}
+    if cd and cd != '' and cd != ' ' then
+        local mode = cd[1]
+        cd = string.sub(cd, 2)
+        cd = string.Split(cd, ',')
+        if name_color_funcs[mode] then tbl = name_color_funcs[mode](name, cd) end
+    end
+
+    -- Draw name shadow
+    local xx = x
+    local c = GAMEMODE.FCol2
+    for k,v in pairs(tbl) do
+        if IsColor(v) or istable(v) then
+            c = v
+            continue
+        end
+        local w = draw.SimpleText(v, 'FS_32', xx, y, c)
+        xx = xx + w
+    end
+end
+
 function PANEL:Init()
     self.AvatarButton = self:Add('DButton')
+    self.AvatarButton:SetText('')
     self.AvatarButton:SetSize(48, 48)
     self.AvatarButton:SetPos(2, 2)
     self.AvatarButton.DoClick = function() self.Player:ShowProfile() end
@@ -144,7 +169,8 @@ function PANEL:Paint(w, h)
     end
 
     -- Draw player name
-	draw.SimpleText(self:GetShortName(self.Player, 20), 'FS_32', 76, 12, GAMEMODE.FCol2)
+    self:DrawPlayerName(self.Player, 76, 12)
+	-- draw.SimpleText(self:GetShortName(self.Player, 20), 'FS_32', 76, 12, GAMEMODE.FCol2)
 
     -- Other information is handled in a wack fashion
     for k,v in pairs(self.CurrentModules) do

@@ -2,15 +2,11 @@ ENT.Base = "base_brush"
 ENT.Type = "brush"
 
 function ENT:Touch(ent)
-    if ent:GetClass() == 'ctf_flag' then
-        if GetGlobalInt('HoldingTeam') == TEAM_RED then
-            GAMEMODE:ScoreGoal(TEAM_RED, ent)
-        else
-            ent.NoExplode = false
-            ent:Remove()
-        end
+    if ent:GetClass() == 'ctf_flag_blue' or ent:GetClass() == 'ctf_flag_blue' then
+        GAMEMODE:ScoreGoal(TEAM_RED, ent)
     elseif ent:IsPlayer() then
-        if ent:HasWeapon('weapon_ctf_flag') and ent:Team() == TEAM_RED then
+        if ent:Team() != TEAM_RED then return end
+        if ent:HasWeapon('weapon_ctf_flag_blue') or ent:HasWeapon('weapon_ctf_flag') then
             GAMEMODE:ScoreGoal(TEAM_RED, ent)
         end
     end

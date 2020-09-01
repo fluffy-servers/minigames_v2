@@ -107,4 +107,4 @@ hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
 	data.Tracer = 1
 	data.TracerName = effect
 	return true
-end )
+end)

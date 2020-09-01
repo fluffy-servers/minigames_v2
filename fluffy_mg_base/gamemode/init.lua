@@ -14,6 +14,7 @@ AddCSLuaFile('cl_thirdperson.lua')
 AddCSLuaFile('cl_playerpanel.lua')
 AddCSLuaFile('cl_scoreboard.lua')
 AddCSLuaFile('cl_hud.lua')
+AddCSLuaFile('cl_round_state.lua')
 AddCSLuaFile('cl_announcements.lua')
 AddCSLuaFile('cl_killfeed.lua')
 AddCSLuaFile('cl_chat.lua')
@@ -116,8 +117,7 @@ function GM:PlayerInitialSpawn(ply)
             ply:ConCommand("mg_info")
         end
 
-        -- Spawn as a spectator in elimination
-        if GAMEMODE.Elimination then
+        if not GAMEMODE:InRound() or GAMEMODE.Elimination then
             GAMEMODE:PlayerSpawnAsSpectator(ply)
         end
     end)
@@ -299,10 +299,9 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     
     if GAMEMODE.TeamBased then
         -- Add the kill to the team
-        local team = attacker:Team()
-        if team == TEAM_SPECTATOR or team == TEAM_UNASSIGNED then return end
-        local team_kills_current = GetGlobalInt(team .. 'TeamKills')
-        SetGlobalInt(team .. 'TeamKills', team_kills_current + 1)
+        local t = attacker:Team()
+        if t == TEAM_SPECTATOR or t == TEAM_UNASSIGNED then return end
+        team.AddRoundScore(t, 1)
     else
         if not attacker.FFAKills then attacker.FFAKills = 0 end
         attacker.FFAKills = attacker.FFAKills + 1
@@ -312,6 +311,29 @@ end
 hook.Add('GetFallDamage', 'MinigamesFallDamage', function(ply, vel)
     if !GAMEMODE.EnableFallDamage then
         return 0
+    end
+end)
+
+hook.Add('WeaponEquip', 'WeaponSpawnerEquip', function(wep, ply)
+    if wep.SpawnerEntity then
+        wep.SpawnerEntity:CollectWeapon(ply)
+    end
+end)
+
+hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
+    if wep.SpawnerEntity then
+        if ply:HasWeapon(wep:GetClass()) then
+            wep.SpawnerEntity:CollectWeapon(ply)
+            wep:Remove()
+            
+            local ammo_table = GAMEMODE.WeaponSpawners["ammo"]
+            if ammo_table[wep:GetClass()] then
+                local ammo = ammo_table[wep:GetClass()]
+                ply:GiveAmmo(ammo[2], ammo[1])
+            end
+        else
+            return true
+        end
     end
 end)
 

@@ -1,7 +1,7 @@
 include('shared.lua')
 
-surface.CreateFont('GunGameFont', { font='HL2MP', size=32 })
-surface.CreateFont('GunGameFontBig', { font='HL2MP', size=72 })
+surface.CreateFont('GunGameFont', {font='HL2MP', size=32 })
+surface.CreateFont('GunGameFontBig', {font='HL2MP', size=72 })
 
 GM.ScoringPaneEnabled = true
 
@@ -113,13 +113,12 @@ end)
 
 -- Add halos for any players on the last stage
 -- This table is calculated in the the ScoreRefreshPlayers
-hook.Add('PreDrawHalos', 'DrawKingHalo', function()
-    if true then return end
+hook.Add('PreDrawHalos', 'DrawGungameHalo', function()
     if not GAMEMODE.DangerPlayers then return end
 
     for _,v in pairs(GAMEMODE.DangerPlayers) do
         local pcolor = v:GetPlayerColor()
         local color = Color(pcolor[1]*255, pcolor[2]*255, pcolor[3]*255)
-        halo.Add({v}, color, 2, 2, 2, true, true)
+        halo.Add({v}, color, 2, 2, 1, true, false)
     end
 end)

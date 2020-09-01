@@ -271,14 +271,21 @@ function GM:OpenEndGamePanel()
     function scoreboard:PaintTeamInfo()
         if GAMEMODE.TeamBased and scoreboard.ShowTeams then
             local tab_width = (w-40)/2
-            draw.RoundedBox(8, 16, 48, tab_width, 48, team.GetColor(TEAM_BLUE))
-            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_L32', 28, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_L48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-
             local t2 = w - tab_width - 16
+
+            draw.RoundedBox(8, 16, 48, tab_width, 48, team.GetColor(TEAM_BLUE))
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_32', 28, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
             draw.RoundedBox(8, t2, 48, tab_width, 48, team.GetColor(TEAM_RED))
-            GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_L48', t2+8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_L32', t2 + tab_width - 8, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_32', t2 + tab_width - 8, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+
+            if GAMEMODE.RoundType == 'timed_endless' then
+                GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), 'FS_48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+                GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_RED), 'FS_48', t2+8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            else
+                GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+                GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_48', t2+8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            end
         end
     end
 
@@ -311,9 +318,9 @@ function TestEndGameScreen()
 end
 
 -- Open up the end game panel when the server says the game has ended
-net.Receive("MinigamesGameEnd", function( len, ply )
+net.Receive("MinigamesGameEnd", function(len, ply)
     GAMEMODE:OpenEndGamePanel()
-end )
+end)
 
 -- Get the map vote options information from the server
 net.Receive("SendMapVoteTable", function()

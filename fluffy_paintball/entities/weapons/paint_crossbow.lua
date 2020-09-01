@@ -1,8 +1,10 @@
+SWEP.Base = "weapon_mg_base"
+
 if CLIENT then
 	SWEP.Slot = 4
 	SWEP.SlotPos = 0
-	SWEP.IconLetter = "f"
-    killicon.AddFont("paint_crossbow", "HL2MPTypeDeath", "1", Color( 255, 80, 0, 255 ))
+	SWEP.IconLetter = "1"
+    killicon.AddFont("paint_crossbow", "HL2MPTypeDeath", "1", Color(255, 80, 0, 255))
     
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end

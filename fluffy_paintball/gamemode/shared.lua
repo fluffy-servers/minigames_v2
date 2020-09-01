@@ -24,3 +24,19 @@ GM.CanSuicide = false
 function GM:Initialize()
 
 end
+
+GM.WeaponSpawners = {
+    ["spawns"] = {
+        ["1"] = {"paint_knife", "paint_smg"},
+        ["2"] = {"paint_shotgun", "paint_grenade_wep"},
+        ["3"] = {"paint_crossbow", "paint_bazooka"},
+    },
+
+    ["ammo"] = {
+        ['paint_shotgun'] = {'Buckshot', 12},
+        ['paint_bazooka'] = {'RPG_Round', 3},
+        ['paint_smg'] = {'SMG1', 60},
+        ['paint_crossbow'] = {'SniperRound', 5},
+        ['paint_grenade_wep'] = {'Grenade', 3},
+    }
+}

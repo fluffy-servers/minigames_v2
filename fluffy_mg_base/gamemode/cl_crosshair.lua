@@ -79,7 +79,7 @@ function GM:DrawCrosshair(x, y, size, force, color)
             surface.SetDrawColor(c)
         end
         surface.SetAlphaMultiplier(1)
-        surface.DrawTexturedRect( x - size/2, y - size/2, size, size )
+        surface.DrawTexturedRect(x - size/2, y - size/2, size, size)
     end
 end
 
@@ -90,7 +90,7 @@ function GM:OpenCrosshairEditor()
     frame:SetPos(128, 64)
     frame:SetTitle('')
     function frame:Paint(w, h)
-        Derma_DrawBackgroundBlur( self, self.m_fCreateTime )
+        Derma_DrawBackgroundBlur(self, self.m_fCreateTime)
         
         local bar_h = 24
         surface.SetDrawColor(GAMEMODE.FCol2)
@@ -139,7 +139,7 @@ function GM:OpenCrosshairEditor()
     -- Color picker for the crosshair
     -- The default convar function for this does bad things with alpha values
     -- Hence the custom ValueChanged convar setting
-    local c_picker = vgui.Create( "DColorMixer", frame )
+    local c_picker = vgui.Create("DColorMixer", frame)
     c_picker:SetSize(256, 120)
     c_picker:SetPos(12, 248)
     c_picker:SetPalette(false)
@@ -191,7 +191,7 @@ function GM:OpenCrosshairEditor()
 end
 
 -- Add the concommand to open the crosshair editor
-concommand.Add("mg_crosshair_editor", function( ply, cmd, args )
+concommand.Add("mg_crosshair_editor", function(ply, cmd, args)
     if not CLIENT then return end -- ??? why
     GAMEMODE:OpenCrosshairEditor()
-end )
+end)

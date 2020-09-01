@@ -34,14 +34,15 @@ end
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
-    
-    -- Drop up to 10 balls, + some additional balls
-    local balls = math.min(ply:GetNWInt("Balls", 0), 10)
-    for i=math.random(-6, 3),balls do
+
+    -- Drop half the player balls + some additional
+    local half = math.ceil(ply:GetNWInt("Balls", 0)/2)
+    local balls = half + math.random(1, 3)
+    for i=1,balls do
 		local b = ents.Create('mg_ball_drop')
 		local p = ply:GetPos() + Vector(0, 0, 50)
-		local v = Vector( math.random(-40, 40), math.random(-40, 40), math.random(-40, 40) )
-		local vel = Vector( math.random(-30, 50), math.random(-30, 50), math.random(-20, 80) )
+		local v = Vector(math.random(-40, 40), math.random(-40, 40), math.random(-40, 40))
+		local vel = Vector(math.random(-30, 50), math.random(-30, 50), math.random(-20, 80))
 		b:SetPos(p + v)
 		b:SetVelocity(vel)
 		b:Spawn()
@@ -49,9 +50,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
         local c3 = ply:GetPlayerColor()
         b:SetBallColor(c3)
     end
-    
+
     -- Reduce the amount of player balls
-    local new_balls = math.max(ply:GetNWInt("Balls", 0) - balls, 0)
+    local new_balls = math.max(ply:GetNWInt("Balls", 0) - half, 0)
     ply:SetNWInt("Balls", new_balls)
     
     -- Play a funny death sound
@@ -68,17 +69,14 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
-    
-    if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
-    if attacker == ply then return end -- Suicides aren't important
 end
 
 -- Reset the player balls count at the start at each round
-hook.Add('RoundStart', 'ResetBalls', function()
+hook.Add('PreRoundStart', 'ResetBalls', function()
 	for k,v in pairs(player.GetAll()) do
 		v:SetNWInt("Balls", 0)
 	end
-end )
+end)
 
 -- The winning player is the player with the most balls at the end of a round
 function GM:GetWinningPlayer()

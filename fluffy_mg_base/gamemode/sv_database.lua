@@ -32,7 +32,7 @@ function GM:CreateDBTables()
     xp INT,
     level INT,
     PRIMARY KEY (steamid64)
-    );]])
+   );]])
     q1:start()
     
     local q2 = db:query([[CREATE TABLE stats_minigames_new (
@@ -41,7 +41,7 @@ function GM:CreateDBTables()
         category VARCHAR(64),
         points INT,
         PRIMARY KEY (steamid64)
-    );]])
+   );]])
     q2:start()
     
     local q3 = db:query([[CREATE TABLE minigames_inventory (
@@ -49,7 +49,7 @@ function GM:CreateDBTables()
         inventory TEXT,
         equipped TEXT,
         PRIMARY KEY (steamid64)
-    );]])
+   );]])
     
     print('Created tables')
 end

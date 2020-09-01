@@ -25,8 +25,8 @@ end
 
 -- Select a bomber at random
 function GM:PickBomber()
-	for k,v in pairs( player.GetAll() ) do 
-		v:SetCarrier( false )
+	for k,v in pairs(player.GetAll()) do 
+		v:SetCarrier(false)
         v:StripWeapon('bt_bomb')
 	end
     
@@ -48,19 +48,19 @@ hook.Add('DoPlayerDeath', 'CheckBomb', function(ply)
     if ply:IsCarrier() then
         timer.Simple(1, function() GAMEMODE:PickBomber() end)
     end
-end )
+end)
 
 -- Pick a new bomb carrier at round start
 hook.Add('RoundStart', 'PickUnluckyStart', function()
     GAMEMODE:PickBomber()
-end )
+end)
 
 -- Remove any bombs still around when the timer runs out
 hook.Add('RoundEnd', 'RemoveSpareBombs', function()
 	for k,v in pairs(player.GetAll()) do
 		v:StripWeapons()
 	end
-end )
+end)
 
 -- Check disconnected players for bombs
 -- This should help ensure there is always a bomb in play
@@ -94,7 +94,7 @@ function GM:StatsRoundWin(winners)
     end
 end
 
-function GM:DoPlayerDeath( ply, attacker, dmginfo )
+function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
     

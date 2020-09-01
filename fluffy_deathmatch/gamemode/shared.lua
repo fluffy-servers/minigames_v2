@@ -11,7 +11,7 @@ GM.TeamBased = false	-- Is the gamemode FFA or Teams?
 GM.RoundType = 'timed_endless'
 GM.EndOnTimeOut = true
 GM.GameTime = 360
-GM.HUDStyle = 3
+GM.HUDStyle = HUD_STYLE_TIMER_ONLY
 
 GM.RespawnTime = 1
 GM.AutoRespawn = true

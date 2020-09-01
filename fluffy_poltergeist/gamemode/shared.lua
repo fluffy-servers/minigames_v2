@@ -25,28 +25,26 @@ GM.TeamSurvival = true
 GM.SurvivorTeam = TEAM_BLUE
 GM.HunterTeam = TEAM_RED
 
-GM.RoundNumber = 7          -- How many rounds?
-GM.RoundTime = 90           -- Seconds each round lasts for
+GM.RoundNumber = 10         -- How many rounds?
+GM.RoundTime = 60           -- Seconds each round lasts for
 GM.ForceFFAColors = true    -- Force team gamemodes to use FFA colors
 
-function GM:Initialize()
-
-end
+GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
 
 TEAM_RED = 1
 TEAM_BLUE = 2
 
 function GM:CreateTeams()
-	if ( !GAMEMODE.TeamBased ) then return end
+	if not GAMEMODE.TeamBased then return end
 	
-	team.SetUp( TEAM_RED, "Poltergeists", Color( 255, 80, 80 ), true )
-	team.SetSpawnPoint( TEAM_RED, { "info_player_start", "info_player_counterterrorist", "info_player_combine" }, true )
+	team.SetUp(TEAM_RED, "Poltergeists", TEAM_COLORS['red'], true)
+	team.SetSpawnPoint(TEAM_RED, {"info_player_start", "info_player_counterterrorist", "info_player_combine"}, true)
 	
-	team.SetUp( TEAM_BLUE, "Humans", Color( 80, 80, 255 ), true )
-	team.SetSpawnPoint( TEAM_BLUE, { "info_player_start", "info_player_terrorist", "info_player_rebel", "info_player_deathmatch" } )
+	team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS['blue'], true)
+	team.SetSpawnPoint(TEAM_BLUE, {"info_player_start", "info_player_terrorist", "info_player_rebel", "info_player_deathmatch"})
 	
-	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
-	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_combine" } ) 
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
+	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_combine"}) 
 end
 
 -- Hide all cosmetics on Poltergeists

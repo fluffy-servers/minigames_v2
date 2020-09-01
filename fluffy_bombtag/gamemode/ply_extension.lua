@@ -1,5 +1,5 @@
 -- This file adds some functions to the Player metatable
-local meta = FindMetaTable( "Player" )
+local meta = FindMetaTable("Player")
 if (!meta) then return end 
 
 -- Set whether this player is the carrier or not

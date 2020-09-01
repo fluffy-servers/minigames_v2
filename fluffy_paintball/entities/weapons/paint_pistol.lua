@@ -1,36 +1,11 @@
-if CLIENT then
-	SWEP.Slot = 1
-	SWEP.SlotPos = 0
-	SWEP.IconLetter = "f"
-    killicon.AddFont("paint_pistol", "HL2MPTypeDeath", "-", Color( 255, 80, 0, 255 ))
-    
-    SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
-end
+SWEP.Base = "weapon_mg_pistol"
 SWEP.PrintName = "Paintball Pistol"
 
--- Primary fire damage and aim settings
-SWEP.Primary.Damage = 15
-SWEP.Primary.Delay = 0.35
-SWEP.Primary.Recoil = 0
-SWEP.Primary.Cone = 0.02
-
--- Primary ammo settings
-SWEP.Primary.ClipSize = -1
-SWEP.Primary.DefaultClip = -1
-SWEP.Primary.Ammo = "none"
-SWEP.Primary.Automatic = true
-
--- We don't have anything that uses secondary ammo so there's nothing here for it
-
--- Set the model for the gun
--- Using hands is preferred
-SWEP.UseHands = true
-SWEP.ViewModel = "models/weapons/c_pistol.mdl"
-SWEP.ViewModelFOV = 62
-SWEP.WorldModel = "models/weapons/w_pistol.mdl"
-
-function SWEP:Initialize()
-    self:SetHoldType('pistol')
+if CLIENT then
+	SWEP.IconLetter = "-"
+    killicon.AddFont("paint_pistol", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
+    
+    SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end
 
 function SWEP:DrawWorldModel()
@@ -46,39 +21,10 @@ function SWEP:PreDrawViewModel(vm, wep)
 end
 
 function SWEP:PrimaryAttack()
-    --models/debug/debugwhite
-    --weapons/357/357_fire2.wav
 	self.Weapon:EmitSound('weapons/flaregun/fire.wav', 35, math.random(180, 200))
-	self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
+	self:ShootBulletEx(self.Primary.Damage, 1, self.Primary.Cone, 'paintball_tracer')
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-end
-
-function SWEP:SecondaryAttack()
-	-- Nothing here!
-	-- Make sure this is blank to override the default
-end
-
--- Feel free to steal this code for any weapons
-function SWEP:ShootBullet(damage, numbullets, aimcone)
-	-- Setup the bullet table and fire it
-	local scale = aimcone
-	local bullet = {}
-	bullet.Num 		= numbullets
-	bullet.Src 		= self.Owner:GetShootPos()			
-	bullet.Dir 		= self.Owner:GetAimVector()			
-	bullet.Spread 	= Vector(scale, scale, 0)		
-	bullet.Force	= math.Round(damage * 2)							
-	bullet.Damage	= math.Round(damage)
-	bullet.AmmoType = "Pistol"
-    bullet.HullSize = 8
-	bullet.Tracer = 1
-    bullet.TracerName = 'paintball_tracer'
-	self.Owner:FireBullets(bullet)
-    
-    -- Make the firing look nice
-	self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-	--self.Owner:MuzzleFlash()
-	self.Owner:SetAnimation(PLAYER_ATTACK1)
+    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)

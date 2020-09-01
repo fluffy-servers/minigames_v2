@@ -1,23 +1,24 @@
 DeriveGamemode('fluffy_mg_base')
 
-GM.Name = 'Crate Wars'
-GM.Author = 'FluffyXVI'
+GM.Name = 'Crate Wars 2'
+
 GM.HelpText = [[
-    Break crates to power up during the final battle!
-    
-    During the first phase of each round, break all the crates!
-    Each crate will give you extra health and a chance of rare weapons
-    
-    About halfway through the round, the battle will begin!
-    The last player standing will win the round
-]]
+        Description pending
+    ]]
 
-GM.Elimination = true
-GM.WinBySurvival = true
+GM.Author = 'FluffyXVI'
 
-GM.TeamBased = false	-- Is the gamemode FFA or Teams?
-GM.RoundNumber = 7      -- How many rounds?
+GM.TeamBased = true	    -- Is the gamemode FFA or Teams?
+GM.RoundNumber = 6      -- How many rounds?
 GM.RoundTime = 100      -- Seconds each round lasts for
+
+GM.HUDStyle = function()
+    if GetGlobalBool('CW_Asymmetric', false) then
+        return HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE
+    else
+        return HUD_STYLE_CLOCK_TEAM_SCORE
+    end
+end
 
 function GM:Initialize()
 

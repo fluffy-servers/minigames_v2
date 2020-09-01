@@ -1,107 +1,158 @@
 @include "base.fgd"
 
-// Spawnpoint entities
-// These are useful in all gamemodes
+// ----------------------
+// BASE GAMEMODE ENTITIES
+// ----------------------
 @PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_counterterrorist:
-    "This entity is a CT spawnpoint. For most gamemodes, this is the RED team. " +
-    "Ideally, aim for about 32 spawnpoints in a map."
+    "This entity is a CT spawnpoint. For most gamemodes, this is the RED team. "
 [
 ]
 
 @PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_terrorist:
-    "This entity is a T spawnpoint. For most gamemodes, this is the BLUE team. " +
-    "Ideally, aim for about 32 spawnpoints in a map."
+    "This entity is a T spawnpoint. For most gamemodes, this is the BLUE team. "
 [
 ]
 
 @PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_red:
-    "This is a RED team spawnpoint. This is ONLY supported by Minigames. " +
-    "Ideally, aim for about 32 spawnpoints in a map."
+    "This is a RED team spawnpoint. This is ONLY supported by Minigames. "
 [
 ]
 
 @PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_blue:
-    "This is a BLUE team spawnpoint. This is ONLY supported by Minigames. " +
-    "Ideally, aim for about 32 spawnpoints in a map."
+    "This is a BLUE team spawnpoint. This is ONLY supported by Minigames. "
 [
 ]
 
-// Other base entities
-@PointClass iconsprite("editor/info_target.vmt") = mg_powerup_spawnpoint:
-    "Spawnpoint for Minigames powerup crates."
+@PointClass iconsprite("editor/bullseye.vmt") = mg_weapon_spawner:
+    "Weapon spawning entity for Deathmatch"
 [
-]
-
-// Paintball entities
-@SolidClass = func_red_home:
-    "The home entity for the RED team. Respawns red players. Spawnpoints should be inside this volume."
-[
-]
-
-@SolidClass = func_blue_home:
-    "The home entity for the BLUE team. Respawns blue players. Spawnpoints should be inside this volume."
-[
-]
-
-@PointClass iconsprite("editor/bullseye.vmt") = pb_weapon_spawner:
-    "Weapon spawning entity for Paintball."
-[
-    type(string)    : "Weapon Types" : "grenade" : "Comma-separated list of weapons to spawn. Choose from: shotgun,bazooka,smg,crossbow,grenade,knife"
+    level(string)     : "Level" : "1"    : "Level to use for weapon entities"
     minspawn(integer) : "Min. Time" : 10 : "Minimum time to wait between weapon spawns."
     maxspawn(integer) : "Max. Time" : 20 : "Maximum time to wait between weapon spawns."
 ]
 
-// Crate Wars entities
-@PointClass studioprop() = crate_spawner:
-    "Crate spawner for Crate Wars."
+@PointClass = mg_team_control:
+    "Replace colors for this map"
+[
+    redchange(choices): "Red Color" : "red" : "Color for the TEAM_RED (uses CT spawns)" =
+    [
+        "red" : "Red"
+        "blue" : "Blue"
+        "orange" : "Orange"
+        "green" : "Green"
+        "purple" : "Purple"
+        "pink" : "Pink"
+        "cyan" : "Cyan"
+        "yellow" : "Yellow"
+    ]
+
+    bluechange(choices): "Blue Color" : "blue" : "Color for the TEAM_BLUE (uses T spawns)" =
+    [
+        "red" : "Red"
+        "blue" : "Blue"
+        "orange" : "Orange"
+        "green" : "Green"
+        "purple" : "Purple"
+        "pink" : "Pink"
+        "cyan" : "Cyan"
+        "yellow" : "Yellow"
+    ]
+]
+
+// BALLS
+// No entities applicable.
+
+// BOMB TAG
+// No entities applicable. 
+
+// CLIMB
+// No entities applicable.
+
+// CRATE WARS
+@PointClass studioprop() = crate_spawner_blue:
+    "Crate spawner for Crate Wars. Creates BLUE crates."
 [
     model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
 ]
 
-// Pitfall entities
-@PointClass = pf_settings:
-    "Map color settings for Pitfall maps."
+@PointClass studioprop() = crate_spawner_red:
+    "Crate spawner for Crate Wars. Creates RED crates."
 [
-    colorstart(string) : "Color Start" : "0,255,128" : "Starting color of the platforms. RGB comma separated no spaces."
-    colorend(string)   : "Color End"   : "255,0,128" : "Ending color of the platforms. RGB comma separated no spaces."
-    colorbonus(string) : "Color Bonus" : "255,128,0" : "Color of platforms with bonuses. RGB comma separated no spaces."
+    model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
 ]
 
-@PointClass = pf_marker:
-    "Marker entity for Pitfall platforms."
+@PointClass studioprop() = crate_blue:
+    "Simple crate entity for Crate Wars. Owned by BLUE team."
 [
-    maxlevels(integer) : "Max Levels" : 1 : "Maximum number of levels that can spawn for this platform. 1-5."
-    size(integer) : "Size" : 1 : "Sizing level. Gamemode picks a number from 1 to 5; then spawns any platforms with a size <= that number."
+    model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
 ]
 
-@SolidClass = pf_platform:
-    "Custom brush entity for Pitfall platforms."
+@PointClass studioprop() = crate_red:
+    "Simple crate entity for Crate Wars. Owned by RED team."
 [
+    model(studio) : "Model to Spawn" : "models/props_junk/wood_crate001a.mdl" : "What model should this crate spawner spawn? Should be a breakable prop of some kind."
 ]
 
-@SolidClass = til_tile:
-    "Custom brush entity for Pitfall platforms."
+// CAPTURE THE FLAG
+@PointClass iconsprite("editor/info_target.vmt") = ctf_blue_marker:
+    "Display for the flag icon for BLUE team."
 [
 ]
 
-// Duck Hunt entities
-@SolidClass = svr_wintrigger:
-    "Winning trigger for Duck Hunt. Any runner that reaches this trigger will win the round."
+@PointClass iconsprite("editor/info_target.vmt") = ctf_red_marker:
+    "Display for the flag icon for RED team."
 [
 ]
 
+@PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn:
+    "Spawnpoint for the CTF flag. Only applies to 1Flag CTF."
+[
+]
+
+@PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn_blue:
+    "Spawnpoint for the Blue Team's CTF flag."
+[
+]
+
+@PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn_red:
+    "Spawnpoint for the Blue Team's CTF flag."
+[
+]
+
+@SolidClass = func_blue_capture:
+    "Capture zone for BLUE team. BLUE has to bring the flag back here."
+[
+]
+
+@SolidClass = func_red_capture:
+    "Capture zone for RED team. RED has to bring the flag back here."
+[
+]
+
+// DEATHMATCH
+// No entities applicable.
+// Use mg_weapon_spawner for weapon spawners
+
+// DODGEBALL
+@PointClass iconsprite("editor/info_target.vmt") = db_ballspawn:
+    "Spawnpoint for Dodgeball balls"
+[
+]
+
+// DUCK HUNT
 @SolidClass = duckhunt_win:
     "Winning trigger for Duck Hunt. Any runner that reaches this trigger will win the round."
 [
 ]
 
-// Incoming entities
-@PointClass iconsprite("editor/env_shooter.vmt") = inc_prop_spawner:
-    "Spawnpoint for Incoming props."
-[
-]
+// FREEZE TAG
+// No entities applicable.
 
-@PointClass iconsprite("editor/env_shooter.vmt") = slope_prop_spawner:
+// GUN GAME
+// No entities applicable.
+
+// INCOMING
+@PointClass iconsprite("editor/env_shooter.vmt") = inc_prop_spawner:
     "Spawnpoint for Incoming props."
 [
 ]
@@ -111,41 +162,28 @@
 [
 ]
 
-@SolidClass = slope_prop_remover:
-    "Removes any props that come into contact with the trigger."
-[
-]
-
 @SolidClass = inc_winners_area:
     "Winning zone for Incoming. First player to reach this wins the round."
 [
 ]
 
-@SolidClass = slope_winners_area:
-    "Winning zone for Incoming. First player to reach this wins the round."
-[
-]
+// INFECTION
+// No entities applicable.
 
-// Poltergeist entities
-@PointClass iconsprite("editor/env_shooter.vmt") = prop_spawner:
-    "Spawn point for Poltergeist entities"
-[
-    frequency(integer) : "Spawn Frequency" : 3 : "How often to respawn props at this location?"
-]
+// JUNK JOUST
+// No entities applicable.
 
-@PointClass iconsprite("editor/env_shooter.vmt") = pg_spawner:
-    "Spawn point for Poltergeist entities"
-[
-    frequency(integer) : "Spawn Frequency" : 3 : "How often to respawn props at this location?"
-]
+// KINGMAKER
+// No entities applicable.
 
-// Dodgeball entities
-@PointClass iconsprite("editor/info_target.vmt") = db_ballspawn:
-    "Spawnpoint for Dodgeball balls"
-[
-]
+// KNOCKBACK
+// No entities applicable.
+// Gamemode is deprecated.
 
-// Microgames entities
+// LASER DANCE
+// No entities applicable.
+
+// MICROGAMES
 @PointClass iconsprite("editor/info_target.vmt") = microgames_marker:
     "Marker for various Microgames gamemodes"
 [
@@ -159,51 +197,43 @@
     region(string) : "Region" : : "Region this spawnpoint is in"
 ]
 
+// MORTAR WARS
+// No entities applicable.
+// Gamemode is deprecated.
 
-// Capture The Flag entities
-@PointClass iconsprite("editor/info_target.vmt") = ctf_blue_marker:
-    "Display for the flag icon for BLUE team."
-[
-]
+// ONE IN THE CHAMBER
+// No entities applicable.
 
-@PointClass iconsprite("editor/info_target.vmt") = ctf_red_marker:
-    "Display for the flag icon for RED team."
-[
-]
+// PAINTBALL
+// No entities applicable.
+// All previous entities required for this gamemode are now deprecated.
+// Use mg_weapon_spawner for weapon spawns.
 
-@PointClass iconsprite("editor/info_target.vmt") = ctf_flagspawn:
-    "Spawnpoint for the CTF flag"
+// PITFALL
+// Previous tile entities are now deprecated.
+@PointClass = pf_settings:
+    "Map color settings for Pitfall maps."
 [
-]
-
-@SolidClass = func_blue_capture:
-    "Capture zone for BLUE team. BLUE has to bring the flag back here."
-[
-]
-
-@SolidClass = func_red_capture:
-    "Capture zone for RED team. RED has to bring the flag back here."
-[
-]
-    
-// Infection entities
-@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_zombie:
-    "This is a zombie spawnpoint for use in INFECTION. This spawns both player and NPC zombies. " +
-    "Try to have these spawnpoints spread out, if possible."
-[
+    colorstart(string) : "Color Start" : "0,255,128" : "Starting color of the platforms. RGB comma separated no spaces."
+    colorend(string)   : "Color End"   : "255,0,128" : "Ending color of the platforms. RGB comma separated no spaces."
+    colorbonus(string) : "Color Bonus" : "255,128,0" : "Color of platforms with bonuses. RGB comma separated no spaces."
 ]
 
-@PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_survivor:
-    "This is a survivor spawnpoint for use in INFECTION. Consider using info_player_counterterrorist instead. " +
-    "Ideally, aim for about 32 spawnpoints in a map."
+// POLTERGEIST
+@PointClass iconsprite("editor/env_shooter.vmt") = pg_spawner:
+    "Spawn point for Poltergeist entities"
 [
+    frequency(integer) : "Spawn Frequency" : 3 : "How often to respawn props at this location?"
 ]
 
-// Deathmatch entities
-@PointClass iconsprite("editor/bullseye.vmt") = mg_weapon_spawner:
-    "Weapon spawning entity for Deathmatch"
-[
-    level(string)     : "Level" : "1"    : "Level to use for weapon entities"
-    minspawn(integer) : "Min. Time" : 10 : "Minimum time to wait between weapon spawns."
-    maxspawn(integer) : "Max. Time" : 20 : "Maximum time to wait between weapon spawns."
-]
+// SUPER SHOTGUNS
+// No entities applicable.
+
+// SNIPER WARS
+// No entities applicable.
+
+// SPECTRUM
+// No entities applicable.
+
+// SUICIDE BARRELS
+// No entities applicable.

@@ -6,7 +6,7 @@
 -- List of gamemodes in rotation
 GM.VoteGamemodes = {
     {'fluffy_sniperwars', 'Sniper Wars', 'Team DM'},
-    --{'fluffy_poltergeist', 'Poltergeist', 'Hunter vs Hunted'},
+    {'fluffy_poltergeist', 'Poltergeist', 'Hunter vs Hunted'},
     {'fluffy_duckhunt', 'Duck Hunt', 'Hunter vs Hunted'},
     {'fluffy_suicidebarrels', 'Suicide Barrels', 'Hunter vs Hunted'},
     {'fluffy_dodgeball', 'Dodgeball', 'Team DM'},
@@ -27,14 +27,15 @@ GM.VoteGamemodes = {
     --{'fluffy_mortar', 'Mortar', 'Team DM'},
     {'fluffy_shotguns', 'Super Shotguns', 'Team DM'},
     --{'fluffy_freezetag', 'Freeze Tag', 'Team DM'},
-    --{'fluffy_infection', 'Infection', 'Hunter vs Hunted'},
+    {'fluffy_infection', 'Infection [Beta]', 'Hunter vs Hunted'},
     {'fluffy_junkjoust', 'Junk Joust', 'FFA'},
     --{'fluffy_stalker', 'Stalker', 'Hunter vs Hunted'},
     --{'fluffy_ctf', 'Capture The Flag', 'Team DM'},
+    --{'fluffy_deathmatch', 'Deathmatch [Beta]', 'FFA'}
 }
 
 -- List of maps in rotation
-local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1'}
+local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1', 'pvp_rivertown_day'}
 local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1'}
 
 GM.VoteMaps = {
@@ -45,12 +46,12 @@ GM.VoteMaps = {
     fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker_v2', 'db_dreamscape_v5'},
     fluffy_pitfall = {'pf_ocean'},
     fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
-    fluffy_bombtag = {'bt_rainbow', 'bt_museum', 'bt_canal', 'bt_yeoldearena_v2'},
+    fluffy_bombtag = {'bt_rainbow', 'bt_museum', 'bt_canal', 'bt_yeoldearena_v2', 'bt_reactor', 'bt_courtyard_kerfuffle'},
     fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix', 'ld_furina'},
 	fluffy_cratewars = {'cw_bricks', 'cw_boxingring'},
 	fluffy_balls = pvp_maps,
 	fluffy_oitc = pvp_maps_team,
-    fluffy_infection = pvp_maps,
+    fluffy_infection = {'pvp_rivertown_day', 'pvp_hexagons', 'pvp_fincity'},
     fluffy_kingmaker = pvp_maps,
     fluffy_gungame = pvp_maps,
     fluffy_microgames = {'microgames_arena_b4'},
@@ -139,7 +140,7 @@ end
 net.Receive('MapVoteSendVote', function(len, ply)
     local vote = net.ReadInt(8)
     GAMEMODE:CountVote(ply, vote)
-end )
+end)
 
 -- Pick a winner from the results
 function GM:PickWinningVote()
@@ -217,7 +218,7 @@ hook.Add('PlayerDisconnected', 'RemoveRTVVotes', function(ply)
 		GAMEMODE.RTV[ply] = nil
 		GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 1) - 1
 	end
-end )
+end)
 
 hook.Add('PlayerSay', 'TrackRTV', function(ply, txt)
 	if txt == '!rtv' or txt == '/rtv' then

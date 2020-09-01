@@ -4,6 +4,9 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 include('sv_player_extension.lua')
 
+GM.BarrelModels = {"models/props_c17/oildrum001_explosive.mdl"}
+GM.BarrelSkins = {0}
+
 -- Appropriate weapon stuff
 function GM:PlayerLoadout(ply)
     if ply:Team() == TEAM_BLUE then
@@ -26,11 +29,17 @@ function GM:PlayerLoadout(ply)
     end
 end
 
+function GM:ApplyBarrelModel(ply)
+    local idx = math.random(#GAMEMODE.BarrelModels)
+    ply:SetModel(GAMEMODE.BarrelModels[idx])
+    ply:SetSkin(GAMEMODE.BarrelSkins[idx])
+end
+
 -- Pick player models
 function GM:PlayerSetModel(ply)
     if ply:Team() == TEAM_RED then
         local color = team.GetColor(TEAM_RED)
-        ply:SetModel("models/props_c17/oildrum001_explosive.mdl")
+        GAMEMODE:ApplyBarrelModel(ply)
         ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
     else
         GAMEMODE.BaseClass:PlayerSetModel(ply)

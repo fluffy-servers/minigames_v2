@@ -3,7 +3,7 @@ SWEP.Base = 'weapon_mg_base'
 if CLIENT then
 	SWEP.IconLetter = '.'
 	SWEP.IconFont = 'HL2MPTypeDeath'
-	killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color( 255, 80, 0, 255 ))
+	killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color(255, 80, 0, 255))
 end
 
 SWEP.PrintName = 'Laser Cannon'
@@ -43,7 +43,7 @@ function SWEP:SecondaryAttack()
 	-- Make sure this is blank to override the default
 end
 
-function SWEP:DoImpactEffect( tr, nDamageType )
+function SWEP:DoImpactEffect(tr, nDamageType)
 	if (tr.HitSky) then return end
 
 	local effectdata = EffectData()

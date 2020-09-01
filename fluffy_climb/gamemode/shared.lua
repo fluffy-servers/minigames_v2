@@ -18,7 +18,7 @@ GM.RoundTime = 90      -- Seconds each round lasts for
 
 GM.RoundType = 'timed'
 GM.GameTime = 500
-GM.HUDStyle = 2
+GM.HUDStyle = HUD_STYLE_CLOCK_TIMER_ALIVE
 
 GM.ThirdpersonEnabled = true
 GM.DeathSounds = true

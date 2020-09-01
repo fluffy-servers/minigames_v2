@@ -3,175 +3,120 @@ AddCSLuaFile('shared.lua')
 
 include('shared.lua')
 
--- Define the weapons that can be awarded from crates
-GM.WeaponOptions = {
-    weapon_stunstick = {'Stunstick', nil, 0},
-    weapon_357 = {'Revolver', '357', 3},
-    weapon_frag = {'Grenade', 'Grenade', 1},
-    weapon_crossbow = {'Crossbow', 'XBowBolt', 3},
-    weapon_mg_pistol = {'Pistol', 'Pistol', 12},
-    weapon_mg_smg = {'SMG Bomb', 'SMG1_Grenade', 1},
-    weapon_mg_shotgun = {'Shotgun', 'Buckshot', 6},
-    weapon_mg_mortar = {'Mortar', 'RPG_Round', 5},
-    weapon_mg_sniper = {'Sniper', 'SniperRound', 10},
-}
+GM.CRATE_DELAY = 3
+GM.CHECK_DELAY = 5
+GM.KillValue = 3
 
--- Percentage of crates that have bonuses
-GM.BonusPercentage = 0.06
-
--- Players start with a crowbar
--- See the StartBattlePhase function for that part of the round
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:StripAmmo()
     ply:StripWeapons()
     ply:Give("weapon_crowbar")
+    ply:Give("weapon_mg_pistol")
+    ply:Give("weapon_physcannon")
+    ply:GiveAmmo(512, "Pistol", true)
+
+    ply:SetRunSpeed(400)
+    ply:SetWalkSpeed(300)
+    ply:SetJumpPower(250)
 end
 
--- Spawn a crate at a random spawn entity
-function GM:SpawnCrate()
-    local spawnents = ents.FindByClass('crate_spawner')
-    if #spawnents == 0 then return end
-    table.Random(spawnents):SpawnCrate()
-end
-
--- Start the Battle Phase of a round
--- This awards bonuses based on the crates broken
-function GM:StartBattlePhase()
-    GAMEMODE.CratePhase = false
-    
-    -- Find and open specific door entities
-    local doors = ents.FindByName('battle_door')
-    if istable(doors) and #doors > 0 then
-        for k,v in pairs(doors) do
-            v:Fire('Open')
-        end
-    end
-    
-    -- Award the stuff to all the living players
-    for k,v in pairs(player.GetAll()) do
-        if !v:Alive() or v.Spectating then continue end
-        v:StripWeapons()
-        
-        -- Players get an SMG by default
-        v:Give('weapon_smg1')
-        v:GiveAmmo(1000, 'SMG1', true)
-        
-        -- Award HP and prizes based on what they collected
-        if v.SmashedCrates and v.SmashedCrates > 0 then
-            local hp = math.Clamp(v.SmashedCrates*5, 10, 250)
-            v:SetHealth(hp) -- 5HP per crate
-            v:SetMaxHealth(hp)
-            v:AddFrags(math.floor(v.SmashedCrates / 10)) -- 1 point for 10 crates
-            for wep, amount in pairs(v.Bonuses) do
-                local tbl = GAMEMODE.WeaponOptions[wep]
-                v:Give(wep)
-                v:GiveAmmo(tbl[3], tbl[2], true)
-            end
-        else
-            -- Make sure players have at least some HP
-            v:SetHealth(10)
-            v:SetMaxHealth(10)
-        end
+function GM:CheckRoundEnd()
+    if team.GetRoundScore(TEAM_BLUE) < 1 then
+        GAMEMODE:EndRound(TEAM_RED)
+    elseif team.GetRoundScore(TEAM_RED) < 1 and not GetGlobalBool('CW_Asymmetric', false) then
+        GAMEMODE:EndRound(TEAM_BLUE)
     end
 end
 
-hook.Add('PreRoundStart', 'PrepareCratePhase', function()
-    -- Reset the number of smashed crates
-    for k,v in pairs(player.GetAll()) do
-        v.SmashedCrates = 0
-        v.Bonuses = {}
-        v:SetNWInt('Crates', 0)
+hook.Add('PreRoundStart', 'RegisterTeamCrates', function()
+    local blue_crates = ents.FindByClass('crate_blue')
+    local red_crates = ents.FindByClass('crate_red')
+    team.SetRoundScore(TEAM_BLUE, #blue_crates)
+
+    -- Check if this map is asymmetric or not
+    if #red_crates < 1 then
+        SetGlobalBool('CW_Asymmetric', true)
+    else
+        team.SetRoundScore(TEAM_RED, #red_crates)
     end
-    
-    GAMEMODE.CratePhase = true
+
+    -- Swap teams at the start of Round 4 if asymmetric
+    if GetGlobalBool('CW_Asymmetric', false) and GAMEMODE:GetRoundNumber() == 4 then
+        GAMEMODE:SwapTeams(true, true)
+    end
+
     -- Check if this map has any crate spawners
-    if #ents.FindByClass('crate_spawner') > 0 then
+    local blue_spawners = ents.FindByClass('crate_spawner_blue')
+    local red_spawners = ents.FindByClass('crate_spawner_red')
+    if #blue_spawners > 0 and (GetGlobalBool('CW_Asymmetric', false) or #red_spawners > 0) then
         GAMEMODE.SpawnCrates = true
+        GAMEMODE.NextCrateSpawn = CurTime() + 15
+
+        GAMEMODE.BlueSpawners = blue_spawners
+        GAMEMODE.RedSpawners = red_spawners
     else
         GAMEMODE.SpawnCrates = false
     end
-    
-    -- Apply bonus weapons to any already existing crates
-    for k, prop in pairs(ents.FindByClass('prop_physics')) do
-        if math.random() <= GAMEMODE.BonusPercentage then
-            prop.BonusWeapon = table.Random(table.GetKeys(GAMEMODE.WeaponOptions))
-        end
-    end
-    
-    -- Set a timer for when the battle begins
-    local time = math.random(40, 60)
-    timer.Simple(time-3, function() GAMEMODE:CountdownAnnouncement(3, "Fight!", "center") end)
-    timer.Simple(time, function() GAMEMODE:StartBattlePhase() end)
-end )
+end)
 
--- Crate breaking handler
-hook.Add('PropBreak', 'TrackBrokenCrates', function(ply, prop)
-    -- Keep track of any crates broken in the crates phase
-    if !GAMEMODE.CratePhase then return end
-    if !ply.SmashedCrates then return end
-    ply.SmashedCrates = ply.SmashedCrates + 1
-    ply:SetNWInt("Crates", ply.SmashedCrates)
-    ply:AddStatPoints('Crates Smashed', 1)
-    
-    -- Award bonuses to the player if lucky
-    if prop.BonusWeapon then
-        if not ply.Bonuses then ply.Bonuses = {} end
-        if not ply.Bonuses[prop.BonusWeapon] then 
-            ply.Bonuses[prop.BonusWeapon] = 0
-        else
-            ply.Bonuses[prop.BonusWeapon] = ply.Bonuses[prop.BonusWeapon] + 1
-        end
-        
-        local text = GAMEMODE.WeaponOptions[prop.BonusWeapon][1]
-        GAMEMODE:PlayerOnlyAnnouncement(ply, 1, text or 'Bonus!', 1)
-        ply:AddStatPoints('Bonuses Earned', 1)
-    end
-end )
-
--- Delay between crate spawns
--- Scales based on player count
-function GM:GetCrateDelay()
-    local count = player.GetCount()
-    if count < 4 then
-        return 0.6
-    elseif count < 8 then
-        return 0.4
-    else
-        return 0.2
-    end
-end
-
--- Spawn crates at spawn entities every so often
--- Note that crates will not spawn if there are over 200 in the map already
-GM.CrateSpawnTimer = 0
-hook.Add("Tick", "TickCrateSpawn", function()
-    if !GAMEMODE.SpawnCrates then return end
+hook.Add('Think', 'CrateThink', function()
     if not GAMEMODE:InRound() then return end
-    if !GAMEMODE.CratePhase then return end
+
+    -- Update crate scores to ensure we're in sync
+    -- This stops weird things from affecting the scores
+    if (GAMEMODE.NextCrateCheck or 0 < CurTime()) then
+        team.SetRoundScore(TEAM_BLUE, #ents.FindByClass('crate_blue'))
+        team.SetRoundScore(TEAM_RED, # ents.FindByClass('crate_red'))
+        GAMEMODE.NextCrateCheck = CurTime() + GAMEMODE.CHECK_DELAY
+    end
     
-    if GAMEMODE.CrateSpawnTimer < CurTime() then
-        GAMEMODE.CrateSpawnTimer = CurTime() + GAMEMODE:GetCrateDelay()
+    -- Fire crate spawners when applicable
+    if not GAMEMODE.SpawnCrates then return end
+    if GAMEMODE.NextCrateSpawn < CurTime() then
+        GAMEMODE.NextCrateSpawn = CurTime() + GAMEMODE.CRATE_DELAY
         GAMEMODE:SpawnCrate()
     end
-end )
+end)
 
--- During the crate phase, players cannot die
-function GM:EntityTakeDamage(target, dmginfo)
-    if GAMEMODE.CratePhase then
-        if target:IsPlayer() then
-            dmginfo:SetDamage(0)
-            local vec = dmginfo:GetDamageForce()
-            target:SetVelocity(vec*10)
-        else
-            dmginfo:SetDamage(500)
-        end
+function GM:SpawnCrate()
+    if GAMEMODE.Asymmetric then
+        if #ents.FindByClass('crate_blue') >= 100 then return end
+        table.Random(GAMEMODE.BlueSpawners):SpawnCrate()
     else
-        return
+        if #ents.FindByClass('crate_blue') >= 100 then return end
+        if #ents.FindByClass('crate_red') >= 100 then return end
+        table.Random(GAMEMODE.BlueSpawners):SpawnCrate()
+        table.Random(GAMEMODE.RedSpawners):SpawnCrate()
     end
 end
 
--- Register XP for Crate Wars
-hook.Add('RegisterStatsConversions', 'AddCrateWarsStatConversions', function()
-    GAMEMODE:AddStatConversion('Crates Smashed', 'Destroyed Crates', 0.1)
-    GAMEMODE:AddStatConversion('Bonuses Earned', 'Bonuses Earned', 0)
+hook.Add('EntityTakeDamage', 'CrowbarBuff', function(target, dmg)
+    local wep = dmg:GetInflictor()
+    if wep:IsPlayer() then wep = wep:GetActiveWeapon() end
+
+    if wep:GetClass() == 'weapon_crowbar' then
+        dmg:SetDamage(25)
+    end
 end)
+
+hook.Add('EntityTakeDamage', 'PistolBuff', function(target, dmg)
+    if not target:IsPlayer() then return end
+
+    local wep = dmg:GetInflictor()
+    if wep:IsPlayer() then wep = wep:GetActiveWeapon() end
+
+    if wep:GetClass() == 'weapon_mg_pistol' then
+        dmg:ScaleDamage(1.5)
+    end
+end)
+
+-- Override the base scoring function
+function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
+    if !attacker:IsValid() or !attacker:IsPlayer() then return end
+    if attacker == ply then return end
+    if !GAMEMODE:InRound() then return end
+    
+    -- Add the frag to scoreboard
+    attacker:AddFrags(GAMEMODE.KillValue)
+    GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
+end

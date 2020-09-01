@@ -39,15 +39,17 @@ GM.ThirdPersonEnabled = false   -- This gamemode overrides some functions to do 
 GM.SpawnProtection = true       -- Spawn protection enabled
 GM.SpawnProtectionTime = 5     -- Increased spawn protection time for runners
 
+GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
+
 function GM:CreateTeams()
-	if ( !GAMEMODE.TeamBased ) then return end
+	if (!GAMEMODE.TeamBased) then return end
 	
-	team.SetUp( TEAM_RED, "Snipers", Color( 255, 80, 80 ), true )
-	team.SetSpawnPoint( TEAM_RED, {"info_player_terrorist", "info_player_combine"} )
+	team.SetUp(TEAM_RED, "Snipers", TEAM_COLORS['red'], true)
+	team.SetSpawnPoint(TEAM_RED, {"info_player_terrorist", "info_player_combine"})
 	
-	team.SetUp( TEAM_BLUE, "Runners", Color( 80, 80, 255 ), true )
-	team.SetSpawnPoint( TEAM_BLUE, {"info_player_counterterrorist", "info_player_rebel"} )
+	team.SetUp(TEAM_BLUE, "Runners", TEAM_COLORS['blue'], true)
+	team.SetSpawnPoint(TEAM_BLUE, {"info_player_counterterrorist", "info_player_rebel"})
 	
-	team.SetUp( TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true )
-	team.SetSpawnPoint( TEAM_SPECTATOR, { "info_player_start", "info_player_terrorist", "info_player_combine" } ) 
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
+	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_combine"}) 
 end

@@ -10,7 +10,7 @@ GM.TeamBased = true	-- Is the gamemode FFA or Teams?
 GM.RoundType = 'timed'
 GM.RoundTime = 60
 GM.GameTime = 600
-GM.HUDStyle = 4
+GM.HUDStyle = HUD_STYLE_TEAM_SCORE_ROUNDS
 
 GM.Elimination = true
 GM.WinBySurvival = true

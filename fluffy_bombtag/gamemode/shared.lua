@@ -22,3 +22,5 @@ GM.RoundTime = 120      -- Seconds each round lasts for
 
 GM.ThirdpersonEnabled = true
 GM.CanSuicide = false
+
+GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE

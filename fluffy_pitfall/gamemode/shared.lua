@@ -20,11 +20,12 @@ GM.WinBySurvival = true
 
 GM.RoundNumber = 10      -- How many rounds?
 GM.RoundTime = 90      -- Seconds each round lasts for
-GM.RoundType = 'timed'
-GM.GameTime = 600
-GM.HUDStyle = 2
 
 GM.ThirdpersonEnabled = true
+
+GM.RoundType = 'timed'
+GM.GameTime = 500
+GM.HUDStyle = HUD_STYLE_CLOCK_TIMER_ALIVE
 
 function GM:Initialize()
 

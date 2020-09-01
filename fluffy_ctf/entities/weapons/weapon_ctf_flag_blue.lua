@@ -1,7 +1,7 @@
 AddCSLuaFile()
 
 SWEP.Base = "weapon_base"
-SWEP.PrintName = "Flag"
+SWEP.PrintName = "Blue Flag"
 
 SWEP.ViewModelFOV = 45
 SWEP.ViewModelFlip = false
@@ -12,6 +12,9 @@ SWEP.UseHands = true
 
 SWEP.BashSound = Sound('Weapon_Crowbar.Single')
 SWEP.ThrowSound = Sound('WeaponFrag.Throw')
+
+SWEP.Color = Vector(0, 0, 1)
+SWEP.DroppedEntity = 'ctf_flag_blue'
 
 function SWEP:Initialize()
     self:SetHoldType('melee')
@@ -67,7 +70,7 @@ function SWEP:PrimaryAttack()
     end
     
     --Animate
-    self.Owner:SetAnimation( PLAYER_ATTACK1 )
+    self.Owner:SetAnimation(PLAYER_ATTACK1)
     
     --Damage entity
     if HitEnt and HitEnt:IsValid() then
@@ -99,7 +102,7 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:TossFlag(strength)
-    local ent = ents.Create('ctf_flag')
+    local ent = ents.Create(self.DroppedEntity)
     ent:SetPos(self.Owner:GetShootPos() + self.Owner:GetAimVector()*40)
     ent:Spawn()
     
@@ -119,7 +122,7 @@ if CLIENT then
     SWEP.ViewRotation = Angle(0, 0, 0)
     SWEP.ViewOffset = Angle(9, 6, 1)
     
-    local mat = Material( "models/fw/flaginner" )
+    local mat = Material("models/fw/flaginner")
     
     function SWEP:CheckCSModel()
         if not IsValid(self.CSModel) then
@@ -130,8 +133,7 @@ if CLIENT then
         
         -- Recolor the ball
         local col = Color(0, 0, 0)
-        if IsValid(self.Owner) then col = self.Owner:GetPlayerColor() end
-        mat:SetVector("$refracttint", col)
+        mat:SetVector("$refracttint", self.Color)
         
         return self.CSModel
     end

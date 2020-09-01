@@ -11,7 +11,7 @@ ITEM.VanillaID = 'roadsign1'
 ITEM.Name = 'Road Sign #1'
 ITEM.Model = 'models/props_c17/streetsign001c.mdl'
 ITEM.Slot = 'face'
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -20,7 +20,7 @@ ITEM.VanillaID = 'roadsign2'
 ITEM.Name = 'Road Sign #2'
 ITEM.Model = 'models/props_c17/streetsign002b.mdl'
 ITEM.Slot = 'face'
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -29,7 +29,7 @@ ITEM.VanillaID = 'roadsign3'
 ITEM.Name = 'Road Sign #3'
 ITEM.Model = 'models/props_c17/streetsign003b.mdl'
 ITEM.Slot = 'face'
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -39,7 +39,7 @@ ITEM.Name = 'Road Sign #4'
 ITEM.Model = 'models/props_c17/streetsign004e.mdl'
 ITEM.Slot = 'face'
 ITEM.Rarity = 2
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -49,7 +49,7 @@ ITEM.Name = 'Road Sign #5'
 ITEM.Model = 'models/props_c17/streetsign004f.mdl'
 ITEM.Slot = 'face'
 ITEM.Rarity = 2
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -59,7 +59,7 @@ ITEM.Name = 'Road Sign #6'
 ITEM.Model = 'models/props_c17/streetsign005d.mdl'
 ITEM.Slot = 'face'
 ITEM.Rarity = 3
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -69,7 +69,7 @@ ITEM.Name = 'Road Sign #7'
 ITEM.Model = 'models/props_c17/streetsign005c.mdl'
 ITEM.Slot = 'face'
 ITEM.Rarity = 3
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 ITEM = {}
 ITEM.Attachment = 'eyes'
@@ -79,7 +79,7 @@ ITEM.Name = 'Road Sign #8'
 ITEM.Model = 'models/props_c17/streetsign005b.mdl'
 ITEM.Slot = 'face'
 ITEM.Rarity = 4
-SHOP:RegisterHat( ITEM )
+SHOP:RegisterHat(ITEM)
 
 -- Generated with the ingame creator
 ITEM = {}

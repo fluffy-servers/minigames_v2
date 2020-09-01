@@ -18,6 +18,7 @@ SWEP.Primary.Damage = 1000
 SWEP.Primary.Cone = 0
 SWEP.Primary.Automatic = false
 SWEP.Primary.ClipSize = 1
+SWEP.Primary.DefaultClip = 1
 SWEP.Primary.Ammo = "pistol"
 SWEP.Primary.Tracer = "mg_tracer"
 
@@ -25,3 +26,17 @@ SWEP.Secondary.ClipSize	= -1
 SWEP.Secondary.DefaultClip = -1 
 SWEP.Secondary.Automatic = false 
 SWEP.Secondary.Ammo = "none" 
+
+-- Generic primary attack function
+function SWEP:PrimaryAttack()
+    if not self:CanPrimaryAttack() then return end
+    
+    self.Weapon:EmitSound(self.Primary.Sound)
+	self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, self.Primary.Tracer)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+
+    self:TakePrimaryAmmo(1)
+	self:Reload()
+    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
+end

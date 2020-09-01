@@ -4,7 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Give the player these weapons on loadout
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
 	-- Strip any old weapons & ammo just in case
 	ply:StripWeapons()
 	ply:StripAmmo()

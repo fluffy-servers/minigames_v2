@@ -10,7 +10,7 @@ hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
 	GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
 	GAMEMODE.MinigamesPQueries['addnewlevel'] = db:prepare("INSERT INTO minigames_xp VALUES(?, 0, 0);")
 	GAMEMODE.MinigamesPQueries['updatelevel'] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
-end )
+end)
 
 local meta = FindMetaTable("Player")
 
@@ -103,7 +103,7 @@ end
 hook.Add('PlayerInitialSpawn', 'LoadMinigamesLevelData', function(ply)
     ply:LoadLevelFromDB()
     ply:LoadStatsFromDB()
-end )
+end)
 
 -- Complicated methods of converting the various tracked stats to XP below
 -- Maximum of 100XP in one round

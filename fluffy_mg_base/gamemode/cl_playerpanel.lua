@@ -20,6 +20,9 @@ function GM:CreateInfoFrame2()
     f:SetDraggable(false)
     f.CreationTime = CurTime()
 
+    local name = GAMEMODE.Name
+    if isfunction(name) then name = name() end
+
     function f:Paint(w, h)
         Derma_DrawBackgroundBlur(self, self.CreationTime)
 
@@ -30,7 +33,7 @@ function GM:CreateInfoFrame2()
 
     -- Add a gamemode/discord advertisement
     surface.SetFont('FS_L40')
-    local wide = math.max(128, surface.GetTextSize(GAMEMODE.Name) + 24)
+    local wide = math.max(128, surface.GetTextSize(name) + 24)
     local discord_ad = vgui.Create('DButton', f)
     discord_ad:SetSize(wide, header_h)
     discord_ad:SetPos(0, 0)
@@ -38,7 +41,7 @@ function GM:CreateInfoFrame2()
 
     function discord_ad:Paint(w, h)
         GAMEMODE:DrawShadowText('Minigames', 'FS_L24', 10, 2, white, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP, 1)
-        GAMEMODE:DrawShadowText(GAMEMODE.Name, 'FS_L40', 8, 18, white)
+        GAMEMODE:DrawShadowText(name, 'FS_L40', 8, 18, white)
     end
 
     function discord_ad:DoClick()
@@ -101,7 +104,7 @@ function GM:CreateInfoFrame2()
 
     function close:Paint(w, h)
         if GAMEMODE.TeamBased and (LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == TEAM_CONNECTING) then return end
-        GAMEMODE:DrawShadowText('x', 'FS_L24', w/2, 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+        GAMEMODE:DrawShadowText('x', 'FS_24', w/2, 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
     end
 
     function close:DoClick()
@@ -162,12 +165,18 @@ function GM:HelpPanel()
     local panel = frame.ContentPanel
     local bottom = frame.BottomBar
 
+    local name = GAMEMODE.Name
+    if isfunction(name) then name = name() end
+
+    local helptext = GAMEMODE.HelpText
+    if isfunction(helptext) then helptext = helptext() end
+
     -- Create the MOTD display
     local motd = vgui.Create('DHTML', panel)
     motd:Dock(FILL)
     motd:OpenURL('https://www.fluffyservers.com/guide/minigames.html')
-    motd:Call('UpdateGamemodeName("' .. GAMEMODE.Name .. '")')
-    motd:Call('UpdateGamemodeDesc("' .. string.Replace(GAMEMODE.HelpText, '\n', '</p><p>') .. '")')
+    motd:Call('UpdateGamemodeName("' .. name .. '")')
+    motd:Call('UpdateGamemodeDesc("' .. string.Replace(helptext, '\n', '</p><p>') .. '")')
 
     -- Create the play button OR a choose team button
     local play_button = vgui.Create('DButton', bottom)

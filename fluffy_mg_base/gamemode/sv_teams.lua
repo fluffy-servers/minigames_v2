@@ -61,7 +61,7 @@ function GM:OnPlayerChangedTeam(ply, old, new)
 end
 
 -- Useful function to swap the current teams
-function GM:SwapTeams(respawn)
+function GM:SwapTeams(respawn, swapscores)
     local red_players = team.GetPlayers(TEAM_RED)
     local blue_players = team.GetPlayers(TEAM_BLUE)
     local respawn = respawn or true
@@ -76,6 +76,14 @@ function GM:SwapTeams(respawn)
     for k,v in pairs(blue_players) do 
         v:SetTeam(TEAM_RED)
         if respawn then v:Spawn() end
+    end
+
+    -- Swap scores if applicable
+    if swapscores then
+        local old_red_score = team.GetScore(TEAM_RED)
+        local old_blue_score = team.GetScore(TEAM_BLUE)
+        team.SetScore(TEAM_RED, old_blue_score)
+        team.SetScore(TEAM_BLUE, old_red_score)
     end
 end
 

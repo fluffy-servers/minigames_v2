@@ -80,14 +80,14 @@ TEAM_BLUE_SPAWNS = {"info_player_terrorist", "info_player_blue"}
 -- Extra team colors
 -- These can be selected with mg_team_control
 TEAM_COLORS = {}
-TEAM_COLORS['orange'] = Color(250, 130, 49)
-TEAM_COLORS['red'] = Color(255, 80, 80)
-TEAM_COLORS['blue'] = Color(80, 80, 255)
-TEAM_COLORS['green'] = Color(46, 213, 115)
+TEAM_COLORS['orange'] = Color(253, 150, 68)
+TEAM_COLORS['red'] = Color(252, 92, 101)
+TEAM_COLORS['blue'] = Color(0, 168, 255)
+TEAM_COLORS['green'] = Color(38, 222, 129)
 TEAM_COLORS['purple'] = Color(165, 94, 234)
-TEAM_COLORS['pink'] = Color(243, 104, 224)
+TEAM_COLORS['pink'] = Color(255, 159, 243)
 TEAM_COLORS['cyan'] = Color(72, 219, 251)
-TEAM_COLORS['yellow'] = Color(254, 202, 87)
+TEAM_COLORS['yellow'] = Color(254, 211, 48)
 
 -- Upsettingly, Garry's Mod by default doesn't provide a way to change the name of teams
 -- This overrides the functions to create global variables for team names
@@ -122,6 +122,20 @@ function team.SetColor(id, color)
     return SetGlobalVector("Team" .. tostring(id) .. ".GColor", color)
 end
 
+-- Additional score tracking utilities
+-- This allows for team round-scores and team rounds won to be tracked
+function team.SetRoundScore(id, score)
+    return SetGlobalInt("Team" .. tostring(id) .. ".RScore", score)
+end
+
+function team.AddRoundScore(id, amount)
+    team.SetRoundScore(id, team.GetRoundScore(id) + amount)
+end
+
+function team.GetRoundScore(id)
+    return GetGlobalInt("Team" .. tostring(id) .. ".RScore", 0)
+end
+
 -- Note that RED is CT and BLUE is T
 -- Not sure why I did this but oh well, way too late to change it
 -- seriously don't change it you'll break a lot of maps
@@ -134,14 +148,14 @@ function GM:CreateTeams()
 	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
 	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
 
-	team.SetUp(TEAM_SPECTATOR, "Spectators", Color( 255, 255, 80 ), true)
+	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
 -- Get a table of all alive players
 function GM:GetAlivePlayers()
     local tbl = {}
-    for k,v in pairs(player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
     end
     
@@ -157,7 +171,7 @@ end
 -- Convenience function to get number of non-spectators
 function GM:NumNonSpectators()
     local num = 0
-    for k,v in pairs( player.GetAll() ) do
+    for k,v in pairs(player.GetAll()) do
         if GAMEMODE.TeamBased then
             if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then num = num + 1 end
         else
@@ -204,6 +218,10 @@ end
 -- Another nice wrapper for a global variable
 function GM:GetRoundStartTime()
     return GetGlobalFloat('RoundStart', 0)
+end
+
+function GM:GetRoundNumber()
+    return GetGlobalInt('RoundNumber', 0)
 end
 
 -- Helper function to scale data based on the number of players

@@ -70,6 +70,8 @@ function GM:EntityTakeDamage(ent, dmg)
         ent:SetHealth(100)
         ent:AddDeaths(1)
 
+        local old_weapon = ent:GetActiveWeapon():GetClass()
+
         -- Fake spawn protection
         ent:GodEnable()
         ent:SetRenderMode(1)
@@ -86,6 +88,7 @@ function GM:EntityTakeDamage(ent, dmg)
                 ent:SetColor(color_white)
 
                 GAMEMODE:PlayerLoadout(ent)
+                ent:SelectWeapon(old_weapon)
             end
         end)
         

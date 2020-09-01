@@ -12,7 +12,7 @@ SWEP.HoldType           = "pistol"
 SWEP.ViewModel			= "models/weapons/c_357.mdl"
 SWEP.WorldModel			= "models/weapons/w_357.mdl"
 SWEP.UseHands           = true
-SWEP.Primary.Sound		= Sound( "Weapon_AR2.Single" )
+SWEP.Primary.Sound		= Sound("Weapon_AR2.Single")
 SWEP.Primary.Delay      = 0.4
 
 function SWEP:Initialize()
@@ -65,7 +65,7 @@ function SWEP:ShootBullets()
             dmginfo:SetDamage(0)
 			local vel = self.Owner:GetAimVector() * 1000
 			vel.z = 300
-			tr.Entity:SetVelocity( vel )
+			tr.Entity:SetVelocity(vel)
 		end
 	end
 	

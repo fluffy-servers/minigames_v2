@@ -26,22 +26,32 @@ surface.CreateFont("FS_16", {
 	font = "Coolvetica",
 	size = 16,
 })
+
 surface.CreateFont("FS_20", {
 	font = "Coolvetica",
 	size = 20,
 })
+
 surface.CreateFont("FS_24", {
 	font = "Coolvetica",
 	size = 24,
 })
+
 surface.CreateFont("FS_32", {
 	font = "Coolvetica",
 	size = 32,
 })
+
 surface.CreateFont("FS_40", {
 	font = "Coolvetica",
 	size = 40,
 })
+
+surface.CreateFont("FS_48", {
+	font = "Coolvetica",
+	size = 48,
+})
+
 surface.CreateFont("FS_60", {
 	font = "Coolvetica",
 	size = 48, -- hmmm
@@ -56,6 +66,7 @@ surface.CreateFont("FS_64", {
 	font = "Coolvetica",
 	size = 64,
 })
+
 surface.CreateFont("FS_128", {
 	font = "Coolvetica",
 	size = 128,
@@ -115,7 +126,7 @@ surface.CreateFont("FS_L64", {
 
 -- Font for CSS Kill Icons
 -- Needed for some weapons
-surface.CreateFont( "CSKillIcons", {
+surface.CreateFont("CSKillIcons", {
   font = "csd",
   size = 100,
   weight = 500,
@@ -140,26 +151,26 @@ end
 ]]--
 
 local possible_colors = {
-    blue = {Color(0, 168, 255), Color(0, 151, 230)},
-    red = {Color(255, 77, 77), Color(255, 56, 56)},
-    yellow = {Color(251, 197, 49), Color(225, 177, 44)},
-    green = {Color(76, 209, 55), Color(68, 189, 50)},
-    purple = {Color(156, 136, 255), Color(140, 122, 230)},
+    blue = {Color(0, 168, 255), Color(0, 144, 226)},
+    red = {Color(252, 92, 101), Color(235, 59, 90)},
+    yellow = {Color(254, 211, 48), Color(247, 183, 49)},
+    green = {Color(38, 222, 129), Color(32, 191, 107)},
+    purple = {Color(165, 94, 234), Color(136, 84, 208)},
     pink = {Color(255, 159, 243), Color(243, 104, 224)},
-    cyan = {Color(0, 210, 211), Color(1, 163, 164)},
-    orange = {Color(230, 126, 34), Color(211, 84, 0)},
+    cyan = {Color(72, 219, 251), Color(10, 189, 227)},
+    orange = {Color(253, 150, 68), Color(250, 130, 49)},
     dark = {Color(39, 60, 117), Color(25, 42, 86)}
 }
 
 -- Default is blue
 -- This changes based on team in some gamemodes
-GM.HColLight = Color(0, 168, 255)
-GM.HColDark = Color(0, 151, 230)
+GM.HColLight = GM.HColLight or possible_colors['blue'][1]
+GM.HColDark = GM.HColDark or possible_colors['blue'][2]
 
 -- Default is blue
-GM.FCol1 = Color(245, 246, 250)
-GM.FCol2 = Color(0, 168, 255)
-GM.FCol3 = Color(0, 151, 230)
+GM.FCol1 = GM.FCol1 or Color(245, 246, 250)
+GM.FCol2 = GM.FCol2 or possible_colors['blue'][1]
+GM.FCol3 = GM.FCol3 or possible_colors['blue'][2]
 GM.FColShadow = Color(0, 0, 0, 150)
 
 -- Function to update the color set to any in the table

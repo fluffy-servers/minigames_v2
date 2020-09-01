@@ -18,7 +18,7 @@ hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
 	-- Assign the trail based on the player (or team?) colour
     local c = Color(255, 255, 255, 255)
     if GAMEMODE.TeamBased then
-        c = team.GetColor( ply:Team() )
+        c = team.GetColor(ply:Team())
     else
         local pc = ply:GetPlayerColor()
         c.r = pc[1]*255
@@ -26,7 +26,7 @@ hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
         c.b = pc[3]*255
     end
     ply.LaserTrail = util.SpriteTrail(ply, 0, c, true, 32, 4, 10, 0, "trails/plasma.vmt")
-end )
+end)
 
 hook.Add('DoPlayerDeath', 'RemoveLaserTrails', function(ply)
     if IsValid(ply.LaserTrail) then

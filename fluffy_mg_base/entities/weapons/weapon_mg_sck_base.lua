@@ -302,10 +302,10 @@ if CLIENT then
                 
                 if file.Exists("materials/" .. v.sprite .. ".vmt", "GAME") then
                     local name = v.sprite .. "-"
-                    local params = { ["$basetexture"] = v.sprite }
+                    local params = {["$basetexture"] = v.sprite }
 
                     -- Make sure we create a unique name based on the selected options
-                    local tocheck = { "nocull", "additive", "vertexalpha", "vertexolor", "ignorez" }
+                    local tocheck = {"nocull", "additive", "vertexalpha", "vertexolor", "ignorez" }
                     for i, j in pairs(tocheck) do
                         if v[j] then
                             params["$" .. j] = 1

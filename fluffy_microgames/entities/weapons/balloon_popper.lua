@@ -42,8 +42,8 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 	bullet.Num 		= numbullets
 	bullet.Src 		= self.Owner:GetShootPos()
 	bullet.Dir 		= self.Owner:GetAimVector()
-	bullet.Spread 	= Vector(scale, scale, 0)	
-	bullet.Force	= math.Round(damage/10)							
+	bullet.Spread 	= Vector(scale, scale, 0)
+	bullet.Force	= math.Round(damage/10)
 	bullet.Damage	= math.Round(damage)
 	bullet.AmmoType = self.Primary.Ammo
     bullet.HullSize = 32
@@ -63,14 +63,14 @@ function SWEP:ShootBullets(damage, numbullets, aimcone)
 		local mins = Vector(-10, -10, -10)
 		local maxs = Vector(10, 10, 10)
 		
-		local tr = util.TraceHull( {
+		local tr = util.TraceHull({
 			start = startpos,
 			endpos = endpos,
 			filter = self.Owner,
 			mins = mins,
 			maxs = maxs,
 			mask = MASK_SHOT_HULL
-		} )
+		})
 		
 		-- If the tracer hits a balloon - apply damage to it
 		if tr.Hit and !tr.HitWorld then

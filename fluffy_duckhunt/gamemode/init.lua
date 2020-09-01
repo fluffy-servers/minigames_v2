@@ -4,7 +4,7 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Appropiate weapon stuff
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     if ply:Team() == TEAM_BLUE then
         -- Runners
         ply:StripWeapons()
@@ -27,8 +27,8 @@ function GM:PlayerSetModel(ply)
 	ply:SetModel(modelname)
     
     if ply:Team() == TEAM_RED then
-		local color = team.GetColor( ply:Team() )
-		ply:SetPlayerColor( Vector( color.r/255, color.g/255, color.b/255 ) )
+		local color = team.GetColor(ply:Team())
+		ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
     else
         if not ply.FFAColor then
             ply.FFAColor = HSVToColor(math.random(360), 1, 1)
@@ -63,7 +63,7 @@ function GM:HandleEndRound(reason)
         -- Other survivors get 1 point
         if reason:Team() == TEAM_BLUE then
             team.AddScore(TEAM_BLUE, 1)
-            for k,v in pairs( team.GetPlayers(TEAM_BLUE) ) do
+            for k,v in pairs(team.GetPlayers(TEAM_BLUE)) do
                 if v.Spectating then continue end
                 if not v:Alive() then continue end
                 

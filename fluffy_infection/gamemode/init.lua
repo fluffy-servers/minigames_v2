@@ -4,40 +4,65 @@ AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 -- Appropiate weapon stuff
-function GM:PlayerLoadout( ply )
+function GM:PlayerLoadout(ply)
     ply:StripWeapons()
     ply:StripAmmo()
     
     if ply:Team() == TEAM_BLUE then
         -- Survivors
-        ply:Give('weapon_mg_pistol')
-        ply:Give('weapon_mg_smg')
-        ply:Give('weapon_mg_shotgun')
-        ply:GiveAmmo(512, 'Pistol', true)
-        ply:GiveAmmo(512, 'Buckshot', true)
+        -- ply:Give('weapon_mg_pistol')
+        -- ply:Give('weapon_mg_smg')
+        -- ply:Give('weapon_mg_shotgun')
+        ply:Give('inf_shotgun')
+        ply:Give('inf_magnum')
+        ply:Give('inf_smg')
+        ply:Give('inf_adrenaline')
+        ply:GiveAmmo(80, 'Pistol', true)
+        ply:GiveAmmo(2400, 'Buckshot', true)
         ply:GiveAmmo(1024, 'SMG1', true)
         
-        ply:SetRunSpeed(300)
-        ply:SetWalkSpeed(200)
+        GAMEMODE:SetHumanSpeed(ply)
+        GAMEMODE:SetAdrenalineFOV(ply, 0)
         ply:SetBloodColor(BLOOD_COLOR_RED)
+        ply:SetJumpPower(200)
     elseif ply:Team() == TEAM_RED then
         -- Infected
         -- Initial infected are stronger but slower
+        local color = team.GetColor(TEAM_RED)
+        ply:SetPlayerColor(Vector(color.r/255, color.g/255, color.b/255))
         ply:SetBloodColor(BLOOD_COLOR_GREEN)
+
         if ply.InitialHunter then
-            ply:SetMaxHealth(75)
-            ply:SetHealth(75)
-            ply:SetRunSpeed(305)
-            ply:SetWalkSpeed(255)
+            ply:SetMaxHealth(85)
+            ply:SetHealth(85)
         else
             ply:SetMaxHealth(50)
             ply:SetHealth(50)
-            ply:SetRunSpeed(325)
-            ply:SetWalkSpeed(300)
         end
+
+        ply:SetRunSpeed(400)
+        ply:SetWalkSpeed(400)
+        ply:SetJumpPower(300)
         ply:Give('weapon_fists')
     end
 end
+
+function GM:SetHumanSpeed(ply)
+    ply:SetRunSpeed(275)
+    ply:SetWalkSpeed(275)
+end
+
+function GM:SetAdrenalineFOV(ply, fov)
+    print(ply, fov)
+    ply.adrenaline_fov = fov
+    ply:SetFOV(fov, 0.5)
+end
+
+hook.Add('PlayerSwitchWeapon', 'AdrenalineWeaponSwitch', function(ply, old, new)
+    if ply.adrenaline_fov then
+        ply:SetFOV(ply.adrenaline_fov, 0)
+    end
+end)
 
 -- Pick player models
 function GM:PlayerSetModel(ply)

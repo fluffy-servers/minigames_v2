@@ -1,4 +1,10 @@
-AddCSLuaFile()
+SWEP.Base = "weapon_mg_base"
+
+if CLIENT then
+    SWEP.Slot = 5
+    SWEP.PrintName = "Paintzooka"
+    SWEP.IconLetter = "-"
+end
 
 SWEP.PrintName = 'Paintzooka'
 SWEP.ViewModel = 'models/weapons/c_rpg.mdl'
@@ -8,7 +14,7 @@ SWEP.UseHands = true
 -- Primary ammo settings
 SWEP.Primary.ClipSize = 3
 SWEP.Primary.DefaultClip = 3
-SWEP.Primary.Ammo = "RPGRound"
+SWEP.Primary.Ammo = "RPG_Round"
 SWEP.Primary.Automatic = false
 
 SWEP.Slot = 5
