@@ -39,8 +39,11 @@ gametypefunctions['hexagon'] = function(p) p:SetModel("models/hunter/geometric/h
 
 function ENT:Initialize()
     if CLIENT then return end
-
+    
+    -- Set the model and data based on the game submode
+    local mode = GetGlobalString('PitfallType', 'square')
 	self:SetModel("models/hunter/blocks/cube2x2x025.mdl")
+    gametypefunctions[mode](self)
     self:SetColor(GAMEMODE.PColorStart)
     
     -- Initialize physics
@@ -60,11 +63,6 @@ function ENT:Initialize()
     self:SetTrigger(true)
 end
 
-function ENT:ApplyModel(mode)
-    gametypefunctions[mode](self)
-    print(self, self:GetModel(), mode)
-end
-
 -- Make platforms take damage when someone is touching them
 function ENT:Touch(ent)
     -- 3 seconds of spawn protection in rounds
@@ -78,7 +76,9 @@ function ENT:Touch(ent)
     
     local scale = CurTime() - self.CreationTime
     scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
-    self:AddDamage(FrameTime() * 40 * scale)
+    
+    -- yay damage
+    self:AddDamage(FrameTime() * 40*scale)
 end
 
 -- Called when this platform is damaged by an entity
