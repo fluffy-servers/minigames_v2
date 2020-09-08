@@ -9,8 +9,6 @@ end
 
 -- KV properties for mapping data
 function ENT:KeyValue(key, value)
-    print(key, value)
-
     if string.StartWith(key, "model") then
         local idx = tonumber(string.sub(key, 6))
         local model = value

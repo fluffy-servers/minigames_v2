@@ -137,11 +137,7 @@ function meta:LoadStatsFromDB()
             ply.GamemodeDBStatsTable = {}
         end
     end
-    
-    -- Print error if any occur (they shouldn't)
-    function q:onError(err)
-        print(err)
-    end
+
     q:start()
 end
 
@@ -175,11 +171,6 @@ function meta:UpdateStatsToDB()
         q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
         q:setString(3, k)
         q:setNumber(4, v)
-        
-        -- Print error if any occur (they shouldn't)
-        function q:onError(err)
-            print(err)
-        end
         q:start()
     end
 end
