@@ -1,63 +1,13 @@
-# Minigames (V2)
+# Minigames
 ## Introduction
-### History
-The original Minigames project ran from November 2017 until April 2018.
-In November 2018, Minigames was revived as this repository - aiming to be a more polished experience with entirely original maps.
+Minigames is a collection of exciting gamemodes developed by Fluffy Servers. We have new and original content, as well as remakes of gamemodes from the glory days of Fretta.
 
-## Server Owners
-### Installation
-All the folders in this repository should go into garrysmod/gamemodes/
+The original Minigames ran from November 2017 until April 2018. It was then revived in it's current form in November 2018, aiming to be a more polished experienced with even more gamemodes and original maps.
 
-You should get the latest 'stable' update from the [releases page](https://github.com/fluffy-servers/minigames_v2/releases)
+## Special Thanks
+Please see CONTRIBUTORS.md for a comprehensive list of those who have helped out with the development of Minigames.
 
-### Database Setup
-Minigames uses [MySQLOO](https://github.com/FredyH/MySQLOO) for managing database connections - make sure this installed correctly.
+## Getting Started
+To setup a server, or start a local game with friends, see the [Server Setup page](https://github.com/fluffy-servers/minigames_v2/wiki/Server-Setup).
 
-To configure a database, create a `db_config.lua` file inside `fluffy_mg_base/gamemode`
-This file should be in the following format:
-
-```lua
-GM.DB_IP = (ip address)
-GM.DB_USERNAME = (username)
-GM.DB_PASSWORD = (password)
-GM.DB_DATABASE = (database)
-```
-
-## Gamemode List
-This list of gamemodes is subject to frequent changes.
-
-__Active Rotation__
-
-- Balls
-- Bomb Tag
-- Climb
-- Crate Wars
-- Dodgeball
-- Duck Hunt
-- Freeze Tag
-- Gun Game
-- Incoming!
-- Junk Joust
-- Kingmaker
-- Laser Dance
-- Microgames
-- One In The Chamber
-- Pitfall
-- Spectrum
-- Super Shotguns
-- Sniper Wars
-- Suicide Barrels
-
-__Prototype/Rework Stage__
-
-- Assassination
-- Capture The Flag
-- Deathmatch
-- Infection
-- Knockback Battle
-- Labyrinth
-- Melon Ranch Simulator: Yeehaw Edition
-- Mortars
-- Paintball
-- Poltergeist
-- Stalker
+If you're interested in learning how to map for Minigames, see the [Mapper's Guide page](https://github.com/fluffy-servers/minigames_v2/wiki/Mapper's-Guide).
