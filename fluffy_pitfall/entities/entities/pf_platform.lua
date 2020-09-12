@@ -62,7 +62,6 @@ end
 
 function ENT:ApplyModel(mode)
     gametypefunctions[mode](self)
-    print(self, self:GetModel(), mode)
 end
 
 -- Make platforms take damage when someone is touching them
