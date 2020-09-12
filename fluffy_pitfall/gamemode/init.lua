@@ -5,8 +5,8 @@ include('sv_levelgen.lua')
 
 -- Backwards compatibility for Pitfall maps
 GM.PlatformPositions = {}
-GM.PlatformPositions['pf_ocean'] = Vector(0, 0, 1500)
-GM.PlatformPositions['pf_ocean_d'] = Vector(0, 0, 1500)
+GM.PlatformPositions['pf_ocean'] = Vector(0, 0, 0)
+GM.PlatformPositions['pf_ocean_d'] = Vector(0, 0, 0)
 GM.PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
 GM.PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
 GM.PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)

@@ -109,11 +109,11 @@ function GM:GetScalingInfo()
     return rows, columns, levels
 end
 
-function GM:ApproximateCentre(basepos, psize, rows, cols)
+function GM:ApproximateCentre(basepos, psize, rows, cols, levels)
     if not cols then cols = rows end
     local px = basepos.x - (psize * rows)/2
     local py = basepos.y - (psize * cols)/2
-    local pz = basepos.z
+    local pz = basepos.z + 150 * ((levels or 0)-1)
     return px, py, pz
 end
 
@@ -122,7 +122,7 @@ function GM:GenerateStacked(basepos, layerfunc)
     local rows, columns, levels = GAMEMODE:GetScalingInfo()
     local model = table.Random(block_options)
     local psize = 96
-    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns)
+    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns, levels)
 
     -- Generate simple layers
     for level = 1, levels do
@@ -135,7 +135,7 @@ function GM:GenerateDecreasingPyramid(basepos, layerfunc)
     local rows, columns, levels = GAMEMODE:GetScalingInfo()
     local model = table.Random(block_options)
     local psize = 96
-    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns)
+    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns, levels)
 
     -- Generate layers decreasing in size
     local level = 1
@@ -161,7 +161,7 @@ function GM:GenerateIncreasingPyramid(basepos, layerfunc)
 
     local model = table.Random(block_options)
     local psize = 96
-    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns)
+    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns, levels)
 
     -- Ensure we have at least three levels
     if levels <= 3 then
@@ -255,7 +255,7 @@ function GM:GenerateLangton(basepos, _)
 
             local xx = basepos.x + (x-25) * psize
             local yy = basepos.y + (y-25) * psize
-            local zz = jump*cell
+            local zz = basepos.z + jump*cell
             GAMEMODE:SpawnPlatform(Vector(xx, yy, zz), true, model)
         end
     end
@@ -264,7 +264,7 @@ end
 -- Generate a level, picking a random generator system
 function GM:GenerateLevel(basepos)
     local layer_func = table.Random({GenerateSquareLayer, GenerateHexagonLayer, GenerateDiscLayer})
-    
+
     -- I'm aware that this bit sucks, but doing things the 'proper' way broke badly
     -- this whole function is still in dev don't sue me yet
     local r = math.random()
@@ -275,6 +275,6 @@ function GM:GenerateLevel(basepos)
     elseif r > 0.65 then
         GAMEMODE:GenerateDecreasingPyramid(basepos, layer_func)
     else
-        GAMEMODE:GeneratedStacked(basepos, layer_func)
+        GAMEMODE:GenerateStacked(basepos, layer_func)
     end
 end
