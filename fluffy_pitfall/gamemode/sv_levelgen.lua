@@ -48,13 +48,23 @@ local function GenerateHexagonLayer(basepos, _, level, size)
     local rows, cols, psize = unpack(size)
     local pos = Vector(basepos)
 
+    -- Scale up both rows and cols since it's so tightly packed
+    rows = math.ceil(rows * 1.5)
+    cols = math.ceil(cols * 1.25)
+
+    -- Hexagon sizes
+    local w = psize * 0.75
+    local h = math.sqrt(3) * psize/2
+
     for row = 1, rows do
-        for col = 1, cols do
+        for col = 1, math.ceil(cols/2) do
             GAMEMODE:SpawnPlatform(pos, (level == 1), 'hexagon')
-            pos.y = pos.y + (psize * 3/4)
+            pos.y = pos.y + w*2
         end
-        pos.x = pos.x + psize/2
-        pos.y = basepos.y + (row % 2) * psize
+
+        -- Offset odd numbered rows
+        pos.y = basepos.y + (row%2)*w
+        pos.x = pos.x + h/2
     end
 end
 
