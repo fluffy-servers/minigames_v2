@@ -1,6 +1,6 @@
 local block_options = {
     'circle',
-    'square',
+    'square'
 }
 
 -- Spawn a platform at a given position
@@ -74,7 +74,7 @@ local function GenerateDiscLayer(basepos, model, level, size)
         rows = 4
     end
 
-    local inner = math.random(0, 192)
+    local inner = (cols-2)*64
     for row = 1, rows do
         -- Calculate the size of this ring
         local radius = (inner + psize * row)
@@ -118,6 +118,7 @@ function GM:ApproximateCentre(basepos, psize, rows, cols)
 end
 
 function GM:GenerateStacked(basepos, layerfunc)
+    print(basepos, layerfunc)
     local rows, columns, levels = GAMEMODE:GetScalingInfo()
     local model = table.Random(block_options)
     local psize = 96
@@ -178,8 +179,102 @@ function GM:GenerateIncreasingPyramid(basepos, layerfunc)
     end
 end
 
+
+function GM:GenerateLangton(basepos, _)
+    local size = (player.GetCount() * math.random(4, 20)) + math.random(50, 100)
+    local model = table.Random(block_options)
+    local psize = 96
+
+    -- Setup a 2D array
+    local grid = {}
+    for i=1,50 do
+        grid[i] = {}
+        for j=1,50 do
+            grid[i][j] = 0
+        end
+    end
+
+    -- Setup simulation variables
+    local xx = 25
+    local yy = 25
+    local count = 0
+    local steps = 0
+    local step_limit = size * 10
+    local orientation = math.random(0, 3)
+
+    -- Generate a rule between 3 and 9 characters long
+    -- All rules must start with an L (starting with an R is just a direction change)
+    -- All rules must have at least one R in them (and one L, but that's satisfied already)
+    local len = math.random(3, 9)
+    local rule = ''
+    while not string.match(rule, 'R') do
+        rule = 'L'
+        while #rule < len do
+            rule = rule .. table.Random({'L', 'R', 'F', 'L', 'R'})
+        end
+    end
+
+    -- Run simulation
+    while count < size do
+        -- Check bounds
+        if xx < 1 or yy < 1 or xx > 50 or yy > 50 then break end
+        steps = steps + 1
+        if steps > step_limit then break end
+
+        -- Update cell
+        if grid[xx][yy] == 0 then count = count + 1 end
+        local cell = math.max(1, grid[xx][yy])
+        if cell == len then
+            grid[xx][yy] = 1
+        else
+            grid[xx][yy] = cell + 1
+        end
+
+        -- Change direction
+        local change = rule:sub(cell, cell)
+        if change == 'L' then
+            orientation = (orientation + 5) % 4
+        elseif change == 'R' then
+            orientation = (orientation + 3) % 4
+        end
+
+        -- Move the ant
+        if (orientation % 2) == 0 then
+            yy = yy + (orientation - 1)
+        else
+            xx = xx - (orientation - 2)
+        end
+    end
+
+    -- Place platforms at each point
+    local jump = math.random(6, 12)
+    for x=1,50 do
+        for y=1,50 do
+            local cell = grid[x][y]
+            if cell == 0 then continue end
+
+            local xx = basepos.x + (x-25) * psize
+            local yy = basepos.y + (y-25) * psize
+            local zz = jump*cell
+            GAMEMODE:SpawnPlatform(Vector(xx, yy, zz), true, model)
+        end
+    end
+end
+
 -- Generate a level, picking a random generator system
 function GM:GenerateLevel(basepos)
-    local func = GenerateDiscLayer
-    GAMEMODE:GenerateDecreasingPyramid(basepos, func)
+    local layer_func = table.Random({GenerateSquareLayer, GenerateHexagonLayer, GenerateDiscLayer})
+    
+    -- I'm aware that this bit sucks, but doing things the 'proper' way broke badly
+    -- this whole function is still in dev don't sue me yet
+    local r = math.random()
+    if r > 0.9 then
+        GAMEMODE:GenerateLangton(basepos)
+    elseif r > 0.75 then
+        GAMEMODE:GenerateIncreasingPyramid(basepos, layer_func)
+    elseif r > 0.65 then
+        GAMEMODE:GenerateDecreasingPyramid(basepos, layer_func)
+    else
+        GAMEMODE:GeneratedStacked(basepos, layer_func)
+    end
 end
