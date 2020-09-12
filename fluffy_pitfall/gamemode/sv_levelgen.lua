@@ -67,6 +67,31 @@ local function GenerateHexagonLayer(basepos, _, level, size)
     end
 end
 
+local function GenerateDiscLayer(basepos, model, level, size)
+    local rows, cols, psize = unpack(size)
+    rows = rows - 2
+    if rows > 4 then
+        rows = 4
+    end
+
+    local inner = math.random(0, 192)
+    for row = 1, rows do
+        -- Calculate the size of this ring
+        local radius = (inner + psize * row)
+        local segs = math.ceil((6.28 * radius)/psize)
+        local offset = math.rad(360/segs)
+
+        -- Add each segment of the ring
+        for seg = 1, segs do
+            local ang = seg * offset
+            local xx = radius * math.cos(ang)
+            local yy = radius * math.sin(ang)
+            local p = Vector(xx, yy, basepos.z)
+            GAMEMODE:SpawnPlatform(p, (level == 1), 'circle')
+        end
+    end
+end
+
 function GM:GetScalingInfo()
     -- Calculate some scaling figures
     local scale = math.min(math.ceil(player.GetCount() / 3), 4)
@@ -92,7 +117,7 @@ function GM:ApproximateCentre(basepos, psize, rows, cols)
     return px, py, pz
 end
 
-function GM:GenerateStackedLevel(basepos, layerfunc)
+function GM:GenerateStacked(basepos, layerfunc)
     local rows, columns, levels = GAMEMODE:GetScalingInfo()
     local model = table.Random(block_options)
     local psize = 96
@@ -155,6 +180,6 @@ end
 
 -- Generate a level, picking a random generator system
 function GM:GenerateLevel(basepos)
-    local func = GenerateSquareLayer
-    GAMEMODE:GenerateIncreasingPyramid(basepos, func)
+    local func = GenerateDiscLayer
+    GAMEMODE:GenerateDecreasingPyramid(basepos, func)
 end
