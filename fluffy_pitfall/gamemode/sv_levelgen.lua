@@ -86,7 +86,7 @@ function GM:GenerateStackedLevel(basepos, layerfunc)
     end
 
     -- Calculate center of the layers
-    local psize = 128
+    local psize = 96
     local px = basepos.x - (psize * rows)/2
     local py = basepos.y - (psize * rows)/2
     local pz = basepos.z
