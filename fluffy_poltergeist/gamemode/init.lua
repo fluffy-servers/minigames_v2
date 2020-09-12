@@ -3,6 +3,7 @@ AddCSLuaFile('init.lua')
 AddCSLuaFile('ply_extension.lua')
 AddCSLuaFile('tables.lua')
 
+AddCSLuaFile('shared.lua')
 include('shared.lua')
 
 function GM:PlayerLoadout(ply)
