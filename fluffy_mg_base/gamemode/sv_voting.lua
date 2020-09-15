@@ -149,10 +149,13 @@ function GM:StartVoting()
     -- Generate and save a voting queue
     local options = GAMEMODE:GenerateVotingQueue()
     GAMEMODE.CurrentVoteTable = options
+
+    local nice_options = table.Copy(options)
+    nice_options = GAMEMODE:PrettifyVoteTable(nice_options)
     
     -- Send to clients
     net.Start('SendMapVoteTable')
-        net.WriteTable(GAMEMODE:PrettifyVoteTable(options))
+        net.WriteTable(nice_options)
     net.Broadcast()
     
     -- Handle the stats queue
