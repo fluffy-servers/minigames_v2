@@ -19,6 +19,17 @@ GM.RoundNumber = 10
 function GM:Initialize()
     local map = game.GetMap()
 
+    -- In the event we haven't loaded something properly yet, wait a little longer
+    -- It's pretty important that this stays in sync!
+    if not map or not GAMEMODE.FFAMaps then
+        timer.Simple(1, function() GAMEMODE:CheckMapProperties() end)
+    else
+        GAMEMODE:CheckMapProperties()
+    end
+end
+
+function GM:CheckMapProperties()
+    local map = game.GetMap()
     if GAMEMODE.FFAMaps[map] then
         GAMEMODE.TeamBased = false
     elseif GAMEMODE.TeamSurvivalMaps[map] then
