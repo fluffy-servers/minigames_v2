@@ -10,6 +10,7 @@ GM.VoteGamemodes = {
     ['fluffy_assassination'] = {'Assassination', 'Team DM'},
     ['fluffy_balls'] = {'Ballz', 'FFA'},
     ['fluffy_bombtag'] = {'Bomb Tag', 'FFA'},
+    ['fluffy_classics'] = {'Classics', 'FFA'},
     ['fluffy_climb'] = {'Climb!', 'FFA'},
     ['fluffy_cratewars'] = {'Crate Wars', 'Team DM'},
     ['fluffy_ctf'] = {'Capture the Flag', 'Team DM'},
@@ -46,6 +47,8 @@ function GM:LoadRotationFromFile()
         end
     end
     local rotation = util.JSONToTable(json)
+    print(json)
+    PrintTable(rotation)
 
     -- Validate keys
     local rotation_parsed = {}
@@ -122,7 +125,7 @@ function GM:GenerateVotingQueue()
     else
         -- Option C: if we have less than 6 gamemodes, then we pick 6 maps at random
         -- Avoid playing exactly the same thing twice in a row
-        -- This *will* crash if there's less than 6 maps but that's a risk I'm willing to take
+        -- This *will* crash if there's less than 7 maps but that's a risk I'm willing to take
         while #options < 6 do
             local gm = table.Random(gamemodes)
             local map = table.Random(GAMEMODE.VoteMaps[gm])
