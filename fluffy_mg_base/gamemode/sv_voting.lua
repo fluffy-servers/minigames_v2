@@ -5,11 +5,12 @@
 
 -- List of gamemodes in rotation
 -- This sanity checks the keys provided in the rotation file + provides nice names
+-- is there a better way to store this?
 GM.VoteGamemodes = {
     ['fluffy_assassination'] = {'Assassination', 'Team DM'},
     ['fluffy_balls'] = {'Ballz', 'FFA'},
     ['fluffy_bombtag'] = {'Bomb Tag', 'FFA'},
-    ['fluffy_climb'] = {'Climb', 'FFA'},
+    ['fluffy_climb'] = {'Climb!', 'FFA'},
     ['fluffy_cratewars'] = {'Crate Wars', 'Team DM'},
     ['fluffy_ctf'] = {'Capture the Flag', 'Team DM'},
     ['fluffy_deathmatch'] = {'Deathmatch [Beta]', 'FFA'},
@@ -17,6 +18,7 @@ GM.VoteGamemodes = {
     ['fluffy_duckhunt'] = {'Duck Hunt', 'Hunter vs Hunted'},
     ['fluffy_freezetag'] = {'Freeze Tag', 'Team DM'},
     ['fluffy_gungame'] = {'Gun Game', 'FFA'},
+    ['fluffy_incoming'] = {'Incoming!', 'FFA'},
     ['fluffy_infection'] = {'Infection [Beta]', 'Hunted vs Hunted'},
     ['fluffy_junkjoust'] = {'Junk Joust', 'FFA'},
     ['fluffy_kingmaker'] = {'Kingmaker', 'FFA'},
@@ -34,37 +36,39 @@ GM.VoteGamemodes = {
     ['fluffy_suicidebarrels'] = {'Suicide Barrels', 'Hunter vs Hunted'},
 }
 
+function GM:LoadRotationFromFile()
+    local json = file.Read("minigames_rotation.json", "DATA")
+    if not json then
+        json = file.Read("gamemodes/fluffy_mg_base/data/minigames_rotation.json", "GAME")
 
--- List of maps in rotation
-local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1', 'pvp_rivertown_day'}
-local pvp_maps_team = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_swampmaze', 'pvp_flyingfish', 'pvp_fincity', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1'}
+        if not json then
+            error("Could not find any Minigames map rotation file.")
+        end
+    end
+    local rotation = util.JSONToTable(json)
 
-GM.VoteMaps = {
-    fluffy_sniperwars = {'sw_towers', 'sw_stairs_v3', 'sw_iceberg_small', 'sw_grassy', 'sw_doublestronghold_v4'},
-    fluffy_poltergeist = {'pg_bigtower', 'pg_stairs'},
-    fluffy_duckhunt = {'dh_gauntlet_v2', 'dh_aroundtheblock_v2', 'dh_runforyourlife_v2'},
-    fluffy_suicidebarrels = {'sb_snowfall', 'sb_yellobox', 'sb_killingrooms', 'sb_shrecksagons_b2'},
-    fluffy_dodgeball = {'db_arena_v3', 'db_terminus_v4', 'db_bunkerchunker_v2', 'db_dreamscape_v5'},
-    fluffy_pitfall = {'pf_ocean'},
-    fluffy_incoming = {'inc_duo', 'inc_linear', 'inc_rectangular'},
-    fluffy_bombtag = {'bt_rainbow', 'bt_museum', 'bt_canal', 'bt_yeoldearena_v2', 'bt_reactor', 'bt_courtyard_kerfuffle'},
-    fluffy_laserdance = {'ld_toxic', 'ld_rainbow', 'ld_test', 'ld_discus_fix', 'ld_furina'},
-	fluffy_cratewars = {'cw_bricks', 'cw_boxingring'},
-	fluffy_balls = pvp_maps,
-	fluffy_oitc = pvp_maps_team,
-    fluffy_infection = {'pvp_rivertown_day', 'pvp_hexagons', 'pvp_fincity'},
-    fluffy_kingmaker = pvp_maps,
-    fluffy_gungame = pvp_maps,
-    fluffy_microgames = {'microgames_arena_b4'},
-    fluffy_climb = {'climb_prototype', 'climb_spacejump'},
-    fluffy_paintball = {'pb_ratrun_v1', 'pb_paintballarena_v1'},
-    fluffy_ctf = {'ctf_prototype3'},
-    fluffy_shotguns = {'sg_bang_v1', 'sg_towerattack_v1', 'sg_overpassdefence_v1'},
-    fluffy_junkjoust = {'jj_foul_v1', 'jj_pumpkinpatch_b2'},
-    fluffy_spectrum = pvp_maps,
-    fluffy_freezetag = pvp_maps_team,
-    fluffy_assassination = pvp_maps_team,
-}
+    -- Validate keys
+    local rotation_parsed = {}
+    for k, v in pairs(rotation) do
+        local gm = k
+        if not string.StartWith(gm, "fluffy_") then
+            gm = "fluffy_" .. gm
+        end
+
+        if not GAMEMODE.VoteGamemodes[gm] then
+            print("Unknown gamemode in rotation:", gm)
+            continue
+        end
+
+        rotation_parsed[gm] = v
+    end
+
+    return rotation_parsed
+end
+
+hook.Add("Initialize", "LoadRotationOnStart", function()
+    GAMEMODE.VoteMaps = GAMEMODE:LoadRotationFromFile()
+end)
 
 -- Variables to keep track of voting
 GM.VotingTime = false
