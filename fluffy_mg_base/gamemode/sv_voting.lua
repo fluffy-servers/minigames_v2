@@ -130,7 +130,16 @@ function GM:GenerateVotingQueue()
             local gm = table.Random(gamemodes)
             local map = table.Random(GAMEMODE.VoteMaps[gm])
             if gm == GAMEMODE_NAME and map == current_map then continue end
-            table.insert(options, {gm, map})
+
+            -- Check we haven't added this combination yet
+            local seen
+            for k, v in pairs(options) do
+                if v[1] == gm and v[2] == map then
+                    seen = true
+                    break
+                end
+            end
+            if not seen then table.insert(options, {gm, map}) end
         end
     end
 
