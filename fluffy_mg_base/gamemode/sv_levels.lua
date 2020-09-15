@@ -61,11 +61,6 @@ function meta:LoadLevelFromDB()
             q:start()
         end
     end
-    
-    -- Print error if any occur (they shouldn't)
-    function q:onError(err)
-        print(err)
-    end
     q:start()
 end
 
@@ -86,16 +81,6 @@ function meta:UpdateLevelToDB()
     q:setNumber(1, level)
     q:setNumber(2, xp)
     q:setString(3, self:SteamID64())
-    
-    -- Success function
-    function q:onSuccess(data)
-        --print('success')
-    end
-    
-    -- Print error if any occur (they shouldn't)
-    function q:onError(err)
-        print(err)
-    end
     q:start()
 end
 

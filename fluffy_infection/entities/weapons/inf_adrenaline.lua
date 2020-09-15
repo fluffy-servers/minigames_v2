@@ -72,7 +72,6 @@ local function Unadrenaline(ply)
     GAMEMODE:SetHumanSpeed(ply)
 
     -- Reset FOV
-    print('test')
     GAMEMODE:SetAdrenalineFOV(ply, 0)
 end
 
