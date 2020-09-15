@@ -350,6 +350,8 @@ function GM:CheckTeamElimination()
         elseif GAMEMODE:GetTeamLivingPlayers(2) == 0 then
             GAMEMODE:EndRound(1)
         end
+    end
+    
     if GAMEMODE.TeamSurvival then
         if GAMEMODE:GetTeamLivingPlayers(GAMEMODE.SurvivorTeam) == 0 then
             GAMEMODE:EndRound(GAMEMODE.HunterTeam)
