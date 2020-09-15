@@ -1,0 +1,6 @@
+"minigames"
+{
+	"base"	"fluffy_mg_base"
+	"title"	"Classics"
+	"maps"	"^mg_"
+}
