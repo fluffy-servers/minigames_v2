@@ -1,0 +1,1 @@
+SWEP.Base = 'weapon_mg_knife'
