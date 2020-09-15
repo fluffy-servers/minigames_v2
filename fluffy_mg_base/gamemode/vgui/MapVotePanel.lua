@@ -33,8 +33,8 @@ function PANEL:AddChildren(width, height)
         local gamemode = 'gamemode'
         local map = 'map'
         if p.Options then
-            gamemode = p.Options[2] or 'gamemode'
-            map = p.Options[4] or 'map'
+            gamemode = p.Options[1] or 'gamemode'
+            map = p.Options[2] or 'map'
             map = string.Split(map, '_')[2]
         end
         draw.SimpleText(gamemode, "FS_L32", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
@@ -65,11 +65,9 @@ function PANEL:SetIndex(i)
 end
 
 function PANEL:SetOptions(options)
-    -- Index 2: gamemode
-    -- Index 3: gamemode description
-    -- Index 4: map
+    -- Index 1: gamemode
+    -- Index 2: map
     self.Options = options
-    PrintTable(self.Options)
 end
 
 function PANEL:Paint(w, h)

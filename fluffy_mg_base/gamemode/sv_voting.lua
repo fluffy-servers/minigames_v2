@@ -4,35 +4,36 @@
 --]]
 
 -- List of gamemodes in rotation
+-- This sanity checks the keys provided in the rotation file + provides nice names
 GM.VoteGamemodes = {
-    {'fluffy_sniperwars', 'Sniper Wars', 'Team DM'},
-    {'fluffy_poltergeist', 'Poltergeist', 'Hunter vs Hunted'},
-    --{'fluffy_duckhunt', 'Duck Hunt', 'Hunter vs Hunted'},
-    {'fluffy_suicidebarrels', 'Suicide Barrels', 'Hunter vs Hunted'},
-    {'fluffy_dodgeball', 'Dodgeball', 'Team DM'},
-    {'fluffy_pitfall', 'Pitfall', 'FFA Elimination'},
-    {'fluffy_incoming', 'Incoming!', 'Free For All'},
-    {'fluffy_bombtag', 'Bomb Tag', 'FFA Elimination'},
-    {'fluffy_laserdance', 'Laser Dance', 'Free For All'},
-	{'fluffy_balls', 'Ballz', 'Free For All'},
-	--{'fluffy_cratewars', 'Crate Wars', 'Free For All'},
-	{'fluffy_oitc', 'One in the Chamber', 'Team DM'},
-    {'fluffy_gungame', 'Gun Game', 'FFA'},
-    {'fluffy_kingmaker', 'Kingmaker', 'FFA'},
-    {'fluffy_microgames', 'Microgames', 'FFA'},
-    {'fluffy_paintball', 'Paintball', 'Team DM'},
-    {'fluffy_climb', 'Climb!', 'FFA'},
-    {'fluffy_spectrum', 'Spectrum', 'FFA'},
-    --{'fluffy_assassination', 'Assassination', 'Team DM'},
-    --{'fluffy_mortar', 'Mortar', 'Team DM'},
-    {'fluffy_shotguns', 'Super Shotguns', 'Team DM'},
-    --{'fluffy_freezetag', 'Freeze Tag', 'Team DM'},
-    {'fluffy_infection', 'Infection [Beta]', 'Hunter vs Hunted'},
-    {'fluffy_junkjoust', 'Junk Joust', 'FFA'},
-    --{'fluffy_stalker', 'Stalker', 'Hunter vs Hunted'},
-    --{'fluffy_ctf', 'Capture The Flag', 'Team DM'},
-    --{'fluffy_deathmatch', 'Deathmatch [Beta]', 'FFA'}
+    ['fluffy_assassination'] = {'Assassination', 'Team DM'},
+    ['fluffy_balls'] = {'Ballz', 'FFA'},
+    ['fluffy_bombtag'] = {'Bomb Tag', 'FFA'},
+    ['fluffy_climb'] = {'Climb', 'FFA'},
+    ['fluffy_cratewars'] = {'Crate Wars', 'Team DM'},
+    ['fluffy_ctf'] = {'Capture the Flag', 'Team DM'},
+    ['fluffy_deathmatch'] = {'Deathmatch [Beta]', 'FFA'},
+    ['fluffy_dodgeball'] = {'Dodgeball', 'Team DM'},
+    ['fluffy_duckhunt'] = {'Duck Hunt', 'Hunter vs Hunted'},
+    ['fluffy_freezetag'] = {'Freeze Tag', 'Team DM'},
+    ['fluffy_gungame'] = {'Gun Game', 'FFA'},
+    ['fluffy_infection'] = {'Infection [Beta]', 'Hunted vs Hunted'},
+    ['fluffy_junkjoust'] = {'Junk Joust', 'FFA'},
+    ['fluffy_kingmaker'] = {'Kingmaker', 'FFA'},
+    ['fluffy_laserdance'] = {'Laser Dance', 'FFA'},
+    ['fluffy_microgames'] = {'Microgames', 'FFA'},
+    ['fluffy_mortar'] = {'Mortar Wars', 'Team DM'},
+    ['fluffy_oitc'] = {'One in the Chamber', 'Team DM'},
+    ['fluffy_paintball'] = {'Paintball', 'Team DM'},
+    ['fluffy_pitfall'] = {'Pitfall', 'FFA'},
+    ['fluffy_poltergeist'] = {'Poltergeist', 'Hunter vs Hunted'},
+    ['fluffy_shotguns'] = {'Super Shotguns', 'Team DM'},
+    ['fluffy_sniperwars'] = {'Sniper Wars', 'Team DM'},
+    ['fluffy_spectrum'] = {'Spectrum', 'FFA'},
+    ['fluffy_stalker'] = {'Stalker', 'Hunter vs Hunted'},
+    ['fluffy_suicidebarrels'] = {'Suicide Barrels', 'Hunter vs Hunted'},
 }
+
 
 -- List of maps in rotation
 local pvp_maps = {'pvp_hexagons', 'pvp_rainbow2', 'pvp_warehouse_v2', 'pvp_fincity', 'pvp_flyingfish', 'pvp_swampmaze', 'pvp_lasertag_arena_v2', 'pvp_smugglestruggle_version2', 'gm_passo_v2', 'pvp_fortfantastic_v1', 'pvp_rivertown_day'}
@@ -78,28 +79,65 @@ util.AddNetworkString('MapVoteSendVote')
 
 -- Generate the voting 'queue' of six options
 function GM:GenerateVotingQueue()
-    -- Copy the gamemodes & shuffle
-    local vote = table.Copy(GAMEMODE.VoteGamemodes)
-    table.Shuffle(vote)
-    
-    -- Ensure the current gamemode is not selected
-    local vote_final = {}
-    for i = 1, #vote do
-        if vote[i][1] != GAMEMODE_NAME then
-            table.insert(vote_final, vote[i])
-            if #vote_final == 6 then break end
-        else
-            continue
+    local gamemodes = table.Keys(GAMEMODE.VoteMaps)
+    local options = {}
+    local current_map = game.GetMap()
+
+    if #gamemodes > 6 then
+        -- Option A (most common): if we have more than 6 gamemodes, pick 6 gamemodes
+        -- We have the flexibility here to ensure we don't repeat gamemodes
+        local selected_gamemodes = table.Shuffle(gamemodes)
+        for k, v in pairs(selected_gamemodes) do
+            if v == GAMEMODE_NAME then continue end
+            local map = table.Random(GAMEMODE.VoteMaps[v])
+            table.insert(options, {v, map})
+            if #options == 6 then break end
+        end
+    elseif #gamemodes == 6 then
+        -- Option B: if we have exactly 6 gamemodes, then we simply pick a map for each gamemode
+        -- This means we will see the current gamemode again, but that's fine in this case
+        -- If the current gamemode has more than one map, we'll pick a new map
+        for k, v in pairs(gamemodes) do
+            if v == GAMEMODE_NAME then
+                if #GAMEMODE.VoteMaps[v] == 1 then
+                    -- Only one map for the current gamemode
+                    table.insert(options, {v, current_map})
+                else
+                    -- Ensure we don't get duplicate maps on the same gamemode
+                    local map = current_map
+                    while map == current_map do
+                        map = table.Random(GAMEMODE.VoteMaps[v])
+                    end
+                    table.insert(options, {v, current_map})
+                end
+            else
+                local map = table.Random(GAMEMODE.VoteMaps[v])
+                table.insert(options, {v, map})
+            end
+        end
+    else
+        -- Option C: if we have less than 6 gamemodes, then we pick 6 maps at random
+        -- Avoid playing exactly the same thing twice in a row
+        -- This *will* crash if there's less than 6 maps but that's a risk I'm willing to take
+        while #options < 6 do
+            local gm = table.Random(gamemodes)
+            local map = table.Random(GAMEMODE.VoteMaps[gm])
+            if gm == GAMEMODE_NAME and map == current_map then continue end
+            table.insert(options, {gm, map})
         end
     end
-    
-    -- Add a map to each gamemode
-    for k,v in pairs(vote_final) do
-        local gamemode = v[1]
-        local map = table.Random(GAMEMODE.VoteMaps[gamemode])
-        table.insert(v, map)
+
+    return options
+end
+
+function GM:PrettifyVoteTable(t)
+    local pretty = {}
+    for _, v in pairs(t) do
+        v[1] = GAMEMODE.VoteGamemodes[v[1]][1]
+        table.insert(pretty, v)
     end
-    return vote_final
+
+    return pretty
 end
 
 -- Start the voting process
@@ -110,7 +148,7 @@ function GM:StartVoting()
     
     -- Send to clients
     net.Start('SendMapVoteTable')
-        net.WriteTable(options)
+        net.WriteTable(GAMEMODE:PrettifyVoteTable(options))
     net.Broadcast()
     
     -- Handle the stats queue
@@ -145,17 +183,12 @@ end)
 -- Pick a winner from the results
 function GM:PickWinningVote()
     local results = {}
-    results[1] = 0
-    results[2] = 0
-    results[3] = 0
-    results[4] = 0
-    results[5] = 0
-    results[6] = 0
+    for i=1,6 do results[i] = 0 end
+
     for k,v in pairs(GAMEMODE.VotingResults) do
         if v > 6 then continue end
         results[v] = results[v] + 1
     end
-    
     return table.GetWinningKey(results)
 end
 
@@ -164,7 +197,7 @@ function GM:EndVote()
     -- Get the winner
     local winner = GAMEMODE.CurrentVoteTable[GAMEMODE:PickWinningVote()]
     local winning_gamemode = winner[1]
-    local winning_map = winner[4]
+    local winning_map = winner[2]
     
     -- Change the gamemode and map
     game.ConsoleCommand('gamemode ' .. winning_gamemode .. '\n')
