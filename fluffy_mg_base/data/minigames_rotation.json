@@ -97,8 +97,8 @@
 		"pvp_fortfantastic_v1"
 	],
 	"paintball": [
-		"pb_ratrun_v1",
-		"pb_paintballarena_v1"
+		"pb_ratrun_v2",
+		"pb_paintballarena_v2"
 	],
 	"pitfall": [
 		"pf_ocean"
@@ -110,7 +110,8 @@
 	"shotguns": [
 		"sg_bang_v1",
 		"sg_towerattack_v1",
-		"sg_overpassdefence_v1"
+		"sg_overpassdefence_v1",
+		"sg_control_dev"
 	],
 	"sniperwars": [
 		"sw_towers",
