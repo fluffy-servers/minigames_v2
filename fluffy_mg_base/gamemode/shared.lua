@@ -70,6 +70,15 @@ function table.Shuffle(t)
     return t
 end
 
+-- Utility function to get table keys
+function table.Keys(t)
+    local keyset = {}
+    for k, _ in pairs(t) do
+        table.insert(keyset, k)
+    end
+    return keyset
+end
+
 -- These teams should work fantastically for most gamemodes
 TEAM_RED = 1
 TEAM_BLUE = 2
