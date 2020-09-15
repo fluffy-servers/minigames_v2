@@ -152,7 +152,6 @@ function SHOP:ShiftEquippedTable(ply, key)
                 SHOP:EquipItem(key, ply, false)
                 SHOP.PlayerEquipped[ply][eq] = nil
             elseif eq > key then
-                print('Shifted ', eq, eq-1)
                 SHOP.PlayerEquipped[ply][eq] = nil
                 SHOP.PlayerEquipped[ply][eq-1] = true
             end

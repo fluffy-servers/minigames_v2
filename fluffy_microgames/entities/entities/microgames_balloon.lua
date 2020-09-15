@@ -68,8 +68,6 @@ function ENT:Initialize()
     local yy = util.SharedRandom("BalloonYRandom", -1, 1, self:EntIndex())
     self.SideMotion = Vector(xx, yy, 0) * self.Accelerate
 
-    print("test")
-    print(self.Accelerate)
     self.Speed = Vector(0, 0, self.Accelerate * 5)
 
     local yaw = util.SharedRandom("BalloonYaw", 0, 360, self:EntIndex())
@@ -110,6 +108,5 @@ end
 -- Make the balloon physically float upwards
 function ENT:PhysicsSimulate(phys, delta)
     self.Speed = self.Speed -- + Vector(0, 0, self.Accelerate * delta) + (self.SideMotion * delta)
-    print(self.Speed)
     return Vector(0, 0, 0), self.Speed, SIM_GLOBAL_FORCE
 end

@@ -23,7 +23,6 @@ function SWEP:Holster()
 end
 
 function SWEP:Deploy()
-    print('uh')
     self.Owner:SetRunSpeed(400)
     self.Owner:SetWalkSpeed(300)
     self.Owner:SetJumpPower(200)

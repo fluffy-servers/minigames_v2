@@ -13,7 +13,6 @@ local function NextImageGeneration()
 
     -- Remove last icon
     if SHOP.GeneratingImages.panel then
-        print('Removing')
         SHOP.GeneratingImages.panel:Remove()
     end
 
