@@ -1,7 +1,7 @@
 local PANEL = {}
 
 function PANEL:Init()
-    print('init')
+
 end
 
 function PANEL:AddChildren(width, height)
@@ -21,7 +21,7 @@ function PANEL:AddChildren(width, height)
     -- Wait until options are sent, then load the icon
     function map_icon:Think()
         if not p.Options then return end
-        local map = p.Options[4]
+        local map = p.Options[2]
         if not map then return end
         
         -- Set the image
