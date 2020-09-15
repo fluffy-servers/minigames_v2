@@ -31,17 +31,23 @@ function PANEL:AddChildren(width, height)
     
     function map_icon:PaintOver(w, h)
         local gamemode = 'gamemode'
-        local map = 'map'
+        local map_pretty = 'map'
+
         if p.Options then
             gamemode = p.Options[1] or 'gamemode'
-            map = p.Options[2] or 'map'
-            map = string.Split(map, '_')[2]
+            local split = string.Split(p.Options[2] or 'map', '_')
+            map_pretty = ''
+            for k, v in pairs(split) do
+                if #v < 4 and (k == 1 or k == #split) then continue end
+                map_pretty = map_pretty .. ' ' .. v:sub(1, 1):upper() .. v:sub(2)
+            end
         end
+
         draw.SimpleText(gamemode, "FS_L32", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         draw.SimpleText(gamemode, "FS_L32", w - 4, h - 28 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         
-        draw.SimpleText(map, "FS_L40", w - 3, h - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-        draw.SimpleText(map, "FS_L40", w - 4, h - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(map_pretty, "FS_L40", w - 3, h - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(map_pretty, "FS_L40", w - 4, h - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         
         --print(GAMEMODE.CurrentVote, p.Index)
         if GAMEMODE.CurrentVote and p.Index and GAMEMODE.CurrentVote == p.Index then
