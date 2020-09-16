@@ -160,6 +160,8 @@ function SWEP:DoAttack(alt)
         self:EmitSound('Weapon_Knife.Slash')
         self.Weapon:SendWeaponAnim(ACT_VM_MISSCENTER)
     end
+
+    attacker:LagCompensation(false)
 end
 
 function SWEP:PrimaryAttack()
