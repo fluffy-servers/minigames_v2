@@ -30,5 +30,5 @@ function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
     self:TakePrimaryAmmo(1)
-    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 5, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 5, 0))
+    self.Owner:ViewPunch(Angle(math.Rand(-0.5, -0.2) * self.Primary.Recoil * 5, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 5, 0))
 end

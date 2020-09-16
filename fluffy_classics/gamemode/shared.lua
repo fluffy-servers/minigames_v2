@@ -10,6 +10,7 @@ GM.HelpText = [[
 GM.TeamBased = true
 GM.Elimination = true
 GM.WinBySurvival = true
+GM.EnableFallDamage = true
 
 GM.RoundTime = 120
 GM.RoundNumber = 10

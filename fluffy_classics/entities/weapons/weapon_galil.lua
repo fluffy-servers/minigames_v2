@@ -23,5 +23,5 @@ SWEP.Primary.Ammo = "AR2"
 SWEP.Primary.Automatic = true
 
 SWEP.HoldType = 'ar2'
-SWEP.ViewModel = "models/weapons/cstrike/c_rif_ak47.mdl"
-SWEP.WorldModel = "models/weapons/w_rif_ak47.mdl"
+SWEP.ViewModel = "models/weapons/cstrike/c_rif_galil.mdl"
+SWEP.WorldModel = "models/weapons/w_rif_galil.mdl"
