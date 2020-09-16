@@ -10,6 +10,12 @@ function GM:PlayerLoadout(ply)
 	ply:StripWeapons()
 	ply:StripAmmo()
 
+	-- Respect game_player_equip
+	local equips = ents.FindByClass("game_player_equip")
+	if equips then
+		equips[1]:Use(ply)
+	end
+
 	ply:SetWalkSpeed(200)
 	ply:SetRunSpeed(400)
 end
