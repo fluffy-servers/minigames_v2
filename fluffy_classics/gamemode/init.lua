@@ -12,7 +12,7 @@ function GM:PlayerLoadout(ply)
 
 	-- Respect game_player_equip
 	local equips = ents.FindByClass("game_player_equip")
-	if equips then
+	if equips and equips[1] then
 		equips[1]:Use(ply)
 	end
 
