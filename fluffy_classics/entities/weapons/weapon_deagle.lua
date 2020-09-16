@@ -5,9 +5,9 @@ if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
     
-	SWEP.IconLetter = 'U'
+	SWEP.IconLetter = 'u'
 	SWEP.IconFont = 'CSTypeDeath'
-    killicon.AddFont("weapon_deagle", "CSTypeDeath", "U", Color(255, 80, 0, 255))
+    killicon.AddFont("weapon_deagle", "CSTypeDeath", "u", Color(255, 80, 0, 255))
 end
 
 SWEP.Primary.Damage = 54
