@@ -4,7 +4,9 @@ include('maps.lua')
 GM.Name = 'Classics'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
-    Classic Minigames maps, from the CS:S era
+    Simple Deathmatch maps. Eliminate the others to win!
+
+    The gameplay of this gamemode will strongly depend on the current map.
 ]]
 
 GM.TeamBased = true
