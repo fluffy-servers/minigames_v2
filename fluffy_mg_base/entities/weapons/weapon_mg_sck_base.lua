@@ -294,7 +294,7 @@ if CLIENT then
                         v.modelEnt = nil
                     end
                 else
-                    print("Could not find model ", v.model)
+                    ErrorNoHalt("Could not find model ", v.model)
                 end
             elseif v.type == "Sprite" then
                 if not v.sprite or v.sprite == "" then continue end

@@ -10,11 +10,10 @@ GM.VoteGamemodes = {
     ['fluffy_assassination'] = {'Assassination', 'Team DM'},
     ['fluffy_balls'] = {'Ballz', 'FFA'},
     ['fluffy_bombtag'] = {'Bomb Tag', 'FFA'},
-    ['fluffy_classics'] = {'Classics', 'FFA'},
+    ['fluffy_classics'] = {'Classics', 'Mix'},
     ['fluffy_climb'] = {'Climb!', 'FFA'},
     ['fluffy_cratewars'] = {'Crate Wars', 'Team DM'},
     ['fluffy_ctf'] = {'Capture the Flag', 'Team DM'},
-    ['fluffy_deathmatch'] = {'Deathmatch [Beta]', 'FFA'},
     ['fluffy_dodgeball'] = {'Dodgeball', 'Team DM'},
     ['fluffy_duckhunt'] = {'Duck Hunt', 'Hunter vs Hunted'},
     ['fluffy_freezetag'] = {'Freeze Tag', 'Team DM'},
@@ -47,8 +46,6 @@ function GM:LoadRotationFromFile()
         end
     end
     local rotation = util.JSONToTable(json)
-    print(json)
-    PrintTable(rotation)
 
     -- Validate keys
     local rotation_parsed = {}
@@ -59,7 +56,7 @@ function GM:LoadRotationFromFile()
         end
 
         if not GAMEMODE.VoteGamemodes[gm] then
-            print("Unknown gamemode in rotation:", gm)
+            ErrorNoHalt("Unknown gamemode in rotation:", gm)
             continue
         end
 
