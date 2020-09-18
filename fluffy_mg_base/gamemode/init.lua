@@ -79,6 +79,12 @@ function GM:PlayerSpawn(ply)
 	hook.Call('PlayerLoadout', GAMEMODE, ply)
     hook.Call('PlayerSetModel', GAMEMODE, ply)
     ply:SetupHands()
+
+	-- Respect game_player_equip
+	local equips = ents.FindByClass("game_player_equip")
+	if equips and equips[1] then
+		equips[1]:Use(ply)
+	end
     
     -- Exit out of spectate
     ply:EndSpectate()
