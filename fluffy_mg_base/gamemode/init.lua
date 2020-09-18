@@ -79,6 +79,12 @@ function GM:PlayerSpawn(ply)
 	hook.Call('PlayerLoadout', GAMEMODE, ply)
     hook.Call('PlayerSetModel', GAMEMODE, ply)
     ply:SetupHands()
+
+	-- Respect game_player_equip
+	local equips = ents.FindByClass("game_player_equip")
+	if equips and equips[1] then
+		equips[1]:Use(ply)
+	end
     
     -- Exit out of spectate
     ply:EndSpectate()
@@ -323,7 +329,7 @@ end)
 hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
     if wep.SpawnerEntity then
         if ply:HasWeapon(wep:GetClass()) then
-            wep.SpawnerEntity:CollectWeapon(ply)
+            wep.SpawnerEntity:CollectItem(ply)
             wep:Remove()
             
             local ammo_table = GAMEMODE.WeaponSpawners["ammo"]
@@ -334,6 +340,12 @@ hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
         else
             return true
         end
+    end
+end)
+
+hook.Add('PlayerCanPickupItem', 'HealthSpawnerItem', function(ply, ent)
+    if ent.SpawnerEntity then
+        ent.SpawnerEntity:CollectItem(ent)
     end
 end)
 

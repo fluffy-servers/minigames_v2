@@ -233,12 +233,9 @@ end
 
 -- Load all the modifiers from the files
 -- This has to be outside of a function
--- Blame Garry not me
 GM.Modifiers = {}
-print('Loading Microgames modifiers...')
 for _, file in pairs(file.Find("gamemodes/fluffy_microgames/gamemode/modifiers/*.lua", "GAME")) do
     local k = string.Replace(file, ".lua", "")
-    print('Loading', k)
     
     MOD = {}
     include("modifiers/" .. file)

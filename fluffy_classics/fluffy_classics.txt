@@ -1,5 +1,6 @@
 "minigames"
 {
 	"base"	"fluffy_mg_base"
-	"title"	"Deathmatch"
+	"title"	"Classics"
+	"maps"	"^mg_"
 }
