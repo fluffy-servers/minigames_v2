@@ -1,0 +1,16 @@
+# This is a basic workflow to help you get started with Actions
+name: GLua Lint
+
+# Controls when the action will run.
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  lua_lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: TASSIA710/action-glua-lint@v1.1
