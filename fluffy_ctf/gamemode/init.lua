@@ -18,8 +18,8 @@ end
 -- Spawn the flag
 function GM:SpawnSingleFlag()
     if not GAMEMODE:InRound() then return end
-    local spawns = ents.FindByClass("ctf_flagspawn")[1]
 
+    local spawn = ents.FindByClass("ctf_flagspawn")[1]
     if not IsValid(spawn) then
         error("No flag spawn in map!")
     end

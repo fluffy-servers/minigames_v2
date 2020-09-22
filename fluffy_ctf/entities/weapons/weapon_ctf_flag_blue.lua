@@ -148,7 +148,6 @@ if CLIENT then
         end
 
         -- Recolor the ball
-        local col = Color(0, 0, 0)
         mat:SetVector("$refracttint", self.Color)
 
         return self.CSModel

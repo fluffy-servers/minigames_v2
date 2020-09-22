@@ -16,7 +16,7 @@ end
 
 function ENT:SpawnProp()
     if table.Count(ents.FindByClass("prop_phys*")) > 100 then return end
-    local prop = self.Entity:CreateProp(self:GetPos(), self:GetAngles(), table.Random(GAMEMODE.PropModels))
+    local prop = self:CreateProp(self:GetPos(), self:GetAngles(), table.Random(GAMEMODE.PropModels))
     local phys = prop:GetPhysicsObject()
 
     if phys and phys:IsValid() then

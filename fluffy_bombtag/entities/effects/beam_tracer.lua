@@ -9,7 +9,7 @@ function EFFECT:Init(data)
     self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Norm = (self.StartPos - self.EndPos)
-    self.Entity:SetRenderBoundsWS(self.StartPos, self.EndPos)
+    self:SetRenderBoundsWS(self.StartPos, self.EndPos)
     self.Alpha = 255
     self.Color = Color(0, 255, 100, self.Alpha)
     local emitter = ParticleEmitter(self.EndPos)

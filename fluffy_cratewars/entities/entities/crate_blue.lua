@@ -19,6 +19,7 @@ function ENT:Initialize()
 
     self:PrecacheGibs()
     self:SetHealth(self.CrateHealth)
+
     -- Apply team color
     self:SetColor(team.GetColor(self.Team))
 end
@@ -26,8 +27,8 @@ end
 function ENT:OnTakeDamage(dmg)
     local attacker = dmg:GetAttacker()
 
-    if attacker:IsPlayer() then
-        if attacker:Team() == self.Team then return end
+    if attacker:IsPlayer() and attacker:Team() == self.Team then
+        return
     end
 
     self:SetHealth(self:Health() - dmg:GetDamage())

@@ -26,7 +26,7 @@ end
 
 function EFFECT:Think()
     self.Alpha = self.Alpha - FrameTime() * 150
-    self.Entity:SetRenderBoundsWS(self.StartPos, self.EndPos)
+    self:SetRenderBoundsWS(self.StartPos, self.EndPos)
     -- Kill the tracer if alpha is less than 0
 
     return (self.Alpha > 0)

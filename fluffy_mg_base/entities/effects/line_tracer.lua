@@ -8,7 +8,7 @@ function EFFECT:Init(data)
     self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Norm = (self.StartPos - self.EndPos):GetNormalized()
-    self.Entity:SetRenderBoundsWS(self.StartPos, self.EndPos)
+    self:SetRenderBoundsWS(self.StartPos, self.EndPos)
 
     self.Alpha = 200
     self.Color = Color(150, 150, 150, self.Alpha)

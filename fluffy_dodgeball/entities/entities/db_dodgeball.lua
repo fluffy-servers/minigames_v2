@@ -30,7 +30,7 @@ function ENT:OnTakeDamage(dmg)
     end
 
     -- Physically react to the damage
-    self.Entity:TakePhysicsDamage(dmg)
+    self:TakePhysicsDamage(dmg)
 end
 
 -- Respawn the ball when removed
