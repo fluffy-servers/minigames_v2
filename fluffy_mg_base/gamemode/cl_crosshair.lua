@@ -178,19 +178,20 @@ function GM:OpenCrosshairEditor()
     for i = 1, 200 do
         local p = icon_list:Add("DPanel")
         p:SetSize(44, 44)
-        local b = vgui.Create("DButton", p)
-        b:Dock(FILL)
-        b:SetText("")
-        b.n = string.format("%03d", i)
-        b.Material = Material("crosshair_outline/crosshair" .. b.n .. ".png", "noclamp")
 
-        function b:PaintOver(w, h)
+        local button = vgui.Create("DButton", p)
+        button:Dock(FILL)
+        button:SetText("")
+        button.n = string.format("%03d", i)
+        button.Material = Material("crosshair_outline/crosshair" .. button.n .. ".png", "noclamp")
+
+        function button:PaintOver(w, h)
             surface.SetDrawColor(color_white)
             surface.SetMaterial(self.Material)
             surface.DrawTexturedRect(4, 4, 36, 36)
         end
 
-        function b:DoClick()
+        function button:DoClick()
             local c = "crosshair" .. self.n .. ".png"
             crosshair_image:SetString(c)
         end

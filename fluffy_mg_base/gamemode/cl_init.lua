@@ -53,7 +53,6 @@ surface.CreateFont("FS_48", {
 surface.CreateFont("FS_60", {
     font = "Coolvetica",
     size = 48, -- hmmm
-    
 })
 
 surface.CreateFont("FS_56", {
@@ -185,7 +184,7 @@ end
 
 -- Function to adjust a colour strength
 function draw.ShadeColor(c, strength)
-    local strength = strength or 10
+    strength = strength or 10
     local r = math.Clamp(c.r + strength, 0, 255)
     local g = math.Clamp(c.g + strength, 0, 255)
     local b = math.Clamp(c.b + strength, 0, 255)
@@ -196,8 +195,7 @@ end
 -- Function to adjust a colour strength without math.Clamp
 -- Could probably break things if overflow occurs
 function draw.ShadeColorFast(c, strength)
-    local strength = strength or 10
-
+    strength = strength or 10
     return Color(c.r + strength, c.g + strength, c.b + strength)
 end
 

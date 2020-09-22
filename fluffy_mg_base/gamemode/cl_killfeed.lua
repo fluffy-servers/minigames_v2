@@ -1,5 +1,9 @@
-﻿local hud_deathnotice_time = CreateClientConVar("mg_deathnotice_time", "6", true, false, "Amount of time to show death notice")
-local have_killsound = CreateClientConVar("mg_killsound_enabled", 1, true, false, "Enable a sound effect when you get a kill")
+﻿-- I stole this from sandbox/base which is why the variable naming sucks so much
+
+local hud_deathnotice_time_cvar = CreateClientConVar("mg_deathnotice_time", "6", true, false, "Amount of time to show death notice")
+local have_killsound_cvar = CreateClientConVar("mg_killsound_enabled", 1, true, false, "Enable a sound effect when you get a kill")
+local draw_hud_cvar = GetConVar("cl_drawhud")
+
 -- These are our kill icons
 local Color_Icon = Color(255, 80, 0, 255)
 local NPC_Color = Color(250, 50, 50, 255)
@@ -19,8 +23,8 @@ killicon.AddFont("npc_satchel", "HL2MPTypeDeath", "*", Color_Icon)
 killicon.AddFont("npc_tripmine", "HL2MPTypeDeath", "*", Color_Icon)
 killicon.AddFont("weapon_crowbar", "HL2MPTypeDeath", "6", Color_Icon)
 killicon.AddFont("weapon_physcannon", "HL2MPTypeDeath", ",", Color_Icon)
-local Deaths = {}
 
+local Deaths = {}
 local function StringifyID(id)
     if isstring(id) then
         if id == "" then return "" end
@@ -29,9 +33,8 @@ local function StringifyID(id)
     end
 
     local p = Entity(id)
-    if not IsValid(ply) then return "???" end
-
-    return ply:Name()
+    if not IsValid(p) then return "???" end
+    return p:Name()
 end
 
 -- Hooks for taking in deaths
@@ -40,7 +43,7 @@ net.Receive("PlayerKilledByPlayer", function()
     local inflictor = net.ReadString()
     local attacker = net.ReadEntity()
 
-    if attacker == LocalPlayer() and have_killsound:GetBool() then
+    if attacker == LocalPlayer() and have_killsound_cvar:GetBool() then
         GAMEMODE:PlayKillSound()
     end
 
@@ -98,7 +101,6 @@ function GM:AddDeathNotice2(attacker, inflictor, victim)
         if not pc then
             Death.color2 = table.Copy(team.GetColor(victim:Team()))
         else
-            local c = Color(pc[1] * 255, pc[2] * 255, pc[3] * 255)
             Death.color2 = Color(pc[1] * 255, pc[2] * 255, pc[3] * 255)
         end
     else
@@ -140,8 +142,8 @@ local function DrawDeath(x, y, death, hud_deathnotice_time)
 end
 
 function GM:DrawDeathNotice(x, y)
-    if GetConVarNumber("cl_drawhud") == 0 then return end
-    local hud_deathnotice_time = hud_deathnotice_time:GetFloat()
+    if not draw_hud_cvar:GetBool() then return end
+    local hud_deathnotice_time = hud_deathnotice_time_cvar:GetFloat()
     x = x * ScrW()
     y = y * ScrH()
 

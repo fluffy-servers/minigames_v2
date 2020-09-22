@@ -37,11 +37,9 @@ function GM:HUDPaint()
     end
 
     -- Check team changes (where needed)
-    if GAMEMODE.HUDTeamColor then
-        if LocalPlayer():Team() ~= (GAMEMODE.team_cached or nil) then
-            GAMEMODE.team_cached = LocalPlayer():Team()
-            GAMEMODE:UpdateTeamColors(LocalPlayer():Team())
-        end
+    if GAMEMODE.HUDTeamColor and LocalPlayer():Team() ~= (GAMEMODE.team_cached or nil) then
+        GAMEMODE.team_cached = LocalPlayer():Team()
+        GAMEMODE:UpdateTeamColors(LocalPlayer():Team())
     end
 
     -- Draw some of the parts
@@ -63,10 +61,7 @@ function GM:HUDPaint()
         y = tr.HitPos:ToScreen().y
         self:DrawCrosshair(x, y)
     else
-        local tr = LocalPlayer():GetEyeTrace()
-        --if (tr.Entity and not tr.Entity:IsPlayer()) or (!tr.Entity) then
         self:DrawCrosshair(ScrW() / 2, ScrH() / 2)
-        --end
     end
 
     -- Scoring pane
@@ -265,8 +260,8 @@ function GM:DrawAmmo()
     -- Check the player is alive and playing the game
     if not LocalPlayer():Alive() then return end
 
-    if GAMEMODE.TeamBased then
-        if LocalPlayer():Team() == TEAM_SPECTATOR or LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == 0 then return end
+    if GAMEMODE.TeamBased and (LocalPlayer():Team() == TEAM_SPECTATOR or LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == 0) then
+        return
     end
 
     -- Grab the current weapon
@@ -284,11 +279,9 @@ function GM:DrawAmmo()
     ammo["MaxSecondaryClip"] = wep:GetMaxClip2()
 
     -- Some weapons have a custom ammo display function to calculate this table
-    if wep.CustomAmmoDisplay then
-        if wep:CustomAmmoDisplay() ~= nil then
-            ammo = wep:CustomAmmoDisplay()
-            if not ammo.Draw then return end
-        end
+    if wep.CustomAmmoDisplay and wep:CustomAmmoDisplay() ~= nil  then
+        ammo = wep:CustomAmmoDisplay()
+        if not ammo.Draw then return end
     end
 
     -- Check the ammo table is valid
@@ -308,30 +301,28 @@ function GM:DrawAmmo()
     surface.DrawTexturedRect(ScrW() - c_pos - (icon_size / 2), ScrH() - c_pos - (icon_size / 2), icon_size, icon_size)
 
     -- Draw the arc (if applicable)
-    if not GAMEMODE.FastHUDConvar:GetBool() then
-        if ammo["MaxPrimaryClip"] and ammo["MaxPrimaryClip"] > -1 then
-            -- Calculate the percentage with slight interpolation
-            -- Make sure the percentage isn't a division by 0
-            local p = 0
+    if ammo["MaxPrimaryClip"] and ammo["MaxPrimaryClip"] > -1 and not GAMEMODE.FastHUDConvar:GetBool() then
+        -- Calculate the percentage with slight interpolation
+        -- Make sure the percentage isn't a division by 0
+        local p = 0
 
-            if ammo["PrimaryClip"] < ammo["MaxPrimaryClip"] and ammo["MaxPrimaryClip"] > 0 then
-                p = ammo["PrimaryClip"] / ammo["MaxPrimaryClip"]
-            else
-                p = 1
-            end
-
-            -- Slight animation effect
-            if ClipPercentage then
-                ClipPercentage = math.Approach(ClipPercentage, p, FrameTime())
-            else
-                ClipPercentage = p
-            end
-
-            -- Draw the arc
-            local ang = ClipPercentage * -360
-            draw.NoTexture()
-            draw.Arc(ScrW() - c_pos, ScrH() - c_pos, 42, 6, math.Round(ang + 90), 90, 12, GAMEMODE.FCol1)
+        if ammo["PrimaryClip"] < ammo["MaxPrimaryClip"] and ammo["MaxPrimaryClip"] > 0 then
+            p = ammo["PrimaryClip"] / ammo["MaxPrimaryClip"]
+        else
+            p = 1
         end
+
+        -- Slight animation effect
+        if ClipPercentage then
+            ClipPercentage = math.Approach(ClipPercentage, p, FrameTime())
+        else
+            ClipPercentage = p
+        end
+
+        -- Draw the arc
+        local ang = ClipPercentage * -360
+        draw.NoTexture()
+        draw.Arc(ScrW() - c_pos, ScrH() - c_pos, 42, 6, math.Round(ang + 90), 90, 12, GAMEMODE.FCol1)
     end
 
     -- If there is a 'reserve' value for this gun, draw clip & ammo
@@ -357,20 +348,19 @@ function GM:CreateRoundEndPanel(message, tagline)
         GAMEMODE.RoundEndPanel:Remove()
     end
 
-    local w = ScrW()
-    local h = 160
-    local p = vgui.Create("DPanel")
-    p:SetSize(w, h)
-    p:SetPos(ScrW(), ScrH() / 2 - h / 2)
-    p.TagLine = tagline or nil
+    local ww = ScrW()
+    local hh = 160
+    local panel = vgui.Create("DPanel")
+    panel:SetSize(ww, hh)
+    panel:SetPos(ScrW(), ScrH() / 2 - hh / 2)
+    panel.TagLine = tagline or nil
 
-    if p.TagLine == "" or p.TagLine == " " then
-        p.TagLine = nil
+    if panel.TagLine == "" or panel.TagLine == " " then
+        panel.TagLine = nil
     end
+    panel.Message = message
 
-    p.Message = message
-
-    function p:Paint(w, h)
+    function panel:Paint(w, h)
         local c = Color(0, 0, 0, 200)
         draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, true, true)
 
@@ -382,13 +372,13 @@ function GM:CreateRoundEndPanel(message, tagline)
         end
     end
 
-    p:MoveTo(0, ScrH() / 2 - h / 2, 0.75, 0, -1, function(anim, p)
-        p:MoveTo(-w, ScrH() / 2 - h / 2, 0.75, GAMEMODE.RoundCooldown - 1, -1, function(anim, p)
-            p:Remove()
+    -- Animation
+    panel:MoveTo(0, ScrH() / 2 - hh / 2, 0.75, 0, -1, function()
+        panel:MoveTo(-ww, ScrH() / 2 - hh / 2, 0.75, GAMEMODE.RoundCooldown - 1, -1, function()
+            panel:Remove()
         end)
     end)
-
-    GAMEMODE.RoundEndPanel = p
+    GAMEMODE.RoundEndPanel = panel
 end
 
 -- Play a COOL sound when the round ends!
@@ -492,23 +482,25 @@ function GM:GetPlayerInfoPanel(ply)
     local panel = vgui.Create("DPanel")
     panel:SetSize(160, 64)
     panel:SetPaintedManually(true)
+
     -- Create the avatar
     local avatar = vgui.Create("AvatarCircle", panel)
     avatar:SetSize(32, 32)
     avatar:SetPos(16, 16)
     avatar:SetPlayer(ply, 32)
-    local last_health = ply:GetMaxHealth() or 100
+    --local last_health = ply:GetMaxHealth() or 100
 
     function panel:Paint(w, h)
         -- Draw a subtle background
         draw.RoundedBox(8, 0, 0, w, h, Color(0, 0, 0, 80))
+
         -- Small animation for the arc
         local hp_max = ply:GetMaxHealth() or 100
         local hp = ply:Health()
         draw.NoTexture()
+
         -- Calculate the color based on team or FFA
         local c = Color(0, 168, 255)
-
         if GAMEMODE.TeamBased then
             c = team.GetColor(ply:Team())
         else

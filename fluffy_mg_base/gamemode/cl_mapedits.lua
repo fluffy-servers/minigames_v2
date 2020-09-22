@@ -70,8 +70,8 @@ net.Receive("VisualiseMapOverrides", function()
         -- Remove single custom spawn
         if not GAMEMODE.MapOverrideProperties then return end
         if not GAMEMODE.MapOverrideProperties["customSpawns"] then return end
-    elseif mode == 3 then
-    elseif mode == 4 then
+    -- elseif mode == 3 then
+    -- elseif mode == 4 then
     end
 
     -- Register single custom entity

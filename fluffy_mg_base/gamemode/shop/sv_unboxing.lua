@@ -73,9 +73,11 @@ end
 function SHOP:InstantUnbox(unbox, ply, message)
     if not unbox.Items then return end
     local items = unbox.Items
+    
     -- Pick an item randomly
     local idx = PickWeightedRandom(unbox.Chances)
-    SHOP:AddItem(items[idex], ply)
+    SHOP:AddItem(items[idx], ply)
+
     -- Display a message
     local rarity = SHOP.RarityColors[item.Rarity]
 

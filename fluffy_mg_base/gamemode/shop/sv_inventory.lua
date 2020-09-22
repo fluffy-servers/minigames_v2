@@ -202,8 +202,8 @@ end)
 
 net.Receive("SHOP_NetworkInventory", function(len, ply)
     -- stop this from being lagged out
-    if ply.LastVerification then
-        if ply.LastVerification + 5 > CurTime() then return end
+    if ply.LastVerification and ply.LastVerification + 3 > CurTime() then
+        return
     end
 
     ply.LastVerification = CurTime()

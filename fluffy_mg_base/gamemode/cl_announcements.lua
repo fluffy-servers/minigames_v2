@@ -28,6 +28,7 @@ local function drawScaledText(x, y, text, font, color, scale)
     render.PopFilterMin()
 end
 
+--[[
 -- Draw text that can be rotated
 local function drawRotatedText(x, y, text, font, color, ang)
     -- Get the size of the text
@@ -68,6 +69,7 @@ local function drawRotatedScaledText(x, y, text, font, color, ang, scale)
     render.PopFilterMag()
     render.PopFilterMin()
 end
+]]--
 
 local location_functions = {
     ["center"] = function(w, h) return w / 2, h / 2 end,

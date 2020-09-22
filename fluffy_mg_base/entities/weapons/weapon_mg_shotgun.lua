@@ -47,10 +47,7 @@ end
 -- Called when the player presses their reload key
 function SWEP:Reload()
     if self:GetReloading() then return end
-
-    if self:Clip1() < self.Primary.ClipSize and self:GetOwner():GetAmmoCount(self.Primary.Ammo) > 0 then
-        if self:StartReload() then return end
-    end
+    if self:StartReload() then return end
 end
 
 -- Handle the reload thinking
@@ -58,6 +55,7 @@ function SWEP:StartReload()
     if self:GetReloading() then return false end
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
+
     if self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return false end
     if self:Clip1() >= self.Primary.ClipSize then return false end
     self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_START)

@@ -79,11 +79,10 @@ function SHOP:OpenInventory(display)
     SHOP:VerifyInventory()
     local display_width = display:GetWide()
     local display_height = display:GetTall()
+
     -- Scaling stuff
     local sw = math.floor(display_width / 256) - 1
-    local margin = display_width - sw * 256
-    local xx = display_width
-    local yy = display_height
+
     -- Create the mirror -> see vgui/ShopMirror.lua
     local mirror = vgui.Create("ShopMirror", display)
     mirror:SetWide(320)
@@ -135,7 +134,7 @@ function SHOP:OpenInventory(display)
             -- Toggle selection state of all other buttons
             local buttons = tabs:GetChild(0):GetChildren()
 
-            for k, v in pairs(buttons) do
+            for _, v in pairs(buttons) do
                 v.Selected = (v == self)
             end
 

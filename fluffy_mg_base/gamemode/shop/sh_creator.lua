@@ -66,12 +66,13 @@ local function GenerateCode(frame)
     if not SHOP.CreatorData["mdl"] then return end
     if not SHOP.CreatorData["attach"] then return end
     if not SHOP.CreatorData["vanillaid"] then return end
+
     -- Basic properties
     local code = "ITEM = {}\n"
-    code = code .. "ITEM.VanillaID = "" .. SHOP.CreatorData["vanillaid"] .. ""\n"
-    code = code .. "ITEM.Name = "" .. SHOP.CreatorData["name"] .. ""\n"
-    code = code .. "ITEM.Model = "" .. SHOP.CreatorData["mdl"] .. ""\n"
-    code = code .. "ITEM.Attachment = "" .. SHOP.CreatorData["attach"] .. ""\n"
+    code = code .. "ITEM.VanillaID = '" .. SHOP.CreatorData["vanillaid"] .. "'\n"
+    code = code .. "ITEM.Name = '" .. SHOP.CreatorData["name"] .. "'\n"
+    code = code .. "ITEM.Model = '" .. SHOP.CreatorData["mdl"] .. "'\n"
+    code = code .. "ITEM.Attachment = '" .. SHOP.CreatorData["attach"] .. "'\n"
 
     if SHOP.CreatorData["skin"] and SHOP.CreatorData["skin"] ~= 0 then
         code = code .. "ITEM.Skin = " .. SHOP.CreatorData["skin"] .. "\n"
@@ -104,11 +105,11 @@ local function GenerateCode(frame)
     end
 
     if SHOP.CreatorData["material"] and #SHOP.CreatorData["material"] > 1 then
-        code = code .. "ITEM.MaterialOverride = "" .. SHOP.CreatorData["material"] .. ""\n"
+        code = code .. "ITEM.MaterialOverride = '" .. SHOP.CreatorData["material"] .. "'\n"
     end
 
     -- Slot and Rarity
-    code = code .. "ITEM.Slot = "" .. (SHOP.CreatorData["slot"] or "face") .. ""\n"
+    code = code .. "ITEM.Slot = '" .. (SHOP.CreatorData["slot"] or "face") .. "'\n"
     code = code .. "ITEM.Rarity = " .. (SHOP.CreatorData["rarity"] or 1) .. "\n"
     code = code .. "\nSHOP:RegisterHat(ITEM)"
     SetClipboardText(code)

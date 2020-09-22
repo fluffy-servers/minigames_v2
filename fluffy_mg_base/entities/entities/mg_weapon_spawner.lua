@@ -91,14 +91,11 @@ end
 
 if CLIENT then
     function ENT:Draw()
-        if self:GetNWBool("GiftReady", false) then
-            -- Draw particle effect
-            if (self.NextReady or 0) < CurTime() then
+        if self:GetNWBool("GiftReady", false) and (self.NextReady or 0) < CurTime() then
                 local ef = EffectData()
                 ef:SetOrigin(self:GetPos())
                 util.Effect("spawner_ready", ef)
                 self.NextReady = CurTime() + 1
-            end
         end
     end
 end

@@ -25,6 +25,6 @@ function EFFECT:Render()
     if self.Alpha < 1 then return end
 
     local sc = self.Alpha / 200
-    render.SetMaterial(mat_beam)
+    render.SetMaterial(mat_smoke)
     render.DrawBeam(self.StartPos, self.EndPos, sc * 2.5 + 1.0, 0, 0, self.Color)
 end

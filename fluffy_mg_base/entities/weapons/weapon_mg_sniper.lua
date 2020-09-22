@@ -142,7 +142,6 @@ end
 
 -- Draw the scope if applicable
 function SWEP:DrawHUD()
-    local vm = self:GetOwner():GetViewModel()
     local mode = self:GetNWInt("Mode", 1)
 
     if mode ~= 1 then
@@ -166,7 +165,7 @@ function SWEP:DrawHUD()
         -- Draw the crosshair
         surface.DrawLine(0, h / 2, w, h / 2)
         surface.DrawLine(w / 2, 0, w / 2, h)
-        
+
         -- Draw the ammo & health on top of the darkness
         -- This will probably not be great for performance but hey
         GAMEMODE:DrawAmmo()

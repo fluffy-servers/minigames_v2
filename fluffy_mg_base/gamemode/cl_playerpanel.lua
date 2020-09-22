@@ -5,13 +5,13 @@ local offwhite = Color(223, 228, 234)
 local gray = Color(220, 221, 225)
 
 function GM:CreateInfoFrame2()
-    local w = ScrW() * 0.75
-    local h = ScrH() * 0.75
+    local ww = ScrW() * 0.75
+    local hh = ScrH() * 0.75
     local header_h = 56
     local footer_h = 40
     local f = vgui.Create("DFrame")
     f:SetTitle("")
-    f:SetSize(w, h)
+    f:SetSize(ww, hh)
     f:Center()
     f:MakePopup()
     f:ShowCloseButton(false)
@@ -99,7 +99,7 @@ function GM:CreateInfoFrame2()
     -- Add close button
     local close = vgui.Create("DButton", f)
     close:SetSize(48, header_h)
-    close:SetPos(w - 48, 0)
+    close:SetPos(ww - 48, 0)
     close:SetText("")
 
     function close:Paint(w, h)
@@ -116,7 +116,7 @@ function GM:CreateInfoFrame2()
     -- Build the bottom bar
     local bottom_bar = vgui.Create("DPanel", f)
     bottom_bar:SetSize(w, footer_h)
-    bottom_bar:SetPos(0, h - footer_h)
+    bottom_bar:SetPos(0, hh - footer_h)
 
     function bottom_bar:Paint(w, h)
         DisableClipping(true)
@@ -138,7 +138,6 @@ function GM:CreateInfoFrame2()
 
     f.ContentPanel = content
     GAMEMODE.MinigamesInfoPanel = f
-
     return f
 end
 
@@ -180,8 +179,8 @@ function GM:HelpPanel()
     local motd = vgui.Create("DHTML", panel)
     motd:Dock(FILL)
     motd:OpenURL("https://www.fluffyservers.com/guide/minigames.html")
-    motd:Call("UpdateGamemodeName("" .. name .. "")")
-    motd:Call("UpdateGamemodeDesc("" .. string.Replace(helptext, "\n", "</p><p>") .. "")")
+    motd:Call("UpdateGamemodeName('" .. name .. "')")
+    motd:Call("UpdateGamemodeDesc('" .. string.Replace(helptext, "\n", "</p><p>") .. "')")
     -- Create the play button OR a choose team button
     local play_button = vgui.Create("DButton", bottom)
     play_button:SetWide(128)

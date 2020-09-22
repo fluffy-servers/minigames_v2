@@ -31,8 +31,6 @@ PANEL.Modules = {
 }
 
 function PANEL:GetRankIcon(ply)
-    local rank = ply:GetUserGroup()
-
     if self.UserIcons[ply:SteamID64()] then
         return self.UserIcons[ply:SteamID64()]
     elseif ply:IsAdmin() then

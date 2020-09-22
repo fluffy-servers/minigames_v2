@@ -16,11 +16,11 @@ function EFFECT:Think()
     self.Life = self.Life + FrameTime() * 3
     self.Alpha = 255 * (1 - self.Life)
 
-    return (self.Life < 1)
+    return self.Life < 1
 end
 
 function EFFECT:Render()
-    if (self.Alpha < 1) then return end
+    if self.Alpha < 1 then return end
     render.SetMaterial(self.BeamMat)
     local c = self.Color
     local gap = (self.StartPos - self.EndPos)

@@ -89,9 +89,9 @@ end
 -- Load all the files
 function SHOP:LoadResources()
     local path = "fluffy_mg_base/gamemode/shop/item/"
-    local files, folders = file.Find(path .. "*", "LUA")
+    local _, folders = file.Find(path .. "*", "LUA")
 
-    for k, v in pairs(folders) do
+    for _, v in pairs(folders) do
         -- Add every item file in subdirectories
         local files = file.Find(path .. v .. "/*", "LUA")
 

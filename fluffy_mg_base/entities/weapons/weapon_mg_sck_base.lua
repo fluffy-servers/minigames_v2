@@ -94,9 +94,9 @@ if CLIENT then
 
         -- Bodygroups
         if v.bodygroup then
-            for k, v in pairs(v.bodygroup) do
-                if model:GetBodygroup(k) ~= v then
-                    model:SetBodygroup(k, v)
+            for k, val in pairs(v.bodygroup) do
+                if model:GetBodygroup(k) ~= val then
+                    model:SetBodygroup(k, val)
                 end
             end
         end
@@ -272,14 +272,61 @@ if CLIENT then
                 pos, ang = m:GetTranslation(), m:GetAngles()
             end
 
-            if self.ViewModelFlip then
-                if IsValid(self:GetOwner()) and ent == self:GetOwner():GetViewModel() then
-                    ang.r = -ang.r
-                end
+            if self.ViewModelFlip and IsValid(self:GetOwner()) and ent == self:GetOwner():GetViewModel() then
+                ang.r = -ang.r
             end
         end
 
         return pos, ang
+    end
+
+    function SWEP:CreateModelPart(v)
+        if not v.model or v.model == "" then continue end
+        if IsValid(v.modelEnt) and v.createdModel == v.model then continue end
+
+        if string.find(v.model, ".mdl") and file.Exists(v.model, "GAME") then
+            v.modelEnt = ClientsideModel(v.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
+
+            if IsValid(v.modelEnt) then
+                v.modelEnt:SetPos(self:GetPos())
+                v.modelEnt:SetAngles(self:GetAngles())
+                v.modelEnt:SetParent(self)
+                v.modelEnt:SetNoDraw(true)
+                v.createdModel = v.model
+            else
+                v.modelEnt = nil
+            end
+        else
+            print("Could not find model ", v.model)
+        end
+    end
+
+    function SWEP:CreateSpritePart(v)
+        if not v.sprite or v.sprite == "" then continue end
+        if v.spriteMaterial and v.createdSprite == v.sprite then continue end
+
+        if file.Exists("materials/" .. v.sprite .. ".vmt", "GAME") then
+            local name = v.sprite .. "-"
+
+            local params = {
+                ["$basetexture"] = v.sprite
+            }
+
+            -- Make sure we create a unique name based on the selected options
+            local tocheck = {"nocull", "additive", "vertexalpha", "vertexolor", "ignorez"}
+
+            for i, j in pairs(tocheck) do
+                if v[j] then
+                    params["$" .. j] = 1
+                    name = name .. "1"
+                else
+                    name = name .. "0"
+                end
+            end
+
+            v.createdSprite = v.sprite
+            v.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
+        end
     end
 
     function SWEP:CreateModels(tab)
@@ -287,50 +334,9 @@ if CLIENT then
 
         for k, v in pairs(tab) do
             if v.type == "Model" then
-                if not v.model or v.model == "" then continue end
-                if IsValid(v.modelEnt) and v.createdModel == v.model then continue end
-
-                if string.find(v.model, ".mdl") and file.Exists(v.model, "GAME") then
-                    v.modelEnt = ClientsideModel(v.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
-
-                    if IsValid(v.modelEnt) then
-                        v.modelEnt:SetPos(self:GetPos())
-                        v.modelEnt:SetAngles(self:GetAngles())
-                        v.modelEnt:SetParent(self)
-                        v.modelEnt:SetNoDraw(true)
-                        v.createdModel = v.model
-                    else
-                        v.modelEnt = nil
-                    end
-                else
-                    print("Could not find model ", v.model)
-                end
+                self:CreateModelPart(v)
             elseif v.type == "Sprite" then
-                if not v.sprite or v.sprite == "" then continue end
-                if v.spriteMaterial and v.createdSprite == v.sprite then continue end
-
-                if file.Exists("materials/" .. v.sprite .. ".vmt", "GAME") then
-                    local name = v.sprite .. "-"
-
-                    local params = {
-                        ["$basetexture"] = v.sprite
-                    }
-
-                    -- Make sure we create a unique name based on the selected options
-                    local tocheck = {"nocull", "additive", "vertexalpha", "vertexolor", "ignorez"}
-
-                    for i, j in pairs(tocheck) do
-                        if v[j] then
-                            params["$" .. j] = 1
-                            name = name .. "1"
-                        else
-                            name = name .. "0"
-                        end
-                    end
-
-                    v.createdSprite = v.sprite
-                    v.spriteMaterial = CreateMaterial(name, "UnlitGeneric", params)
-                end
+                self:CreateSpritePart(v)
             end
         end
     end
@@ -339,10 +345,8 @@ if CLIENT then
         if not tab then return end
 
         for k, v in pairs(tab) do
-            if v.type == "Model" then
-                if IsValid(v.modelEnt) then
-                    v.modelEnt:Remove()
-                end
+            if v.type == "Model" and IsValid(v.modelEnt) then
+                v.modelEnt:Remove()
             end
         end
     end

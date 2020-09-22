@@ -10,9 +10,7 @@ local sounds = {"vo/coast/odessa/male01/nlo_cheer01.wav", "vo/coast/odessa/male0
 
 function GM:OpenEndGamePanel()
     local frame = vgui.Create("DFrame")
-    local w = ScrW()
-    local h = ScrH()
-    frame:SetSize(w, h)
+    frame:SetSize(ScrW(), ScrH())
     frame:SetPos(0, 0)
     frame:SetTitle("")
     frame:ShowCloseButton(true)
@@ -20,11 +18,13 @@ function GM:OpenEndGamePanel()
     frame:MakePopup()
     frame:SetPopupStayAtBack(true)
     frame:SetKeyboardInputEnabled(false)
+
     frame.CurrentScreen = "End of Game"
     frame.offx = 0
     frame.offy = 0
     frame.bar_h = 64
     frame.Background = Material("fluffy/pattern1.png", "noclamp")
+
     -- Prepare variables to do with level information
     frame.CurrentXP = LocalPlayer():GetExperience()
     frame.MaxXP = LocalPlayer():GetMaxExperience()
@@ -39,6 +39,7 @@ function GM:OpenEndGamePanel()
         local psize = 512
         self.offx = (self.offx - FrameTime() * 0.1) % 1
         self.offy = (self.offy - FrameTime() * 0.15) % 1
+
         -- UV stuff
         -- DrawTexturedRectUV has a lot of quirks
         local uw = ScrW() / psize
@@ -48,19 +49,23 @@ function GM:OpenEndGamePanel()
         surface.SetDrawColor(color_white)
         surface.SetMaterial(self.Background)
         surface.DrawTexturedRectUV(0, 0, w, h, self.offx, self.offy, uw + self.offx, vh + self.offy)
+
         -- Draw the bar at the bottom of the panel
         local bar_h = self.bar_h
         self:PaintXPMessage(w, h, bar_h)
         surface.SetDrawColor(c1)
         draw.NoTexture()
         surface.DrawTexturedRect(0, h - bar_h, w, bar_h)
+
         -- Draw the basic level information
         local tw = draw.SimpleText("Level", "FS_L48", 8, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         tw = tw + draw.SimpleText(self.Level, "FS_L64", 116, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(math.floor(self.CurrentXP) .. "/" .. self.MaxXP .. "XP", "FS_L32", 224, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+
         -- Draw the bar
         local bar_empty = Color(220, 221, 225)
         local bar_filled = Color(0, 151, 230)
+
         -- XP animation
         self.CurrentXP = math.Approach(self.CurrentXP, self.TargetXP, FrameTime() * 25)
 
@@ -78,7 +83,7 @@ function GM:OpenEndGamePanel()
     function frame:PaintXPMessage(w, h, bar_h)
         if not self.XPMessage or self.XPMessage == "" then return end
         -- Draw the XP message (if applicable)
-        local xph = math.Clamp((CurTime() - self.XPMessageTime), 0, 1) * (bar_h / 2)
+        local xph = math.Clamp(CurTime() - self.XPMessageTime, 0, 1) * (bar_h / 2)
         local ca = Color(c2.r, c2.g, c2.b, 255 - xph * 2)
         draw.SimpleText(self.XPMessage or "", "FS_L32", w / 2, h - bar_h - 2 + xph, ca, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
@@ -232,10 +237,10 @@ function GM:OpenEndGamePanel()
 
     GAMEMODE.EndGamePanel = frame
     local scoreboard = vgui.Create("DPanel", frame)
-    local h = ScrH() - 64 - (40 * 2)
-    local w = h * 0.75
-    scoreboard:SetSize(w, h)
-    scoreboard:SetPos(ScrW() / 2 - w / 2, 40)
+    local hh = ScrH() - 64 - (40 * 2)
+    local ww = hh * 0.75
+    scoreboard:SetSize(ww, hh)
+    scoreboard:SetPos(ScrW() / 2 - ww / 2, 40)
     scoreboard.ScoreboardMessage = "Scoreboard"
     scoreboard.ShowTeams = true
     scoreboard.yy = 56

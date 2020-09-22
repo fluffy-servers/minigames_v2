@@ -3,7 +3,11 @@
     -- This only applies in some cases where general team switching won't fly
     if (ply:Team() == TEAM_SPECTATOR and teamid == TEAM_UNASSIGNED) or (ply:Team() == TEAM_UNASSIGNED and teamid == TEAM_SPECTATOR) then
         if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or (not GAMEMODE.PlayerChooseTeams) then
-            if not hook.Run("PlayerCanJoinTeam", ply, teamid) then return end -- still follow these rules
+            -- Obey this hook
+            if not hook.Run("PlayerCanJoinTeam", ply, teamid) then 
+                return 
+            end
+
             GAMEMODE:PlayerJoinTeam(ply, teamid)
         end
     end
@@ -64,9 +68,9 @@ end
 
 -- Useful function to swap the current teams
 function GM:SwapTeams(respawn, swapscores)
+    respawn = respawn or true
     local red_players = team.GetPlayers(TEAM_RED)
     local blue_players = team.GetPlayers(TEAM_BLUE)
-    local respawn = respawn or true
 
     -- Move red players to blue
     for k, v in pairs(red_players) do
@@ -99,7 +103,7 @@ end
 -- This is good for rebalancing if things go really badly
 function GM:ShuffleTeams(respawn)
     -- Figure out what players are eligible for team swaps
-    local respawn = respawn or true
+    respawn = respawn or true
     local players = {}
     local num = 0
 

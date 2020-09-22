@@ -52,9 +52,9 @@ function meta:LoadLevelFromDB()
             ply:SetExperience(data[1]["xp"])
         else
             -- Add new blank row into the table
-            local q = GAMEMODE.MinigamesPQueries["addnewlevel"]
-            q:setString(1, ply:SteamID64())
-            q:start()
+            local q2 = GAMEMODE.MinigamesPQueries["addnewlevel"]
+            q2:setString(1, ply:SteamID64())
+            q2:start()
         end
     end
 
@@ -105,12 +105,12 @@ end)
 -- Maximum of 20XP for any given source (except round wins)
 -- Add a stat conversion type
 -- Note that this WILL override if already exists - use this for good not evil please
-function GM:AddStatConversion(type, nicename, value, max)
+function GM:AddStatConversion(stat, nicename, value, max)
     if not GAMEMODE.StatConversions then
         GAMEMODE.StatConversions = {}
     end
 
-    GAMEMODE.StatConversions[type] = {nicename, value, max or nil}
+    GAMEMODE.StatConversions[stat] = {nicename, value, max or nil}
 end
 
 hook.Add("Initialize", "AddBaseStatConversions", function()

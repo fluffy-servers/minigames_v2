@@ -27,11 +27,10 @@ function EFFECT:Think()
     self.Angle = self.Angle + FrameTime() * 1
     self.Z = self.Z + FrameTime() * 20
 
-    return (self.Life > 0)
+    return self.Life > 0
 end
 
 function EFFECT:Render()
-    local p = self.Pos
     local c = HSVToColor(CurTime() * 20 % 360, 1, 1)
     c.a = 255 * 4 * (self.Life - (self.Life * self.Life))
 

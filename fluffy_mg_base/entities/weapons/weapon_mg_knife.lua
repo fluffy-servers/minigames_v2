@@ -129,7 +129,7 @@ function SWEP:EntityFaceBack(ent)
         angle = 360 + angle
     end
 
-    return (angle <= 90 and angle >= -90)
+    return angle <= 90 and angle >= -90
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)

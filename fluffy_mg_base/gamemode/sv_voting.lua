@@ -190,13 +190,11 @@ function GM:RockTheVote(ply)
         return
     end
 
-    local voted = false
-
     if not GAMEMODE.RTV[ply] then
         GAMEMODE.RTV[ply] = true
         GAMEMODE.RTVCount = (GAMEMODE.RTVCount or 0) + 1
         local c = GAMEMODE.RTVCount
-        local t = player.GetCount()
+        -- local t = player.GetCount()
         local m = math.ceil(player.GetCount() * 0.5)
 
         if c >= m then

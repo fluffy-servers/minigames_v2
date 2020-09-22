@@ -9,10 +9,10 @@ function surface.PrecacheArc(cx, cy, radius, thickness, startang, endang, roughn
     local triarc = {}
     -- local deg2rad = math.pi / 180
     -- Define step
-    local roughness = math.max(roughness or 1, 1)
+    roughness = math.max(roughness or 1, 1)
     local step = roughness
     -- Correct start/end ang
-    local startang, endang = startang or 0, endang or 0
+    startang, endang = startang or 0, endang or 0
 
     if startang > endang then
         step = math.abs(step) * -1

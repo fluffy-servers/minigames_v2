@@ -12,7 +12,7 @@ hook.Add("InitPostEntity", "PrepareStatsStuff", function()
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
     GAMEMODE.MinigamesPQueries["getstats"] = db:prepare("SELECT category, points FROM stats_minigames_new WHERE `steamid64` = ? AND `gamemode` = ?;")
-    GAMEMODE.MinigamesPQueries["addnewstats"] = db:prepare("INSERT INTO stats_minigames VALUES(?, ?, "{}");")
+    GAMEMODE.MinigamesPQueries["addnewstats"] = db:prepare("INSERT INTO stats_minigames VALUES(?, ?, \"{}\");")
     GAMEMODE.MinigamesPQueries["updatestats"] = db:prepare("INSERT INTO stats_minigames_new VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points);")
 end)
 
@@ -172,9 +172,6 @@ function meta:UpdateStatsToDB()
             new_table[k] = new_table[k] + v
         end
     end
-
-    -- Convert table to json form
-    local json = util.TableToJSON(new_table, false)
 
     -- Prepare the query
     for k, v in pairs(new_table) do

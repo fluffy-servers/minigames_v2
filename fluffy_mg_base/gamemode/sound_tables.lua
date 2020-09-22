@@ -8,14 +8,14 @@ GM.DefaultDeathSoundsRare = {
         "vo/npc/male01/vanswer04.wav", -- Should I take that personally?
         "vo/npc/male01/vanswer13.wav", -- Stop, you're killing me
         "vo/npc/male01/vanswer14.wav", -- What'd I do to deserve this
-        
+
         "vo/npc/male01/answer04.wav", -- Try not to dwell on it
         "vo/npc/male01/answer11.wav", -- I'll put it on your tombstone
         "vo/npc/male01/answer34.wav", -- Don't forget Hawaii
         "vo/npc/male01/answer35.wav", -- Try not to let it get to ya
         "vo/npc/male01/answer36.wav", -- Wouldn't be the first time
         "vo/npc/male01/answer40.wav", -- There's a first time for everything
-        
+
         "vo/npc/male01/question05.wav", -- Whoa, deja vu
         "vo/npc/male01/question10.wav", -- I can't believe this day has finally come!
         "vo/npc/male01/question11.wav", -- I'm pretty sure this isn't part of the plan
@@ -31,14 +31,14 @@ GM.DefaultDeathSoundsRare = {
         "vo/npc/female01/vanswer04.wav", -- Should I take that personally?
         "vo/npc/female01/vanswer13.wav", -- Stop, you're killing me
         "vo/npc/female01/vanswer14.wav", -- What'd I do to deserve this
-        
+
         "vo/npc/female01/answer04.wav", -- Try not to dwell on it
         "vo/npc/female01/answer11.wav", -- I'll put it on your tombstone
         "vo/npc/female01/answer34.wav", -- Don't forget Hawaii
         "vo/npc/female01/answer35.wav", -- Try not to let it get to ya
         "vo/npc/female01/answer36.wav", -- Wouldn't be the first time
         "vo/npc/female01/answer40.wav", -- There's a first time for everything
-        
+
         "vo/npc/female01/question05.wav", -- Whoa, deja vu
         "vo/npc/female01/question10.wav", -- I can't believe this day has finally come!
         "vo/npc/female01/question11.wav", -- I'm pretty sure this isn't part of the plan
@@ -66,7 +66,7 @@ GM.DefaultDeathSoundsUncommon = {
         "vo/npc/male01/gordead_ques06.wav",
         "vo/npc/male01/gordead_ques10.wav",
         "vo/npc/male01/gordead_ques14.wav",
-        
+
         "vo/trainyard/male01/cit_window_use01.wav",
         "vo/trainyard/male01/cit_window_use03.wav",
     },
@@ -83,12 +83,12 @@ GM.DefaultDeathSoundsUncommon = {
         "vo/npc/female01/gordead_ques06.wav",
         "vo/npc/female01/gordead_ques10.wav",
         "vo/npc/female01/gordead_ques14.wav",
-        
+
         "vo/trainyard/female01/cit_window_use01.wav",
         "vo/trainyard/female01/cit_window_use03.wav",
     }
 }
-  
+
 GM.DefaultDeathSoundsCommon = {
     male = {
         "vo/npc/male01/uhoh.wav",
@@ -119,7 +119,7 @@ GM.DefaultDeathSoundsCommon = {
         "vo/streetwar/sniper/male01/c17_09_help01.wav",
         "vo/streetwar/sniper/male01/c17_09_help02.wav",
         "vo/streetwar/sniper/male01/c17_09_help03.wav",
-        
+
         "vo/npc/barney/ba_pain01.wav",
         "vo/npc/barney/ba_pain01.wav",
         "vo/npc/barney/ba_pain02.wav",
@@ -134,7 +134,7 @@ GM.DefaultDeathSoundsCommon = {
         "vo/npc/barney/ba_wounded02.wav",
         "vo/npc/barney/ba_wounded03.wav",
     },
-    
+
     female = {
         "vo/npc/female01/uhoh.wav",
         "vo/npc/female01/help01.wav",
@@ -161,7 +161,7 @@ GM.DefaultDeathSoundsCommon = {
         "vo/npc/female01/pain07.wav",
         "vo/npc/female01/pain08.wav",
         "vo/npc/female01/pain09.wav",
-        
+
         "vo/npc/alyx/hurt04.wav",
         "vo/npc/alyx/hurt05.wav",
         "vo/npc/alyx/hurt06.wav",
@@ -174,7 +174,7 @@ GM.DefaultDeathSoundsCommon = {
 function GM:GetRandomDeathSound(gender)
     if not gender then gender = "male" end
     if gender != "male" and gender != "female" then gender = "male" end
-    
+
     local c = math.random()
     if c > 0.9 then
         -- Play a rare sound

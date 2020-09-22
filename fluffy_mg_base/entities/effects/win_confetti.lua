@@ -1,8 +1,5 @@
 ﻿function EFFECT:Init(data)
-    local sounds = {"vo/coast/odessa/male01/nlo_cheer01.wav", "vo/coast/odessa/male01/nlo_cheer02.wav", "vo/coast/odessa/male01/nlo_cheer03.wav", "vo/coast/odessa/male01/nlo_cheer04.wav", "vo/coast/odessa/female01/nlo_cheer01.wav", "vo/coast/odessa/female01/nlo_cheer02.wav", "vo/coast/odessa/female01/nlo_cheer03.wav",}
-
     local pos = data:GetOrigin() + Vector(0, 0, 16)
-    local color = data:GetStart()
     local num = 50
     local emitter = ParticleEmitter(pos, true)
     local material = Material("particles/balloon_bit")

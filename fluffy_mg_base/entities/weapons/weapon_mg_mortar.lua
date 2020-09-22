@@ -31,7 +31,7 @@ function SWEP:Launch()
 
     -- Find starting position & angles for the rocket
     local owner = self:GetOwner()
-    local ang = owner:EyeAngles()
+    -- local ang = owner:EyeAngles()
     local src = owner:GetShootPos() + (owner:GetAimVector() * 8)
 
     -- Play animation & effects
@@ -47,6 +47,7 @@ end
 function SWEP:CreateRocket(pos, velocity)
     local grenade = ents.Create("mg_mortar_rocket")
     if not IsValid(grenade) then return end
+
     grenade.WeaponEnt = self
     grenade.Player = self:GetOwner()
     grenade:SetPos(pos)

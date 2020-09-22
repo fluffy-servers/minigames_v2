@@ -26,27 +26,35 @@ end
 function GM:CreateDBTables()
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
+
     print("Starting table creation...")
     local q1 = db:query([[CREATE TABLE minigames_xp (
-    steamid64 VARCHAR(64),
-    xp INT,
-    level INT,
-    PRIMARY KEY (steamid64)
-   );]])
+        steamid64 VARCHAR(64),
+        xp INT,
+        level INT,
+        PRIMARY KEY (steamid64)
+        );
+    ]])
     q1:start()
+
     local q2 = db:query([[CREATE TABLE stats_minigames_new (
         steamid64 VARCHAR(64),
         gamemode VARCHAR(64),
         category VARCHAR(64),
         points INT,
         PRIMARY KEY (steamid64)
-   );]])
+        );
+    ]])
     q2:start()
+
     local q3 = db:query([[CREATE TABLE minigames_inventory (
         steamid64 VARCHAR(64),
         inventory TEXT,
         equipped TEXT,
         PRIMARY KEY (steamid64)
-   );]])
+        );
+    ]])
+    q3:start()
+
     print("Created tables")
 end
