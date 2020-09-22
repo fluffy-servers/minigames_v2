@@ -16,3 +16,6 @@ jobs:
       - uses: TASSIA710/action-glua-lint@master
         with:
           failOnWarning: true
+          lint_unusedParameters: false
+          lint_unusedLoopVars: false
+          lint_whitespaceStyle: false
