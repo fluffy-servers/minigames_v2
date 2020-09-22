@@ -151,13 +151,11 @@ function PANEL:TrailIcon(ITEM)
         surface.DrawTexturedRectUV(off / 2, 0, w - off, h - off, 0, self.uv, 1, self.uv + 1)
 
         -- Scroll the trail if in the right category
-        if IsValid(SHOP.InventoryPanel) then
-            if not self:IsHovered() and SHOP.InventoryPanel.Category == "Trails" then
-                self.uv = self.uv + FrameTime() * 0.5
+        if IsValid(SHOP.InventoryPanel) and not self:IsHovered() and SHOP.InventoryPanel.Category == "Trails" then
+            self.uv = self.uv + FrameTime() * 0.5
 
-                if self.uv > 1 then
-                    self.uv = 0
-                end
+            if self.uv > 1 then
+                self.uv = 0
             end
         end
     end
@@ -238,8 +236,6 @@ function PANEL:WearableIcon(ITEM)
         self.icon:SetFOV(26)
     end
 
-    local shift = Vector(0, 0, 0)
-
     if ITEM.IconShift then
         self.icon:SetCamPos(self.icon:GetCamPos() + ITEM.IconShift)
         self.icon:SetLookAt(self.icon:GetLookAt() + ITEM.IconShift)
@@ -274,14 +270,16 @@ function PANEL:DoClick()
     local ITEM = self.ITEM
     if not ITEM then return end
     local Menu = DermaMenu()
+
     local rarity_color = rarity_colors[ITEM.Rarity or 1]
     local rarity_box = Menu:AddOption(rarity_names[ITEM.Rarity or 1])
     rarity_box:SetTextColor(color_white)
     rarity_box:SetIcon("icon16/star.png")
-    rarity_box.Paint = function(self, w, h) end
-    rarity_box.PaintOver = function(self, w, h) end
 
-    Menu.Paint = function(self, w, h)
+    function rarity_box:Paint(w, h) end
+    function rarity_box:PaintOver(w, h) end
+
+    function Menu:Paint(w, h)
         derma.SkinHook("Paint", "Menu", self, w, h)
         draw.RoundedBox(0, 1, 1, w - 2, 21, rarity_color)
     end
@@ -299,8 +297,8 @@ function PANEL:DoClick()
         Menu:AddOption("Unbox", function()
             SHOP:RequestUnbox(self.key)
         end):SetIcon("icon16/box.png")
-    elseif ITEM.Type == "Paint" then
-    else -- Add no buttons :(
+    --elseif ITEM.Type == "Paint" then
+    else
         -- Add equip button
         local text = "Equip"
 

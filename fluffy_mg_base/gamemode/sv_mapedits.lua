@@ -19,11 +19,13 @@ function GM:LoadMapOverrideProperties()
     GAMEMODE:GetOriginalSpawnLocations()
 end
 
+--[[
 local function registerSpawnType(tbl, class)
     for k, v in pairs(ents.FindByClass(class)) do
         table.insert(tbl, {v:GetPos(), class})
     end
 end
+]]--
 
 -- Store the original spawn locations for the map
 function GM:GetOriginalSpawnLocations()
@@ -90,8 +92,8 @@ function GM:ApplyMapOverrideEntities()
         e:SetPos(pos)
         e:Spawn()
 
-        for k, v in pairs(kvs) do
-            e:SetKeyValue(k, v)
+        for kk, vv in pairs(kvs) do
+            e:SetKeyValue(kk, vv)
         end
     end
 end

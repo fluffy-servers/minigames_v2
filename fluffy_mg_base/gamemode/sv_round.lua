@@ -178,29 +178,33 @@ end
 
 -- End the round
 function GM:EndRound(reason, extra)
+
     -- Check that we're in a round
     if not GAMEMODE:InRound() then return end
     -- Stop the timer
     timer.Remove("GamemodeTimer")
+
     -- The end of each round is honestly the painful part
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     local winners = nil
     local msg = "The round has ended!"
-    local extra = nil
     winners, msg, extra = GAMEMODE:HandleEndRound(reason)
+
     -- Send the result to the players
     net.Start("EndRound")
     net.WriteString(msg)
     net.WriteString(extra or "")
     net.Broadcast()
+
     -- STATS: Add round wins
     GAMEMODE:StatsRoundWin(winners)
+
     -- Apply confetti effect
     GAMEMODE:ConfettiEffect(winners)
+
     -- Move to next round
     hook.Call("RoundEnd")
     SetGlobalString("RoundState", "EndRound")
-
     timer.Simple(GAMEMODE.RoundCooldown, function()
         GAMEMODE:PreStartRound()
     end)
@@ -368,10 +372,8 @@ function GM:CheckTeamElimination()
         end
     end
 
-    if GAMEMODE.TeamSurvival then
-        if GAMEMODE:GetTeamLivingPlayers(GAMEMODE.SurvivorTeam) == 0 then
-            GAMEMODE:EndRound(GAMEMODE.HunterTeam)
-        end
+    if GAMEMODE.TeamSurvival and GAMEMODE:GetTeamLivingPlayers(GAMEMODE.SurvivorTeam) == 0 then
+        GAMEMODE:EndRound(GAMEMODE.HunterTeam)
     end
 end
 

@@ -77,11 +77,6 @@ end
 function SHOP:OpenInventory(display)
     if not IsValid(display) then return end
     SHOP:VerifyInventory()
-    local display_width = display:GetWide()
-    local display_height = display:GetTall()
-
-    -- Scaling stuff
-    local sw = math.floor(display_width / 256) - 1
 
     -- Create the mirror -> see vgui/ShopMirror.lua
     local mirror = vgui.Create("ShopMirror", display)
@@ -89,6 +84,7 @@ function SHOP:OpenInventory(display)
     mirror:Dock(LEFT)
     mirror:SetCamera(default_cam.x, default_cam.y)
     mirror:SetAngle(default_cam.z)
+
     -- Scrollable category list
     local tabs = vgui.Create("DScrollPanel", display)
     tabs:SetWide(128)
@@ -258,7 +254,7 @@ function SHOP:OpenPaintBox(topaint)
     frame:SetDraggable(false)
     frame:SetTitle("")
 
-    frame.OnClose = function(self)
+    function frame:OnClose()
         SHOP.InventoryPanel:SetMouseInputEnabled(true)
     end
 

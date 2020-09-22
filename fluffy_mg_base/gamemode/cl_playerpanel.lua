@@ -66,34 +66,34 @@ function GM:CreateInfoFrame2()
     local xx = wide
 
     for k, v in pairs(header_buttons) do
-        local name = v["name"]
+        local tab_name = v["name"]
 
-        if name == "Items" then
-            if not LocalPlayer():IsAdmin() then continue end
+        if tab_name == "Items" and not LocalPlayer():IsAdmin() then
+            continue
         end
 
-        local wide = surface.GetTextSize(name) + 24
+        local b_wide = surface.GetTextSize(tab_name) + 24
         local b = vgui.Create("DButton", f)
-        b:SetSize(wide, header_h)
+        b:SetSize(b_wide, header_h)
         b:SetPos(xx, 0)
         b:SetText("")
 
         function b:Paint(w, h)
             local c = lightblue
 
-            if self:IsHovered() or (f.SelectedButton == name) then
+            if self:IsHovered() or (f.SelectedButton == tab_name) then
                 c = darkblue
             end
 
             draw.RoundedBox(0, 0, 0, w, h, c)
-            GAMEMODE:DrawShadowText(name, "FS_L40", w / 2, h + 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+            GAMEMODE:DrawShadowText(tab_name, "FS_L40", w / 2, h + 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
         end
 
         function b:DoClick()
             GAMEMODE:OpenInfoOption(v["name"], v["func"])
         end
 
-        xx = xx + wide
+        xx = xx + b_wide
     end
 
     -- Add close button
@@ -115,7 +115,7 @@ function GM:CreateInfoFrame2()
     f.CloseButton = close
     -- Build the bottom bar
     local bottom_bar = vgui.Create("DPanel", f)
-    bottom_bar:SetSize(w, footer_h)
+    bottom_bar:SetSize(ww, footer_h)
     bottom_bar:SetPos(0, hh - footer_h)
 
     function bottom_bar:Paint(w, h)
@@ -128,7 +128,7 @@ function GM:CreateInfoFrame2()
     f.BottomBar = bottom_bar
     -- Build the content panel
     local content = vgui.Create("DPanel", f)
-    content:SetSize(w, h - header_h - footer_h)
+    content:SetSize(ww, hh - header_h - footer_h)
     content:SetPos(0, header_h)
 
     function content:Paint(w, h)
@@ -187,7 +187,7 @@ function GM:HelpPanel()
     play_button:Dock(RIGHT)
     play_button:SetText("")
 
-    play_button.Paint = function(self, w, h)
+    function play_button:Paint(w, h)
         DisableClipping(true)
         draw.RoundedBoxEx(8, 0, 4, w, h, Color(68, 189, 50), false, false, false, true)
         draw.RoundedBoxEx(8, 0, 0, w, h, Color(76, 209, 55), false, false, false, true)
@@ -195,7 +195,7 @@ function GM:HelpPanel()
         DisableClipping(false)
     end
 
-    if GAMEMODE.TeamBased and (not GAMEMODE.TeamSurvival) and (GAMEMODE.PlayerChooseTeams) then
+    if GAMEMODE.TeamBased and not GAMEMODE.TeamSurvival and GAMEMODE.PlayerChooseTeams then
         play_button:SetWide(192)
         play_button.Message = "Choose Team"
 
@@ -229,7 +229,7 @@ function GM:TeamPanel()
     -- Create a panel for each team
     local i = 0
 
-    for k, v in pairs(team.GetAllTeams()) do
+    for k, _ in pairs(team.GetAllTeams()) do
         if k == TEAM_UNASSIGNED or k == TEAM_CONNECTING or k == TEAM_SPECTATOR then continue end
         -- Make a panel for each team
         local team_panel = vgui.Create("DPanel", panel)
@@ -416,15 +416,13 @@ function GM:TeamPanelFFA()
                 self.players[ply] = row
 
                 function row:Think()
-                    if v == TEAM_SPECTATOR and not ply:Team() == TEAM_SPECTATOR then
+                    if v == TEAM_SPECTATOR and ply:Team() ~= TEAM_SPECTATOR then
                         self:Remove()
-
                         return
                     end
 
                     if v ~= TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then
                         self:Remove()
-
                         return
                     end
                 end

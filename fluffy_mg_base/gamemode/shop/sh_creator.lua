@@ -54,14 +54,6 @@ function SHOP:ParseVanillaItem(ITEM)
     return ITEM
 end
 
-local function Broadcast(frame)
-    if not SHOP.CreatorData then return end
-    PrintTable(SHOP.CreatorData)
-    net.Start("ItemCreatorBroadcast")
-    net.WriteTable(SHOP.CreatorData)
-    net.SendToServer()
-end
-
 local function GenerateCode(frame)
     if not SHOP.CreatorData["mdl"] then return end
     if not SHOP.CreatorData["attach"] then return end
@@ -300,7 +292,7 @@ local function BasicTab(frame)
     Attachments:AddChoice("chest")
     Attachments:AddChoice("forward")
 
-    Attachments.OnSelect = function(panel, index, value)
+    function Attachments:OnSelect(index, value)
         frame:UpdateInfo()
     end
 
@@ -314,7 +306,7 @@ local function BasicTab(frame)
     ScaleSlider:SetDecimals(2)
     ScaleSlider:SetValue(SHOP.CreatorData["scale"] or 1)
 
-    ScaleSlider.OnValueChanged = function()
+    function ScaleSlider:OnValueChanged()
         frame:UpdateInfo()
     end
 
@@ -480,7 +472,7 @@ local function PropertiesTab(frame)
     Slots:AddChoice("hat")
     Slots:AddChoice("head")
 
-    Slots.OnSelect = function(panel, index, value)
+    function Slots:OnSelect(index, value)
         frame:UpdateInfo()
     end
 
@@ -554,6 +546,7 @@ local function MaterialTab(frame)
     local CModeLabel = vgui.Create("DLabel", panel)
     CModeLabel:SetPos(24, 16)
     CModeLabel:SetText("Color Mode:")
+
     local CModes = vgui.Create("DComboBox", panel)
     CModes:SetPos(24, 32)
     CModes:SetSize(252, 24)
@@ -562,7 +555,7 @@ local function MaterialTab(frame)
     CModes:AddChoice("Paintable")
 
     --CModes:AddChoice("Force Color (WIP)")
-    CModes.OnSelect = function(panel, index, value)
+    function CModes:OnSelect(index, value)
         frame:UpdateInfo()
     end
 
@@ -573,20 +566,22 @@ local function MaterialTab(frame)
     Mixer:SetColor(SHOP.CreatorData["color"] or color_white)
     Mixer:SetPalette(false)
 
-    Mixer.ValueChanged = function()
+    function Mixer:ValueChanged()
         frame:UpdateInfo()
     end
 
     frame.ColorMixer = Mixer
+
     local MaterialLabel = vgui.Create("DLabel", panel)
     MaterialLabel:SetPos(24, 224)
     MaterialLabel:SetText("Material:")
+
     local MaterialPicker = vgui.Create("DTextEntry", panel)
     MaterialPicker:SetPos(24, 256)
     MaterialPicker:SetSize(252, 24)
     MaterialPicker:SetText(SHOP.CreatorData["material"] or "")
 
-    MaterialPicker.OnEnter = function(self)
+    function MaterialPicker:OnEnter()
         frame:UpdateInfo()
     end
 
@@ -613,15 +608,19 @@ function SHOP.OpenCreatorPanel()
         draw.RoundedBox(8, 0, 0, w, h, Color(47, 54, 64))
     end
 
-    frame.UpdateInfo = function(self)
+    function frame:UpdateInfo(self)
         UpdateInfo(self)
     end
 
-    frame.Broadcast = function(self)
-        Broadcast(self)
+    function frame:Broadcast(self)
+        if not SHOP.CreatorData then return end
+        PrintTable(SHOP.CreatorData)
+        net.Start("ItemCreatorBroadcast")
+        net.WriteTable(SHOP.CreatorData)
+        net.SendToServer()
     end
 
-    frame.GenerateCode = function(self)
+    function frame:GenerateCode(self)
         GenerateCode(self)
     end
 
@@ -654,10 +653,8 @@ net.Receive("ItemCreatorBroadcast", function()
     local ply = net.ReadEntity()
     if ply == LocalPlayer() then return end
 
-    if ply.CreatorItem then
-        if IsValid(ply.CreatorItem.entity) then
-            SafeRemoveEntity(ply.CreatorItem.entity)
-        end
+    if ply.CreatorItem and IsValid(ply.CreatorItem.entity) then
+        SafeRemoveEntity(ply.CreatorItem.entity)
     end
 
     ply.CreatorItem = ITEM

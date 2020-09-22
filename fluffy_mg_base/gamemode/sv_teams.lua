@@ -1,15 +1,15 @@
 ﻿function GM:PlayerRequestTeam(ply, teamid)
     -- If players are spectating, they can change to Unassigned (and vice versa)
     -- This only applies in some cases where general team switching won't fly
-    if (ply:Team() == TEAM_SPECTATOR and teamid == TEAM_UNASSIGNED) or (ply:Team() == TEAM_UNASSIGNED and teamid == TEAM_SPECTATOR) then
-        if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or (not GAMEMODE.PlayerChooseTeams) then
-            -- Obey this hook
-            if not hook.Run("PlayerCanJoinTeam", ply, teamid) then 
-                return 
-            end
-
-            GAMEMODE:PlayerJoinTeam(ply, teamid)
+    -- tidy this up at some point
+    local moving_spec_ffa = (ply:Team() == TEAM_SPECTATOR and teamid == TEAM_UNASSIGNED) or (ply:Team() == TEAM_UNASSIGNED and teamid == TEAM_SPECTATOR)
+    if moving_spec_ffa and (not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or (not GAMEMODE.PlayerChooseTeams)) then
+        -- Obey this hook
+        if not hook.Run("PlayerCanJoinTeam", ply, teamid) then
+            return
         end
+
+        GAMEMODE:PlayerJoinTeam(ply, teamid)
     end
 
     -- No team swapping in FFA gamemodes (except the above case)

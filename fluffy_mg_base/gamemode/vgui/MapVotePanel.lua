@@ -5,8 +5,9 @@ function PANEL:Init()
 end
 
 function PANEL:AddChildren(width, height)
-    local width = self:GetWide()
-    local height = self:GetTall()
+    width = self:GetWide()
+    height = self:GetTall()
+
     local p = self
     -- Create the icon for each map
     -- The icon is loaded from the Fluffy Servers website

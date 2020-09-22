@@ -40,7 +40,7 @@ end
 -- This function is taken straight from the wiki
 -- https://wiki.facepunch.com/gmod/surface.DrawPoly
 local function drawCircle(x, y, radius, seg, offset)
-    local offset = offset or 0
+    offset = offset or 0
     local cir = {}
 
     table.insert(cir, {

@@ -73,7 +73,7 @@ end
 function SHOP:InstantUnbox(unbox, ply, message)
     if not unbox.Items then return end
     local items = unbox.Items
-    
+
     -- Pick an item randomly
     local idx = PickWeightedRandom(unbox.Chances)
     SHOP:AddItem(items[idx], ply)

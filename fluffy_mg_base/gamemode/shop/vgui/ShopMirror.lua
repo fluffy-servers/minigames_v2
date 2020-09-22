@@ -30,7 +30,7 @@ function PANEL:LayoutEntity(ent)
     end
 
     if self.Pressed then
-        local mx, my = gui.MousePos()
+        local mx, _ = gui.MousePos()
         self.Angles = self.Angles - Angle(0, (self.PressX or mx) - mx, 0)
         self.PressX, self.PressY = gui.MousePos()
         ent:SetAngles(self.Angles)
