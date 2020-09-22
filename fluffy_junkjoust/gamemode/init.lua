@@ -1,6 +1,5 @@
-AddCSLuaFile('cl_init.lua')
+﻿AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
-
 include('shared.lua')
 
 -- Give the player the gravity gun
@@ -20,18 +19,19 @@ end
 -- Stat points for throwing
 function GM:GravGunPunt(ply, ent)
     local model = ent:GetModel()
-    
+
     if ply.HoldingProp then
         if model == 'models/props_junk/sawblade001a.mdl' then
-            ply:AddStatPoints('Sawblade Tosses', 1)    
+            ply:AddStatPoints('Sawblade Tosses', 1)
         else
             ply:AddStatPoints('Props Thrown', 1)
         end
     else
         ply:AddStatPoints('Props Punted', 1)
     end
-    
+
     ply.HoldingProp = false
+
     return true
 end
 
@@ -44,6 +44,7 @@ end)
 hook.Add('EntityTakeDamage', 'DoubleDamage', function(target, dmginfo)
     if target:IsPlayer() then
         dmginfo:ScaleDamage(2)
+
         if dmginfo:GetDamage() < 15 then
             dmginfo:SetDamage(dmginfo:GetDamage() * 3.5)
         elseif dmginfo:GetDamage() > 65 then

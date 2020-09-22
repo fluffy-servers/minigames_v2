@@ -1,9 +1,8 @@
---[[
+﻿--[[
     The big ol' core of the gamemode
     Probably needs to be split into some more files at this point
     But this isn't a total mess yet! Go me!
 --]]
-
 -- Send all the required files to the client
 -- Very important! Don't forget!
 AddCSLuaFile('drawarc.lua')
@@ -19,31 +18,24 @@ AddCSLuaFile('cl_announcements.lua')
 AddCSLuaFile('cl_killfeed.lua')
 AddCSLuaFile('cl_chat.lua')
 AddCSLuaFile('cl_mapedits.lua')
-
 AddCSLuaFile('vgui/AvatarCircle.lua')
 AddCSLuaFile('vgui/MapVotePanel.lua')
 AddCSLuaFile('vgui/ScoreboardRow.lua')
-
 AddCSLuaFile('shop/sh_init.lua')
-
 AddCSLuaFile('shared.lua')
 AddCSLuaFile('sound_tables.lua')
 AddCSLuaFile('sh_levels.lua')
 AddCSLuaFile('sh_scorehelper.lua')
-
 -- Add workshop content
 resource.AddWorkshop('1518438705')
 resource.AddFile('resource/fonts/BebasKai.ttf')
 resource.AddFile('resource/fonts/LemonMilk.ttf')
-
 resource.AddFile('materials/fluffy/pattern1.png')
 resource.AddFile('materials/fluffy/health.png')
 resource.AddFile('materials/fluffy/ammo.png')
 resource.AddFile('materials/fluffy/time.png')
-
 -- Include useful server files
 include('shared.lua')
-
 -- Add net message
 util.AddNetworkString('EndRound')
 util.AddNetworkString('MinigamesGameEnd')
@@ -56,48 +48,50 @@ util.AddNetworkString('SpectateState')
 -- Called each time a player spawns
 function GM:PlayerSpawn(ply)
     local state = GAMEMODE:GetRoundState()
-    
+
     -- If elimination, block respawns during round
-    if state != 'PreRound' and GAMEMODE.Elimination then
+    if state ~= 'PreRound' and GAMEMODE.Elimination then
         self:PlayerSpawnAsSpectator(ply)
+
         return
     end
-    
+
     -- Spectators should be spawned as spectators (duh)
     if ply:Team() == TEAM_SPECTATOR then
         self:PlayerSpawnAsSpectator(ply)
+
         return
     end
-    
+
     -- Make sure players have a team
     if GAMEMODE.TeamBased and (ply:Team() == TEAM_UNASSIGNED or ply:Team() == 0) then
         self:PlayerSpawnAsSpectator(ply)
+
         return
     end
-    
+
     -- Call functions to setup model and loadout
-	hook.Call('PlayerLoadout', GAMEMODE, ply)
+    hook.Call('PlayerLoadout', GAMEMODE, ply)
     hook.Call('PlayerSetModel', GAMEMODE, ply)
     ply:SetupHands()
-    
     -- Exit out of spectate
     ply:EndSpectate()
-    
+
     -- Spawn protection
     if GAMEMODE.SpawnProtection then
         ply:GodEnable()
         ply:SetRenderMode(1)
         ply:SetColor(Color(255, 255, 255, 50))
-        
         -- Calculate time to be in god mode for
         local god_time = GAMEMODE.SpawnProtectionTime or 3
-        if not GAMEMODE:InRound() then 
+
+        if not GAMEMODE:InRound() then
             god_time = god_time + GAMEMODE.RoundCooldown
         end
-        
+
         -- Ungodmode after given time
         timer.Simple(god_time, function()
-            if IsValid(ply) then 
+            if IsValid(ply) then
                 ply:GodDisable()
                 ply:SetRenderMode(0)
                 ply:SetColor(color_white)
@@ -121,7 +115,6 @@ function GM:PlayerInitialSpawn(ply)
             GAMEMODE:PlayerSpawnAsSpectator(ply)
         end
     end)
-    
 
     -- Ensure that players don't respawn if it's an elimination gamemode
     if GAMEMODE.Elimination then
@@ -132,6 +125,7 @@ function GM:PlayerInitialSpawn(ply)
     -- Otherwise, automatically assign teams (hopefully evenly..)
     if not GAMEMODE.TeamBased then
         ply:SetTeam(TEAM_UNASSIGNED)
+
         return
     else
         GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())
@@ -149,7 +143,7 @@ end)
 -- Check for server autorestart situations
 -- This reloads the map if the server is currently empty and has been up for more than 2 hours
 hook.Add('PlayerInitialSpawn', 'CheckServerAutoRestart', function(ply)
-    if(player.GetCount() == 1 and CurTime() > 7200) then
+    if (player.GetCount() == 1 and CurTime() > 7200) then
         RunConsoleCommand("changelevel", game.GetMap())
     end
 end)
@@ -166,10 +160,11 @@ end
 
 -- Disable friendly fire
 function GM:PlayerShouldTakeDamage(victim, ply)
-    if !GAMEMODE.TeamBased then return true end
-    if !ply:IsPlayer() then return true end
+    if not GAMEMODE.TeamBased then return true end
+    if not ply:IsPlayer() then return true end
     if ply == victim then return true end
     if ply:Team() == victim:Team() then return false end
+
     return true
 end
 
@@ -188,9 +183,9 @@ end
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
-    
+
     -- Play a funny death sound
-    if GAMEMODE.DeathSounds and ply:Team() != TEAM_UNASSIGNED and not ply.Spectating then
+    if GAMEMODE.DeathSounds and ply:Team() ~= TEAM_UNASSIGNED and not ply.Spectating then
         local gender = GAMEMODE:DetermineModelGender(ply:GetModel())
         local sound = GAMEMODE:GetRandomDeathSound(gender)
         ply:EmitSound(sound)
@@ -200,7 +195,6 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
     GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
-    
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
 end
@@ -209,19 +203,20 @@ end
 function GM:GetWinningPlayer()
     -- Doesn't really make sense in Team gamemodes
     -- if GAMEMODE.TeamBased then return nil end
-    
     -- Loop through all players and return the one with the most frags
     local bestscore = 0
     local bestplayer = nil
-    for k,v in pairs(player.GetAll()) do
+
+    for k, v in pairs(player.GetAll()) do
         local frags = v.FFAKills or 0
+
         if frags > bestscore then
             bestscore = frags
             bestplayer = v
         end
     end
-    
     -- Return the winner! Yay!
+
     return bestplayer
 end
 
@@ -233,16 +228,18 @@ end
 -- Pick a random player
 function GM:GetRandomPlayer(num, forcetable)
     num = num or 1
-    
+
     -- Return one player for compatibility
     if num == 1 and not forcetable then
         local players = GAMEMODE:GetAlivePlayers()
+
         return players[math.random(1, #players)]
     end
-    
+
     local players = table.Shuffle(table.Copy(player.GetAll()))
     local output = {}
     local i = 1
+
     while #output < num do
         if i > #players then break end
         local p = players[i]
@@ -251,8 +248,9 @@ function GM:GetRandomPlayer(num, forcetable)
         if p.Spectating then continue end
         table.insert(output, p)
     end
-    
-    return output -- return table
+    -- return table
+
+    return output
 end
 
 -- Remove extra stuff on deathmatch maps
@@ -282,36 +280,39 @@ local deathmatch_remove = {
     ['item_ammo_ar2_large'] = true,
     ['item_ammo_ar2_altfire'] = true,
 }
+
 function GM:CleanUpDMStuff()
-    for k,v in pairs(ents.GetAll()) do
-        if deathmatch_remove[ v:GetClass() ] then v:Remove() end
+    for k, v in pairs(ents.GetAll()) do
+        if deathmatch_remove[v:GetClass()] then
+            v:Remove()
+        end
     end
 end
 
-function GM:HandlePlayerDeath(ply, attacker, dmginfo) 
-    if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
+function GM:HandlePlayerDeath(ply, attacker, dmginfo)
+    if not attacker:IsValid() or not attacker:IsPlayer() then return end -- We only care about player kills from here on
     if attacker == ply then return end -- Suicides aren't important
-    if !GAMEMODE:InRound() then return end
-    
+    if not GAMEMODE:InRound() then return end
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)
     GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
-    
+
     if GAMEMODE.TeamBased then
         -- Add the kill to the team
         local t = attacker:Team()
         if t == TEAM_SPECTATOR or t == TEAM_UNASSIGNED then return end
         team.AddRoundScore(t, 1)
     else
-        if not attacker.FFAKills then attacker.FFAKills = 0 end
+        if not attacker.FFAKills then
+            attacker.FFAKills = 0
+        end
+
         attacker.FFAKills = attacker.FFAKills + 1
     end
 end
 
 hook.Add('GetFallDamage', 'MinigamesFallDamage', function(ply, vel)
-    if !GAMEMODE.EnableFallDamage then
-        return 0
-    end
+    if not GAMEMODE.EnableFallDamage then return 0 end
 end)
 
 hook.Add('WeaponEquip', 'WeaponSpawnerEquip', function(wep, ply)
@@ -325,8 +326,8 @@ hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
         if ply:HasWeapon(wep:GetClass()) then
             wep.SpawnerEntity:CollectWeapon(ply)
             wep:Remove()
-            
             local ammo_table = GAMEMODE.WeaponSpawners["ammo"]
+
             if ammo_table[wep:GetClass()] then
                 local ammo = ammo_table[wep:GetClass()]
                 ply:GiveAmmo(ammo[2], ammo[1])

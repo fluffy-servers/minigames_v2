@@ -1,2 +1,2 @@
-AddCSLuaFile()
+﻿AddCSLuaFile()
 ENT.Type = "point"

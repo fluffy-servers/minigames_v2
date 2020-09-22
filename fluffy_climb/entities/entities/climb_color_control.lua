@@ -1,4 +1,4 @@
-AddCSLuaFile()
+﻿AddCSLuaFile()
 ENT.Type = "point"
 
 -- KV properties for mapping data

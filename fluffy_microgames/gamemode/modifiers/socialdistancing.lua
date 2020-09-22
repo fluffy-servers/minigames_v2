@@ -1,6 +1,5 @@
-MOD.Name = 'Social Distancing'
+﻿MOD.Name = 'Social Distancing'
 MOD.RoundTime = 5
-
 MOD.SurviveValue = 1
 
 function MOD:Initialize()
@@ -9,8 +8,9 @@ end
 
 function MOD:PlayerFinish(ply)
     local nearby = ents.FindInSphere(ply:GetPos(), 160)
-    for k,v in pairs(nearby) do
-        if v:IsPlayer() and v != ply then
+
+    for k, v in pairs(nearby) do
+        if v:IsPlayer() and v ~= ply then
             ply:Kill()
             break
         end

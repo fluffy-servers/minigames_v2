@@ -1,4 +1,4 @@
--- Generated with FluffyStore Creator
+﻿-- Generated with FluffyStore Creator
 ITEM = {}
 ITEM.VanillaID = 'balloon_classic'
 ITEM.Name = 'Classic Balloon'
@@ -10,12 +10,11 @@ ITEM.IconShift = Vector(0, 0, 10)
 ITEM.Rarity = 2
 
 ITEM.Modify = {
-	scale = 0.4,
-	offset = Vector(-3, 0, 7.5),
+    scale = 0.4,
+    offset = Vector(-3, 0, 7.5),
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with FluffyStore Creator
 ITEM = {}
 ITEM.VanillaID = 'balloon_heart'
@@ -28,13 +27,12 @@ ITEM.IconShift = Vector(0, 0, 10)
 ITEM.Rarity = 3
 
 ITEM.Modify = {
-	scale = 0.4,
-	offset = Vector(-3, 0, 7.5),
-	angle = Angle(0, 90, 0),
+    scale = 0.4,
+    offset = Vector(-3, 0, 7.5),
+    angle = Angle(0, 90, 0),
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with FluffyStore Creator
 ITEM = {}
 ITEM.VanillaID = 'balloon_star'
@@ -47,12 +45,11 @@ ITEM.IconShift = Vector(0, 0, 10)
 ITEM.Rarity = 4
 
 ITEM.Modify = {
-	scale = 0.3,
-	offset = Vector(-3, 0, 7.5),
+    scale = 0.3,
+    offset = Vector(-3, 0, 7.5),
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with FluffyStore Creator
 ITEM = {}
 ITEM.VanillaID = 'balloon_dog'
@@ -65,9 +62,9 @@ ITEM.IconShift = Vector(0, 0, 10)
 ITEM.Rarity = 5
 
 ITEM.Modify = {
-	scale = 0.4,
-	offset = Vector(-3, 0, 7.5),
-	angle = Angle(0, 15, 0),
+    scale = 0.4,
+    offset = Vector(-3, 0, 7.5),
+    angle = Angle(0, 15, 0),
 }
 
 SHOP:RegisterHat(ITEM)

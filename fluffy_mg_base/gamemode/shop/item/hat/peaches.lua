@@ -1,4 +1,4 @@
--- Generated with the ingame creator
+﻿-- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'widowdoll'
 ITEM.Name = 'Widow'
@@ -13,7 +13,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 ITEM = {}
 ITEM.VanillaID = 'trashcan'
 ITEM.Name = 'Rubbish Man'
@@ -27,7 +26,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'kennel'
@@ -42,7 +40,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'potblock'
@@ -56,7 +53,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'coolchair'
@@ -71,7 +67,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'sawbladepeach'
@@ -86,7 +81,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'lightman'
@@ -101,7 +95,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'bombman'

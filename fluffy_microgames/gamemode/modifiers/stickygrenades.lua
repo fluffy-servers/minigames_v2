@@ -1,7 +1,6 @@
-MOD.Name = 'Sticky Grenades'
+﻿MOD.Name = 'Sticky Grenades'
 MOD.Elimination = true
 MOD.Region = 'empty'
-
 MOD.KillValue = 1
 
 function MOD:Initialize()

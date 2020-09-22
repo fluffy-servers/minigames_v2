@@ -1,16 +1,12 @@
-DeriveGamemode('fluffy_mg_base')
-
+﻿DeriveGamemode('fluffy_mg_base')
 GM.Name = 'Crate Wars 2'
-
 GM.HelpText = [[
         Description pending
     ]]
-
 GM.Author = 'FluffyXVI'
-
-GM.TeamBased = true	    -- Is the gamemode FFA or Teams?
-GM.RoundNumber = 6      -- How many rounds?
-GM.RoundTime = 100      -- Seconds each round lasts for
+GM.TeamBased = true -- Is the gamemode FFA or Teams?
+GM.RoundNumber = 6 -- How many rounds?
+GM.RoundTime = 100 -- Seconds each round lasts for
 
 GM.HUDStyle = function()
     if GetGlobalBool('CW_Asymmetric', false) then
@@ -21,5 +17,4 @@ GM.HUDStyle = function()
 end
 
 function GM:Initialize()
-
 end

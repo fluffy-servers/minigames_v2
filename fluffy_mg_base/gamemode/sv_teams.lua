@@ -1,4 +1,4 @@
-function GM:PlayerRequestTeam(ply, teamid)
+﻿function GM:PlayerRequestTeam(ply, teamid)
     -- If players are spectating, they can change to Unassigned (and vice versa)
     -- This only applies in some cases where general team switching won't fly
     if (ply:Team() == TEAM_SPECTATOR and teamid == TEAM_UNASSIGNED) or (ply:Team() == TEAM_UNASSIGNED and teamid == TEAM_SPECTATOR) then
@@ -12,39 +12,41 @@ function GM:PlayerRequestTeam(ply, teamid)
     if not GAMEMODE.TeamBased then return end
 
     -- Stop players joining weird teams (eg. Unassigned in team gamemodes)
-	if not team.Joinable(teamid) then
-		ply:ChatPrint("You can't join that team")
-        return 
+    if not team.Joinable(teamid) then
+        ply:ChatPrint("You can't join that team")
+
+        return
     end
-    
+
     -- Stop players changing teams in certain gamemodes
     if not GAMEMODE.PlayerChooseTeams then
         ply:ChatPrint("You can't change teams in this gamemode!")
     end
-        
-	-- Run the can join hook
-	if not hook.Run('PlayerCanJoinTeam', ply, teamid) then return end
-	GAMEMODE:PlayerJoinTeam(ply, teamid)
+
+    -- Run the can join hook
+    if not hook.Run('PlayerCanJoinTeam', ply, teamid) then return end
+    GAMEMODE:PlayerJoinTeam(ply, teamid)
 end
 
 function GM:PlayerCanJoinTeam(ply, teamid)
     -- Stop rejoining same team
-    if ply:Team() == teamid then
-        return false
-    end
+    if ply:Team() == teamid then return false end
 
     -- Team swap as frequently as required before game start
     if GAMEMODE:GetRoundState() == 'GameNotStarted' or GAMEMODE:GetRoundState() == 'Warmup' then
         ply.LastTeamSwitch = RealTime()
+
         return true
     end
 
     -- Stop from frequently changing teams in game
     if ply.LastTeamSwitch and RealTime() - ply.LastTeamSwitch < 10 then
         ply:ChatPrint('Please wait before changing teams')
+
         return false
     else
         ply.LastTeamSwitch = RealTime()
+
         return true
     end
 end
@@ -65,17 +67,23 @@ function GM:SwapTeams(respawn, swapscores)
     local red_players = team.GetPlayers(TEAM_RED)
     local blue_players = team.GetPlayers(TEAM_BLUE)
     local respawn = respawn or true
-    
+
     -- Move red players to blue
-    for k,v in pairs(red_players) do 
+    for k, v in pairs(red_players) do
         v:SetTeam(TEAM_BLUE)
-        if respawn then v:Spawn() end
+
+        if respawn then
+            v:Spawn()
+        end
     end
-    
+
     -- Move blue players to red
-    for k,v in pairs(blue_players) do 
+    for k, v in pairs(blue_players) do
         v:SetTeam(TEAM_RED)
-        if respawn then v:Spawn() end
+
+        if respawn then
+            v:Spawn()
+        end
     end
 
     -- Swap scores if applicable
@@ -94,22 +102,26 @@ function GM:ShuffleTeams(respawn)
     local respawn = respawn or true
     local players = {}
     local num = 0
-    for k,v in pairs(player.GetAll()) do
-        if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then 
+
+    for k, v in pairs(player.GetAll()) do
+        if v:Team() ~= TEAM_SPECTATOR and v:Team() ~= TEAM_UNASSIGNED and v:Team() ~= 0 then
             num = num + 1
             table.insert(players, v)
         end
     end
-    
+
     -- Reassign the teams
     players = table.Shuffle(players)
-    for i = 1,num do
-        if i%2 == 0 then 
-            players[i]:SetTeam(TEAM_RED) 
-        else 
-            players[i]:SetTeam(TEAM_BLUE) 
+
+    for i = 1, num do
+        if i % 2 == 0 then
+            players[i]:SetTeam(TEAM_RED)
+        else
+            players[i]:SetTeam(TEAM_BLUE)
         end
-        
-        if respawn then players[i]:Spawn() end
+
+        if respawn then
+            players[i]:Spawn()
+        end
     end
 end

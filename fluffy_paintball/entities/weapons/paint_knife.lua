@@ -1,11 +1,10 @@
-SWEP.Base = "weapon_mg_knife"
+﻿SWEP.Base = "weapon_mg_knife"
 SWEP.PrintName = "Paintbrush"
 
 if CLIENT then
     SWEP.Slot = 0
-	SWEP.IconLetter = "j"
+    SWEP.IconLetter = "j"
     killicon.AddFont("paint_knife", "CSKillIcons", "j", Color(255, 80, 0, 255))
-    
     SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
 end
 
@@ -19,6 +18,7 @@ function SWEP:Holster()
     self.Owner:SetRunSpeed(300)
     self.Owner:SetWalkSpeed(200)
     self.Owner:SetJumpPower(160)
+
     return true
 end
 
@@ -38,18 +38,16 @@ end
 
 function SWEP:PreDrawViewModel(vm, wep)
     local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
-    wep:SetColor(Color(v.x*255, v.y*255, v.z*255))
+    wep:SetColor(Color(v.x * 255, v.y * 255, v.z * 255))
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)
     if SERVER then return end
-	if tr.HitSky then return end
-    
+    if tr.HitSky then return end
     local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
-    c = Color(v.x*255, v.y*255, v.z*255)
-    
-    local s = 0.7 + 0.4*math.random()
+    c = Color(v.x * 255, v.y * 255, v.z * 255)
+    local s = 0.7 + 0.4 * math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)
-    
+
     return true
 end

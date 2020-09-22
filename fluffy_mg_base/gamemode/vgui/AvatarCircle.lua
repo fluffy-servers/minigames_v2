@@ -1,9 +1,8 @@
---[[
+﻿--[[
     VGUI element to create a circular avatar
     This element can be pretty easily extended for a range of shapes
     Replace the drawStencil() function with whatever shape you need to draw
 --]]
-
 PANEL = {}
 PANEL.NumSides = 16
 PANEL.PolyOffset = 0
@@ -42,52 +41,64 @@ end
 -- https://wiki.facepunch.com/gmod/surface.DrawPoly
 local function drawCircle(x, y, radius, seg, offset)
     local offset = offset or 0
-	local cir = {}
+    local cir = {}
 
-	table.insert(cir, {x = x, y = y, u = 0.5, v = 0.5})
-	for i = 0, seg do
-		local a = offset + math.rad((i / seg) * -360)
-		table.insert(cir, {x = x + math.sin(a) * radius, y = y + math.cos(a) * radius, u = math.sin(a) / 2 + 0.5, v = math.cos(a) / 2 + 0.5})
-	end
+    table.insert(cir, {
+        x = x,
+        y = y,
+        u = 0.5,
+        v = 0.5
+    })
 
-	local a = offset + math.rad(0) -- This is needed for non absolute segment counts
-	table.insert(cir, {x = x + math.sin(a) * radius, y = y + math.cos(a) * radius, u = math.sin(a) / 2 + 0.5, v = math.cos(a) / 2 + 0.5})
+    for i = 0, seg do
+        local a = offset + math.rad((i / seg) * -360)
 
-	surface.DrawPoly(cir)
+        table.insert(cir, {
+            x = x + math.sin(a) * radius,
+            y = y + math.cos(a) * radius,
+            u = math.sin(a) / 2 + 0.5,
+            v = math.cos(a) / 2 + 0.5
+        })
+    end
+
+    local a = offset + math.rad(0) -- This is needed for non absolute segment counts
+
+    table.insert(cir, {
+        x = x + math.sin(a) * radius,
+        y = y + math.cos(a) * radius,
+        u = math.sin(a) / 2 + 0.5,
+        v = math.cos(a) / 2 + 0.5
+    })
+
+    surface.DrawPoly(cir)
 end
 
 function PANEL:DrawStencil(w, h)
-    drawCircle(w/2, h/2, w/2, self.NumSides, self.PolyOffset)
+    drawCircle(w / 2, h / 2, w / 2, self.NumSides, self.PolyOffset)
 end
 
 -- Big scary stencil code goes in here
 function PANEL:Paint(w, h)
     render.ClearStencil()
     render.SetStencilEnable(true)
- 
     render.SetStencilWriteMask(1)
     render.SetStencilTestMask(1)
- 
     render.SetStencilFailOperation(STENCILOPERATION_REPLACE)
     render.SetStencilPassOperation(STENCILOPERATION_ZERO)
     render.SetStencilZFailOperation(STENCILOPERATION_ZERO)
     render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_NEVER)
     render.SetStencilReferenceValue(1)
-	
     -- Draw the mask in white
-	surface.SetDrawColor(color_white)
-	draw.NoTexture()
+    surface.SetDrawColor(color_white)
+    draw.NoTexture()
     self:DrawStencil(w, h)
- 
     render.SetStencilFailOperation(STENCILOPERATION_ZERO)
     render.SetStencilPassOperation(STENCILOPERATION_REPLACE)
     render.SetStencilZFailOperation(STENCILOPERATION_ZERO)
     render.SetStencilCompareFunction(STENCILCOMPARISONFUNCTION_EQUAL)
     render.SetStencilReferenceValue(1)
- 
     -- Draw the avatar, masked to the stencil shape
     self.Avatar:PaintManual()
- 
     render.SetStencilEnable(false)
     render.ClearStencil()
 end
@@ -95,19 +106,14 @@ end
 function PANEL:PaintOver(w, h)
     if not self.Player then return end
     if not self.DrawLevel then return end
-
     local xx = w - 6
     local yy = h - 6
-
     DisableClipping(true)
-
     draw.NoTexture()
     surface.SetDrawColor(Color(95, 39, 205))
     drawCircle(xx, yy, 10, 6, 0)
-
     local level = self.Player:GetLevel()
     draw.SimpleText(level, "FS_12", xx, yy, color_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
     DisableClipping(false)
 end
 

@@ -1,4 +1,4 @@
--- Generated with the ingame creator
+﻿-- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'globalelite'
 ITEM.Name = 'The Global Elite'
@@ -12,7 +12,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'heated'
@@ -28,7 +27,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'unzipped'
@@ -42,7 +40,6 @@ ITEM.Modify = {
 }
 
 SHOP:RegisterHat(ITEM)
-
 -- Generated with the ingame creator
 ITEM = {}
 ITEM.VanillaID = 'nothingtosee'

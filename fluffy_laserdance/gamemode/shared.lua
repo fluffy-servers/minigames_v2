@@ -1,5 +1,4 @@
-DeriveGamemode('fluffy_mg_base')
-
+﻿DeriveGamemode('fluffy_mg_base')
 GM.Name = 'Laser Dance'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
@@ -11,19 +10,15 @@ GM.HelpText = [[
     
     Just one direct hit is deadly - be cautious.
 ]]
-
-GM.TeamBased = false	-- Is the gamemode FFA or Teams?
+GM.TeamBased = false -- Is the gamemode FFA or Teams?
 GM.Elimination = false
 GM.WinBySurvival = false
-
-GM.RoundNumber = 8      -- How many rounds?
-GM.RoundTime = 60      -- Seconds each round lasts for
-
+GM.RoundNumber = 8 -- How many rounds?
+GM.RoundTime = 60 -- Seconds each round lasts for
 GM.ThirdpersonEnabled = true
 GM.SpawnProtection = true
 
 function GM:Initialize()
-
 end
 
 -- Hide all Tracer and Trail cosmetics

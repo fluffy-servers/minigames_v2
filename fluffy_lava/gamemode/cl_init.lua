@@ -1,4 +1,4 @@
-include('shared.lua')
+﻿include('shared.lua')
 
 function GM:PostDrawTranslucentRenderables()
     if not GAMEMODE:InRound() then return end

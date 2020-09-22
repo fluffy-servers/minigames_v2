@@ -1,18 +1,14 @@
-DeriveGamemode('fluffy_mg_base')
-
+﻿DeriveGamemode('fluffy_mg_base')
 GM.Name = 'Deathmatch'
 GM.Author = 'FluffyXVI'
 GM.HelpText = [[
     Description pending
 ]]
-
-GM.TeamBased = false	-- Is the gamemode FFA or Teams?
-
+GM.TeamBased = false -- Is the gamemode FFA or Teams?
 GM.RoundType = 'timed_endless'
 GM.EndOnTimeOut = true
 GM.GameTime = 360
 GM.HUDStyle = HUD_STYLE_TIMER_ONLY
-
 GM.RespawnTime = 1
 GM.AutoRespawn = true
 GM.SpawnProtection = true -- Spawn protection enabled
@@ -23,7 +19,6 @@ GM.WeaponSpawners = {
         ["2"] = {'weapon_mg_shotgun', 'weapon_mg_smg', 'weapon_crossbow', 'weapon_357'},
         ["3"] = {'weapon_mg_sniper', 'weapon_rpg', 'weapon_mg_mortar', 'weapon_frag'}
     },
-
     ["ammo"] = {
         ['weapon_mg_shotgun'] = {'Buckshot', 12},
         ['weapon_mg_pistol'] = {'Pistol', 12},

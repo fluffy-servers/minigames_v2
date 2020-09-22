@@ -1,6 +1,5 @@
-AddCSLuaFile('cl_init.lua')
+﻿AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
-
 include('shared.lua')
 include('sv_levelgen.lua')
 
@@ -20,12 +19,14 @@ end
 -- Calculations to check player scoring based on height
 function GM:PlayerTick(ply)
     if not GAMEMODE:InRound() then return end
-    
     local z = ply:GetPos().z
     if not z then return end
     if not ply:Alive() or ply.Spectating then return end
-    if not ply.BestHeight then ply.BestHeight = 0 end
-    
+
+    if not ply.BestHeight then
+        ply.BestHeight = 0
+    end
+
     if z > GAMEMODE.CurrentHeight then
         GAMEMODE:ClimbVictory(ply)
     elseif z > ply.BestHeight then
@@ -40,9 +41,9 @@ hook.Add('PreRoundStart', 'GenerateClimbLevel', function()
     local height = GAMEMODE:GenerateLevel()
     GAMEMODE.CurrentHeight = height
     SetGlobalInt('ClimbHeight', height)
-    
+
     -- Reset best heights
-    for k,v in pairs(player.GetAll()) do
+    for k, v in pairs(player.GetAll()) do
         v.BestHeight = nil
     end
 end)
@@ -51,14 +52,14 @@ end)
 -- Takes the best height, rounds down to the nearest 10% and adds 1 point per 10%
 -- eg. 48% -> 40% -> 4 points
 hook.Add('RoundEnd', 'ClimbHeightPoints', function()
-    for k,v in pairs(player.GetAll()) do
+    for k, v in pairs(player.GetAll()) do
         if v.BestHeight then
-            local ratio = v.BestHeight/GAMEMODE.CurrentHeight
+            local ratio = v.BestHeight / GAMEMODE.CurrentHeight
             local p = math.Clamp(math.floor(ratio * 100), 0, 100)
             v:AddStatPoints('Distance', p)
-            v:AddFrags(math.floor(p/10))
+            v:AddFrags(math.floor(p / 10))
         end
-        
+
         if v:Alive() and not v.Spectating then
             v:AddFrags(1)
             v:AddStatPoints('Survived Rounds', 1)
@@ -70,11 +71,9 @@ end)
 -- This should only occur for the first player to reach the top
 function GM:ClimbVictory(ply)
     if not GAMEMODE:InRound() then return end
-    
     ply:AddFrags(3)
     ply.BestHeight = GAMEMODE.CurrentHeight
     GAMEMODE:EndRound(ply)
-    
     GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5)
 end
 

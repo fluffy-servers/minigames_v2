@@ -1,4 +1,4 @@
-include('cl_inventory.lua')
+﻿include('cl_inventory.lua')
 include('cl_render.lua')
 include('cl_images.lua')
 include('vgui/ShopMirror.lua')
@@ -33,12 +33,10 @@ SHOP.Color4 = Color(0, 151, 230)
 net.Receive('SHOP_BroadcastEquip', function()
     local ITEM = net.ReadTable()
     ITEM = SHOP:ParseVanillaItem(ITEM)
-    
     local ply = net.ReadEntity()
     if not IsValid(ply) or not ply:IsPlayer() then return end
-    
     local state = net.ReadBool()
-    
+
     if ITEM.Type == 'Hat' then
         -- See cl_render
         -- Passes off to cosmetic rendering engine
@@ -58,10 +56,10 @@ end)
 
 -- Announce unboxes
 net.Receive('SHOP_AnnounceUnbox', function()
-	local name = net.ReadString()
-	local prize = net.ReadString()
+    local name = net.ReadString()
+    local prize = net.ReadString()
     local joiner = net.ReadString()
-	local color = net.ReadTable()
-	color = Color(color.r, color.g, color.b)
+    local color = net.ReadTable()
+    color = Color(color.r, color.g, color.b)
     chat.AddText(Color(241, 196, 15), name, Color(255, 255, 255), ' ', joiner, ' ', color, prize)
 end)

@@ -1,8 +1,6 @@
-AddCSLuaFile()
-
+﻿AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_anim"
-
 ENT.MinRespawn = 10
 ENT.MaxRespawn = 20
 
@@ -10,13 +8,13 @@ if SERVER then
     function ENT:Initialize()
         if not GAMEMODE.WeaponSpawners then
             self:Remove()
+
             return
         end
 
         self.CreationTime = CurTime()
         self.NextTime = self.CreationTime + math.random(self.MinRespawn, self.MaxRespawn)
         self:SetModel("models/hunter/blocks/cube075x2x075.mdl")
-
         self:SetAngles(Angle(0, 0, 90))
         self:SetTrigger(true)
         self:PhysicsInit(SOLID_VPHYSICS)
@@ -28,6 +26,7 @@ if SERVER then
 
     function ENT:Think()
         local ready = self:GetNWBool("GiftReady", false)
+
         if ready then
             self:NextThink(CurTime() + 2)
         elseif CurTime() > self.NextTime then
@@ -45,8 +44,8 @@ if SERVER then
         wep:SetPos(self:GetPos() + Vector(0, 0, 48))
         wep:SetAngles(Angle(0, 0, 0))
         wep:Spawn()
-
         local phys = wep:GetPhysicsObject()
+
         if IsValid(phys) then
             phys:EnableMotion(false)
         end
@@ -58,16 +57,15 @@ if SERVER then
     function ENT:CollectWeapon(ply)
         print('Collecting weapon!')
         if not ply:IsPlayer() then return end
-
         local wep = self.WeaponEntity
 
         -- Reset the spawner
         if self.RandomTable then
             self:SetNWString('WeaponType', table.Random(self.RandomTable))
         end
+
         self:SetNWBool('GiftReady', false)
         self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
-
         -- Announce to the player
         local name = wep:GetPrintName()
         GAMEMODE:PlayerOnlyAnnouncement(ply, 1.5, name, 1, 'top')

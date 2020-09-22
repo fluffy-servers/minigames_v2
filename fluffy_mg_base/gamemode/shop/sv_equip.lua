@@ -1,13 +1,13 @@
--- Equip a cosmetic item
+﻿-- Equip a cosmetic item
 -- This broadcasts the cosmetic to all players
 function SHOP:EquipCosmetic(ITEM, ply)
     ITEM = SHOP:StripVanillaItem(ITEM)
     net.Start('SHOP_BroadcastEquip')
-        net.WriteTable(ITEM)
-        net.WriteEntity(ply)
-        net.WriteBool(true)
+    net.WriteTable(ITEM)
+    net.WriteEntity(ply)
+    net.WriteBool(true)
     net.Broadcast()
-    
+
     return true
 end
 
@@ -16,9 +16,9 @@ end
 function SHOP:UnequipCosmetic(ITEM, ply)
     ITEM = SHOP:StripVanillaItem(ITEM)
     net.Start('SHOP_BroadcastEquip')
-        net.WriteTable(ITEM)
-        net.WriteEntity(ply)
-        net.WriteBool(false)
+    net.WriteTable(ITEM)
+    net.WriteEntity(ply)
+    net.WriteBool(false)
     net.Broadcast()
 end
 
@@ -26,6 +26,7 @@ end
 function SHOP:EquipTrail(ITEM, ply)
     ply.EquippedTrail = ITEM
     SHOP:WearTrail(ply)
+
     return true
 end
 
@@ -53,13 +54,14 @@ end
 
 -- Equip a tracer
 function SHOP:EquipTracer(ITEM, ply)
-	ply:SetNWString('ShopTracerEffect', ITEM.Effect)
-	return true
+    ply:SetNWString('ShopTracerEffect', ITEM.Effect)
+
+    return true
 end
 
 -- Unequip a tracer
 function SHOP:UnequipTracer(ply)
-	ply:SetNWString('ShopTracerEffect', nil)
+    ply:SetNWString('ShopTracerEffect', nil)
 end
 
 -- Add equipped trails on player spawn
@@ -74,13 +76,18 @@ end)
 
 -- Serverside tracer effect
 hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
-	if !ent:IsPlayer() then return end
-	local effect = ent:GetNWString('ShopTracerEffect')
-	if not effect or effect == '' then return end
-    
-    if not GAMEMODE:DoCosmeticsCheck(ent, {Type='Tracer'}) then return end
-	
-	data.Tracer = 1
-	data.TracerName = effect
-	return true
+    if not ent:IsPlayer() then return end
+    local effect = ent:GetNWString('ShopTracerEffect')
+    if not effect or effect == '' then return end
+
+    if not GAMEMODE:DoCosmeticsCheck(ent, {
+        Type = 'Tracer'
+    }) then
+        return
+    end
+
+    data.Tracer = 1
+    data.TracerName = effect
+
+    return true
 end)

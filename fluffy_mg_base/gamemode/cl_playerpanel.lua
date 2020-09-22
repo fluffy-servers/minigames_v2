@@ -1,5 +1,4 @@
-
-local lightblue = Color(0, 168, 255)
+﻿local lightblue = Color(0, 168, 255)
 local darkblue = Color(0, 151, 230)
 local white = Color(241, 242, 246)
 local offwhite = Color(223, 228, 234)
@@ -10,7 +9,6 @@ function GM:CreateInfoFrame2()
     local h = ScrH() * 0.75
     local header_h = 56
     local footer_h = 40
-
     local f = vgui.Create('DFrame')
     f:SetTitle('')
     f:SetSize(w, h)
@@ -19,13 +17,14 @@ function GM:CreateInfoFrame2()
     f:ShowCloseButton(false)
     f:SetDraggable(false)
     f.CreationTime = CurTime()
-
     local name = GAMEMODE.Name
-    if isfunction(name) then name = name() end
+
+    if isfunction(name) then
+        name = name()
+    end
 
     function f:Paint(w, h)
         Derma_DrawBackgroundBlur(self, self.CreationTime)
-
         -- Draw header basics
         -- Buttons can get added here later
         draw.RoundedBoxEx(8, 0, 0, w, header_h, lightblue, true, true, false, false)
@@ -53,12 +52,10 @@ function GM:CreateInfoFrame2()
             ["name"] = "Help",
             ["func"] = GAMEMODE.HelpPanel
         },
-
         {
             ["name"] = "Team",
             ["func"] = GAMEMODE.TeamPanel
         },
-
         {
             ["name"] = "Items",
             ["func"] = GAMEMODE.ItemsPanel
@@ -67,6 +64,7 @@ function GM:CreateInfoFrame2()
 
     -- Add all other header buttons
     local xx = wide
+
     for k, v in pairs(header_buttons) do
         local name = v['name']
 
@@ -75,7 +73,6 @@ function GM:CreateInfoFrame2()
         end
 
         local wide = surface.GetTextSize(name) + 24
-
         local b = vgui.Create('DButton', f)
         b:SetSize(wide, header_h)
         b:SetPos(xx, 0)
@@ -83,10 +80,13 @@ function GM:CreateInfoFrame2()
 
         function b:Paint(w, h)
             local c = lightblue
-            if self:IsHovered() or (f.SelectedButton == name) then c = darkblue end
+
+            if self:IsHovered() or (f.SelectedButton == name) then
+                c = darkblue
+            end
 
             draw.RoundedBox(0, 0, 0, w, h, c)
-            GAMEMODE:DrawShadowText(name, 'FS_L40', w/2, h+2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+            GAMEMODE:DrawShadowText(name, 'FS_L40', w / 2, h + 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
         end
 
         function b:DoClick()
@@ -104,15 +104,15 @@ function GM:CreateInfoFrame2()
 
     function close:Paint(w, h)
         if GAMEMODE.TeamBased and (LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == TEAM_CONNECTING) then return end
-        GAMEMODE:DrawShadowText('x', 'FS_24', w/2, 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
+        GAMEMODE:DrawShadowText('x', 'FS_24', w / 2, 2, white, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP, 1)
     end
 
     function close:DoClick()
         if GAMEMODE.TeamBased and (LocalPlayer():Team() == TEAM_UNASSIGNED or LocalPlayer():Team() == TEAM_CONNECTING) then return end
         f:Close()
     end
-    f.CloseButton = close
 
+    f.CloseButton = close
     -- Build the bottom bar
     local bottom_bar = vgui.Create('DPanel', f)
     bottom_bar:SetSize(w, footer_h)
@@ -124,20 +124,21 @@ function GM:CreateInfoFrame2()
         draw.RoundedBoxEx(8, 0, 0, w, h, lightblue, false, false, true, true)
         DisableClipping(false)
     end
-    f.BottomBar = bottom_bar
 
+    f.BottomBar = bottom_bar
     -- Build the content panel
     local content = vgui.Create('DPanel', f)
     content:SetSize(w, h - header_h - footer_h)
     content:SetPos(0, header_h)
+
     function content:Paint(w, h)
         surface.SetDrawColor(white)
         surface.DrawRect(0, 0, w, h)
     end
 
     f.ContentPanel = content
-
     GAMEMODE.MinigamesInfoPanel = f
+
     return f
 end
 
@@ -154,7 +155,6 @@ function GM:OpenInfoOption(name, func)
     -- Clear old selection
     frame.ContentPanel:Clear()
     frame.BottomBar:Clear()
-
     -- Set new selection
     frame.SelectedButton = name
     func()
@@ -164,12 +164,17 @@ function GM:HelpPanel()
     local frame = GAMEMODE:GetInfoFrame()
     local panel = frame.ContentPanel
     local bottom = frame.BottomBar
-
     local name = GAMEMODE.Name
-    if isfunction(name) then name = name() end
+
+    if isfunction(name) then
+        name = name()
+    end
 
     local helptext = GAMEMODE.HelpText
-    if isfunction(helptext) then helptext = helptext() end
+
+    if isfunction(helptext) then
+        helptext = helptext()
+    end
 
     -- Create the MOTD display
     local motd = vgui.Create('DHTML', panel)
@@ -177,17 +182,17 @@ function GM:HelpPanel()
     motd:OpenURL('https://www.fluffyservers.com/guide/minigames.html')
     motd:Call('UpdateGamemodeName("' .. name .. '")')
     motd:Call('UpdateGamemodeDesc("' .. string.Replace(helptext, '\n', '</p><p>') .. '")')
-
     -- Create the play button OR a choose team button
     local play_button = vgui.Create('DButton', bottom)
     play_button:SetWide(128)
     play_button:Dock(RIGHT)
     play_button:SetText('')
+
     play_button.Paint = function(self, w, h)
         DisableClipping(true)
         draw.RoundedBoxEx(8, 0, 4, w, h, Color(68, 189, 50), false, false, false, true)
         draw.RoundedBoxEx(8, 0, 0, w, h, Color(76, 209, 55), false, false, false, true)
-        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w/2, h/2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w / 2, h / 2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
         DisableClipping(false)
     end
 
@@ -211,23 +216,22 @@ function GM:TeamPanel()
     -- Otherwise use the generic playing/spectating version
     if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or (not GAMEMODE.PlayerChooseTeams) then
         GAMEMODE:TeamPanelFFA()
+
         return
     end
 
     local frame = GAMEMODE:GetInfoFrame()
     local panel = frame.ContentPanel
     local bottom = frame.BottomBar
-
     -- numbers
     local teams = team.GetAllTeams()
     local total_wide = panel:GetWide()
     local team_wide = total_wide / (table.Count(teams) - 3)
-
     -- Create a panel for each team
     local i = 0
-    for k,v in pairs(team.GetAllTeams()) do
-        if k == TEAM_UNASSIGNED or k == TEAM_CONNECTING or k == TEAM_SPECTATOR then continue end
 
+    for k, v in pairs(team.GetAllTeams()) do
+        if k == TEAM_UNASSIGNED or k == TEAM_CONNECTING or k == TEAM_SPECTATOR then continue end
         -- Make a panel for each team
         local team_panel = vgui.Create('DPanel', panel)
         team_panel:SetWide(team_wide)
@@ -235,18 +239,16 @@ function GM:TeamPanel()
         team_panel:SetPos(team_wide * i, 0)
 
         function team_panel:Paint(w, h)
-            draw.SimpleText(team.GetName(k), 'FS_32', w/2, 24, team.GetColor(k), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
+            draw.SimpleText(team.GetName(k), 'FS_32', w / 2, 24, team.GetColor(k), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             surface.SetDrawColor(offwhite)
             -- Side lines
             surface.DrawLine(0, 0, 0, h)
             surface.DrawLine(1, 0, 1, h)
             surface.DrawLine(w, 0, w, h)
             surface.DrawLine(w - 1, 0, w - 1, h)
-
             -- Bottom line
-            surface.DrawLine(0, h-1, w, h-1)
-            surface.DrawLine(0, h-2, w, h-2)
+            surface.DrawLine(0, h - 1, w, h - 1)
+            surface.DrawLine(0, h - 2, w, h - 2)
         end
 
         -- Scoreboard of all current players in the team
@@ -254,15 +256,14 @@ function GM:TeamPanel()
         scoreboard:SetSize(team_wide * 0.95, team_panel:GetTall() - 64)
         scoreboard:SetPos(team_wide * 0.025, 48)
         scoreboard.players = {}
-        
+
         function scoreboard:Paint(w, h)
             draw.RoundedBox(8, 0, 0, w, h, offwhite)
         end
 
         function scoreboard:Think()
-            for _,v in pairs(team.GetPlayers(k)) do
+            for _, v in pairs(team.GetPlayers(k)) do
                 if IsValid(self.players[v]) then continue end
-
                 local row = vgui.Create('ScoreboardRow')
                 row:SetPlayer(v)
                 row:Dock(TOP)
@@ -273,7 +274,7 @@ function GM:TeamPanel()
                 self.players[v] = row
 
                 function row:Think()
-                    if self.Player:Team() != k then
+                    if self.Player:Team() ~= k then
                         self:Remove()
                     end
                 end
@@ -301,15 +302,16 @@ function GM:TeamPanel()
     spectate_button:SetSize(total_wide, 48)
     spectate_button:SetPos(0, panel:GetTall() - 48)
     spectate_button:SetText('')
-    
+
     function spectate_button:Paint(w, h)
         surface.SetDrawColor(gray)
         surface.DrawRect(0, 0, w, h)
-
         local num_spectators = #team.GetPlayers(TEAM_SPECTATOR)
+
         if GAMEMODE:GetRoundState() == 'GameNotStarted' or GAMEMODE:GetRoundState() == 'Warmup' then
             local GAME_STATE = GAMEMODE:GetRoundState()
             local message = ''
+
             if GAME_STATE == 'GameNotStarted' then
                 message = 'Waiting for players...'
             elseif GAME_STATE == 'Warmup' then
@@ -318,10 +320,10 @@ function GM:TeamPanel()
                 message = 'Starting in ' .. math.ceil(t) .. '...'
             end
 
-            GAMEMODE:DrawShadowText(num_spectators .. ' spectating', 'FS_32', w/4, h/2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(message, 'FS_32', 3*(w/4), h/2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(num_spectators .. ' spectating', 'FS_32', w / 4, h / 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(message, 'FS_32', 3 * (w / 4), h / 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         else
-            GAMEMODE:DrawShadowText(num_spectators .. ' spectating', 'FS_32', w/2, h/2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) 
+            GAMEMODE:DrawShadowText(num_spectators .. ' spectating', 'FS_32', w / 2, h / 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
     end
 
@@ -337,11 +339,10 @@ function GM:TeamPanel()
 
     function play_button:Paint(w, h)
         if GAMEMODE.TeamBased and LocalPlayer():Team() == TEAM_UNASSIGNED then return end
-
         DisableClipping(true)
         draw.RoundedBoxEx(8, 0, 4, w, h, Color(68, 189, 50), false, false, false, true)
         draw.RoundedBoxEx(8, 0, 0, w, h, Color(76, 209, 55), false, false, false, true)
-        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w/2, h/2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w / 2, h / 2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
         DisableClipping(false)
     end
 
@@ -358,37 +359,37 @@ function GM:TeamPanelFFA()
     local frame = GAMEMODE:GetInfoFrame()
     local panel = frame.ContentPanel
     local bottom = frame.BottomBar
-
     -- numbers
     local total_wide = panel:GetWide()
     local team_wide = total_wide / 2
-
     -- Create a panel for each team
     local i = 0
-    for k,v in pairs({TEAM_UNASSIGNED, TEAM_SPECTATOR}) do
+
+    for k, v in pairs({TEAM_UNASSIGNED, TEAM_SPECTATOR}) do
         -- Make a panel for each team
         local team_panel = vgui.Create('DPanel', panel)
         team_panel:SetWide(team_wide)
         team_panel:SetTall(panel:GetTall())
         team_panel:SetPos(team_wide * i, 0)
-
         local name = 'Players'
-        if v == TEAM_SPECTATOR then name = 'Spectators' end
+
+        if v == TEAM_SPECTATOR then
+            name = 'Spectators'
+        end
+
         local color = Color(0, 168, 255)
 
         function team_panel:Paint(w, h)
-            draw.SimpleText(name, 'FS_32', w/2, 24, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-
+            draw.SimpleText(name, 'FS_32', w / 2, 24, color, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
             surface.SetDrawColor(offwhite)
             -- Side lines
             surface.DrawLine(0, 0, 0, h)
             surface.DrawLine(1, 0, 1, h)
             surface.DrawLine(w, 0, w, h)
             surface.DrawLine(w - 1, 0, w - 1, h)
-
             -- Bottom line
-            surface.DrawLine(0, h-1, w, h-1)
-            surface.DrawLine(0, h-2, w, h-2)
+            surface.DrawLine(0, h - 1, w, h - 1)
+            surface.DrawLine(0, h - 2, w, h - 2)
         end
 
         -- Scoreboard of all current players in the team
@@ -396,17 +397,16 @@ function GM:TeamPanelFFA()
         scoreboard:SetSize(team_wide * 0.95, team_panel:GetTall() - 64)
         scoreboard:SetPos(team_wide * 0.025, 48)
         scoreboard.players = {}
-        
+
         function scoreboard:Paint(w, h)
             draw.RoundedBox(8, 0, 0, w, h, offwhite)
         end
 
         function scoreboard:Think()
-            for _,ply in pairs(player.GetAll()) do
+            for _, ply in pairs(player.GetAll()) do
                 if IsValid(self.players[ply]) then continue end
-                if v == TEAM_SPECTATOR and ply:Team() != TEAM_SPECTATOR then continue end
-                if v != TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then continue end
-
+                if v == TEAM_SPECTATOR and ply:Team() ~= TEAM_SPECTATOR then continue end
+                if v ~= TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then continue end
                 local row = vgui.Create('ScoreboardRow')
                 row:SetPlayer(ply)
                 row:Dock(TOP)
@@ -417,14 +417,16 @@ function GM:TeamPanelFFA()
                 self.players[ply] = row
 
                 function row:Think()
-                    if v == TEAM_SPECTATOR and not ply:Team() == TEAM_SPECTATOR then 
+                    if v == TEAM_SPECTATOR and not ply:Team() == TEAM_SPECTATOR then
                         self:Remove()
+
                         return
                     end
 
-                    if v != TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then 
-                        self:Remove() 
-                        return 
+                    if v ~= TEAM_SPECTATOR and ply:Team() == TEAM_SPECTATOR then
+                        self:Remove()
+
+                        return
                     end
                 end
             end
@@ -444,7 +446,7 @@ function GM:TeamPanelFFA()
         -- Make sure panels move further over
         i = i + 1
     end
-    
+
     -- Create the play button
     local play_button = vgui.Create('DButton', bottom)
     play_button:SetWide(128)
@@ -455,7 +457,7 @@ function GM:TeamPanelFFA()
         DisableClipping(true)
         draw.RoundedBoxEx(8, 0, 4, w, h, Color(68, 189, 50), false, false, false, true)
         draw.RoundedBoxEx(8, 0, 0, w, h, Color(76, 209, 55), false, false, false, true)
-        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w/2, h/2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
+        GAMEMODE:DrawShadowText(self.Message or 'Play!', 'FS_32', w / 2, h / 2 + 2, motd_white, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER, 1)
         DisableClipping(false)
     end
 
@@ -477,16 +479,16 @@ end)
 
 concommand.Add('mg_team', function()
     GAMEMODE:OpenInfoOption('Team', GAMEMODE.TeamPanel)
+end)
 
-    --[[
+--[[
     if GAMEMODE.TeamBased and (not GAMEMODE.TeamSurvival) and (GAMEMODE.PlayerChooseTeams) then
         GAMEMODE:OpenInfoOption('Team', GAMEMODE.TeamPanel)
     else
         GAMEMODE:OpenInfoOption('Help', GAMEMODE.HelpPanel)
     end
-    ]]--
-end)
-
+    ]]
+--
 concommand.Add('mg_inventory', function()
     if not LocalPlayer():IsAdmin() then return end
     GAMEMODE:OpenInfoOption('Items', GAMEMODE.ItemsPanel)

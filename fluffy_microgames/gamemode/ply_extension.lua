@@ -1,4 +1,4 @@
--- Scoring functions for modifiers
+﻿-- Scoring functions for modifiers
 -- Simple networked variables
 local meta = FindMetaTable("Player")
 
@@ -22,6 +22,7 @@ end
 
 function meta:AwardWin(confetti)
     self:AddFrags(1)
+
     if confetti then
         GAMEMODE:ConfettiEffectSingle(self)
     end

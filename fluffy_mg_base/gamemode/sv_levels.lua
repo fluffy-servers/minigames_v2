@@ -1,21 +1,19 @@
---[[
+﻿--[[
     Serverside handling of levels
     This includes the database interface for XP
 --]]
-
 -- Prepare some prepared queries to make database stuff faster and more secure
 hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
-	local db = GAMEMODE:CheckDBConnection()
+    local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-	GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
-	GAMEMODE.MinigamesPQueries['addnewlevel'] = db:prepare("INSERT INTO minigames_xp VALUES(?, 0, 0);")
-	GAMEMODE.MinigamesPQueries['updatelevel'] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
+    GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
+    GAMEMODE.MinigamesPQueries['addnewlevel'] = db:prepare("INSERT INTO minigames_xp VALUES(?, 0, 0);")
+    GAMEMODE.MinigamesPQueries['updatelevel'] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
 end)
 
 local meta = FindMetaTable("Player")
 
 -- Also note sh_levels.lua which has getters of the below methods
-
 -- Set the level of the player
 -- Does NOT automatically save
 function meta:SetLevel(level)
@@ -40,14 +38,12 @@ end
 function meta:LoadLevelFromDB()
     if not self:SteamID64() or self:IsBot() then return end
     local ply = self
-    
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    
     local q = GAMEMODE.MinigamesPQueries['getlevel']
-	if not q then return end
+    if not q then return end
     q:setString(1, self:SteamID64())
-    
+
     -- Success function
     function q:onSuccess(data)
         if type(data) == 'table' and #data > 0 then
@@ -61,11 +57,12 @@ function meta:LoadLevelFromDB()
             q:start()
         end
     end
-    
+
     -- Print error if any occur (they shouldn't)
     function q:onError(err)
         print(err)
     end
+
     q:start()
 end
 
@@ -76,26 +73,24 @@ function meta:UpdateLevelToDB()
     local level = ply:GetLevel()
     local xp = ply:GetExperience()
     if level == 0 and xp == 0 then return end
-    
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    
     local q = GAMEMODE.MinigamesPQueries['updatelevel']
     if not q then return end
-    
     q:setNumber(1, level)
     q:setNumber(2, xp)
     q:setString(3, self:SteamID64())
-    
+
     -- Success function
     function q:onSuccess(data)
         --print('success')
     end
-    
+
     -- Print error if any occur (they shouldn't)
     function q:onError(err)
         print(err)
     end
+
     q:start()
 end
 
@@ -108,11 +103,13 @@ end)
 -- Complicated methods of converting the various tracked stats to XP below
 -- Maximum of 100XP in one round
 -- Maximum of 20XP for any given source (except round wins)
-
 -- Add a stat conversion type
 -- Note that this WILL override if already exists - use this for good not evil please
 function GM:AddStatConversion(type, nicename, value, max)
-    if not GAMEMODE.StatConversions then GAMEMODE.StatConversions = {} end
+    if not GAMEMODE.StatConversions then
+        GAMEMODE.StatConversions = {}
+    end
+
     GAMEMODE.StatConversions[type] = {nicename, value, max or nil}
 end
 
@@ -133,27 +130,31 @@ end)
 function GM:ConvertStat(name, points)
     if not GAMEMODE.StatConversions then return end
     if not GAMEMODE.StatConversions[name] then return end
-    
+
     if name == 'RoundWins' then
         -- Adjust round value based on some factors
         local value = 8
+
         if GAMEMODE.RoundValue then
             value = GAMEMODE.RoundValue
         elseif GAMEMODE.TeamBased then
             value = 5
         end
-        
+
         if not GAMEMODE.TeamBased then
-            local score = math.Clamp(points*value, 0, 40)
+            local score = math.Clamp(points * value, 0, 40)
+
             return {'Rounds Won', points, score}
         elseif GAMEMODE.TeamBased then
-            local score = math.Clamp(points*value, 0, 40)
+            local score = math.Clamp(points * value, 0, 40)
+
             return {'Rounds Won', points, score}
         end
     else
         local t = GAMEMODE.StatConversions[name]
         local max = t[3] or 25
         local score = math.Clamp(math.floor(points * t[2]), 0, max)
+
         return {t[1], points, score}
     end
 end
@@ -163,11 +164,17 @@ function meta:ConvertStatsToExperience()
     local xp = {}
     local total_xp = 0
     local hit_max = false
-    for k,v in pairs(self:GetStatTable()) do
+
+    for k, v in pairs(self:GetStatTable()) do
         local s = GAMEMODE:ConvertStat(k, v)
-        if not s then print(k) continue end
+
+        if not s then
+            print(k)
+            continue
+        end
+
         -- Limit of 100XP per game
-        if (total_xp + s[3] > 100) and (!hit_max) then
+        if (total_xp + s[3] > 100) and (not hit_max) then
             s[3] = 100 - total_xp
             hit_max = true
             table.insert(xp, s)
@@ -178,7 +185,7 @@ function meta:ConvertStatsToExperience()
             table.insert(xp, s)
         end
     end
-    
+
     return xp
 end
 
@@ -188,21 +195,25 @@ function meta:ProcessLevels()
     local new_xp = self:GetExperience()
     local new_level = self:GetLevel()
     local max_xp = self:GetMaxExperience()
+
     -- Sum up the XP
-    for k,v in pairs(queue) do
+    for k, v in pairs(queue) do
         local amount = v[3]
         new_xp = new_xp + amount
     end
-    
+
     -- Check level ups!
     if new_xp > max_xp then
         new_xp = new_xp - max_xp
         new_level = new_level + 1
         hook.Run('MinigamesLevelUp', self, new_level)
     end
-    
+
     -- Save changes
     self:SetExperience(new_xp)
     self:SetLevel(new_level)
-    timer.Simple(5, function() self:UpdateLevelToDB() end)
+
+    timer.Simple(5, function()
+        self:UpdateLevelToDB()
+    end)
 end

@@ -1,4 +1,4 @@
-AddCSLuaFile('cl_init.lua')
+﻿AddCSLuaFile('cl_init.lua')
 AddCSLuaFile('shared.lua')
 include('shared.lua')
 
@@ -19,45 +19,51 @@ end
 function GM:PlayerLoadout(ply)
     local stage = math.floor(ply:GetNWInt('GG_Progress', 0) / 2) + 1
     local kill = nil
-    if IsValid(ply:GetActiveWeapon()) then kill = ply:GetActiveWeapon():GetClass() end
-    
+
+    if IsValid(ply:GetActiveWeapon()) then
+        kill = ply:GetActiveWeapon():GetClass()
+    end
+
     local prog = GAMEMODE.Progression
+
     if stage > #prog then
         GAMEMODE:EndRound(ply)
+
         return
     end
-    
+
     local wep = prog[stage]
     local last = prog[#prog]
-    if ply:HasWeapon(wep) and wep != last then return end
-    
+    if ply:HasWeapon(wep) and wep ~= last then return end
     ply:RemoveAllAmmo()
     ply:StripWeapons()
     GAMEMODE:StockAmmo(ply)
-    
     ply:Give(last, true)
     local given = ply:Give(wep)
-    if kill != last then 
-        ply:SelectWeapon(wep) 
+
+    if kill ~= last then
+        ply:SelectWeapon(wep)
     end
 end
 
 -- Reset gungame progression
 hook.Add('PreRoundStart', 'ResetGGRank', function()
-    for k,v in pairs(player.GetAll()) do
+    for k, v in pairs(player.GetAll()) do
         v:SetNWInt('GG_Progress', 0)
     end
 end)
 
 -- Players increase the weapon progression for every kill
 function GM:HandlePlayerDeath(ply, attacker, dmginfo)
-    if !attacker:IsValid() or !attacker:IsPlayer() then return end -- We only care about player kills from here on
-    if attacker == ply then 
+    if not attacker:IsValid() or not attacker:IsPlayer() then return end -- We only care about player kills from here on
+
+    if attacker == ply then
         attacker:AddFrags(-1)
         attacker:SetNWInt('GG_Progress', math.Clamp(attacker:GetNWInt('GG_Progress') - 1, 0, 100))
-        return 
+
+        return
     end
-    
+
     -- Add the frag; track the GG progress
     attacker:AddFrags(GAMEMODE.KillValue)
     GAMEMODE:AddStatPoints(attacker, 'kills', 1)
