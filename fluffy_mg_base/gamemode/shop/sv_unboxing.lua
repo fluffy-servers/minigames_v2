@@ -40,7 +40,7 @@ function SHOP:OpenUnbox(cratekey, ply)
     -- Why 24th? I have no idea it's a nice number ok
     local item = items[queue[24]]
 
-    if type(item) == 'string' then
+    if type(item) == "string" then
         item = {
             VanillaID = item
         }
@@ -61,10 +61,10 @@ function SHOP:OpenUnbox(cratekey, ply)
             b = rarity.b
         }
 
-        net.Start('SHOP_AnnounceUnbox')
-        net.WriteString(ply:Nick() or 'Somebody')
+        net.Start("SHOP_AnnounceUnbox")
+        net.WriteString(ply:Nick() or "Somebody")
         net.WriteString(ITEM.Name)
-        net.WriteString('unboxed')
+        net.WriteString("unboxed")
         net.WriteTable(rarity)
         net.Broadcast()
     end)
@@ -85,10 +85,10 @@ function SHOP:InstantUnbox(unbox, ply, message)
         b = rarity.b
     }
 
-    net.Start('SHOP_AnnounceUnbox')
-    net.WriteString(ply:Nick() or 'Somebody')
+    net.Start("SHOP_AnnounceUnbox")
+    net.WriteString(ply:Nick() or "Somebody")
     net.WriteString(item.Name)
-    net.WriteString('unboxed')
+    net.WriteString("unboxed")
     net.WriteTable(rarity)
     net.Broadcast()
 end

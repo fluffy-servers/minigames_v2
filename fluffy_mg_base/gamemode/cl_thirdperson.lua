@@ -53,7 +53,7 @@ function GM:ThirdPersonView(ply, pos, angles, fov)
         view.drawviewer = true
     else
         -- rethink this section tbh
-        --view.fov = GetConVar("default_fov"):GetFloat() BAD FLUFFY NO DON'T DO THIS
+        --view.fov = GetConVar("default_fov"):GetFloat() BAD
         view.origin = pos
         view.angles = angles
     end
@@ -123,7 +123,7 @@ function GM:CalcView(ply, pos, angles, fov)
 end
 
 -- Net receiver for cool camera transitions
-net.Receive('CoolTransition', function()
+net.Receive("CoolTransition", function()
     local tbl = net.ReadTable()
 
     if not tbl.pos then

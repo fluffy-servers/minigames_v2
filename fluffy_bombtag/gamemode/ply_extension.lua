@@ -27,7 +27,7 @@ function meta:Explode()
     local ed = EffectData()
     ed:SetOrigin(self:GetPos())
     util.Effect("Explosion", ed, true, true)
-    util.BlastDamage(self:GetWeapon('bt_bomb') or self, self, self:GetPos(), 500, 200)
+    util.BlastDamage(self:GetWeapon("bt_bomb") or self, self, self:GetPos(), 500, 200)
 end
 
 -- Set the time remaining on the bomb

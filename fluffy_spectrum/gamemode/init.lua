@@ -1,6 +1,6 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 function GM:PlayerLoadout(ply)
     ply:StripAmmo()
@@ -23,7 +23,7 @@ function GM:CanRoundStart()
 end
 
 -- Prepare the round properties
-hook.Add('PreRoundStart', 'VIPPreparations', function()
+hook.Add("PreRoundStart", "VIPPreparations", function()
     -- Shuffle a list of team colors & the list of players
     colors = table.Shuffle({TEAM_RED, TEAM_BLUE, TEAM_GREEN, TEAM_YELLOW, TEAM_PURPLE, TEAM_ORANGE, TEAM_PINK, TEAM_CYAN})
 
@@ -63,7 +63,7 @@ function GM:EntityTakeDamage(ent, dmg)
     local amount = dmg:GetDamage()
 
     if ent:Health() - amount <= 0 then
-        -- Reset the 'dead' player
+        -- Reset the "dead" player
         dmg:SetDamage(0)
         ent:SetHealth(100)
         ent:AddDeaths(1)
@@ -89,16 +89,16 @@ function GM:EntityTakeDamage(ent, dmg)
 
         -- Add points to inflictor
         attacker:AddFrags(1)
-        attacker:AddStatPoints('Enemy Conversions', 1)
+        attacker:AddStatPoints("Enemy Conversions", 1)
         -- Change the team
         local t = attacker:Team()
         local color = team.GetColor(t)
         ent:SetTeam(t)
         ent:SetPlayerColor(Vector(color.r / 255, color.g / 255, color.b / 255))
-        GAMEMODE:PlayerOnlyAnnouncement(ent, 2, 'You are now on ' .. team.GetName(t))
+        GAMEMODE:PlayerOnlyAnnouncement(ent, 2, "You are now on " .. team.GetName(t))
         GAMEMODE:CheckVictory(t)
         -- Fake a death in the killfeed
-        net.Start('PlayerKilledByPlayer')
+        net.Start("PlayerKilledByPlayer")
         net.WriteEntity(ent)
         net.WriteString(dmg:GetInflictor():GetClass())
         net.WriteEntity(attacker)
@@ -107,7 +107,7 @@ function GM:EntityTakeDamage(ent, dmg)
 end
 
 -- Check for victory when people die
-hook.Add('DoPlayerDeath', 'CheckVictoryOnDeath', function()
+hook.Add("DoPlayerDeath", "CheckVictoryOnDeath", function()
     -- Check all teams since we don't know who is winning
     timer.Simple(0.2, function()
         for i = 1, 8 do
@@ -120,12 +120,12 @@ end)
 function GM:HandleTeamWin(reason)
     local winners, msg, extra
 
-    if reason == 'TimeEnd' then
+    if reason == "TimeEnd" then
         winners = nil
-        msg = 'No team has won!'
-    elseif type(reason) == 'number' then
+        msg = "No team has won!"
+    elseif type(reason) == "number" then
         winners = reason
-        msg = team.GetName(winners) .. ' win the round!'
+        msg = team.GetName(winners) .. " win the round!"
         extra = nil
     end
 
@@ -133,6 +133,6 @@ function GM:HandleTeamWin(reason)
 end
 
 -- Register XP for Spectrum
-hook.Add('RegisterStatsConversions', 'AddSpectrumStatConversions', function()
-    GAMEMODE:AddStatConversion('Enemy Conversions', 'Enemy Conversions', 0.5)
+hook.Add("RegisterStatsConversions", "AddSpectrumStatConversions", function()
+    GAMEMODE:AddStatConversion("Enemy Conversions", "Enemy Conversions", 0.5)
 end)

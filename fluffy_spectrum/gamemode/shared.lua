@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Spectrum'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Spectrum"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     pending
 ]]
@@ -29,21 +29,21 @@ function GM:CreateTeams()
     TEAM_ORANGE = 6
     TEAM_PINK = 7
     TEAM_CYAN = 8
-    team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true)
+    team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS["red"], true)
     team.SetSpawnPoint(TEAM_RED, TEAM_SPAWNS)
-    team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
+    team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS["blue"], true)
     team.SetSpawnPoint(TEAM_BLUE, TEAM_SPAWNS)
-    team.SetUp(TEAM_GREEN, "Green Team", TEAM_COLORS['green'], true)
+    team.SetUp(TEAM_GREEN, "Green Team", TEAM_COLORS["green"], true)
     team.SetSpawnPoint(TEAM_GREEN, TEAM_SPAWNS)
-    team.SetUp(TEAM_PURPLE, "Purple Team", TEAM_COLORS['purple'], true)
+    team.SetUp(TEAM_PURPLE, "Purple Team", TEAM_COLORS["purple"], true)
     team.SetSpawnPoint(TEAM_PURPLE, TEAM_SPAWNS)
-    team.SetUp(TEAM_YELLOW, "Yellow Team", TEAM_COLORS['yellow'], true)
+    team.SetUp(TEAM_YELLOW, "Yellow Team", TEAM_COLORS["yellow"], true)
     team.SetSpawnPoint(TEAM_YELLOW, TEAM_SPAWNS)
-    team.SetUp(TEAM_ORANGE, "Orange Team", TEAM_COLORS['orange'], true)
+    team.SetUp(TEAM_ORANGE, "Orange Team", TEAM_COLORS["orange"], true)
     team.SetSpawnPoint(TEAM_ORANGE, TEAM_SPAWNS)
-    team.SetUp(TEAM_PINK, "Pink Team", TEAM_COLORS['pink'], true)
+    team.SetUp(TEAM_PINK, "Pink Team", TEAM_COLORS["pink"], true)
     team.SetSpawnPoint(TEAM_PINK, TEAM_SPAWNS)
-    team.SetUp(TEAM_CYAN, "Cyan Team", TEAM_COLORS['cyan'], true)
+    team.SetUp(TEAM_CYAN, "Cyan Team", TEAM_COLORS["cyan"], true)
     team.SetSpawnPoint(TEAM_CYAN, TEAM_SPAWNS)
     team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 

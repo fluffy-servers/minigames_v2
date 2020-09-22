@@ -1,7 +1,7 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
-include('sv_levelgen.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
+include("sv_levelgen.lua")
 
 -- Crowbar to start with
 function GM:PlayerLoadout(ply)

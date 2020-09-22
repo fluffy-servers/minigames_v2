@@ -1,6 +1,6 @@
 ﻿AddCSLuaFile()
-ENT.Type = 'anim'
-ENT.Base = 'base_anim'
+ENT.Type = "anim"
+ENT.Base = "base_anim"
 
 local mixedmodels = {"models/hunter/blocks/cube2x2x025.mdl", "models/hunter/blocks/cube2x2x025.mdl", "models/hunter/tubes/circle2x2.mdl", "models/hunter/tubes/circle2x2.mdl", "models/hunter/blocks/cube075x075x075.mdl", "models/hunter/tubes/circle4x4c.mdl", "models/hunter/triangles/2x2.mdl", "models/hunter/triangles/2x2.mdl", "models/hunter/triangles/3x3.mdl",}
 
@@ -13,27 +13,27 @@ ENT.ActivateSounds = {Sound("physics/metal/sawblade_stick1.wav"), Sound("physics
 
 local gametypefunctions = {}
 
-gametypefunctions['square'] = function(p)
+gametypefunctions["square"] = function(p)
     p:SetModel("models/hunter/blocks/cube2x2x025.mdl")
 end
 
-gametypefunctions['circle'] = function(p)
+gametypefunctions["circle"] = function(p)
     p:SetModel("models/hunter/tubes/circle2x2.mdl")
 end
 
-gametypefunctions['mixed'] = function(p)
+gametypefunctions["mixed"] = function(p)
     p:SetModel(table.Random(mixedmodels))
     p:SetAngles(Angle(0, math.random(360), 0))
 end
 
-gametypefunctions['hexagon'] = function(p)
+gametypefunctions["hexagon"] = function(p)
     p:SetModel("models/hunter/geometric/hex1x1.mdl")
 end
 
 function ENT:Initialize()
     if CLIENT then return end
     -- Set the model and data based on the game submode
-    local mode = GetGlobalString('PitfallType', 'square')
+    local mode = GetGlobalString("PitfallType", "square")
     self:SetModel("models/hunter/blocks/cube2x2x025.mdl")
     gametypefunctions[mode](self)
     self:SetColor(GAMEMODE.PColorStart)
@@ -87,10 +87,10 @@ function ENT:OnTakeDamage(dmg)
         inflictor = inflictor:GetActiveWeapon()
     end
 
-    if inflictor:GetClass() == 'weapon_crowbar' then
+    if inflictor:GetClass() == "weapon_crowbar" then
         -- Instabreak for crowbars
         self:AddDamage(100, attacker)
-    elseif inflictor:GetClass() == 'weapon_platformbreaker' then
+    elseif inflictor:GetClass() == "weapon_platformbreaker" then
         -- pew pew does some damage
         local scale = CurTime() - self.CreationTime
         scale = 1 + (4 * (scale / GAMEMODE.RoundTime))
@@ -111,7 +111,7 @@ function ENT:AddDamage(amount, ply)
     local scale = math.Clamp(self.MyHealth / 100, 0, 1)
 
     if IsValid(ply) and ply:IsPlayer() then
-        ply:AddStatPoints('Platform Damage', math.floor(damage))
+        ply:AddStatPoints("Platform Damage", math.floor(damage))
     end
 
     -- Adjust color

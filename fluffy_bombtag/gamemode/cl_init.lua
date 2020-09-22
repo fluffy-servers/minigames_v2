@@ -1,7 +1,7 @@
-﻿include('shared.lua')
+﻿include("shared.lua")
 
 -- Draw a halo around whoever has the bomb
-hook.Add('PreDrawHalos', 'DrawBombHalo', function()
+hook.Add("PreDrawHalos", "DrawBombHalo", function()
     for k, v in pairs(player.GetAll()) do
         if v:GetNWBool("Carrier", false) then
             local pcolor = v:GetPlayerColor()

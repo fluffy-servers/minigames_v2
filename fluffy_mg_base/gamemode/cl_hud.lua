@@ -3,7 +3,7 @@
     This file has been pretty much completely made for lots of improvements around the board!
     Note: this HUD isn't the most efficient thing ever created, but the latest updates have improved framerates significantly.
 --]]
-include('drawarc.lua')
+include("drawarc.lua")
 
 -- Hide default HUD components
 local hide = {
@@ -26,7 +26,7 @@ end)
 -- This calls many of the sub functions below
 function GM:HUDPaint()
     -- Obey the convar
-    local shouldDraw = GetConVar('cl_drawhud'):GetBool()
+    local shouldDraw = GetConVar("cl_drawhud"):GetBool()
 
     if not shouldDraw then
         if GAMEMODE:ScoringPaneActive() and IsValid(GAMEMODE.ScorePane) then
@@ -90,16 +90,16 @@ end
 function GM:UpdateTeamColors(t)
     local name = team.GetName(t)
 
-    if name == 'Spectators' then
+    if name == "Spectators" then
         GAMEMODE:UpdateColorSet()
     else
         if t == TEAM_RED then
-            GAMEMODE:UpdateColorSet('red')
+            GAMEMODE:UpdateColorSet("red")
         elseif t == TEAM_BLUE then
-            GAMEMODE:UpdateColorSet('blue')
+            GAMEMODE:UpdateColorSet("blue")
         else
             -- Last resort, try getting the color from the team name
-            name = string.lower(string.Replace(name, ' Team', ''))
+            name = string.lower(string.Replace(name, " Team", ""))
             GAMEMODE:UpdateColorSet(name)
         end
     end
@@ -218,7 +218,7 @@ function GM:DrawHealth()
     local team_name = team.GetName(LocalPlayer():Team())
 
     if GAMEMODE.TeamBased and LocalPlayer():Team() ~= TEAM_CONNECTING then
-        surface.SetFont('FS_24')
+        surface.SetFont("FS_24")
         local w = surface.GetTextSize(team_name)
         local rect_height = 32
         local rect_width = w + 80
@@ -251,11 +251,11 @@ function GM:DrawHealth()
     end
 
     -- Draw the health number
-    GAMEMODE:DrawShadowText(math.floor(LocalPlayer():Health()), 'FS_40', c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    GAMEMODE:DrawShadowText(math.floor(LocalPlayer():Health()), "FS_40", c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
 
     -- Draw the team name (if applicable)
     if GAMEMODE.TeamBased and LocalPlayer():Team() ~= TEAM_CONNECTING then
-        GAMEMODE:DrawShadowText(team_name, 'FS_24', c_pos + 52, ScrH() - c_pos + 2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(team_name, "FS_24", c_pos + 52, ScrH() - c_pos + 2, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 end
 
@@ -276,12 +276,12 @@ function GM:DrawAmmo()
     -- Get the ammo information from the gun
     -- There's a lot of unusual cases here that could be handled better in futures
     local ammo = {}
-    ammo['PrimaryClip'] = wep:Clip1()
-    ammo['SecondaryClip'] = wep:Clip2()
-    ammo['PrimaryAmmo'] = LocalPlayer():GetAmmoCount(wep:GetPrimaryAmmoType())
-    ammo['SecondaryAmmo'] = LocalPlayer():GetAmmoCount(wep:GetSecondaryAmmoType())
-    ammo['MaxPrimaryClip'] = wep:GetMaxClip1()
-    ammo['MaxSecondaryClip'] = wep:GetMaxClip2()
+    ammo["PrimaryClip"] = wep:Clip1()
+    ammo["SecondaryClip"] = wep:Clip2()
+    ammo["PrimaryAmmo"] = LocalPlayer():GetAmmoCount(wep:GetPrimaryAmmoType())
+    ammo["SecondaryAmmo"] = LocalPlayer():GetAmmoCount(wep:GetSecondaryAmmoType())
+    ammo["MaxPrimaryClip"] = wep:GetMaxClip1()
+    ammo["MaxSecondaryClip"] = wep:GetMaxClip2()
 
     -- Some weapons have a custom ammo display function to calculate this table
     if wep.CustomAmmoDisplay then
@@ -293,8 +293,8 @@ function GM:DrawAmmo()
 
     -- Check the ammo table is valid
     if not ammo then return end
-    if ammo['PrimaryClip'] == -1 and (ammo['PrimaryAmmo'] or -1) < 1 then return end
-    if ammo['PrimaryClip'] == 0 and ammo['PrimaryAmmo'] == 0 then return end
+    if ammo["PrimaryClip"] == -1 and (ammo["PrimaryAmmo"] or -1) < 1 then return end
+    if ammo["PrimaryClip"] == 0 and ammo["PrimaryAmmo"] == 0 then return end
     -- Draw the shadow & circle
     draw.NoTexture()
     surface.SetDrawColor(GAMEMODE.HColDark)
@@ -309,13 +309,13 @@ function GM:DrawAmmo()
 
     -- Draw the arc (if applicable)
     if not GAMEMODE.FastHUDConvar:GetBool() then
-        if ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > -1 then
+        if ammo["MaxPrimaryClip"] and ammo["MaxPrimaryClip"] > -1 then
             -- Calculate the percentage with slight interpolation
             -- Make sure the percentage isn't a division by 0
             local p = 0
 
-            if ammo['PrimaryClip'] < ammo['MaxPrimaryClip'] and ammo['MaxPrimaryClip'] > 0 then
-                p = ammo['PrimaryClip'] / ammo['MaxPrimaryClip']
+            if ammo["PrimaryClip"] < ammo["MaxPrimaryClip"] and ammo["MaxPrimaryClip"] > 0 then
+                p = ammo["PrimaryClip"] / ammo["MaxPrimaryClip"]
             else
                 p = 1
             end
@@ -336,22 +336,22 @@ function GM:DrawAmmo()
 
     -- If there is a 'reserve' value for this gun, draw clip & ammo
     -- Otherwise, just draw the clip
-    if ammo['PrimaryAmmo'] and ammo['PrimaryAmmo'] > -1 and ammo['PrimaryAmmo'] < 1000 and ammo['PrimaryClip'] > -1 then
+    if ammo["PrimaryAmmo"] and ammo["PrimaryAmmo"] > -1 and ammo["PrimaryAmmo"] < 1000 and ammo["PrimaryClip"] > -1 then
         -- Clip & ammo
-        GAMEMODE:DrawShadowText(ammo['PrimaryClip'], 'FS_40', ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-        GAMEMODE:DrawShadowText(ammo['PrimaryAmmo'] or 72, 'FS_20', ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    elseif ammo['PrimaryClip'] ~= -1 then
+        GAMEMODE:DrawShadowText(ammo["PrimaryClip"], "FS_40", ScrW() - c_pos, ScrH() - c_pos - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(ammo["PrimaryAmmo"] or 72, "FS_20", ScrW() - c_pos, ScrH() - c_pos + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    elseif ammo["PrimaryClip"] ~= -1 then
         -- Clip1 only
-        GAMEMODE:DrawShadowText(ammo['PrimaryClip'], 'FS_60', ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-    elseif ammo['PrimaryAmmo'] > 0 then
-        GAMEMODE:DrawShadowText(ammo['PrimaryAmmo'], 'FS_60', ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(ammo["PrimaryClip"], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    elseif ammo["PrimaryAmmo"] > 0 then
+        GAMEMODE:DrawShadowText(ammo["PrimaryAmmo"], "FS_60", ScrW() - c_pos, ScrH() - c_pos, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     end
     -- What about secondary ammo?? :(
     -- Todo: add a check for 'infinite' ammo (I think this is done)
 end
 
 function GM:CreateRoundEndPanel(message, tagline)
-    surface.PlaySound('friends/friend_join.wav')
+    surface.PlaySound("friends/friend_join.wav")
 
     if IsValid(GAMEMODE.RoundEndPanel) then
         GAMEMODE.RoundEndPanel:Remove()
@@ -359,12 +359,12 @@ function GM:CreateRoundEndPanel(message, tagline)
 
     local w = ScrW()
     local h = 160
-    local p = vgui.Create('DPanel')
+    local p = vgui.Create("DPanel")
     p:SetSize(w, h)
     p:SetPos(ScrW(), ScrH() / 2 - h / 2)
     p.TagLine = tagline or nil
 
-    if p.TagLine == '' or p.TagLine == ' ' then
+    if p.TagLine == "" or p.TagLine == " " then
         p.TagLine = nil
     end
 
@@ -375,10 +375,10 @@ function GM:CreateRoundEndPanel(message, tagline)
         draw.RoundedBoxEx(0, 0, 0, w, h, c, false, false, true, true)
 
         if self.TagLine then
-            GAMEMODE:DrawShadowText(self.Message, 'FS_64', w / 2, h / 2 - 24, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
-            GAMEMODE:DrawShadowText(self.TagLine, 'FS_40', w / 2, h / 2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(self.Message, "FS_64", w / 2, h / 2 - 24, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(self.TagLine, "FS_40", w / 2, h / 2 + 32, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         else
-            GAMEMODE:DrawShadowText(self.Message, 'FS_64', w / 2, h / 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(self.Message, "FS_64", w / 2, h / 2, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
     end
 
@@ -393,7 +393,7 @@ end
 
 -- Play a COOL sound when the round ends!
 -- Also display the EndGameMessage -> update the look of this soon
-net.Receive('EndRound', function()
+net.Receive("EndRound", function()
     local msg = net.ReadString()
     local tagline = net.ReadString()
     GAMEMODE:CreateRoundEndPanel(msg, tagline)
@@ -447,7 +447,7 @@ function GM:CreateScoringPane()
         GAMEMODE.ScorePane:Remove()
     end
 
-    local frame = vgui.Create('DPanel')
+    local frame = vgui.Create("DPanel")
     local panel_h = 80
     frame:SetSize(ScrW() * 0.5, panel_h)
     frame:SetPos(ScrW() * 0.25, ScrH() - panel_h)
@@ -455,16 +455,16 @@ function GM:CreateScoringPane()
     -- Function to create a blob for each player
     -- This includes the score & avatar
     function frame:CreatePlayer(ply, x)
-        local p = vgui.Create('DPanel', frame)
+        local p = vgui.Create("DPanel", frame)
         p:SetPos(x, 0)
         p:SetSize(64, panel_h)
 
         function p:Paint()
             local score = GAMEMODE:ScoringPaneScore(ply) or 0
-            GAMEMODE:DrawShadowText(score, 'FS_32', 32, panel_h - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+            GAMEMODE:DrawShadowText(score, "FS_32", 32, panel_h - 4, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
         end
 
-        local Avatar = vgui.Create('AvatarImage', p)
+        local Avatar = vgui.Create("AvatarImage", p)
         Avatar:SetSize(40, 40)
         Avatar:SetPos(12, 0)
         Avatar:SetPlayer(ply, 64)
@@ -478,7 +478,7 @@ function GM:CreateScoringPane()
     -- Refresh the score panel every 2 seconds
     -- This is a bit expensive hence the infrequency
     -- Scores will update instantly, however the order only changes in this function
-    ScoreRefreshPlayers = timer.Create('RefreshPlayers', 2, 0, function()
+    ScoreRefreshPlayers = timer.Create("RefreshPlayers", 2, 0, function()
         GAMEMODE:ScoreRefreshSort()
     end)
 end
@@ -493,7 +493,7 @@ function GM:GetPlayerInfoPanel(ply)
     panel:SetSize(160, 64)
     panel:SetPaintedManually(true)
     -- Create the avatar
-    local avatar = vgui.Create('AvatarCircle', panel)
+    local avatar = vgui.Create("AvatarCircle", panel)
     avatar:SetSize(32, 32)
     avatar:SetPos(16, 16)
     avatar:SetPlayer(ply, 32)
@@ -536,10 +536,10 @@ function GM:GetPlayerInfoPanel(ply)
         local name = ply:Nick()
         draw.SimpleText(name, "FS_24", 64 + 1, 24 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         draw.SimpleText(name, "FS_24", 64, 24, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        GAMEMODE:DrawShadowText(name, 'FS_24', 64, 24, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(name, "FS_24", 64, 24, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         -- Draw HP number
         hp = math.floor(hp)
-        GAMEMODE:DrawShadowText(hp .. 'HP', 'FS_24', 64, 44, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        GAMEMODE:DrawShadowText(hp .. "HP", "FS_24", 64, 44, c, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 
     -- Cache & return this panel
@@ -578,22 +578,22 @@ function GM:DrawSpectateState()
     if not LocalPlayer().Spectating then return end
     -- Find the name of the target to draw
     -- This will be a player name 99% of the time
-    local targetname = 'Free Roam'
+    local targetname = "Free Roam"
 
     if LocalPlayer().SpectateMode ~= OBS_MODE_ROAMING then
         local e = LocalPlayer().SpectateTarget
 
         if e:IsPlayer() then
-            targetname = e:Nick() or 'Player'
+            targetname = e:Nick() or "Player"
         else
-            targetname = 'Entity'
+            targetname = "Entity"
         end
     end
 
     -- Draw text
-    GAMEMODE:DrawShadowText('Spectating', 'FS_32', 8, ScrH() - 58, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
-    GAMEMODE:DrawShadowText(targetname, 'FS_64', 8, ScrH(), GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText("Spectating", "FS_32", 8, ScrH() - 58, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
+    GAMEMODE:DrawShadowText(targetname, "FS_64", 8, ScrH(), GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_BOTTOM)
 end
 
 -- Load round state stuff
-include('cl_round_state.lua')
+include("cl_round_state.lua")

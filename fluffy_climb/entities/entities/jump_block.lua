@@ -1,5 +1,5 @@
 ﻿AddCSLuaFile()
-ENT.Type = 'anim'
+ENT.Type = "anim"
 
 function ENT:Initialize()
     self:PhysicsInitShadow(false, false)
@@ -9,7 +9,7 @@ end
 function ENT:SetJumpBlock()
     self.OldColor = self:GetColor()
     self:SetColor(Color(0, 255, 0))
-    self:SetMaterial('tools/toolswhite', true)
+    self:SetMaterial("tools/toolswhite", true)
     self:SetTrigger(true)
     self.JumpMode = true
 end

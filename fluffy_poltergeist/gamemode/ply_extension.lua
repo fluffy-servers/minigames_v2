@@ -87,11 +87,11 @@ function meta:KillProp(force)
 end
 
 -- Poltergeists: Player death hook
-hook.Add('PlayerDeath', 'PoltergeistDeath', function(ply)
+hook.Add("PlayerDeath", "PoltergeistDeath", function(ply)
     if ply:Team() ~= TEAM_RED then return end
 end)
 
-hook.Add('Move', 'GhostMove', function(ply, mv)
+hook.Add("Move", "GhostMove", function(ply, mv)
     if ply:Team() ~= TEAM_RED then return end
     local prop = ply:GetProp()
     if not prop or not IsValid(prop) then return end
@@ -126,7 +126,7 @@ hook.Add('Move', 'GhostMove', function(ply, mv)
     end
 end)
 
-hook.Add('KeyPress', 'GhostExtraControls', function(ply, key)
+hook.Add("KeyPress", "GhostExtraControls", function(ply, key)
     if not ply:Alive() then return end
     if ply:Team() ~= TEAM_RED then return end
     local prop = ply:GetProp()
@@ -139,7 +139,7 @@ hook.Add('KeyPress', 'GhostExtraControls', function(ply, key)
         local closest = 62501
 
         for k, v in pairs(ents.FindInSphere(prop:GetPos(), 250)) do
-            if v:GetClass() ~= 'prop_physics' then continue end
+            if v:GetClass() ~= "prop_physics" then continue end
             if IsValid(v:GetOwner()) then continue end
             local distance = prop:GetPos():DistToSqr(v:GetPos())
 
@@ -161,7 +161,7 @@ hook.Add('KeyPress', 'GhostExtraControls', function(ply, key)
         -- Handle dash attack
         local phys = prop:GetPhysicsObject()
         if not phys or not phys:IsValid() then return end
-        prop:EmitSound('ambient/machines/machine1_hit1.wav')
+        prop:EmitSound("ambient/machines/machine1_hit1.wav")
         phys:SetVelocityInstantaneous(ply:GetAimVector() * 5000)
         ply.AttackTime = CurTime() + 5
     elseif key == IN_ATTACK2 and (ply.TauntTime or 0) < CurTime() then

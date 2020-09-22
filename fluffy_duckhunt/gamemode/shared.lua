@@ -4,9 +4,9 @@
     Originally by Niandra Lades
 ]]
 --
-DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Duck Hunt'
-GM.Author = 'FluffyXVI'
+DeriveGamemode("fluffy_mg_base")
+GM.Name = "Duck Hunt"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Runners have to make it to the end before getting sniped!
     
@@ -37,11 +37,11 @@ GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
 
 function GM:CreateTeams()
     if (not GAMEMODE.TeamBased) then return end
-    team.SetUp(TEAM_RED, "Snipers", TEAM_COLORS['red'], true)
+    team.SetUp(TEAM_RED, "Snipers", TEAM_COLORS["red"], true)
 
     team.SetSpawnPoint(TEAM_RED, {"info_player_terrorist", "info_player_combine"})
 
-    team.SetUp(TEAM_BLUE, "Runners", TEAM_COLORS['blue'], true)
+    team.SetUp(TEAM_BLUE, "Runners", TEAM_COLORS["blue"], true)
 
     team.SetSpawnPoint(TEAM_BLUE, {"info_player_counterterrorist", "info_player_rebel"})
 

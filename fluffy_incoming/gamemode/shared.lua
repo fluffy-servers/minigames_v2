@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Incoming!'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Incoming!"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Race to the top of the slope!
     Avoid all the falling props!

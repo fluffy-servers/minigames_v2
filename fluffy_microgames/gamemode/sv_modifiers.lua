@@ -10,14 +10,14 @@
 }
 
 local modifier_properties = {
-    ['Initialize'] = true,
-    ['Loadout'] = true,
-    ['WinCheck'] = true,
-    ['Cleanup'] = true,
-    ['PlayerFinish'] = true,
-    ['Think'] = true,
-    ['CanStart'] = true,
-    ['GetWinningPlayer'] = true
+    ["Initialize"] = true,
+    ["Loadout"] = true,
+    ["WinCheck"] = true,
+    ["Cleanup"] = true,
+    ["PlayerFinish"] = true,
+    ["Think"] = true,
+    ["CanStart"] = true,
+    ["GetWinningPlayer"] = true
 }
 
 -- Set up a new modifier
@@ -75,7 +75,7 @@ function GM:SetupModifier(modifier)
     GAMEMODE.ModifierHooks = {}
 
     for k, func in pairs(modifier) do
-        if type(func) == 'function' and not modifier_properties[k] then
+        if type(func) == "function" and not modifier_properties[k] then
             hook.Add(k, modifier.Name, function(...) return func(modifier, ...) end)
             table.insert(GAMEMODE.ModifierHooks, k)
         end
@@ -105,12 +105,12 @@ function GM:HandleRegion(modifier)
     -- If there are no markers for this region, bail out
     -- If the region isn't generic, respawn everyone
     local region = modifier.Region
-    if not modifier.Region or modifier.Region == 'generic' then return true end
+    if not modifier.Region or modifier.Region == "generic" then return true end
 
     -- If multiple regions are specified, pick one at random from the table
-    if type(region) == 'table' then
+    if type(region) == "table" then
         region = table.Random(region)
-        if region == 'generic' then return true end
+        if region == "generic" then return true end
     end
 
     -- Abort the gamemode if the region is not in this map
@@ -142,7 +142,7 @@ function GM:TeardownModifier(modifier)
         v:SetHealth(100)
         v:SetMaxHealth(100)
         v:SetJumpPower(200)
-        hook.Call('PlayerSetModel', GAMEMODE, v)
+        hook.Call("PlayerSetModel", GAMEMODE, v)
 
         -- Win conditions / points / cleanup etc.
         if modifier.PlayerFinish then
@@ -206,7 +206,7 @@ function GM:GetWinningPlayer(modifier)
 end
 
 -- Think hook with built-in delay
-hook.Add('Think', 'ModifierThinkLoop', function()
+hook.Add("Think", "ModifierThinkLoop", function()
     if not GAMEMODE:InRound() then return end
 
     if GAMEMODE.CurrentModifier.Think then
@@ -244,11 +244,11 @@ end
 -- This has to be outside of a function
 -- Blame Garry not me
 GM.Modifiers = {}
-print('Loading Microgames modifiers...')
+print("Loading Microgames modifiers...")
 
 for _, file in pairs(file.Find("gamemodes/fluffy_microgames/gamemode/modifiers/*.lua", "GAME")) do
     local k = string.Replace(file, ".lua", "")
-    print('Loading', k)
+    print("Loading", k)
     MOD = {}
     include("modifiers/" .. file)
     GM.Modifiers[k] = MOD

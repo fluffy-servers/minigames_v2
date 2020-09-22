@@ -35,7 +35,7 @@ local function StringifyID(id)
 end
 
 -- Hooks for taking in deaths
-net.Receive('PlayerKilledByPlayer', function()
+net.Receive("PlayerKilledByPlayer", function()
     local victim = net.ReadEntity()
     local inflictor = net.ReadString()
     local attacker = net.ReadEntity()
@@ -48,13 +48,13 @@ net.Receive('PlayerKilledByPlayer', function()
     GAMEMODE:AddDeathNotice2(attacker, inflictor, victim)
 end)
 
-net.Receive('PlayerKilledSelf', function()
+net.Receive("PlayerKilledSelf", function()
     local victim = net.ReadEntity()
     if not IsValid(victim) then return end
-    GAMEMODE:AddDeathNotice2(nil, 'suicide', victim)
+    GAMEMODE:AddDeathNotice2(nil, "suicide", victim)
 end)
 
-net.Receive('PlayerKilled', function()
+net.Receive("PlayerKilled", function()
     local victim = net.ReadEntity()
     local inflictor = net.ReadString()
     local attacker = StringifyID(net.ReadString())
@@ -62,7 +62,8 @@ net.Receive('PlayerKilled', function()
     GAMEMODE:AddDeathNotice2(attacker, inflictor, victim)
 end)
 
--- NPC stuff isn't relevant to us
+-- Ignore NPC deaths - only handle players
+-- apologies in advance if an NPC gamemode is ever made
 function GM:AddDeathNotice2(attacker, inflictor, victim)
     local Death = {}
     Death.time = CurTime()
@@ -112,7 +113,7 @@ function GM:AddDeathNotice2(attacker, inflictor, victim)
 
     if Death.left == Death.right then
         Death.left = nil
-        Death.icon = 'suicide'
+        Death.icon = "suicide"
     end
 
     table.insert(Deaths, Death)
@@ -129,17 +130,17 @@ local function DrawDeath(x, y, death, hud_deathnotice_time)
 
     -- Draw the attacker
     if death.left then
-        draw.SimpleText(death.left, 'ChatFont', x - (w / 2) - 16, y, death.color1, TEXT_ALIGN_RIGHT)
+        draw.SimpleText(death.left, "ChatFont", x - (w / 2) - 16, y, death.color1, TEXT_ALIGN_RIGHT)
     end
 
     -- Draw the victim
-    draw.SimpleText(death.right, 'ChatFont', x + (w / 2) + 16, y, death.color2, TEXT_ALIGN_LEFT)
+    draw.SimpleText(death.right, "ChatFont", x + (w / 2) + 16, y, death.color2, TEXT_ALIGN_LEFT)
 
     return y + h * 0.70
 end
 
 function GM:DrawDeathNotice(x, y)
-    if GetConVarNumber('cl_drawhud') == 0 then return end
+    if GetConVarNumber("cl_drawhud") == 0 then return end
     local hud_deathnotice_time = hud_deathnotice_time:GetFloat()
     x = x * ScrW()
     y = y * ScrH()
@@ -168,5 +169,5 @@ function GM:DrawDeathNotice(x, y)
 end
 
 function GM:PlayKillSound()
-    sound.Play('hl1/fvox/bell.wav', LocalPlayer():GetPos(), 75, math.random(120, 140))
+    sound.Play("hl1/fvox/bell.wav", LocalPlayer():GetPos(), 75, math.random(120, 140))
 end

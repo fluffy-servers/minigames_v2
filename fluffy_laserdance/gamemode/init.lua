@@ -1,6 +1,6 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 -- Give the player the fancy knockback gun
 function GM:PlayerLoadout(ply)
@@ -8,8 +8,8 @@ function GM:PlayerLoadout(ply)
 end
 
 -- Add laser trails to players that spawn
-hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
-    -- Don't duplicate the laser trail
+hook.Add("PlayerSpawn", "AddLaserTrails", function(ply)
+    
     if IsValid(ply.LaserTrail) then
         SafeRemoveEntity(ply.LaserTrail)
     end
@@ -30,7 +30,7 @@ hook.Add('PlayerSpawn', 'AddLaserTrails', function(ply)
     ply.LaserTrail = util.SpriteTrail(ply, 0, c, true, 32, 4, 10, 0, "trails/plasma.vmt")
 end)
 
-hook.Add('DoPlayerDeath', 'RemoveLaserTrails', function(ply)
+hook.Add("DoPlayerDeath", "RemoveLaserTrails", function(ply)
     if IsValid(ply.LaserTrail) then
         ply.LaserTrail:Remove()
     end

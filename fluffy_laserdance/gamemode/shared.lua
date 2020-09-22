@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Laser Dance'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Laser Dance"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Get as many kills as you can!
     This is a fast-paced free-for-all deathmatch.
@@ -23,6 +23,6 @@ end
 
 -- Hide all Tracer and Trail cosmetics
 -- Part of the Laser Dance mechanics is the bright lasers everywhere
-hook.Add('ShouldDrawCosmetics', 'HideLaserDanceCosmetics', function(ply, ITEM)
-    if ITEM.Type == 'Tracer' or ITEM.Type == 'Trail' then return false end
+hook.Add("ShouldDrawCosmetics", "HideLaserDanceCosmetics", function(ply, ITEM)
+    if ITEM.Type == "Tracer" or ITEM.Type == "Trail" then return false end
 end)

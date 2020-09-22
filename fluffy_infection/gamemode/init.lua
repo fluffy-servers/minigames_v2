@@ -1,6 +1,6 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 -- Appropiate weapon stuff
 function GM:PlayerLoadout(ply)
@@ -9,16 +9,16 @@ function GM:PlayerLoadout(ply)
 
     if ply:Team() == TEAM_BLUE then
         -- Survivors
-        -- ply:Give('weapon_mg_pistol')
-        -- ply:Give('weapon_mg_smg')
-        -- ply:Give('weapon_mg_shotgun')
-        ply:Give('inf_shotgun')
-        ply:Give('inf_magnum')
-        ply:Give('inf_smg')
-        ply:Give('inf_adrenaline')
-        ply:GiveAmmo(80, 'Pistol', true)
-        ply:GiveAmmo(2400, 'Buckshot', true)
-        ply:GiveAmmo(1024, 'SMG1', true)
+        -- ply:Give("weapon_mg_pistol")
+        -- ply:Give("weapon_mg_smg")
+        -- ply:Give("weapon_mg_shotgun")
+        ply:Give("inf_shotgun")
+        ply:Give("inf_magnum")
+        ply:Give("inf_smg")
+        ply:Give("inf_adrenaline")
+        ply:GiveAmmo(80, "Pistol", true)
+        ply:GiveAmmo(2400, "Buckshot", true)
+        ply:GiveAmmo(1024, "SMG1", true)
         GAMEMODE:SetHumanSpeed(ply)
         GAMEMODE:SetAdrenalineFOV(ply, 0)
         ply:SetBloodColor(BLOOD_COLOR_RED)
@@ -41,7 +41,7 @@ function GM:PlayerLoadout(ply)
         ply:SetRunSpeed(400)
         ply:SetWalkSpeed(400)
         ply:SetJumpPower(300)
-        ply:Give('weapon_fists')
+        ply:Give("weapon_fists")
     end
 end
 
@@ -56,7 +56,7 @@ function GM:SetAdrenalineFOV(ply, fov)
     ply:SetFOV(fov, 0.5)
 end
 
-hook.Add('PlayerSwitchWeapon', 'AdrenalineWeaponSwitch', function(ply, old, new)
+hook.Add("PlayerSwitchWeapon", "AdrenalineWeaponSwitch", function(ply, old, new)
     if ply.adrenaline_fov then
         ply:SetFOV(ply.adrenaline_fov, 0)
     end
@@ -87,21 +87,21 @@ function GM:StatsRoundWin(winners)
     if winners == TEAM_BLUE then
         for k, v in pairs(team.GetPlayers(TEAM_BLUE)) do
             if v:Alive() then
-                GAMEMODE:AddStatPoints(v, 'survived_rounds', 1)
+                GAMEMODE:AddStatPoints(v, "survived_rounds", 1)
             end
         end
     end
 end
 
 -- Buff fists
-hook.Add('EntityTakeDamage', 'BuffFists', function(target, dmg)
+hook.Add("EntityTakeDamage", "BuffFists", function(target, dmg)
     local wep = dmg:GetInflictor()
 
-    if wep:GetClass() == 'player' then
+    if wep:GetClass() == "player" then
         wep = wep:GetActiveWeapon()
     end
 
-    if wep:GetClass() == 'weapon_fists' then
+    if wep:GetClass() == "weapon_fists" then
         dmg:ScaleDamage(20)
         dmg:SetDamageForce(dmg:GetDamageForce() * 50)
     end

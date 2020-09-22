@@ -23,9 +23,9 @@ function ENT:CreateProp(pos, ang, model)
     local class
 
     if self.Team == TEAM_BLUE then
-        class = 'crate_blue'
+        class = "crate_blue"
     else
-        class = 'crate_red'
+        class = "crate_red"
     end
 
     local prop = ents.Create(class)

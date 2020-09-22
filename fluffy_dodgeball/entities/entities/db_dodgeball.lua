@@ -23,7 +23,7 @@ end
 -- Destroy the ball if damaged by trigger_hurt entities, otherwise apply physics damage
 function ENT:OnTakeDamage(dmg)
     -- Remove if in contact with a trigger hurt
-    if dmg:GetInflictor():GetClass() == 'trigger_hurt' or dmg:GetAttacker():GetClass() == 'trigger_hurt' then
+    if dmg:GetInflictor():GetClass() == "trigger_hurt" or dmg:GetAttacker():GetClass() == "trigger_hurt" then
         self:Remove()
 
         return
@@ -63,7 +63,7 @@ function ENT:PhysicsCollide(data, physobj)
     if data.HitEntity:IsPlayer() and data.Speed > 80 then
         local ply = data.HitEntity
 
-        if (self:GetNWString('CurrentTeam') == 'blue' and ply:Team() == TEAM_RED) or (self:GetNWString('CurrentTeam') == 'red' and ply:Team() == TEAM_BLUE) then
+        if (self:GetNWString("CurrentTeam") == "blue" and ply:Team() == TEAM_RED) or (self:GetNWString("CurrentTeam") == "red" and ply:Team() == TEAM_BLUE) then
             local info = DamageInfo()
             info:SetDamage(data.Speed)
             info:SetDamageType(DMG_DISSOLVE)
@@ -78,8 +78,8 @@ function ENT:PhysicsCollide(data, physobj)
 
     if self.CurrentBounces > self.MaxBounces then
         self:ResetTracer()
-        self:SetNWString('CurrentTeam', nil)
-        self:SetNWVector('RColor', Vector(1, 1, 1))
+        self:SetNWString("CurrentTeam", nil)
+        self:SetNWVector("RColor", Vector(1, 1, 1))
         self.CurrentBounces = 0
     end
 
@@ -106,7 +106,7 @@ function ENT:MakeTracer(ply)
     end
 
     -- Make a new tracer
-    local tracer = ents.Create('db_tracer')
+    local tracer = ents.Create("db_tracer")
     tracer:SetMoveType(MOVETYPE_NONE)
     tracer:SetPos(self:GetPos())
     tracer:SetParent(self)
@@ -122,7 +122,7 @@ function ENT:ResetTracer()
         -- Cool little spark effect for the end of the trail
         local effect = EffectData()
         effect:SetOrigin(self:GetPos())
-        effect:SetStart(self:GetNWVector('RColor', Vector(1, 1, 1)))
+        effect:SetStart(self:GetNWVector("RColor", Vector(1, 1, 1)))
         util.Effect("db_spark", effect)
 
         timer.Simple(3, function()
@@ -144,7 +144,7 @@ if CLIENT then
         render.SetMaterial(ball_mat)
         local pos = self:GetPos()
         local lcolor = render.ComputeLighting(pos, Vector(0, 0, 1))
-        local c = self:GetNWVector('RColor', Vector(1, 1, 1))
+        local c = self:GetNWVector("RColor", Vector(1, 1, 1))
         lcolor.x = c.r * (math.Clamp(lcolor.x, 0, 1) + 0.5) * 255
         lcolor.y = c.g * (math.Clamp(lcolor.y, 0, 1) + 0.5) * 255
         lcolor.z = c.b * (math.Clamp(lcolor.z, 0, 1) + 0.5) * 255

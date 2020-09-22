@@ -1,4 +1,4 @@
--- MOD.Name = 'Guess Who'
+-- MOD.Name = "Guess Who"
 -- 
 -- MOD.KillValue = 2
 -- 
@@ -17,25 +17,25 @@
 -- 
 -- local function spawnNPCs()
 --     local number1 = GAMEMODE:PlayerScale(0.4, 4, 8)
---     local positions1 = GAMEMODE:GetRandomLocations(number1, 'ground')
+--     local positions1 = GAMEMODE:GetRandomLocations(number1, "ground")
 -- 
 --     for i=1,number1 do
 --         local ent = ents.Create("npc_citizen")
 --         ent:SetModel(table.Random(model_list))
 --         ent:SetPos(positions1[i] + Vector(0, 0, 32))
---         ent:Give('weapon_crossbow')
+--         ent:Give("weapon_crossbow")
 --         ent:Spawn()
 --         ent:SetColor(ColorRand())
 --     end
 -- 
 --     local number2 = GAMEMODE:PlayerScale(0.7, 8, 14)
---     local positions2 = GAMEMODE:GetRandomLocations(number2, 'crate')
+--     local positions2 = GAMEMODE:GetRandomLocations(number2, "crate")
 -- 
 --     for i=1,number2 do
 --         local ent = ents.Create("npc_citizen")
 --         ent:SetModel(table.Random(model_list))
 --         ent:SetPos(positions2[i]+ Vector(0, 0, 32))
---         ent:Give('weapon_crossbow')
+--         ent:Give("weapon_crossbow")
 --         ent:Spawn()
 --     end
 -- end
@@ -46,6 +46,6 @@
 -- end
 -- 
 -- function MOD:Loadout(ply)
---     ply:Give('weapon_crossbow')
---     ply:GiveAmmo(999, 'XBowBolt', true)
+--     ply:Give("weapon_crossbow")
+--     ply:GiveAmmo(999, "XBowBolt", true)
 -- end

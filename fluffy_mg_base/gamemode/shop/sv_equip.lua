@@ -2,7 +2,7 @@
 -- This broadcasts the cosmetic to all players
 function SHOP:EquipCosmetic(ITEM, ply)
     ITEM = SHOP:StripVanillaItem(ITEM)
-    net.Start('SHOP_BroadcastEquip')
+    net.Start("SHOP_BroadcastEquip")
     net.WriteTable(ITEM)
     net.WriteEntity(ply)
     net.WriteBool(true)
@@ -15,7 +15,7 @@ end
 -- This broadcasts the cosmetic to all players
 function SHOP:UnequipCosmetic(ITEM, ply)
     ITEM = SHOP:StripVanillaItem(ITEM)
-    net.Start('SHOP_BroadcastEquip')
+    net.Start("SHOP_BroadcastEquip")
     net.WriteTable(ITEM)
     net.WriteEntity(ply)
     net.WriteBool(false)
@@ -54,34 +54,34 @@ end
 
 -- Equip a tracer
 function SHOP:EquipTracer(ITEM, ply)
-    ply:SetNWString('ShopTracerEffect', ITEM.Effect)
+    ply:SetNWString("ShopTracerEffect", ITEM.Effect)
 
     return true
 end
 
 -- Unequip a tracer
 function SHOP:UnequipTracer(ply)
-    ply:SetNWString('ShopTracerEffect', nil)
+    ply:SetNWString("ShopTracerEffect", nil)
 end
 
 -- Add equipped trails on player spawn
-hook.Add('PlayerSpawn', 'AddEquippedTrail', function(ply)
+hook.Add("PlayerSpawn", "AddEquippedTrail", function(ply)
     SHOP:WearTrail(ply)
 end)
 
 -- Remove trails on player death
-hook.Add('DoPlayerDeath', 'RemoveEquippedTrail', function(ply)
+hook.Add("DoPlayerDeath", "RemoveEquippedTrail", function(ply)
     SHOP:RemoveTrail(ply)
 end)
 
 -- Serverside tracer effect
-hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
+hook.Add("EntityFireBullets", "ShopTracerEffects", function(ent, data)
     if not ent:IsPlayer() then return end
-    local effect = ent:GetNWString('ShopTracerEffect')
-    if not effect or effect == '' then return end
+    local effect = ent:GetNWString("ShopTracerEffect")
+    if not effect or effect == "" then return end
 
     if not GAMEMODE:DoCosmeticsCheck(ent, {
-        Type = 'Tracer'
+        Type = "Tracer"
     }) then
         return
     end

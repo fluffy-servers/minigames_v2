@@ -6,9 +6,9 @@ if CLIENT then
     SWEP.IconLetter = "-"
 end
 
-SWEP.PrintName = 'Paintzooka'
-SWEP.ViewModel = 'models/weapons/c_rpg.mdl'
-SWEP.WorldModel = 'models/weapons/w_rocket_launcher.mdl'
+SWEP.PrintName = "Paintzooka"
+SWEP.ViewModel = "models/weapons/c_rpg.mdl"
+SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
 SWEP.UseHands = true
 -- Primary ammo settings
 SWEP.Primary.ClipSize = 3
@@ -18,7 +18,7 @@ SWEP.Primary.Automatic = false
 SWEP.Slot = 5
 
 function SWEP:Initialize()
-    self:SetHoldType('rpg')
+    self:SetHoldType("rpg")
 end
 
 function SWEP:PrimaryAttack()
@@ -39,12 +39,12 @@ function SWEP:Launch()
     local src = owner:GetShootPos() + (owner:GetAimVector() * 8)
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
     owner:SetAnimation(PLAYER_ATTACK1)
-    self:EmitSound('Weapon_RPG.Single')
+    self:EmitSound("Weapon_RPG.Single")
     self:CreateRocket(src, owner:GetAimVector() * 1000)
 end
 
 function SWEP:CreateRocket(pos, velocity)
-    local grenade = ents.Create('paint_rocket')
+    local grenade = ents.Create("paint_rocket")
     if not IsValid(grenade) then return end
     grenade.WeaponEnt = self
     grenade.Player = self:GetOwner()

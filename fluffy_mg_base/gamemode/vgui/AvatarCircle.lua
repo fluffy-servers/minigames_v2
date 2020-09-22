@@ -118,4 +118,4 @@ function PANEL:PaintOver(w, h)
 end
 
 -- Register this so we can reuse it later
-vgui.Register('AvatarCircle', PANEL)
+vgui.Register("AvatarCircle", PANEL)

@@ -1,4 +1,4 @@
-﻿EFFECT.Mat = Material('sprites/physg_glow1')
+﻿EFFECT.Mat = Material("sprites/physg_glow1")
 
 --sprites/light_ignorez
 --sprites/physg_glow1

@@ -1,8 +1,8 @@
-﻿DeriveGamemode('fluffy_mg_base')
-include('tables.lua')
-include('ply_extension.lua')
-GM.Name = 'Poltergeist'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+include("tables.lua")
+include("ply_extension.lua")
+GM.Name = "Poltergeist"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Angry ghosts are out to kill all humans!
     
@@ -31,11 +31,11 @@ TEAM_BLUE = 2
 
 function GM:CreateTeams()
     if not GAMEMODE.TeamBased then return end
-    team.SetUp(TEAM_RED, "Poltergeists", TEAM_COLORS['red'], true)
+    team.SetUp(TEAM_RED, "Poltergeists", TEAM_COLORS["red"], true)
 
     team.SetSpawnPoint(TEAM_RED, {"info_player_start", "info_player_counterterrorist", "info_player_combine"}, true)
 
-    team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS['blue'], true)
+    team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS["blue"], true)
 
     team.SetSpawnPoint(TEAM_BLUE, {"info_player_start", "info_player_terrorist", "info_player_rebel", "info_player_deathmatch"})
 
@@ -45,6 +45,6 @@ function GM:CreateTeams()
 end
 
 -- Hide all cosmetics on Poltergeists
-hook.Add('ShouldDrawCosmetics', 'HideHunterCosmetics', function(ply, ITEM)
+hook.Add("ShouldDrawCosmetics", "HideHunterCosmetics", function(ply, ITEM)
     if ply:Team() == TEAM_RED then return false end
 end)

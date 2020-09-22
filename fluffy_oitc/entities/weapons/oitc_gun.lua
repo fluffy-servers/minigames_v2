@@ -5,8 +5,8 @@ if CLIENT then
     SWEP.PrintName = "Revolver"
     SWEP.Slot = 0
     SWEP.SlotPos = 0
-    SWEP.IconLetter = '.'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "."
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("oitc_gun", "HL2MPTypeDeath", ".", Color(255, 80, 0, 255))
 end
 

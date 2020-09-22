@@ -1,56 +1,59 @@
 ﻿--[[
-    The big ol' core of the gamemode
+    The core of the gamemode
     Probably needs to be split into some more files at this point
-    But this isn't a total mess yet! Go me!
 --]]
+
 -- Send all the required files to the client
--- Very important! Don't forget!
-AddCSLuaFile('drawarc.lua')
-AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('cl_crosshair.lua')
-AddCSLuaFile('cl_endgame.lua')
-AddCSLuaFile('cl_thirdperson.lua')
-AddCSLuaFile('cl_playerpanel.lua')
-AddCSLuaFile('cl_scoreboard.lua')
-AddCSLuaFile('cl_hud.lua')
-AddCSLuaFile('cl_round_state.lua')
-AddCSLuaFile('cl_announcements.lua')
-AddCSLuaFile('cl_killfeed.lua')
-AddCSLuaFile('cl_chat.lua')
-AddCSLuaFile('cl_mapedits.lua')
-AddCSLuaFile('vgui/AvatarCircle.lua')
-AddCSLuaFile('vgui/MapVotePanel.lua')
-AddCSLuaFile('vgui/ScoreboardRow.lua')
-AddCSLuaFile('shop/sh_init.lua')
-AddCSLuaFile('shared.lua')
-AddCSLuaFile('sound_tables.lua')
-AddCSLuaFile('sh_levels.lua')
-AddCSLuaFile('sh_scorehelper.lua')
+-- Very important step!
+AddCSLuaFile("drawarc.lua")
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("cl_crosshair.lua")
+AddCSLuaFile("cl_endgame.lua")
+AddCSLuaFile("cl_thirdperson.lua")
+AddCSLuaFile("cl_playerpanel.lua")
+AddCSLuaFile("cl_scoreboard.lua")
+AddCSLuaFile("cl_hud.lua")
+AddCSLuaFile("cl_round_state.lua")
+AddCSLuaFile("cl_announcements.lua")
+AddCSLuaFile("cl_killfeed.lua")
+AddCSLuaFile("cl_chat.lua")
+AddCSLuaFile("cl_mapedits.lua")
+AddCSLuaFile("vgui/AvatarCircle.lua")
+AddCSLuaFile("vgui/MapVotePanel.lua")
+AddCSLuaFile("vgui/ScoreboardRow.lua")
+AddCSLuaFile("shop/sh_init.lua")
+AddCSLuaFile("shared.lua")
+AddCSLuaFile("sound_tables.lua")
+AddCSLuaFile("sh_levels.lua")
+AddCSLuaFile("sh_scorehelper.lua")
+
 -- Add workshop content
-resource.AddWorkshop('1518438705')
-resource.AddFile('resource/fonts/BebasKai.ttf')
-resource.AddFile('resource/fonts/LemonMilk.ttf')
-resource.AddFile('materials/fluffy/pattern1.png')
-resource.AddFile('materials/fluffy/health.png')
-resource.AddFile('materials/fluffy/ammo.png')
-resource.AddFile('materials/fluffy/time.png')
+resource.AddWorkshop("1518438705")
+resource.AddFile("resource/fonts/BebasKai.ttf")
+resource.AddFile("resource/fonts/LemonMilk.ttf")
+resource.AddFile("materials/fluffy/pattern1.png")
+resource.AddFile("materials/fluffy/health.png")
+resource.AddFile("materials/fluffy/ammo.png")
+resource.AddFile("materials/fluffy/time.png")
+
 -- Include useful server files
-include('shared.lua')
--- Add net message
-util.AddNetworkString('EndRound')
-util.AddNetworkString('MinigamesGameEnd')
-util.AddNetworkString('SendExperienceTable')
-util.AddNetworkString('MinigamesAnnouncement')
-util.AddNetworkString('CoolTransition')
-util.AddNetworkString('VisualiseMapOverrides')
-util.AddNetworkString('SpectateState')
+include("shared.lua")
+
+-- Add net messages
+util.AddNetworkString("EndRound")
+util.AddNetworkString("MinigamesGameEnd")
+util.AddNetworkString("SendExperienceTable")
+util.AddNetworkString("MinigamesAnnouncement")
+util.AddNetworkString("CoolTransition")
+util.AddNetworkString("VisualiseMapOverrides")
+util.AddNetworkString("SpectateState")
 
 -- Called each time a player spawns
 function GM:PlayerSpawn(ply)
     local state = GAMEMODE:GetRoundState()
 
     -- If elimination, block respawns during round
-    if state ~= 'PreRound' and GAMEMODE.Elimination then
+    if state ~= "PreRound" and GAMEMODE.Elimination then
         self:PlayerSpawnAsSpectator(ply)
 
         return
@@ -71,8 +74,8 @@ function GM:PlayerSpawn(ply)
     end
 
     -- Call functions to setup model and loadout
-    hook.Call('PlayerLoadout', GAMEMODE, ply)
-    hook.Call('PlayerSetModel', GAMEMODE, ply)
+    hook.Call("PlayerLoadout", GAMEMODE, ply)
+    hook.Call("PlayerSetModel", GAMEMODE, ply)
     ply:SetupHands()
     -- Exit out of spectate
     ply:EndSpectate()
@@ -116,7 +119,7 @@ function GM:PlayerInitialSpawn(ply)
         end
     end)
 
-    -- Ensure that players don't respawn if it's an elimination gamemode
+    -- No respawns in elimination gamemodes
     if GAMEMODE.Elimination then
         ply.FirstSpawn = true
     end
@@ -133,7 +136,7 @@ function GM:PlayerInitialSpawn(ply)
 end
 
 -- Ensure that players really stay dead
-hook.Add('PlayerSpawn', 'KeepInitialDead', function(ply)
+hook.Add("PlayerSpawn", "KeepInitialDead", function(ply)
     if ply.FirstSpawn then
         ply.FirstSpawn = nil
         ply:KillSilent()
@@ -142,7 +145,7 @@ end)
 
 -- Check for server autorestart situations
 -- This reloads the map if the server is currently empty and has been up for more than 2 hours
-hook.Add('PlayerInitialSpawn', 'CheckServerAutoRestart', function(ply)
+hook.Add("PlayerInitialSpawn", "CheckServerAutoRestart", function(ply)
     if (player.GetCount() == 1 and CurTime() > 7200) then
         RunConsoleCommand("changelevel", game.GetMap())
     end
@@ -169,7 +172,6 @@ function GM:PlayerShouldTakeDamage(victim, ply)
 end
 
 -- Attempt to fix the damage scaling system
--- Don't think it worked :(
 function GM:ScalePlayerDamage(ply, hitgroup, dmginfo)
     return
 end
@@ -194,15 +196,13 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
+    GAMEMODE:AddStatPoints(ply, "Deaths", 1)
     -- Delegate this to each gamemode (defaults are provided lower down for reference)
     GAMEMODE:HandlePlayerDeath(ply, attacker, dmginfo)
 end
 
 -- Basic function to get the player with the most frags
 function GM:GetWinningPlayer()
-    -- Doesn't really make sense in Team gamemodes
-    -- if GAMEMODE.TeamBased then return nil end
     -- Loop through all players and return the one with the most frags
     local bestscore = 0
     local bestplayer = nil
@@ -255,30 +255,30 @@ end
 
 -- Remove extra stuff on deathmatch maps
 local deathmatch_remove = {
-    ['item_healthcharger'] = true,
-    ['item_suitcharger'] = true,
-    ['weapon_crowbar'] = true,
-    ['weapon_stunstick'] = true,
-    ['weapon_ar2'] = true,
-    ['weapon_357'] = true,
-    ['weapon_pistol'] = true,
-    ['weapon_crossbow'] = true,
-    ['weapon_shotgun'] = true,
-    ['weapon_frag'] = true,
-    ['weapon_rpg'] = true,
-    ['weapon_slam'] = true,
-    ['item_ammo_357'] = true,
-    ['item_ammo_357_large'] = true,
-    ['item_ammo_pistol'] = true,
-    ['item_ammo_crossbow'] = true,
-    ['item_ammo_smg1_grenade'] = true,
-    ['item_rpg_round'] = true,
-    ['item_box_buckshot'] = true,
-    ['item_healthkit'] = true,
-    ['item_battery'] = true,
-    ['item_ammo_ar2'] = true,
-    ['item_ammo_ar2_large'] = true,
-    ['item_ammo_ar2_altfire'] = true,
+    ["item_healthcharger"] = true,
+    ["item_suitcharger"] = true,
+    ["weapon_crowbar"] = true,
+    ["weapon_stunstick"] = true,
+    ["weapon_ar2"] = true,
+    ["weapon_357"] = true,
+    ["weapon_pistol"] = true,
+    ["weapon_crossbow"] = true,
+    ["weapon_shotgun"] = true,
+    ["weapon_frag"] = true,
+    ["weapon_rpg"] = true,
+    ["weapon_slam"] = true,
+    ["item_ammo_357"] = true,
+    ["item_ammo_357_large"] = true,
+    ["item_ammo_pistol"] = true,
+    ["item_ammo_crossbow"] = true,
+    ["item_ammo_smg1_grenade"] = true,
+    ["item_rpg_round"] = true,
+    ["item_box_buckshot"] = true,
+    ["item_healthkit"] = true,
+    ["item_battery"] = true,
+    ["item_ammo_ar2"] = true,
+    ["item_ammo_ar2_large"] = true,
+    ["item_ammo_ar2_altfire"] = true,
 }
 
 function GM:CleanUpDMStuff()
@@ -291,11 +291,12 @@ end
 
 function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     if not attacker:IsValid() or not attacker:IsPlayer() then return end -- We only care about player kills from here on
-    if attacker == ply then return end -- Suicides aren't important
+    if attacker == ply then return end
     if not GAMEMODE:InRound() then return end
+
     -- Add the frag to scoreboard
     attacker:AddFrags(GAMEMODE.KillValue)
-    GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
+    GAMEMODE:AddStatPoints(attacker, "Kills", 1)
 
     if GAMEMODE.TeamBased then
         -- Add the kill to the team
@@ -311,17 +312,17 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     end
 end
 
-hook.Add('GetFallDamage', 'MinigamesFallDamage', function(ply, vel)
+hook.Add("GetFallDamage", "MinigamesFallDamage", function(ply, vel)
     if not GAMEMODE.EnableFallDamage then return 0 end
 end)
 
-hook.Add('WeaponEquip', 'WeaponSpawnerEquip', function(wep, ply)
+hook.Add("WeaponEquip", "WeaponSpawnerEquip", function(wep, ply)
     if wep.SpawnerEntity then
         wep.SpawnerEntity:CollectWeapon(ply)
     end
 end)
 
-hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
+hook.Add("PlayerCanPickupWeapon", "WeaponSpawnerAmmo", function(ply, wep)
     if wep.SpawnerEntity then
         if ply:HasWeapon(wep:GetClass()) then
             wep.SpawnerEntity:CollectWeapon(ply)
@@ -339,14 +340,14 @@ hook.Add('PlayerCanPickupWeapon', 'WeaponSpawnerAmmo', function(ply, wep)
 end)
 
 -- Import the component parts
-include('sv_database.lua')
-include('sv_stats.lua')
-include('sv_round.lua')
-include('sv_voting.lua')
-include('sv_player.lua')
-include('sv_levels.lua')
-include('sv_mapedits.lua')
-include('sv_announcements.lua')
-include('sv_spectating.lua')
-include('sv_teams.lua')
-include('gametype_hunter.lua')
+include("sv_database.lua")
+include("sv_stats.lua")
+include("sv_round.lua")
+include("sv_voting.lua")
+include("sv_player.lua")
+include("sv_levels.lua")
+include("sv_mapedits.lua")
+include("sv_announcements.lua")
+include("sv_spectating.lua")
+include("sv_teams.lua")
+include("gametype_hunter.lua")

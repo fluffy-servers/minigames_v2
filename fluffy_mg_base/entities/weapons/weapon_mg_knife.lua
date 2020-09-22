@@ -1,4 +1,4 @@
-﻿SWEP.Base = 'weapon_mg_base'
+﻿SWEP.Base = "weapon_mg_base"
 
 if SERVER then
     SWEP.Weight = 5
@@ -11,8 +11,8 @@ if CLIENT then
     SWEP.ViewModelFlip = false
     SWEP.Slot = 2
     SWEP.SlotPos = 0
-    SWEP.IconLetter = 'j'
-    SWEP.IconFont = 'CSSelectIcons'
+    SWEP.IconLetter = "j"
+    SWEP.IconFont = "CSSelectIcons"
     killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color(255, 80, 0, 255))
 end
 
@@ -94,15 +94,15 @@ function SWEP:AttackTrace()
                 edata:SetNormal(tr.Normal)
                 edata:SetEntity(tr.Entity)
                 util.Effect("BloodImpact", edata)
-                self:EmitSound('Weapon_Knife.Hit')
+                self:EmitSound("Weapon_Knife.Hit")
             end
         else
             -- Attack hit world
-            self:EmitSound('Weapon_Crowbar.Melee_Hit')
+            self:EmitSound("Weapon_Crowbar.Melee_Hit")
         end
     else
         -- Attack missed
-        self:EmitSound('Weapon_Knife.Slash')
+        self:EmitSound("Weapon_Knife.Slash")
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
     end
 

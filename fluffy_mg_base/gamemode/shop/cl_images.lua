@@ -14,7 +14,7 @@ local function NextImageGeneration()
 
     -- Remove last icon
     if SHOP.GeneratingImages.panel then
-        print('Removing')
+        print("Removing")
         SHOP.GeneratingImages.panel:Remove()
     end
 
@@ -22,7 +22,7 @@ local function NextImageGeneration()
     local name = SHOP.GeneratingImages.items[SHOP.GeneratingImages.index]
     local ITEM = SHOP.VanillaItems[name]
     SHOP.GeneratingImages.name = name
-    local panel = vgui.Create('ShopItemPanel')
+    local panel = vgui.Create("ShopItemPanel")
     panel:SetPos(16, 16)
     panel.key = key
     panel.ITEM = ITEM
@@ -51,7 +51,7 @@ end
 
 concommand.Add("minigames_generate_item_icons", StartImageGeneration)
 
-hook.Add('PostRender', 'ShopGenerateImages', function()
+hook.Add("PostRender", "ShopGenerateImages", function()
     if not SHOP.GeneratingImages then return end
     if not SHOP.GeneratingImages.screenshot then return end
     SHOP.GeneratingImages.screenshot = false

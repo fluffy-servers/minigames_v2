@@ -1,12 +1,12 @@
-﻿MOD.Name = 'Combine Balls'
+﻿MOD.Name = "Combine Balls"
 MOD.Elimination = true
 
 function MOD:Loadout(ply)
-    ply:Give('weapon_ar2')
+    ply:Give("weapon_ar2")
     ply:StripAmmo()
-    ply:SetAmmo(0, 'AR2')
-    ply:GetWeapon('weapon_ar2'):SetClip1(0)
-    ply:GiveAmmo(50, 'AR2AltFire')
+    ply:SetAmmo(0, "AR2")
+    ply:GetWeapon("weapon_ar2"):SetClip1(0)
+    ply:GiveAmmo(50, "AR2AltFire")
 end
 
 function MOD:Initialize()

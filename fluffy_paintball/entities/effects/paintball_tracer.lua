@@ -17,7 +17,7 @@ function EFFECT:Init(data)
     self.Life = 1
 
     if IsValid(self.WeaponEnt) then
-        local c = self.WeaponEnt:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+        local c = self.WeaponEnt:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
         self.Color = Color(c.x * 255, c.y * 255, c.z * 255)
     end
 end

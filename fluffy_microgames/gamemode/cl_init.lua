@@ -1,4 +1,4 @@
-﻿include('shared.lua')
+﻿include("shared.lua")
 
 -- Scoring pane can be toggled by the modifier
 function GM:ScoringPaneActive()

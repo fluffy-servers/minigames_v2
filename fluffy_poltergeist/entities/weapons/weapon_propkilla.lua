@@ -1,9 +1,9 @@
-﻿SWEP.Base = 'weapon_mg_base'
+﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
     SWEP.PrintName = "Prop Shooter"
-    SWEP.IconLetter = '2'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "2"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("weapon_propkilla", "HL2MPTypeDeath", "2", Color(255, 80, 0, 255))
 end
 
@@ -20,7 +20,7 @@ SWEP.Primary.Tracer = "mg_tracer"
 SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Automatic = false
-SWEP.Primary.Ammo = 'none'
+SWEP.Primary.Ammo = "none"
 SWEP.Secondary.Sound = "Weapon_AR2.Single"
 SWEP.Secondary.NumShots = 1
 SWEP.Secondary.Cone = 0.05
@@ -30,7 +30,7 @@ SWEP.Secondary.Delay = 3
 SWEP.Secondary.BurstTime = 0.125
 SWEP.Secondary.ClipSize = -1
 SWEP.Secondary.DefaultClip = -1
-SWEP.Secondary.Ammo = 'none'
+SWEP.Secondary.Ammo = "none"
 
 -- We need to be certain about the weapon so we use this to set the bullet attacker as well
 -- Welcome to hackland

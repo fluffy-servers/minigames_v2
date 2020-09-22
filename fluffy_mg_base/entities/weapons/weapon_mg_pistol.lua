@@ -3,8 +3,8 @@
 if CLIENT then
     SWEP.Slot = 1
     SWEP.SlotPos = 0
-    SWEP.IconLetter = '-'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "-"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("weapon_mg_pistol", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
 
@@ -28,4 +28,4 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_pistol.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
-SWEP.HoldType = 'pistol'
+SWEP.HoldType = "pistol"

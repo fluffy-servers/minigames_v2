@@ -6,13 +6,13 @@ SWEP.ViewModelFlip = false
 SWEP.ViewModel = "models/weapons/c_crowbar.mdl"
 SWEP.WorldModel = "models/weapons/w_grenade.mdl"
 SWEP.UseHands = true
-SWEP.BashSound = Sound('Weapon_Crowbar.Single')
-SWEP.ThrowSound = Sound('WeaponFrag.Throw')
+SWEP.BashSound = Sound("Weapon_Crowbar.Single")
+SWEP.ThrowSound = Sound("WeaponFrag.Throw")
 SWEP.Color = Vector(0, 0, 1)
-SWEP.DroppedEntity = 'ctf_flag_blue'
+SWEP.DroppedEntity = "ctf_flag_blue"
 
 function SWEP:Initialize()
-    self:SetHoldType('melee')
+    self:SetHoldType("melee")
 end
 
 function SWEP:PrimaryAttack()
@@ -82,9 +82,9 @@ function SWEP:PrimaryAttack()
             end
         end
     else
-        --Didn't hit anything, miss animation
+        --Didn't hit anything, play miss animation
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
-        self:EmitSound('Weapon_Knife.Slash')
+        self:EmitSound("Weapon_Knife.Slash")
     end
 
     --Animate
@@ -115,7 +115,7 @@ function SWEP:SecondaryAttack()
     self:GetOwner():EmitSound(self.ThrowSound)
     -- Loadout and select crowbar
     GAMEMODE:PlayerLoadout(self:GetOwner())
-    self:GetOwner():SelectWeapon('weapon_crowbar')
+    self:GetOwner():SelectWeapon("weapon_crowbar")
 end
 
 function SWEP:TossFlag(strength)
@@ -165,7 +165,7 @@ if CLIENT then
 
         -- Lookup the hand attachment
         if IsValid(owner) then
-            local attid = owner:LookupAttachment('anim_attachment_RH')
+            local attid = owner:LookupAttachment("anim_attachment_RH")
             local att = owner:GetAttachment(attid)
             pos = att.Pos
             ang = att.Ang

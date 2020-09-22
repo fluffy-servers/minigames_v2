@@ -1,7 +1,7 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
-include('sv_maps.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
+include("sv_maps.lua")
 
 -- Nobody wins in Incoming ?
 -- Used to override default functionality on FFA round end
@@ -11,7 +11,7 @@ end
 
 -- No weapons
 function GM:PlayerLoadout(ply)
-    --ply:Give('weapon_crowbar')
+    --ply:Give("weapon_crowbar")
 end
 
 -- Get the winning position of this map
@@ -20,13 +20,13 @@ function GM:EndingPoint()
     return GAMEMODE.MapInfo[game.GetMap()].endpos or Vector(0, 0, 0)
 end
 
-GM.CurrentPropsCategory = 'Both'
+GM.CurrentPropsCategory = "Both"
 -- Prop spawn timer loop
 -- Spawns props at the top of the slope at a fixed interval
 INCPropSpawnTimer = 0
 
 hook.Add("Tick", "TickPropSpawn", function()
-    if not GAMEMODE:InRound() then return end -- don't spawn props after the round
+    if not GAMEMODE:InRound() then return end
     -- Get information from the currently selected props category
     -- See sv_maps for the prop data
     local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
@@ -35,8 +35,8 @@ hook.Add("Tick", "TickPropSpawn", function()
 
     if INCPropSpawnTimer < CurTime() then
         -- Spawn a prop at every spawner
-        for k, v in pairs(ents.FindByClass('inc_prop_spawner')) do
-            local ent = ents.Create('prop_physics')
+        for k, v in pairs(ents.FindByClass("inc_prop_spawner")) do
+            local ent = ents.Create("prop_physics")
             ent:SetModel(props[math.random(1, #props)])
             ent:SetPos(v:GetPos())
             ent:Spawn()
@@ -53,7 +53,7 @@ hook.Add("Tick", "TickPropSpawn", function()
 end)
 
 -- Randomly pick a group of props
-hook.Add('PreRoundStart', 'IncomingPropsChange', function()
+hook.Add("PreRoundStart", "IncomingPropsChange", function()
     -- If the map has a category restriction, pay attention to that
     local category
 
@@ -91,11 +91,11 @@ end
 
 -- Get a % of how close the player got to the ending
 -- This is used for better scoring than all-or-nothing
-hook.Add('DoPlayerDeath', 'IncomingDistanceCheck', function(ply)
+hook.Add("DoPlayerDeath", "IncomingDistanceCheck", function(ply)
     GAMEMODE:GetDistanceToEnd(ply)
 end)
 
-hook.Add('EntityTakeDamage', 'CrowbarKnockback', function(ent, dmg)
+hook.Add("EntityTakeDamage", "CrowbarKnockback", function(ent, dmg)
     if not ent:IsPlayer() then return true end
     if not dmg:GetAttacker():IsPlayer() then return end
     dmg:SetDamage(0)
@@ -107,13 +107,13 @@ end)
 -- Add scoring based on distance at the end of a round
 -- Takes the best distance, rounds down to the nearest 10% and adds 1 point per 10%
 -- eg. 48% -> 40% -> 4 points
-hook.Add('RoundEnd', 'IncomingDistancePoints', function()
+hook.Add("RoundEnd", "IncomingDistancePoints", function()
     for k, v in pairs(player.GetAll()) do
         GAMEMODE:GetDistanceToEnd(v)
 
         if v.BestDistance then
             local p = math.floor(v.BestDistance * 100)
-            v:AddStatPoints('IncomingDistance', p)
+            v:AddStatPoints("IncomingDistance", p)
             v:AddFrags(math.floor(p / 10))
         end
     end
@@ -144,8 +144,8 @@ function IncludeResFolder(dir)
 end
 
 -- Equivalent of 1XP for every 100% of distance travelled
-hook.Add('RegisterStatsConversions', 'AddIncomingStatConversions', function()
-    GAMEMODE:AddStatConversion('Distance', 'Distance Travelled', 0.01)
+hook.Add("RegisterStatsConversions", "AddIncomingStatConversions", function()
+    GAMEMODE:AddStatConversion("Distance", "Distance Travelled", 0.01)
 end)
 
 IncludeResFolder("materials/models/clannv/incoming/")

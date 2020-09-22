@@ -12,9 +12,9 @@ if SERVER then
             return
         end
 
-        self.WeaponTable = GAMEMODE.WeaponSpawners['spawns']
-        self.ModelsTable = GAMEMODE.WeaponSpawners['models']
-        self.AmmoTable = GAMEMODE.WeaponSpawners['ammo']
+        self.WeaponTable = GAMEMODE.WeaponSpawners["spawns"]
+        self.ModelsTable = GAMEMODE.WeaponSpawners["models"]
+        self.AmmoTable = GAMEMODE.WeaponSpawners["ammo"]
         self.CreationTime = CurTime()
         self.NextTime = self.CreationTime + math.random(self.MinRespawn, self.MaxRespawn)
         self:SetModel("models/hunter/blocks/cube075x2x075.mdl")
@@ -25,16 +25,16 @@ if SERVER then
         self:SetSolid(SOLID_VPHYSICS)
         self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE)
         self:PhysWake()
-        --self:SetNWString('WeaponType', 'grenade')
+        --self:SetNWString("WeaponType", "grenade")
     end
 
     function ENT:Think()
-        local ready = self:GetNWBool('GiftReady', false)
+        local ready = self:GetNWBool("GiftReady", false)
 
         if ready then
             self:NextThink(CurTime() + 3)
         elseif CurTime() > self.NextTime then
-            self:SetNWBool('GiftReady', true)
+            self:SetNWBool("GiftReady", true)
             self:SetCollisionGroup(COLLISION_GROUP_NONE)
             -- Check that nobody is stuck
             local nearby_ents = ents.FindInSphere(self:GetPos(), 48)
@@ -51,11 +51,11 @@ if SERVER then
     end
 
     function ENT:Touch(ent)
-        if not self:GetNWBool('GiftReady', false) then return end
+        if not self:GetNWBool("GiftReady", false) then return end
         if not ent:IsPlayer() then return end
-        if ent:GetNWBool('IsGhost', false) then return end
+        if ent:GetNWBool("IsGhost", false) then return end
         -- Award the player the weapon
-        local wep = self:GetNWString('WeaponType', 'weapon_mg_shotgun')
+        local wep = self:GetNWString("WeaponType", "weapon_mg_shotgun")
 
         -- Award weapon
         if not ent:HasWeapon(wep) then
@@ -72,28 +72,28 @@ if SERVER then
             ent:GiveAmmo(ammo_table[wep][2], ammo_table[wep][1])
         end
 
-        ent:AddStatPoints('Weapons Collected', 1)
+        ent:AddStatPoints("Weapons Collected", 1)
 
         -- Shuffle the type (if applicable)
         if self.RandomTable then
-            self:SetNWString('WeaponType', table.Random(self.RandomTable))
+            self:SetNWString("WeaponType", table.Random(self.RandomTable))
         end
 
         -- Reset the timer
-        self:SetNWBool('GiftReady', false)
+        self:SetNWBool("GiftReady", false)
         self:SetCollisionGroup(COLLISION_GROUP_IN_VEHICLE) -- this seems strange but it's so bullets work
         self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
     end
 
     -- KV properties for mapping data
     function ENT:KeyValue(key, value)
-        if key == 'level' then
+        if key == "level" then
             self.RandomTable = weapon_table[value]
-            self:SetNWString('WeaponType', table.Random(self.RandomTable))
-        elseif key == 'minspawn' then
+            self:SetNWString("WeaponType", table.Random(self.RandomTable))
+        elseif key == "minspawn" then
             self.MinRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
-        elseif key == 'maxspawn' then
+        elseif key == "maxspawn" then
             self.MaxRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
         end
@@ -104,13 +104,13 @@ if CLIENT then
     -- Render the weapon preview
     function ENT:RenderPreviewModel()
         if not self.PreviewModel then
-            local type = self:GetNWString('WeaponType', 'weapon_mg_shotgun')
+            local type = self:GetNWString("WeaponType", "weapon_mg_shotgun")
             self.PreviewModel = ClientsideModel(models_table[type])
             self.PreviewType = type
             self.PreviewModel:SetNoDraw(true)
         end
 
-        if self.PreviewType ~= self:GetNWString('WeaponType', 'weapon_mg_shotgun') then
+        if self.PreviewType ~= self:GetNWString("WeaponType", "weapon_mg_shotgun") then
             SafeRemoveEntity(self.PreviewModel)
             self.PreviewModel = nil
 
@@ -125,14 +125,14 @@ if CLIENT then
 
     function ENT:Draw()
         --self:DrawModel()
-        if self:GetNWBool('GiftReady', false) then
+        if self:GetNWBool("GiftReady", false) then
             self:RenderPreviewModel()
 
             -- Draw particle effect
             if (self.NextReady or 0) < CurTime() then
                 local ef = EffectData()
                 ef:SetOrigin(self:GetPos())
-                util.Effect('spawner_ready', ef)
+                util.Effect("spawner_ready", ef)
                 self.NextReady = CurTime() + 1
             end
         end

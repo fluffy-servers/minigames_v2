@@ -27,7 +27,7 @@ SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pistol.mdl"
 
 function SWEP:Initialize()
-    self:SetHoldType('pistol')
+    self:SetHoldType("pistol")
 end
 
 function SWEP:PrimaryAttack()
@@ -58,7 +58,7 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
     bullet.AmmoType = "Pistol"
     bullet.HullSize = 12
     bullet.Tracer = 1
-    bullet.TracerName = 'snowball_tracer'
+    bullet.TracerName = "snowball_tracer"
     owner:FireBullets(bullet)
     -- Make the firing look nice
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)

@@ -1,13 +1,13 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 -- Backwards compatibility for Pitfall maps
 GM.PlatformPositions = {}
-GM.PlatformPositions['pf_ocean'] = Vector(0, 0, 1500)
-GM.PlatformPositions['pf_ocean_d'] = Vector(0, 0, 1500)
-GM.PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
-GM.PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
-GM.PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_ocean"] = Vector(0, 0, 1500)
+GM.PlatformPositions["pf_ocean_d"] = Vector(0, 0, 1500)
+GM.PlatformPositions["gm_flatgrass"] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_midnight_v1_fix"] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_midnight_v1"] = Vector(0, 0, 0)
 -- Color properties
 -- pf_settings can edit these
 GM.PColorStart = Color(0, 255, 128)
@@ -24,13 +24,13 @@ function GM:UpdatePDColors()
     GAMEMODE.PDB = GAMEMODE.PColorEnd.b - GAMEMODE.PColorStart.b
 end
 
-GM.BlockOptions = {'circle', 'square', 'hexagon',}
+GM.BlockOptions = {"circle", "square", "hexagon",}
 
---'mixed',
---'props',
+--"mixed",
+--"props",
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout(ply)
-    ply:Give('weapon_platformbreaker')
+    ply:Give("weapon_platformbreaker")
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
@@ -52,10 +52,10 @@ function GM:PlayerSelectSpawn(pl)
 end
 
 -- Credit damage to players for Knockbacks
-hook.Add('EntityTakeDamage', 'CreditPitfallKills', function(ply, dmginfo)
+hook.Add("EntityTakeDamage", "CreditPitfallKills", function(ply, dmginfo)
     if not ply:IsPlayer() then return end
 
-    if dmginfo:GetAttacker():GetClass() == 'trigger_hurt' then
+    if dmginfo:GetAttacker():GetClass() == "trigger_hurt" then
         if ply.LastKnockback and (CurTime() - ply.KnockbackTime) < 5 then
             attacker = ply.LastKnockback
             dmginfo:SetAttacker(attacker)
@@ -71,38 +71,38 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Do not count deaths unless in round
     if not GAMEMODE:InRound() then return end
     ply:AddDeaths(1)
-    GAMEMODE:AddStatPoints(ply, 'Deaths', 1)
+    GAMEMODE:AddStatPoints(ply, "Deaths", 1)
 
     -- Award an point to the attacker (if there is one)
     if IsValid(attacker) and attacker:IsPlayer() then
         attacker:AddFrags(1)
-        attacker:AddStatPoints('Kills', 1)
+        attacker:AddStatPoints("Kills", 1)
     end
 
     -- Every living players earns a point
     for k, v in pairs(player.GetAll()) do
         if not v:Alive() or v == ply then continue end
         v:AddFrags(1)
-        --GAMEMODE:AddStatPoints(v, 'pitfall_score', 1)
+        --GAMEMODE:AddStatPoints(v, "pitfall_score", 1)
     end
 end
 
 -- Functions below this comment are for backwards-compatibility with Pitfall maps
 -- This includes platform spawning, etc.
-hook.Add('PreRoundStart', 'CreatePlatforms', function()
+hook.Add("PreRoundStart", "CreatePlatforms", function()
     GAMEMODE.NextPowerUp = CurTime() + 5
     -- Tiles maps already have platforms
     local map = game.GetMap()
-    if string.StartWith(map, 'til_') then return end
+    if string.StartWith(map, "til_") then return end
     -- Clear the level then randomly place platforms
     local gametype = table.Random(GAMEMODE.BlockOptions)
-    SetGlobalString('PitfallType', gametype)
+    SetGlobalString("PitfallType", gametype)
     GAMEMODE:ClearLevel()
     GAMEMODE:SpawnPlatforms()
 end)
 
 -- Add platforms to the platforms at random intervals
-hook.Add('Think', 'PowerUpThink', function()
+hook.Add("Think", "PowerUpThink", function()
     if not GAMEMODE:InRound() then return end
 
     if not GAMEMODE.NextPowerUp then
@@ -146,9 +146,9 @@ function GM:SpawnPlatforms()
 
     if not pos then
         -- Check if this is a Trembling Tiles map
-        if #ents.FindByClass('til_tile') > 0 then return end
+        if #ents.FindByClass("til_tile") > 0 then return end
         -- Check if we have markers defined
-        local p = ents.FindByClass('pf_marker')
+        local p = ents.FindByClass("pf_marker")
 
         if p and #p > 0 then
             GAMEMODE:MarkerPlatforms(p)
@@ -218,7 +218,7 @@ function GM:MarkerPlatforms(ents)
     local size = math.random(1, 5)
 
     -- Level is randomly assigned between a certain amount
-    -- Each marker has a 'level' - higher levels = more platforms?
+    -- Each marker has a "level" - higher levels = more platforms?
     for k, v in pairs(ents) do
         if size > v.Size then continue end
 
@@ -261,10 +261,10 @@ function GM:AddPowerUp()
     if true then return end
     local t = table.Random(GAMEMODE:GetPowerUpTypes())
     local target = false
-    local platforms = ents.FindByClass('til_tile')
+    local platforms = ents.FindByClass("til_tile")
 
     if not platforms or #platforms < 1 then
-        platforms = ents.FindByClass('pf_platform')
+        platforms = ents.FindByClass("pf_platform")
     end
 
     while not target do
@@ -276,6 +276,6 @@ function GM:AddPowerUp()
 end
 
 -- Register XP for Pitfall
-hook.Add('RegisterStatsConversions', 'AddPitfallStatConversions', function()
-    GAMEMODE:AddStatConversion('Platform Damage', 'Platform Damage', 0.01)
+hook.Add("RegisterStatsConversions", "AddPitfallStatConversions", function()
+    GAMEMODE:AddStatConversion("Platform Damage", "Platform Damage", 0.01)
 end)

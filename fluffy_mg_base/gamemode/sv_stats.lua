@@ -8,12 +8,12 @@
 GM.StatsTracking = {}
 
 -- Prepare some prepared queries to make database stuff faster and more secure
-hook.Add('InitPostEntity', 'PrepareStatsStuff', function()
+hook.Add("InitPostEntity", "PrepareStatsStuff", function()
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    GAMEMODE.MinigamesPQueries['getstats'] = db:prepare("SELECT category, points FROM stats_minigames_new WHERE `steamid64` = ? AND `gamemode` = ?;")
-    GAMEMODE.MinigamesPQueries['addnewstats'] = db:prepare('INSERT INTO stats_minigames VALUES(?, ?, "{}");')
-    GAMEMODE.MinigamesPQueries['updatestats'] = db:prepare("INSERT INTO stats_minigames_new VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points);")
+    GAMEMODE.MinigamesPQueries["getstats"] = db:prepare("SELECT category, points FROM stats_minigames_new WHERE `steamid64` = ? AND `gamemode` = ?;")
+    GAMEMODE.MinigamesPQueries["addnewstats"] = db:prepare("INSERT INTO stats_minigames VALUES(?, ?, "{}");")
+    GAMEMODE.MinigamesPQueries["updatestats"] = db:prepare("INSERT INTO stats_minigames_new VALUES(?, ?, ?, ?) ON DUPLICATE KEY UPDATE points = VALUES(points);")
 end)
 
 -- Add some points to a given statistic
@@ -78,8 +78,8 @@ function GM:GenerateStatisticsTable()
     local tbl = {}
 
     for stat, _ in pairs(GAMEMODE.StatConversions) do
-        if stat == 'Deaths' or stat == 'Rounds Played' then continue end
-        if GAMEMODE.TeamBased and stat == 'Rounds Won' then continue end
+        if stat == "Deaths" or stat == "Rounds Played" then continue end
+        if GAMEMODE.TeamBased and stat == "Rounds Won" then continue end
         local passed = false
         local stat_tbl = {}
 
@@ -126,20 +126,20 @@ function meta:LoadStatsFromDB()
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
     -- Prepare the query
-    local q = GAMEMODE.MinigamesPQueries['getstats']
+    local q = GAMEMODE.MinigamesPQueries["getstats"]
     if not q then return end
     q:setString(1, self:SteamID64())
-    q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+    q:setString(2, string.Replace(GAMEMODE_NAME, "fluffy_", ""))
 
     -- Success function
     function q:onSuccess(data)
-        if type(data) == 'table' and #data > 0 then
+        if type(data) == "table" and #data > 0 then
             -- Load information from DB
             ply.GamemodeDBStatsTable = {}
 
             for key, value in pairs(data) do
-                local category = data[key]['category']
-                local points = data[key]['points']
+                local category = data[key]["category"]
+                local points = data[key]["points"]
                 ply.GamemodeDBStatsTable[category] = points
             end
         else
@@ -178,10 +178,10 @@ function meta:UpdateStatsToDB()
 
     -- Prepare the query
     for k, v in pairs(new_table) do
-        local q = GAMEMODE.MinigamesPQueries['updatestats']
+        local q = GAMEMODE.MinigamesPQueries["updatestats"]
         if not q then return end
         q:setString(1, self:SteamID64())
-        q:setString(2, string.Replace(GAMEMODE_NAME, 'fluffy_', ''))
+        q:setString(2, string.Replace(GAMEMODE_NAME, "fluffy_", ""))
         q:setString(3, k)
         q:setNumber(4, v)
 

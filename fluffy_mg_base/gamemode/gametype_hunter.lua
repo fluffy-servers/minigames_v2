@@ -3,14 +3,14 @@
 	Examples: Suicide Barrels
 --]]
 -- Make new players join the Hunter team on connection
-hook.Add('PlayerInitialSpawn', 'HunterTeamAssignment', function(ply)
+hook.Add("PlayerInitialSpawn", "HunterTeamAssignment", function(ply)
     if GAMEMODE.TeamSurvival and GAMEMODE.HunterTeam then
         ply:SetTeam(GAMEMODE.HunterTeam)
     end
 end)
 
 -- If team survival pick one player to be a hunter
-hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
+hook.Add("PreRoundStart", "SurvivalPickHunter", function()
     if GAMEMODE.TeamSurvival then
         local num_players = 0
 
@@ -35,19 +35,19 @@ hook.Add('PreRoundStart', 'SurvivalPickHunter', function()
 end)
 
 -- Stop Hunters from switching back to the other team
-hook.Add('PlayerCanJoinTeam', 'StopHunterSwap', function(ply, new_team)
+hook.Add("PlayerCanJoinTeam", "StopHunterSwap", function(ply, new_team)
     if not GAMEMODE.TeamSurvival then return end
     local current_team = ply:Team()
 
     if current_team == GAMEMODE.HunterTeam and new_team ~= TEAM_SPECTATOR then
-        ply:ChatPrint('You cannot change teams currently')
+        ply:ChatPrint("You cannot change teams currently")
 
         return false
     end
 end)
 
 -- Assign dead survivors to the hunter team
-hook.Add('PlayerDeath', 'SurvivalDeath', function(ply)
+hook.Add("PlayerDeath", "SurvivalDeath", function(ply)
     if ply:Team() == GAMEMODE.SurvivorTeam then
         ply:SetTeam(GAMEMODE.HunterTeam)
     end
@@ -74,7 +74,7 @@ function GM:GetLastPlayer(exclude_player)
 end
 
 -- Last Survivor gets a message and a stat bonus
-hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
+hook.Add("DoPlayerDeath", "AwardLastSurvivor", function(ply)
     if not GAMEMODE.TeamSurvival then return end
     if GAMEMODE.DisableLoneSurvivor then return end
     if ply:Team() ~= GAMEMODE.SurvivorTeam then return end
@@ -83,8 +83,8 @@ hook.Add('DoPlayerDeath', 'AwardLastSurvivor', function(ply)
     if IsValid(last_player) and last_player ~= false then
         -- Award the last survivor bonus
         local name = string.sub(last_player:Nick(), 1, 10)
-        GAMEMODE:PulseAnnouncement(4, name .. ' is the lone survivor!', 0.8, 'top')
-        last_player:AddStatPoints('LastSurvivor', 1)
+        GAMEMODE:PulseAnnouncement(4, name .. " is the lone survivor!", 0.8, "top")
+        last_player:AddStatPoints("LastSurvivor", 1)
         GAMEMODE.LastSurvivor = last_player
     end
 end)

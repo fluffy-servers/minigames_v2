@@ -6,28 +6,28 @@
 PANEL = {}
 
 PANEL.Icons = {
-    ["gold"] = Material('icon16/medal_gold_2.png'),
-    ["silver"] = Material('icon16/medal_silver_2.png'),
-    ["bronze"] = Material('icon16/medal_bronze_2.png'),
-    ["star"] = Material('icon16/star.png'),
-    ["admin"] = Material('icon16/shield.png'),
-    ["dev"] = Material('icon16/wrench.png'),
-    ["user"] = Material('icon16/user_gray.png'),
-    ["donor"] = Material('icon16/heart.png'),
-    ["map"] = Material('icon16/map.png'),
-    ["bot"] = Material('icon16/cog.png')
+    ["gold"] = Material("icon16/medal_gold_2.png"),
+    ["silver"] = Material("icon16/medal_silver_2.png"),
+    ["bronze"] = Material("icon16/medal_bronze_2.png"),
+    ["star"] = Material("icon16/star.png"),
+    ["admin"] = Material("icon16/shield.png"),
+    ["dev"] = Material("icon16/wrench.png"),
+    ["user"] = Material("icon16/user_gray.png"),
+    ["donor"] = Material("icon16/heart.png"),
+    ["map"] = Material("icon16/map.png"),
+    ["bot"] = Material("icon16/cog.png")
 }
 
 PANEL.UserIcons = {
-    ["76561198067202125"] = 'dev',
-    ["76561198087419337"] = 'map'
+    ["76561198067202125"] = "dev",
+    ["76561198087419337"] = "map"
 }
 
 PANEL.Modules = {
-    ["ping"] = {function(p) return p:Ping() end, 'Ping'},
-    ['deaths'] = {function(p) return p:Deaths() end, 'Deaths'},
-    ['score'] = {function(p) return p:Frags() end, 'Score'},
-    ['level'] = {function(p) return p:GetLevel() end, 'Level'}
+    ["ping"] = {function(p) return p:Ping() end, "Ping"},
+    ["deaths"] = {function(p) return p:Deaths() end, "Deaths"},
+    ["score"] = {function(p) return p:Frags() end, "Score"},
+    ["level"] = {function(p) return p:GetLevel() end, "Level"}
 }
 
 function PANEL:GetRankIcon(ply)
@@ -36,30 +36,30 @@ function PANEL:GetRankIcon(ply)
     if self.UserIcons[ply:SteamID64()] then
         return self.UserIcons[ply:SteamID64()]
     elseif ply:IsAdmin() then
-        return 'admin'
-    elseif ply:GetNWBool('Donor', false) then
-        return 'donor'
+        return "admin"
+    elseif ply:GetNWBool("Donor", false) then
+        return "donor"
     elseif ply:IsBot() then
-        return 'bot'
+        return "bot"
     end
 
-    return 'user'
+    return "user"
 end
 
 function PANEL:GetShortName(ply, len)
-    return string.sub(ply:Nick() or '<disconnected>', 1, len or 16)
+    return string.sub(ply:Nick() or "<disconnected>", 1, len or 16)
 end
 
 function PANEL:DrawPlayerName(ply, x, y)
-    local cd = ply:GetNWString('NameColor', nil)
+    local cd = ply:GetNWString("NameColor", nil)
     local name = self:GetShortName(ply, 20)
 
     local tbl = {name}
 
-    if cd and cd ~= '' and cd ~= ' ' then
+    if cd and cd ~= "" and cd ~= " " then
         local mode = cd[1]
         cd = string.sub(cd, 2)
-        cd = string.Split(cd, ',')
+        cd = string.Split(cd, ",")
 
         if name_color_funcs[mode] then
             tbl = name_color_funcs[mode](name, cd)
@@ -76,14 +76,14 @@ function PANEL:DrawPlayerName(ply, x, y)
             continue
         end
 
-        local w = draw.SimpleText(v, 'FS_32', xx, y, c)
+        local w = draw.SimpleText(v, "FS_32", xx, y, c)
         xx = xx + w
     end
 end
 
 function PANEL:Init()
-    self.AvatarButton = self:Add('DButton')
-    self.AvatarButton:SetText('')
+    self.AvatarButton = self:Add("DButton")
+    self.AvatarButton:SetText("")
     self.AvatarButton:SetSize(48, 48)
     self.AvatarButton:SetPos(2, 2)
 
@@ -92,7 +92,7 @@ function PANEL:Init()
     end
 
     self.AvatarButton.Paint = function() end
-    self.Avatar = vgui.Create('AvatarCircle', self.AvatarButton)
+    self.Avatar = vgui.Create("AvatarCircle", self.AvatarButton)
     self.Avatar:Dock(FILL)
     self.Avatar:SetMouseInputEnabled(false)
     self.Avatar:SetDrawLevel(false)
@@ -105,11 +105,11 @@ function PANEL:Init()
         local medal = nil
 
         if GAMEMODE.Medals[1] == parent.Player then
-            medal = 'gold'
+            medal = "gold"
         elseif GAMEMODE.Medals[2] == parent.Player then
-            medal = 'silver'
+            medal = "silver"
         elseif GAMEMODE.Medals[3] == parent.Player then
-            medal = 'bronze'
+            medal = "bronze"
         end
 
         if medal then
@@ -167,16 +167,16 @@ function PANEL:Paint(w, h)
     -- Draw player name
     self:DrawPlayerName(self.Player, 76, 12)
 
-    -- draw.SimpleText(self:GetShortName(self.Player, 20), 'FS_32', 76, 12, GAMEMODE.FCol2)
+    -- draw.SimpleText(self:GetShortName(self.Player, 20), "FS_32", 76, 12, GAMEMODE.FCol2)
     -- Other information is handled in a wack fashion
     for k, v in pairs(self.CurrentModules) do
         local xx = w - 32 - (k - 1) * 64
 
         if v[2] then
-            draw.SimpleText(v[1](self.Player), 'FS_32', xx, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
-            draw.SimpleText(v[2], 'FS_20', xx, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
+            draw.SimpleText(v[1](self.Player), "FS_32", xx, 2, GAMEMODE.FCol2, TEXT_ALIGN_CENTER)
+            draw.SimpleText(v[2], "FS_20", xx, 32, GAMEMODE.FCol3, TEXT_ALIGN_CENTER)
         else
-            draw.SimpleText(v[1](self.Player), 'FS_56', w - 40, h / 2 + 1, GAMEMODE.FCol2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+            draw.SimpleText(v[1](self.Player), "FS_56", w - 40, h / 2 + 1, GAMEMODE.FCol2, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
         end
     end
 end
@@ -193,4 +193,4 @@ function PANEL:Think()
 end
 
 -- Register this so we can reuse it later
-vgui.Register('ScoreboardRow', PANEL)
+vgui.Register("ScoreboardRow", PANEL)

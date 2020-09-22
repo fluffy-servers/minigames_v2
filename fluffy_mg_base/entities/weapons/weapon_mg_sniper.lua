@@ -1,13 +1,13 @@
-﻿SWEP.Base = 'weapon_mg_base'
+﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "r"
-    killicon.AddFont('weapon_mg_sniper', 'CSKillIcons', 'r', Color(255, 80, 0, 255))
+    killicon.AddFont("weapon_mg_sniper", "CSKillIcons", "r", Color(255, 80, 0, 255))
 end
 
 -- Model information
-SWEP.PrintName = 'Sniper Rifle'
+SWEP.PrintName = "Sniper Rifle"
 SWEP.ViewModel = "models/weapons/cstrike/c_snip_awp.mdl"
 SWEP.ViewModelFOV = 75
 SWEP.ViewModelFlip = false
@@ -27,10 +27,10 @@ SWEP.Primary.Delay = 1.5
 SWEP.Primary.ClipSize = 10
 SWEP.Primary.DefaultClip = 9999
 SWEP.Primary.Automatic = false
-SWEP.Primary.Ammo = 'pistol'
+SWEP.Primary.Ammo = "pistol"
 SWEP.Secondary.Sound = Sound("weapons/g3sg1/g3sg1_slide.wav")
 SWEP.Secondary.Delay = 0.5
-SWEP.Secondary.Ammo = 'none'
+SWEP.Secondary.Ammo = "none"
 -- Zoom and viewmodel related stuff
 SWEP.LastRunFrame = 0
 SWEP.SprintPos = Vector(0, 0, -2)
@@ -87,7 +87,7 @@ function SWEP:PrimaryAttack()
     self:ZoomOut()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:EmitSound(self.Primary.Sound, 100, math.random(95, 105))
-    self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, 'line_tracer')
+    self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, "line_tracer")
     self:TakePrimaryAmmo(1)
 
     if SERVER then
@@ -114,14 +114,14 @@ function SWEP:SetZoomMode(num)
     end
 
     -- Update the zoom
-    self:SetNWInt('Mode', num)
+    self:SetNWInt("Mode", num)
     self:GetOwner():SetFOV(self.ZoomModes[num], self.ZoomSpeeds[num])
     self:GetOwner():DrawViewModel(num == 1)
 end
 
 -- Get the current zoom mode
 function SWEP:GetZoomMode()
-    return self:GetNWInt('Mode', 1)
+    return self:GetNWInt("Mode", 1)
 end
 
 -- Useful function to return to zoom level 1 when needed
@@ -134,7 +134,7 @@ end
 
 -- Adjust the mouse sensitivity based on zoom level
 function SWEP:AdjustMouseSensitivity()
-    local num = self:GetNWInt('Mode', 1)
+    local num = self:GetNWInt("Mode", 1)
     local scale = self.ZoomModes[num] / 80
 
     return scale
@@ -143,7 +143,7 @@ end
 -- Draw the scope if applicable
 function SWEP:DrawHUD()
     local vm = self:GetOwner():GetViewModel()
-    local mode = self:GetNWInt('Mode', 1)
+    local mode = self:GetNWInt("Mode", 1)
 
     if mode ~= 1 then
         -- Handle scope-related drawing
@@ -154,7 +154,7 @@ function SWEP:DrawHUD()
         local w_half = (w / 2)
 
         -- Draw the scope circle
-        surface.SetTexture(surface.GetTextureID('gmod/scope'))
+        surface.SetTexture(surface.GetTextureID("gmod/scope"))
         surface.SetDrawColor(0, 0, 0, 255)
         surface.DrawTexturedRect(w_half - wr_half, 0, wr, h)
 
@@ -164,7 +164,6 @@ function SWEP:DrawHUD()
         surface.DrawRect(w_half + wr_half - 4, 0, w - (w_half + wr_half) + 8, h)
 
         -- Draw the crosshair
-        -- No longer the stupid one from before I'm sorry
         surface.DrawLine(0, h / 2, w, h / 2)
         surface.DrawLine(w / 2, 0, w / 2, h)
         

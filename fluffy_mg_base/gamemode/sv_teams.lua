@@ -3,7 +3,7 @@
     -- This only applies in some cases where general team switching won't fly
     if (ply:Team() == TEAM_SPECTATOR and teamid == TEAM_UNASSIGNED) or (ply:Team() == TEAM_UNASSIGNED and teamid == TEAM_SPECTATOR) then
         if not GAMEMODE.TeamBased or GAMEMODE.TeamSurvival or (not GAMEMODE.PlayerChooseTeams) then
-            if not hook.Run('PlayerCanJoinTeam', ply, teamid) then return end -- still follow these rules
+            if not hook.Run("PlayerCanJoinTeam", ply, teamid) then return end -- still follow these rules
             GAMEMODE:PlayerJoinTeam(ply, teamid)
         end
     end
@@ -24,7 +24,7 @@
     end
 
     -- Run the can join hook
-    if not hook.Run('PlayerCanJoinTeam', ply, teamid) then return end
+    if not hook.Run("PlayerCanJoinTeam", ply, teamid) then return end
     GAMEMODE:PlayerJoinTeam(ply, teamid)
 end
 
@@ -33,7 +33,7 @@ function GM:PlayerCanJoinTeam(ply, teamid)
     if ply:Team() == teamid then return false end
 
     -- Team swap as frequently as required before game start
-    if GAMEMODE:GetRoundState() == 'GameNotStarted' or GAMEMODE:GetRoundState() == 'Warmup' then
+    if GAMEMODE:GetRoundState() == "GameNotStarted" or GAMEMODE:GetRoundState() == "Warmup" then
         ply.LastTeamSwitch = RealTime()
 
         return true
@@ -41,7 +41,7 @@ function GM:PlayerCanJoinTeam(ply, teamid)
 
     -- Stop from frequently changing teams in game
     if ply.LastTeamSwitch and RealTime() - ply.LastTeamSwitch < 10 then
-        ply:ChatPrint('Please wait before changing teams')
+        ply:ChatPrint("Please wait before changing teams")
 
         return false
     else
@@ -59,7 +59,7 @@ function GM:OnPlayerChangedTeam(ply, old, new)
         ply:SetPos(pos)
     end
 
-    PrintMessage(HUD_PRINTTALK, Format("%s joined '%s'", ply:Nick(), team.GetName(new)))
+    PrintMessage(HUD_PRINTTALK, Format("%s joined "%s"", ply:Nick(), team.GetName(new)))
 end
 
 -- Useful function to swap the current teams

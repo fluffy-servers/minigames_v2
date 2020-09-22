@@ -1,4 +1,4 @@
-﻿SWEP.Base = 'weapon_mg_shotgun'
+﻿SWEP.Base = "weapon_mg_shotgun"
 SWEP.PrintName = "Super Shotgun"
 SWEP.Knockback = 425
 

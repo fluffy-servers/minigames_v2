@@ -6,14 +6,14 @@ ENT.PrintName = "Paint Bomb"
 function ENT:Initialize()
     self.SpawnTime = CurTime()
     if CLIENT then return end
-    self:SetModel('models/weapons/w_missile_closed.mdl')
+    self:SetModel("models/weapons/w_missile_closed.mdl")
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
     self:PhysWake()
     self:SetGravity(0)
     -- Add a trail
-    self.Trail = util.SpriteTrail(self, 0, team.GetColor(self.Player:Team()) or color_white, false, 24, 2, 4, 1, 'trails/laser')
+    self.Trail = util.SpriteTrail(self, 0, team.GetColor(self.Player:Team()) or color_white, false, 24, 2, 4, 1, "trails/laser")
 end
 
 function ENT:Explode()
@@ -28,7 +28,7 @@ function ENT:Explode()
     end
     util.BlastDamage(wep, self.Player, self:GetPos(), 300, 150)
 
-    --self:EmitSound('AlyxEMP.Discharge')
+    --self:EmitSound("AlyxEMP.Discharge")
     -- stop red message of doom
     timer.Simple(0.01, function()
         self:Remove()

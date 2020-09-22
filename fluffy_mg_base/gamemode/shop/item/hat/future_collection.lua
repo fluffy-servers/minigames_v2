@@ -1,9 +1,9 @@
 ﻿-- Generated with the ingame creator
 ITEM = {}
-ITEM.VanillaID = 'cubehead'
-ITEM.Name = 'Cube Head'
-ITEM.Model = 'models/maxofs2d/cube_tool.mdl'
-ITEM.Attachment = 'eyes'
+ITEM.VanillaID = "cubehead"
+ITEM.Name = "Cube Head"
+ITEM.Model = "models/maxofs2d/cube_tool.mdl"
+ITEM.Attachment = "eyes"
 
 ITEM.Modify = {
     scale = 0.5,
@@ -13,10 +13,10 @@ ITEM.Modify = {
 SHOP:RegisterHat(ITEM)
 -- Generated with the ingame creator
 ITEM = {}
-ITEM.VanillaID = 'futurecube'
-ITEM.Name = 'Future Cube'
-ITEM.Model = 'models/xqm/box5s.mdl'
-ITEM.Attachment = 'eyes'
+ITEM.VanillaID = "futurecube"
+ITEM.Name = "Future Cube"
+ITEM.Model = "models/xqm/box5s.mdl"
+ITEM.Attachment = "eyes"
 
 ITEM.Modify = {
     scale = 0.5,
@@ -27,10 +27,10 @@ ITEM.Modify = {
 SHOP:RegisterHat(ITEM)
 -- Generated with the ingame creator
 ITEM = {}
-ITEM.VanillaID = 'gear1'
-ITEM.Name = 'Mechanical Mind'
-ITEM.Model = 'models/Mechanics/gears/gear12x6_large.mdl'
-ITEM.Attachment = 'eyes'
+ITEM.VanillaID = "gear1"
+ITEM.Name = "Mechanical Mind"
+ITEM.Model = "models/Mechanics/gears/gear12x6_large.mdl"
+ITEM.Attachment = "eyes"
 
 ITEM.Modify = {
     scale = 0.1,
@@ -40,11 +40,11 @@ ITEM.Modify = {
 
 SHOP:RegisterHat(ITEM)
 ITEM = {}
-ITEM.VanillaID = 'monitor1'
-ITEM.Name = 'Black Screen'
-ITEM.Model = 'models/props_lab/monitor02.mdl'
-ITEM.Attachment = 'eyes'
-ITEM.Slot = 'head'
+ITEM.VanillaID = "monitor1"
+ITEM.Name = "Black Screen"
+ITEM.Model = "models/props_lab/monitor02.mdl"
+ITEM.Attachment = "eyes"
+ITEM.Slot = "head"
 ITEM.Skin = 0
 
 ITEM.Modify = {
@@ -54,11 +54,11 @@ ITEM.Modify = {
 
 SHOP:RegisterHat(ITEM)
 ITEM = {}
-ITEM.VanillaID = 'monitor2'
-ITEM.Name = 'Mad Programmer'
-ITEM.Model = 'models/props_lab/monitor02.mdl'
-ITEM.Attachment = 'eyes'
-ITEM.Slot = 'head'
+ITEM.VanillaID = "monitor2"
+ITEM.Name = "Mad Programmer"
+ITEM.Model = "models/props_lab/monitor02.mdl"
+ITEM.Attachment = "eyes"
+ITEM.Slot = "head"
 ITEM.Skin = 1
 
 ITEM.Modify = {
@@ -68,11 +68,11 @@ ITEM.Modify = {
 
 SHOP:RegisterHat(ITEM)
 ITEM = {}
-ITEM.VanillaID = 'monitor3'
-ITEM.Name = 'TV Star'
-ITEM.Model = 'models/props_lab/monitor01b.mdl'
-ITEM.Attachment = 'eyes'
-ITEM.Slot = 'head'
+ITEM.VanillaID = "monitor3"
+ITEM.Name = "TV Star"
+ITEM.Model = "models/props_lab/monitor01b.mdl"
+ITEM.Attachment = "eyes"
+ITEM.Slot = "head"
 
 ITEM.Modify = {
     scale = 1.1,
@@ -81,11 +81,11 @@ ITEM.Modify = {
 
 SHOP:RegisterHat(ITEM)
 ITEM = {}
-ITEM.VanillaID = 'pluggedin'
-ITEM.Name = 'Plugged In'
-ITEM.Model = 'models/props_lab/tpplug.mdl'
-ITEM.Attachment = 'eyes'
-ITEM.Slot = 'hat'
+ITEM.VanillaID = "pluggedin"
+ITEM.Name = "Plugged In"
+ITEM.Model = "models/props_lab/tpplug.mdl"
+ITEM.Attachment = "eyes"
+ITEM.Slot = "hat"
 
 ITEM.Modify = {
     scale = 0.4,

@@ -1,4 +1,4 @@
-﻿MOD.Name = 'Social Distancing'
+﻿MOD.Name = "Social Distancing"
 MOD.RoundTime = 5
 MOD.SurviveValue = 1
 

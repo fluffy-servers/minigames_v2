@@ -1,11 +1,11 @@
 ﻿SWEP.Base = "weapon_mg_base"
 -- Use an RPG model for the weapon
--- Look it's good enough okay
-SWEP.PrintName = 'Mortar'
-SWEP.ViewModel = 'models/weapons/c_rpg.mdl'
-SWEP.WorldModel = 'models/weapons/w_rocket_launcher.mdl'
-SWEP.HoldType = 'rpg'
+SWEP.PrintName = "Mortar"
+SWEP.ViewModel = "models/weapons/c_rpg.mdl"
+SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
+SWEP.HoldType = "rpg"
 SWEP.UseHands = true
+
 -- Primary ammo settings
 SWEP.Primary.ClipSize = 3
 SWEP.Primary.DefaultClip = 3
@@ -37,7 +37,7 @@ function SWEP:Launch()
     -- Play animation & effects
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
     owner:SetAnimation(PLAYER_ATTACK1)
-    self:EmitSound('Weapon_RPG.Single')
+    self:EmitSound("Weapon_RPG.Single")
 
     -- FIRE THE ROCKET!
     self:CreateRocket(src, owner:GetAimVector() * 1000)
@@ -45,7 +45,7 @@ end
 
 -- Helper function to create a rocket entity
 function SWEP:CreateRocket(pos, velocity)
-    local grenade = ents.Create('mg_mortar_rocket')
+    local grenade = ents.Create("mg_mortar_rocket")
     if not IsValid(grenade) then return end
     grenade.WeaponEnt = self
     grenade.Player = self:GetOwner()

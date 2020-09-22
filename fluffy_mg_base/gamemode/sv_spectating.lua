@@ -37,7 +37,7 @@ function GM:EndSpectate(ply)
 end
 
 function GM:NetworkSpectate(ply, mode, target)
-    net.Start('SpectateState')
+    net.Start("SpectateState")
     net.WriteInt(mode or -1, 8)
     net.WriteEntity(target or Entity(-1))
     net.Send(ply)
@@ -192,7 +192,7 @@ function GM:PlayerDeathThink(ply)
 end
 
 -- Add player metatable functions for spectating
-local meta = FindMetaTable('Player')
+local meta = FindMetaTable("Player")
 
 function meta:StartSpectate(mode, target)
     GAMEMODE:StartSpectate(self, mode, target)

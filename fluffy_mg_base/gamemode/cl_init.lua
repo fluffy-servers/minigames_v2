@@ -4,20 +4,20 @@
 	Most other HUD stuff is in the other client files
 --]]
 -- Include useful files
-include('shared.lua')
-include('cl_announcements.lua')
-include('cl_chat.lua')
-include('cl_crosshair.lua')
-include('cl_endgame.lua')
-include('cl_hud.lua')
-include('cl_killfeed.lua')
-include('cl_mapedits.lua')
-include('cl_playerpanel.lua')
-include('cl_scoreboard.lua')
-include('cl_thirdperson.lua')
-include('vgui/AvatarCircle.lua')
-include('vgui/MapVotePanel.lua')
-include('vgui/ScoreboardRow.lua')
+include("shared.lua")
+include("cl_announcements.lua")
+include("cl_chat.lua")
+include("cl_crosshair.lua")
+include("cl_endgame.lua")
+include("cl_hud.lua")
+include("cl_killfeed.lua")
+include("cl_mapedits.lua")
+include("cl_playerpanel.lua")
+include("cl_scoreboard.lua")
+include("cl_thirdperson.lua")
+include("vgui/AvatarCircle.lua")
+include("vgui/MapVotePanel.lua")
+include("vgui/ScoreboardRow.lua")
 
 -- Register universal fonts
 surface.CreateFont("FS_16", {
@@ -165,18 +165,18 @@ local possible_colors = {
 
 -- Default is blue
 -- This changes based on team in some gamemodes
-GM.HColLight = GM.HColLight or possible_colors['blue'][1]
-GM.HColDark = GM.HColDark or possible_colors['blue'][2]
+GM.HColLight = GM.HColLight or possible_colors["blue"][1]
+GM.HColDark = GM.HColDark or possible_colors["blue"][2]
 -- Default is blue
 GM.FCol1 = GM.FCol1 or Color(245, 246, 250)
-GM.FCol2 = GM.FCol2 or possible_colors['blue'][1]
-GM.FCol3 = GM.FCol3 or possible_colors['blue'][2]
+GM.FCol2 = GM.FCol2 or possible_colors["blue"][1]
+GM.FCol3 = GM.FCol3 or possible_colors["blue"][2]
 GM.FColShadow = Color(0, 0, 0, 150)
 
 -- Function to update the color set to any in the table
 function GM:UpdateColorSet(name)
     if not possible_colors[name] then
-        name = 'blue'
+        name = "blue"
     end
 
     GAMEMODE.HColLight = possible_colors[name][1]
@@ -193,7 +193,7 @@ function draw.ShadeColor(c, strength)
     return Color(r, g, b)
 end
 
--- Function to adjust a colour strength that doesn't use math.Clamp
+-- Function to adjust a colour strength without math.Clamp
 -- Could probably break things if overflow occurs
 function draw.ShadeColorFast(c, strength)
     local strength = strength or 10
@@ -204,14 +204,14 @@ end
 -- Get a short name for a team
 function team.GetShortName(id)
     if id == TEAM_SPECTATOR then
-        return 'Spec'
+        return "Spec"
     else
         return string.Replace(team.GetName(id), " Team", "")
     end
 end
 
 -- Handle spectating messages
-net.Receive('SpectateState', function()
+net.Receive("SpectateState", function()
     local mode = net.ReadInt(8)
     LocalPlayer().SpectateMode = mode
     LocalPlayer().Spectating = false

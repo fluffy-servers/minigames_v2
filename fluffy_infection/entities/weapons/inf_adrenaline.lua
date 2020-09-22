@@ -1,10 +1,10 @@
-﻿SWEP.Base = 'weapon_mg_sck_base'
-SWEP.HoldType = 'grenade'
+﻿SWEP.Base = "weapon_mg_sck_base"
+SWEP.HoldType = "grenade"
 
 if CLIENT then
     SWEP.IconFont = "CSSelectIcons"
     SWEP.IconLetter = "H"
-    SWEP.PrintName = 'Adrenaline'
+    SWEP.PrintName = "Adrenaline"
     SWEP.Slot = 2
     SWEP.SlotPos = 2
 end
@@ -71,15 +71,15 @@ SWEP.AdrenalineLength = 8
 
 -- Reset utility on player spawn
 -- Players spawn with 50% of the device charged
-hook.Add('PlayerSpawn', 'Utility', function(ply)
-    ply:SetNWFloat('LastUtility', CurTime() - 10)
+hook.Add("PlayerSpawn", "Utility", function(ply)
+    ply:SetNWFloat("LastUtility", CurTime() - 10)
     ply:SetNoDraw(false)
 end)
 
 -- Ammo display
 -- Show how charged the utility is
 function SWEP:CustomAmmoDisplay()
-    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility', 0)
+    self.LastUtility = self:GetOwner():GetNWFloat("LastUtility", 0)
     self.AmmoDisplay = self.AmmoDisplay or {}
     self.AmmoDisplay.Draw = true
     self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100)
@@ -93,10 +93,8 @@ local function Unadrenaline(ply)
     if not IsValid(ply) then return end
     if not ply:Alive() then return end
     if ply:Team() ~= TEAM_BLUE then return end
-    -- Reset speed
+    
     GAMEMODE:SetHumanSpeed(ply)
-    -- Reset FOV
-    print('test')
     GAMEMODE:SetAdrenalineFOV(ply, 0)
 end
 
@@ -115,7 +113,7 @@ end
 
 -- Sync weapon and player last utility times
 function SWEP:Deploy()
-    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility')
+    self.LastUtility = self:GetOwner():GetNWFloat("LastUtility")
 end
 
 -- Only allow the player to cloak if the device is fully charged
@@ -127,8 +125,8 @@ end
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
     self:EmitSound(self.Primary.Sound)
-    self:GetOwner():SetNWFloat('LastUtility', CurTime() + 5)
-    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility')
+    self:GetOwner():SetNWFloat("LastUtility", CurTime() + 5)
+    self.LastUtility = self:GetOwner():GetNWFloat("LastUtility")
 
     if SERVER then
         self:Adrenaline()

@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'OITC'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "OITC"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     You only have one bullet - use it wisely.
     

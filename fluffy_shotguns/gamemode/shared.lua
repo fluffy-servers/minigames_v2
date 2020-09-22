@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Super Shotguns'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Super Shotguns"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Super Shotguns to the death in this intense deathmatch!
     
@@ -9,7 +9,7 @@ GM.HelpText = [[
 GM.TeamBased = true -- Is the gamemode FFA or Teams?
 GM.RoundTime = 200
 GM.RoundNumber = 3
-GM.RoundType = 'timed_endless'
+GM.RoundType = "timed_endless"
 GM.EndOnTimeOut = true
 GM.GameTime = 500
 GM.HUDStyle = HUD_STYLE_TEAM_SCORE

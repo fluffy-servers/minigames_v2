@@ -3,34 +3,34 @@
 local default_cam = Vector(56, 24, 0)
 
 local shop_categories = {
-    {'Backwear', Vector(48, 24, 180), 'back'},
-    {'Glasses', Vector(64, 16, 0), 'eyes'},
-    {'Headgear', Vector(64, 24, 0), 'face'},
-    {'Crates', default_cam, 'Crate'},
-    {'Paint', default_cam, 'Paint'},
-    {'Tracers', default_cam, 'Tracer'},
-    {'Trails', default_cam, 'Trail'},
+    {"Backwear", Vector(48, 24, 180), "back"},
+    {"Glasses", Vector(64, 16, 0), "eyes"},
+    {"Headgear", Vector(64, 24, 0), "face"},
+    {"Crates", default_cam, "Crate"},
+    {"Paint", default_cam, "Paint"},
+    {"Tracers", default_cam, "Tracer"},
+    {"Trails", default_cam, "Trail"},
 }
 
 SHOP.InventoryTable = SHOP.InventoryTable or {}
 SHOP.InventoryEquipped = SHOP.InventoryEquipped or {}
 
 function SHOP:VerifyInventory()
-    net.Start('SHOP_NetworkInventory')
+    net.Start("SHOP_NetworkInventory")
     net.WriteString(SHOP:HashTable(SHOP.InventoryTable))
     net.SendToServer()
 end
 
-net.Receive('SHOP_NetworkInventory', function()
+net.Receive("SHOP_NetworkInventory", function()
     SHOP.InventoryTable = net.ReadTable()
-    print('Updated local inventory with copy from server')
+    print("Updated local inventory with copy from server")
 
     if IsValid(SHOP.InventoryPanel) then
         SHOP:PopulateInventory()
     end
 end)
 
-net.Receive('SHOP_NetworkEquipped', function()
+net.Receive("SHOP_NetworkEquipped", function()
     SHOP.InventoryEquipped = net.ReadTable()
 end)
 
@@ -44,7 +44,7 @@ function SHOP:PopulateInventory(category)
         ITEM = SHOP:ParseVanillaItem(ITEM)
 
         if category then
-            if category == 'Equipped' then
+            if category == "Equipped" then
                 if not SHOP.InventoryEquipped[key] then continue end
             else
                 if not ITEM.Type then continue end
@@ -52,7 +52,7 @@ function SHOP:PopulateInventory(category)
             end
         end
 
-        local panel = display:Add('ShopItemPanel')
+        local panel = display:Add("ShopItemPanel")
         panel.key = key
         panel.ITEM = ITEM
         panel:Ready()
@@ -85,13 +85,13 @@ function SHOP:OpenInventory(display)
     local xx = display_width
     local yy = display_height
     -- Create the mirror -> see vgui/ShopMirror.lua
-    local mirror = vgui.Create('ShopMirror', display)
+    local mirror = vgui.Create("ShopMirror", display)
     mirror:SetWide(320)
     mirror:Dock(LEFT)
     mirror:SetCamera(default_cam.x, default_cam.y)
     mirror:SetAngle(default_cam.z)
     -- Scrollable category list
-    local tabs = vgui.Create('DScrollPanel', display)
+    local tabs = vgui.Create("DScrollPanel", display)
     tabs:SetWide(128)
     tabs:Dock(LEFT)
     tabs:GetVBar():SetVisible(false)
@@ -104,9 +104,9 @@ function SHOP:OpenInventory(display)
 
     -- Create buttons for all shop categories
     for k, cat in pairs(shop_categories) do
-        local cat_button = vgui.Create('DButton', tabs)
+        local cat_button = vgui.Create("DButton", tabs)
         cat_button:SetSize(128, button_height)
-        cat_button:SetFont('FS_B32')
+        cat_button:SetFont("FS_B32")
         cat_button:SetText(cat[1])
         cat_button:SetTextColor(color_white)
         cat_button:Dock(TOP)
@@ -151,11 +151,11 @@ function SHOP:OpenInventory(display)
     end
 
     -- Create the equipped button
-    local equipped_button = vgui.Create('DButton', tabs)
+    local equipped_button = vgui.Create("DButton", tabs)
     equipped_button:SetSize(128, button_height)
-    equipped_button:SetFont('FS_B32')
+    equipped_button:SetFont("FS_B32")
     equipped_button:SetTextColor(color_white)
-    equipped_button:SetText('Equipped')
+    equipped_button:SetText("Equipped")
     equipped_button:Dock(TOP)
 
     function equipped_button:Paint(w, h)
@@ -185,16 +185,16 @@ function SHOP:OpenInventory(display)
             v.Selected = (v == self)
         end
 
-        SHOP.InventoryPanel.Category = 'Equipped'
-        SHOP:PopulateInventory('Equipped')
+        SHOP.InventoryPanel.Category = "Equipped"
+        SHOP:PopulateInventory("Equipped")
     end
 
     -- Create the settings button
-    local settings_button = vgui.Create('DButton', tabs)
+    local settings_button = vgui.Create("DButton", tabs)
     settings_button:SetSize(128, button_height)
-    settings_button:SetFont('FS_B32')
+    settings_button:SetFont("FS_B32")
     settings_button:SetTextColor(color_white)
-    settings_button:SetText('Settings')
+    settings_button:SetText("Settings")
     settings_button:Dock(TOP)
 
     function settings_button:Paint(w, h)
@@ -224,14 +224,14 @@ function SHOP:OpenInventory(display)
             v.Selected = (v == self)
         end
 
-        SHOP.InventoryPanel.Category = 'Settings'
+        SHOP.InventoryPanel.Category = "Settings"
         SHOP.PopulateSettings()
     end
 
     -- Create the scrollable inventory display
-    local scroll = vgui.Create('DScrollPanel', display)
+    local scroll = vgui.Create("DScrollPanel", display)
     scroll:Dock(FILL)
-    local icons_display = vgui.Create('DIconLayout', scroll)
+    local icons_display = vgui.Create("DIconLayout", scroll)
     icons_display:Dock(FILL)
     icons_display:SetSpaceX(8)
     icons_display:SetSpaceY(8)
@@ -247,7 +247,7 @@ end
 function SHOP:OpenPaintBox(topaint)
     if not IsValid(SHOP.InventoryPanel) then return end
     SHOP.InventoryPanel:SetMouseInputEnabled(false)
-    local frame = vgui.Create('DFrame')
+    local frame = vgui.Create("DFrame")
     -- Scaling stuff
     local sw = math.floor(ScrW() / 256) - 1
     local margin = ScrW() - sw * 256
@@ -257,7 +257,7 @@ function SHOP:OpenPaintBox(topaint)
     frame:Center()
     frame:MakePopup()
     frame:SetDraggable(false)
-    frame:SetTitle('')
+    frame:SetTitle("")
 
     frame.OnClose = function(self)
         SHOP.InventoryPanel:SetMouseInputEnabled(true)
@@ -273,11 +273,11 @@ function SHOP:OpenPaintBox(topaint)
     end
 
     -- Create the scrollable inventory display
-    local scroll = vgui.Create('DScrollPanel', frame)
+    local scroll = vgui.Create("DScrollPanel", frame)
     scroll:SetSize(xx, yy - 24)
     scroll:SetPos(0, 24)
     -- Sizing for the display
-    local display = vgui.Create('DIconLayout', scroll)
+    local display = vgui.Create("DIconLayout", scroll)
     display:DockMargin(16, 0, 16, 0)
     display:Dock(FILL)
     display:SetPos(32, 0)
@@ -288,8 +288,8 @@ function SHOP:OpenPaintBox(topaint)
 
     -- Populate the list of paints
     for key, ITEM in pairs(SHOP.InventoryTable) do
-        if ITEM.Type ~= 'Paint' then continue end
-        local panel = display:Add('ShopItemPanel')
+        if ITEM.Type ~= "Paint" then continue end
+        local panel = display:Add("ShopItemPanel")
         panel.key = key
         panel.ITEM = ITEM
         panel:Ready()
@@ -307,16 +307,16 @@ end
 -- Anything to do with item interaction goes through the server first
 -- Send an equip request to the server
 function SHOP:RequestEquip(key)
-    net.Start('SHOP_RequestItemAction')
-    net.WriteString('EQUIP')
+    net.Start("SHOP_RequestItemAction")
+    net.WriteString("EQUIP")
     net.WriteInt(key, 16)
     net.SendToServer()
 end
 
 -- Send a paint request to the server
 function SHOP:RequestPaint(itemkey, paintkey)
-    net.Start('SHOP_RequestItemAction')
-    net.WriteString('PAINT')
+    net.Start("SHOP_RequestItemAction")
+    net.WriteString("PAINT")
     net.WriteInt(itemkey, 16)
     net.WriteInt(paintkey, 16)
     net.SendToServer()
@@ -324,24 +324,24 @@ end
 
 -- Send an unbox request to the server
 function SHOP:RequestUnbox(key)
-    net.Start('SHOP_RequestItemAction')
-    net.WriteString('UNBOX')
+    net.Start("SHOP_RequestItemAction")
+    net.WriteString("UNBOX")
     net.WriteInt(key, 16)
     net.SendToServer()
 end
 
 -- Send a delete request to the server
 function SHOP:RequestDelete(key)
-    net.Start('SHOP_RequestItemAction')
-    net.WriteString('DELETE')
+    net.Start("SHOP_RequestItemAction")
+    net.WriteString("DELETE")
     net.WriteInt(key, 16)
     net.SendToServer()
 end
 
 -- Send a gift request to the server
 function SHOP:RequestGift(key, giftee)
-    net.Start('SHOP_RequestItemAction')
-    net.WriteString('GIFT')
+    net.Start("SHOP_RequestItemAction")
+    net.WriteString("GIFT")
     net.WriteInt(key, 16)
     net.WriteEntity(giftee)
     net.SendToServer()
@@ -349,18 +349,18 @@ end
 
 -- Network handler for changing inventory handling
 -- This allows adding items, removing items, and modifying items
-net.Receive('SHOP_InventoryChange', function()
+net.Receive("SHOP_InventoryChange", function()
     local mode = net.ReadString()
 
-    if mode == 'ADD' then
+    if mode == "ADD" then
         -- An item has been added
         local ITEM = net.ReadTable()
         table.insert(SHOP.InventoryTable, ITEM)
-    elseif mode == 'REMOVE' then
+    elseif mode == "REMOVE" then
         -- An item has been removed
         local key = net.ReadInt(16)
         table.remove(SHOP.InventoryTable, key)
-    elseif mode == 'MODIFY' then
+    elseif mode == "MODIFY" then
         -- An item has been modified
         local key = net.ReadInt(16)
         local ITEM = net.ReadTable()

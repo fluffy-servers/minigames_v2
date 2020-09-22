@@ -3,12 +3,12 @@
     This includes the database interface for XP
 --]]
 -- Prepare some prepared queries to make database stuff faster and more secure
-hook.Add('InitPostEntity', 'PrepareLevelStuff', function()
+hook.Add("InitPostEntity", "PrepareLevelStuff", function()
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    GAMEMODE.MinigamesPQueries['getlevel'] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
-    GAMEMODE.MinigamesPQueries['addnewlevel'] = db:prepare("INSERT INTO minigames_xp VALUES(?, 0, 0);")
-    GAMEMODE.MinigamesPQueries['updatelevel'] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
+    GAMEMODE.MinigamesPQueries["getlevel"] = db:prepare("SELECT xp, level FROM minigames_xp WHERE `steamid64` = ?;")
+    GAMEMODE.MinigamesPQueries["addnewlevel"] = db:prepare("INSERT INTO minigames_xp VALUES(?, 0, 0);")
+    GAMEMODE.MinigamesPQueries["updatelevel"] = db:prepare("UPDATE minigames_xp SET `level` = ?, `xp` = ? WHERE `steamid64` = ?;")
 end)
 
 local meta = FindMetaTable("Player")
@@ -40,19 +40,19 @@ function meta:LoadLevelFromDB()
     local ply = self
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    local q = GAMEMODE.MinigamesPQueries['getlevel']
+    local q = GAMEMODE.MinigamesPQueries["getlevel"]
     if not q then return end
     q:setString(1, self:SteamID64())
 
     -- Success function
     function q:onSuccess(data)
-        if type(data) == 'table' and #data > 0 then
+        if type(data) == "table" and #data > 0 then
             -- Load information from DB
-            ply:SetLevel(data[1]['level'])
-            ply:SetExperience(data[1]['xp'])
+            ply:SetLevel(data[1]["level"])
+            ply:SetExperience(data[1]["xp"])
         else
             -- Add new blank row into the table
-            local q = GAMEMODE.MinigamesPQueries['addnewlevel']
+            local q = GAMEMODE.MinigamesPQueries["addnewlevel"]
             q:setString(1, ply:SteamID64())
             q:start()
         end
@@ -75,7 +75,7 @@ function meta:UpdateLevelToDB()
     if level == 0 and xp == 0 then return end
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    local q = GAMEMODE.MinigamesPQueries['updatelevel']
+    local q = GAMEMODE.MinigamesPQueries["updatelevel"]
     if not q then return end
     q:setNumber(1, level)
     q:setNumber(2, xp)
@@ -83,7 +83,7 @@ function meta:UpdateLevelToDB()
 
     -- Success function
     function q:onSuccess(data)
-        --print('success')
+        --print("success")
     end
 
     -- Print error if any occur (they shouldn't)
@@ -95,7 +95,7 @@ function meta:UpdateLevelToDB()
 end
 
 -- Load the player level from database on join
-hook.Add('PlayerInitialSpawn', 'LoadMinigamesLevelData', function(ply)
+hook.Add("PlayerInitialSpawn", "LoadMinigamesLevelData", function(ply)
     ply:LoadLevelFromDB()
     ply:LoadStatsFromDB()
 end)
@@ -113,17 +113,17 @@ function GM:AddStatConversion(type, nicename, value, max)
     GAMEMODE.StatConversions[type] = {nicename, value, max or nil}
 end
 
-hook.Add('Initialize', 'AddBaseStatConversions', function()
-    hook.Call('RegisterStatsConversions')
+hook.Add("Initialize", "AddBaseStatConversions", function()
+    hook.Call("RegisterStatsConversions")
 end)
 
-hook.Add('RegisterStatsConversions', 'AddBaseStatConversions', function()
-    GAMEMODE:AddStatConversion('Rounds Won', 'Rounds Won', 0)
-    GAMEMODE:AddStatConversion('Rounds Played', 'Thanks for playing!', 1.5)
-    GAMEMODE:AddStatConversion('Kills', 'Kills', 1)
-    GAMEMODE:AddStatConversion('Last Survivor', 'Last Survivor Bonus', 5)
-    GAMEMODE:AddStatConversion('Deaths', 'Deaths', 0)
-    GAMEMODE:AddStatConversion('Survived Rounds', 'Rounds Survived', 1)
+hook.Add("RegisterStatsConversions", "AddBaseStatConversions", function()
+    GAMEMODE:AddStatConversion("Rounds Won", "Rounds Won", 0)
+    GAMEMODE:AddStatConversion("Rounds Played", "Thanks for playing!", 1.5)
+    GAMEMODE:AddStatConversion("Kills", "Kills", 1)
+    GAMEMODE:AddStatConversion("Last Survivor", "Last Survivor Bonus", 5)
+    GAMEMODE:AddStatConversion("Deaths", "Deaths", 0)
+    GAMEMODE:AddStatConversion("Survived Rounds", "Rounds Survived", 1)
 end)
 
 -- Convert a stat name & score to a table with XP
@@ -131,7 +131,7 @@ function GM:ConvertStat(name, points)
     if not GAMEMODE.StatConversions then return end
     if not GAMEMODE.StatConversions[name] then return end
 
-    if name == 'RoundWins' then
+    if name == "RoundWins" then
         -- Adjust round value based on some factors
         local value = 8
 
@@ -144,11 +144,11 @@ function GM:ConvertStat(name, points)
         if not GAMEMODE.TeamBased then
             local score = math.Clamp(points * value, 0, 40)
 
-            return {'Rounds Won', points, score}
+            return {"Rounds Won", points, score}
         elseif GAMEMODE.TeamBased then
             local score = math.Clamp(points * value, 0, 40)
 
-            return {'Rounds Won', points, score}
+            return {"Rounds Won", points, score}
         end
     else
         local t = GAMEMODE.StatConversions[name]
@@ -206,7 +206,7 @@ function meta:ProcessLevels()
     if new_xp > max_xp then
         new_xp = new_xp - max_xp
         new_level = new_level + 1
-        hook.Run('MinigamesLevelUp', self, new_level)
+        hook.Run("MinigamesLevelUp", self, new_level)
     end
 
     -- Save changes

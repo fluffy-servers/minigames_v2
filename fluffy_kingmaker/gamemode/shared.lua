@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Kingmaker'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Kingmaker"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Become the King and survive!
     

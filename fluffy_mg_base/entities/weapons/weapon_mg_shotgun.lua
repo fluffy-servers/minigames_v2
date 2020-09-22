@@ -3,8 +3,8 @@
 if CLIENT then
     SWEP.Slot = 2
     SWEP.SlotPos = 0
-    SWEP.IconLetter = '0'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "0"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("weapon_mg_shotgun", "HL2MPTypeDeath", "0", Color(255, 80, 0, 255))
 end
 
@@ -29,7 +29,7 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/c_shotgun.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_shotgun.mdl"
-SWEP.HoldType = 'shotgun'
+SWEP.HoldType = "shotgun"
 
 -- I'll be honest I copied this from a older shotgun weapon
 -- Since the shotgun has unique reloading function, it needs extra data to handle that

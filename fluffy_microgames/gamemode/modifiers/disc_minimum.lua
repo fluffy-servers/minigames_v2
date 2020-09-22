@@ -1,9 +1,9 @@
-﻿MOD.Name = 'Disc Balance'
+﻿MOD.Name = "Disc Balance"
 MOD.Countdown = true
 MOD.SurviveValue = 2
 
 local function spawnDisc(pos, color)
-    local ent = ents.Create('microgames_disc')
+    local ent = ents.Create("microgames_disc")
     ent:SetPos(pos)
     ent:SetColor(color)
     ent:Spawn()
@@ -13,7 +13,7 @@ end
 
 function MOD:SpawnCircles()
     local number = GAMEMODE:PlayerScale(0.3, 2, 5)
-    local positions = GAMEMODE:GetRandomLocations(number, 'ground')
+    local positions = GAMEMODE:GetRandomLocations(number, "ground")
     local colors = table.Shuffle(GAMEMODE.DiscColors)
     GAMEMODE.Circles = {}
 

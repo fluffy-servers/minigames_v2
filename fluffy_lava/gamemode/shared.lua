@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Climb!'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Climb!"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Race to the top in this fast-paced climbing gamemode!
     
@@ -12,7 +12,7 @@ GM.Elimination = true
 GM.WinBySurvival = true
 GM.RoundNumber = 5
 GM.RoundTime = 120
-GM.RoundType = 'timed'
+GM.RoundType = "timed"
 GM.GameTime = 500
 GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
 GM.ThirdpersonEnabled = true
@@ -24,7 +24,7 @@ end
 function GM:GetLavaHeight()
     local startpos = 0
     local speed = 10
-    local t = CurTime() - GetGlobalFloat('RoundStart', 0) - 10
+    local t = CurTime() - GetGlobalFloat("RoundStart", 0) - 10
     if t < 0 then return startpos end
 
     return startpos + t * speed

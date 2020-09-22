@@ -1,14 +1,14 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('init.lua')
-AddCSLuaFile('ply_extension.lua')
-AddCSLuaFile('tables.lua')
-include('shared.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("init.lua")
+AddCSLuaFile("ply_extension.lua")
+AddCSLuaFile("tables.lua")
+include("shared.lua")
 
 function GM:PlayerLoadout(ply)
     ply:StripWeapons()
 
     if ply:Team() == TEAM_BLUE then
-        ply:Give('weapon_propkilla')
+        ply:Give("weapon_propkilla")
         ply:SetWalkSpeed(250)
         ply:SetRunSpeed(300)
     elseif ply:Team() == TEAM_RED then
@@ -35,10 +35,10 @@ function GM:PreStartRound()
     end
 
     -- Set global round data
-    SetGlobalInt('RoundNumber', round + 1)
-    SetGlobalString('RoundState', 'PreRound')
-    SetGlobalFloat('RoundStart', CurTime())
-    hook.Call('PreRoundStart')
+    SetGlobalInt("RoundNumber", round + 1)
+    SetGlobalString("RoundState", "PreRound")
+    SetGlobalFloat("RoundStart", CurTime())
+    hook.Call("PreRoundStart")
 
     -- Respawn everybody & freeze them until the round actually starts
     for k, v in pairs(player.GetAll()) do
@@ -53,12 +53,12 @@ function GM:PreStartRound()
 end
 
 function GM:SpawnProps()
-    for k, v in pairs(ents.FindByClass('prop_spawner')) do
+    for k, v in pairs(ents.FindByClass("prop_spawner")) do
         v:SpawnProp()
     end
 end
 
-hook.Add('Think', 'SpawnPoltergeistProps', function()
+hook.Add("Think", "SpawnPoltergeistProps", function()
     local lasttime = GAMEMODE.LastSpawnTime or 0
 
     if CurTime() - lasttime > 1 then
@@ -84,7 +84,7 @@ function GM:CanPlayerSuicide(ply)
 end
 
 -- Fix a spawning bug for Poltergeists
-hook.Add('RoundStart', 'FixGhostBug', function()
+hook.Add("RoundStart", "FixGhostBug", function()
     for k, v in pairs(team.GetPlayers(TEAM_RED)) do
         v:Spawn()
     end

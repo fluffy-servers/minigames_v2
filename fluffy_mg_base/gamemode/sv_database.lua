@@ -1,16 +1,16 @@
 ﻿-- Database configuration is stored in db_config
 -- This means I can upload this file to github or whatever without leaking my DB password
-include('db_config.lua')
+include("db_config.lua")
 GM.MinigamesPQueries = {}
-CreateConVar('mg_db_enabled', 1, FCVAR_NONE, 'Should the Minigames DB be enabled?')
+CreateConVar("mg_db_enabled", 1, FCVAR_NONE, "Should the Minigames DB be enabled?")
 
 function GM:CheckDBConnection()
     if not GAMEMODE then return end
-    if not GetConVar('mg_db_enabled'):GetBool() then return end
+    if not GetConVar("mg_db_enabled"):GetBool() then return end
 
     if not GAMEMODE.MinigamesDB then
         if not mysqloo then
-            print('no mysqloo? oh no')
+            print("no mysqloo? oh no")
 
             return
         end
@@ -26,7 +26,7 @@ end
 function GM:CreateDBTables()
     local db = GAMEMODE:CheckDBConnection()
     if not db then return end
-    print('Starting table creation...')
+    print("Starting table creation...")
     local q1 = db:query([[CREATE TABLE minigames_xp (
     steamid64 VARCHAR(64),
     xp INT,
@@ -48,5 +48,5 @@ function GM:CreateDBTables()
         equipped TEXT,
         PRIMARY KEY (steamid64)
    );]])
-    print('Created tables')
+    print("Created tables")
 end

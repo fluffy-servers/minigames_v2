@@ -5,7 +5,7 @@ if CLIENT then
     SWEP.SlotPos = 0
     SWEP.IconLetter = "1"
     killicon.AddFont("paint_crossbow", "HL2MPTypeDeath", "1", Color(255, 80, 0, 255))
-    SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
+    SWEP.PaintSplat = Material("decals/decal_paintsplatterpink001")
 end
 
 SWEP.PrintName = "Paintball Crossbow"
@@ -28,24 +28,24 @@ SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_crossbow.mdl"
 
 function SWEP:Initialize()
-    self:SetHoldType('crossbow')
+    self:SetHoldType("crossbow")
 end
 
 function SWEP:DrawWorldModel()
-    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     render.SetColorModulation(v.x, v.y, v.z)
     self:DrawModel()
     render.SetColorModulation(1, 1, 1)
 end
 
 function SWEP:PreDrawViewModel(vm, wep)
-    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     wep:SetColor(Color(v.x * 255, v.y * 255, v.z * 255))
 end
 
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
-    self:EmitSound('Weapon_IRifle.Single')
+    self:EmitSound("Weapon_IRifle.Single")
     self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:TakePrimaryAmmo(1)
@@ -58,17 +58,17 @@ function SWEP:SecondaryAttack()
 end
 
 function SWEP:ToggleZoom()
-    if self:GetNWBool('Zoom', false) then
+    if self:GetNWBool("Zoom", false) then
         self:GetOwner():SetFOV(0, 0.2)
-        self:SetNWBool('Zoom', false)
+        self:SetNWBool("Zoom", false)
     else
         self:GetOwner():SetFOV(35, 0.2)
-        self:SetNWBool('Zoom', true)
+        self:SetNWBool("Zoom", true)
     end
 end
 
 function SWEP:AdjustMouseSensitivity()
-    if self:GetNWBool('Zoom', false) then
+    if self:GetNWBool("Zoom", false) then
         return 0.2
     else
         return 1
@@ -90,7 +90,7 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
     bullet.AmmoType = "Pistol"
     bullet.HullSize = 8
     bullet.Tracer = 1
-    bullet.TracerName = 'paintball_tracer'
+    bullet.TracerName = "paintball_tracer"
     owner:FireBullets(bullet)
     
     -- Make the firing look nice
@@ -101,7 +101,7 @@ end
 function SWEP:DoImpactEffect(tr, nDamageType)
     if SERVER then return end
     if tr.HitSky then return end
-    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     c = Color(v.x * 255, v.y * 255, v.z * 255)
     local s = 0.6 + math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)

@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Freeze Tag'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Freeze Tag"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     pending
 ]]
@@ -12,8 +12,8 @@ GM.RoundNumber = 10 -- How many rounds are in each game?
 function GM:Initialize()
 end
 
-local meta = FindMetaTable('Player')
+local meta = FindMetaTable("Player")
 
 function meta:IsIceFrozen()
-    return self:GetNWBool('Frozen', false)
+    return self:GetNWBool("Frozen", false)
 end

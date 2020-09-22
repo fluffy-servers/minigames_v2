@@ -19,7 +19,7 @@ function GM:PlayerSetModel(ply)
         local color = team.GetColor(ply:Team())
         ply:SetPlayerColor(Vector(color.r / 255, color.g / 255, color.b / 255))
 
-        if ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or state == 'GameNotStarted' then
+        if ply:Team() == TEAM_SPECTATOR or ply:Team() == TEAM_UNASSIGNED or state == "GameNotStarted" then
             self:PlayerSpawnAsSpectator(ply)
 
             return

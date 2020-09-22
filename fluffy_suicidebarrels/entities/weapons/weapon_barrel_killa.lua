@@ -1,9 +1,9 @@
-﻿SWEP.Base = 'weapon_mg_base'
+﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
     SWEP.PrintName = "Barrel Shooter"
-    SWEP.IconLetter = '-'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "-"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("weapon_barrel_killa", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
 

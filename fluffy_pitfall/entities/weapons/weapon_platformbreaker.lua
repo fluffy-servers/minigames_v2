@@ -1,11 +1,11 @@
-﻿SWEP.Base = 'weapon_mg_base'
+﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
     SWEP.PrintName = "Platform Breaker!"
     SWEP.Slot = 1
     SWEP.SlotPos = 1
-    SWEP.IconLetter = '-'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "-"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("weapon_platformbreaker", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
 
@@ -46,7 +46,7 @@ function SWEP:PrimaryAttack()
 
         local trace = util.TraceLine(tr)
 
-        if IsValid(trace.Entity) and trace.Entity:GetClass() == 'til_tile' then
+        if IsValid(trace.Entity) and trace.Entity:GetClass() == "til_tile" then
             trace.Entity:OnTakeDamage(owner)
         end
     end

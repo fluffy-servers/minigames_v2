@@ -9,7 +9,7 @@
 local sounds = {"vo/coast/odessa/male01/nlo_cheer01.wav", "vo/coast/odessa/male01/nlo_cheer02.wav", "vo/coast/odessa/male01/nlo_cheer03.wav", "vo/coast/odessa/male01/nlo_cheer04.wav", "vo/coast/odessa/female01/nlo_cheer01.wav", "vo/coast/odessa/female01/nlo_cheer02.wav", "vo/coast/odessa/female01/nlo_cheer03.wav",}
 
 function GM:OpenEndGamePanel()
-    local frame = vgui.Create('DFrame')
+    local frame = vgui.Create("DFrame")
     local w = ScrW()
     local h = ScrH()
     frame:SetSize(w, h)
@@ -24,7 +24,7 @@ function GM:OpenEndGamePanel()
     frame.offx = 0
     frame.offy = 0
     frame.bar_h = 64
-    frame.Background = Material('fluffy/pattern1.png', 'noclamp')
+    frame.Background = Material("fluffy/pattern1.png", "noclamp")
     -- Prepare variables to do with level information
     frame.CurrentXP = LocalPlayer():GetExperience()
     frame.MaxXP = LocalPlayer():GetMaxExperience()
@@ -55,9 +55,9 @@ function GM:OpenEndGamePanel()
         draw.NoTexture()
         surface.DrawTexturedRect(0, h - bar_h, w, bar_h)
         -- Draw the basic level information
-        local tw = draw.SimpleText('Level', 'FS_L48', 8, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        tw = tw + draw.SimpleText(self.Level, 'FS_L64', 116, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
-        draw.SimpleText(math.floor(self.CurrentXP) .. '/' .. self.MaxXP .. 'XP', 'FS_L32', 224, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        local tw = draw.SimpleText("Level", "FS_L48", 8, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        tw = tw + draw.SimpleText(self.Level, "FS_L64", 116, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(math.floor(self.CurrentXP) .. "/" .. self.MaxXP .. "XP", "FS_L32", 224, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
         -- Draw the bar
         local bar_empty = Color(220, 221, 225)
         local bar_filled = Color(0, 151, 230)
@@ -72,15 +72,15 @@ function GM:OpenEndGamePanel()
         local bar_fill_width = (w - 480 - 48)
         draw.RoundedBox(16, 416, h - 3 * (bar_h / 4), w - 480, bar_h / 2, bar_empty)
         draw.RoundedBox(16, 414, h - 3 * (bar_h / 4), 48 + (bar_fill_width * percentage), bar_h / 2, bar_filled)
-        draw.SimpleText(math.floor(percentage * 100) .. '%', 'FS_L24', 424, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+        draw.SimpleText(math.floor(percentage * 100) .. "%", "FS_L24", 424, h - bar_h / 2, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
     end
 
     function frame:PaintXPMessage(w, h, bar_h)
-        if not self.XPMessage or self.XPMessage == '' then return end
+        if not self.XPMessage or self.XPMessage == "" then return end
         -- Draw the XP message (if applicable)
         local xph = math.Clamp((CurTime() - self.XPMessageTime), 0, 1) * (bar_h / 2)
         local ca = Color(c2.r, c2.g, c2.b, 255 - xph * 2)
-        draw.SimpleText(self.XPMessage or '', 'FS_L32', w / 2, h - bar_h - 2 + xph, ca, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
+        draw.SimpleText(self.XPMessage or "", "FS_L32", w / 2, h - bar_h - 2 + xph, ca, TEXT_ALIGN_CENTER, TEXT_ALIGN_BOTTOM)
     end
 
     -- Confetti effect on level up
@@ -127,7 +127,7 @@ function GM:OpenEndGamePanel()
         self.XPMessageTime = (CurTime() + amount / 25)
         local percentage = math.Clamp(self.TargetXP / self.MaxXP, 0, 1)
         local pitch = 150 + (percentage * 100)
-        LocalPlayer():EmitSound('ambient/alarms/warningbell1.wav', 75, pitch)
+        LocalPlayer():EmitSound("ambient/alarms/warningbell1.wav", 75, pitch)
     end
 
     function frame:LevelUp()
@@ -186,7 +186,7 @@ function GM:OpenEndGamePanel()
         self.scoreboard.yy = 56
 
         for k, v in pairs(data) do
-            local row = vgui.Create('ScoreboardRow', self.scoreboard)
+            local row = vgui.Create("ScoreboardRow", self.scoreboard)
             row:SetPos(16, self.scoreboard.yy)
             row:SetWide(self.scoreboard:GetWide() - 32)
             row:SetPlayer(v[1])
@@ -216,7 +216,7 @@ function GM:OpenEndGamePanel()
             end
 
             for i = 1, 3 do
-                local map = vgui.Create('MapVotePanel', self)
+                local map = vgui.Create("MapVotePanel", self)
                 map:SetSize(box, box)
                 map:SetPos(margin + (box + gap) * (i - 1), yy)
                 map:AddChildren()
@@ -231,12 +231,12 @@ function GM:OpenEndGamePanel()
     end
 
     GAMEMODE.EndGamePanel = frame
-    local scoreboard = vgui.Create('DPanel', frame)
+    local scoreboard = vgui.Create("DPanel", frame)
     local h = ScrH() - 64 - (40 * 2)
     local w = h * 0.75
     scoreboard:SetSize(w, h)
     scoreboard:SetPos(ScrW() / 2 - w / 2, 40)
-    scoreboard.ScoreboardMessage = 'Scoreboard'
+    scoreboard.ScoreboardMessage = "Scoreboard"
     scoreboard.ShowTeams = true
     scoreboard.yy = 56
     frame.scoreboard = scoreboard
@@ -247,7 +247,7 @@ function GM:OpenEndGamePanel()
         DisableClipping(false)
         draw.RoundedBox(16, 0, 0, w, h, color_white)
         -- Draw the header of the scoreboard
-        draw.SimpleText(self.ScoreboardMessage, 'FS_L48', w / 2, 4, c1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+        draw.SimpleText(self.ScoreboardMessage, "FS_L48", w / 2, 4, c1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
         -- Paint Team Info
         self:PaintTeamInfo()
     end
@@ -261,16 +261,16 @@ function GM:OpenEndGamePanel()
             local tab_width = (w - 40) / 2
             local t2 = w - tab_width - 16
             draw.RoundedBox(8, 16, 48, tab_width, 48, team.GetColor(TEAM_BLUE))
-            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), 'FS_32', 28, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), "FS_32", 28, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             draw.RoundedBox(8, t2, 48, tab_width, 48, team.GetColor(TEAM_RED))
-            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), 'FS_32', t2 + tab_width - 8, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+            GAMEMODE:DrawShadowText(team.GetName(TEAM_RED), "FS_32", t2 + tab_width - 8, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
 
-            if GAMEMODE.RoundType == 'timed_endless' then
-                GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), 'FS_48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-                GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_RED), 'FS_48', t2 + 8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+            if GAMEMODE.RoundType == "timed_endless" then
+                GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_BLUE), "FS_48", 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+                GAMEMODE:DrawShadowText(team.GetRoundScore(TEAM_RED), "FS_48", t2 + 8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             else
-                GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), 'FS_48', 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
-                GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), 'FS_48', t2 + 8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
+                GAMEMODE:DrawShadowText(team.GetScore(TEAM_BLUE), "FS_48", 16 + tab_width - 4, 72, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_CENTER)
+                GAMEMODE:DrawShadowText(team.GetScore(TEAM_RED), "FS_48", t2 + 8, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             end
         end
     end
@@ -280,12 +280,12 @@ function GM:OpenEndGamePanel()
     table.sort(players, function(a, b) return a:Frags() > b:Frags() end)
 
     for k, v in pairs(players) do
-        local row = vgui.Create('ScoreboardRow', scoreboard)
+        local row = vgui.Create("ScoreboardRow", scoreboard)
         row:SetPos(16, scoreboard.yy)
         row:SetWide(scoreboard:GetWide() - 32)
         row:SetPlayer(v)
-        row:AddModule('deaths')
-        row:AddModule('score')
+        row:AddModule("deaths")
+        row:AddModule("score")
         scoreboard.yy = scoreboard.yy + 60
     end
 end
@@ -295,10 +295,10 @@ function TestEndGameScreen()
 
     timer.Simple(1, function()
         local stats = {
-            {'Thanks for playing!', nil, 25},
-            {'Rounds Won', nil, 10},
-            {'Crates Broken', nil, 45},
-            {'lol filler text', nil, 30},
+            {"Thanks for playing!", nil, 25},
+            {"Rounds Won", nil, 10},
+            {"Crates Broken", nil, 45},
+            {"lol filler text", nil, 30},
         }
 
         GAMEMODE.EndGamePanel:ProcessXP(stats)

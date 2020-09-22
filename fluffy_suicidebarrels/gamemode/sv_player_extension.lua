@@ -12,7 +12,7 @@ local function explode(ply)
 end
 
 -- Make suicide barrels go boom when they die
-hook.Add('PlayerDeath', 'SuicideBarrelsDeath', function(ply, inflictor, attacker)
+hook.Add("PlayerDeath", "SuicideBarrelsDeath", function(ply, inflictor, attacker)
     if ply:Team() == TEAM_RED then
         local boom = ents.Create("env_explosion")
         boom:SetPos(ply:GetPos())
@@ -25,7 +25,7 @@ hook.Add('PlayerDeath', 'SuicideBarrelsDeath', function(ply, inflictor, attacker
 end)
 
 -- Actually makes the barrel explode
-hook.Add('KeyPress', 'SuicideBarrelBoom', function(ply, key)
+hook.Add("KeyPress", "SuicideBarrelBoom", function(ply, key)
     if ply:Team() == TEAM_RED and key == IN_ATTACK then
         -- Handle exploding on left click
         if not ply:Alive() then return end

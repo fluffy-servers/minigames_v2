@@ -5,7 +5,7 @@ if CLIENT then
     SWEP.SlotPos = 0
     SWEP.IconLetter = "!"
     killicon.AddFont("paint_baton", "HL2MPTypeDeath", "!", Color(255, 80, 0, 255))
-    SWEP.PaintSplat = Material('decals/decal_paintsplatterpink001')
+    SWEP.PaintSplat = Material("decals/decal_paintsplatterpink001")
 end
 
 SWEP.PrintName = "Paint Roller"
@@ -30,14 +30,14 @@ function SWEP:Initialize()
 end
 
 function SWEP:DrawWorldModel()
-    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     render.SetColorModulation(v.x, v.y, v.z)
     self:DrawModel()
     render.SetColorModulation(1, 1, 1)
 end
 
 function SWEP:PreDrawViewModel(vm, wep)
-    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     wep:SetColor(Color(v.x * 255, v.y * 255, v.z * 255))
 end
 
@@ -55,11 +55,11 @@ function SWEP:PrimaryAttack()
 
     if IsValid(tr.Entity) or tr.HitWorld then
         self:SendWeaponAnim(ACT_VM_HITCENTER)
-        self:EmitSound('Weapon_Crowbar.Melee_Hit')
+        self:EmitSound("Weapon_Crowbar.Melee_Hit")
         self:ShootBullet(-1, 1, 0)
     else
         self:SendWeaponAnim(ACT_VM_MISSCENTER)
-        self:EmitSound('Weapon_Crowbar.Single')
+        self:EmitSound("Weapon_Crowbar.Single")
     end
 
     if IsValid(tr.Entity) and SERVER then
@@ -102,7 +102,7 @@ function SWEP:DoImpactEffect(tr, nDamageType)
     if SERVER then return end
     if tr.HitSky then return end
     
-    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     c = Color(v.x * 255, v.y * 255, v.z * 255)
     local s = 1 + 0.4 * math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)

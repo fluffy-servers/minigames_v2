@@ -1,5 +1,5 @@
 ﻿GM.Markers = {}
-GM.Markers['generic'] = {}
+GM.Markers["generic"] = {}
 
 function GM:LoadMarkers()
     for _, v in pairs(ents.FindByClass("microgames_marker")) do
@@ -7,7 +7,7 @@ function GM:LoadMarkers()
         local region = v.Region
 
         if not region then
-            region = 'generic'
+            region = "generic"
         else
             if not GAMEMODE.Markers[region] then
                 GAMEMODE.Markers[region] = {}
@@ -25,13 +25,13 @@ function GM:LoadMarkers()
     end
 end
 
-hook.Add('InitPostEntity', 'LoadMicrogamesMarkers', function()
+hook.Add("InitPostEntity", "LoadMicrogamesMarkers", function()
     GAMEMODE:LoadMarkers()
 end)
 
 function GM:GetRandomLocations(num, type, region)
     if not region then
-        region = GAMEMODE.CurrentRegion or 'generic'
+        region = GAMEMODE.CurrentRegion or "generic"
     end
 
     -- Shuffle the table

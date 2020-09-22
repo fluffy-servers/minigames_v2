@@ -4,9 +4,9 @@
     Inspired by countless prior gmod gamemodes
 ]]
 --
-DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Suicide Barrels'
-GM.Author = 'FluffyXVI'
+DeriveGamemode("fluffy_mg_base")
+GM.Name = "Suicide Barrels"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Some explosive barrels have turned sentient.
     
@@ -37,11 +37,11 @@ GM.ForceFFAColors = true -- Force team gamemodes to use FFA colors
 
 function GM:CreateTeams()
     if (not GAMEMODE.TeamBased) then return end
-    team.SetUp(TEAM_RED, "Barrels", TEAM_COLORS['red'], true)
+    team.SetUp(TEAM_RED, "Barrels", TEAM_COLORS["red"], true)
 
     team.SetSpawnPoint(TEAM_RED, {"info_player_counterterrorist", "info_player_rebel"})
 
-    team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS['blue'], true)
+    team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS["blue"], true)
 
     team.SetSpawnPoint(TEAM_BLUE, {"info_player_terrorist", "info_player_combine"})
 
@@ -55,6 +55,6 @@ function GM:PlayerFootstep(ply, pos, foot, sound, volume, rf)
 end
 
 -- Hide all cosmetics for barrels
-hook.Add('ShouldDrawCosmetics', 'HideHunterCosmetics', function(ply, ITEM)
+hook.Add("ShouldDrawCosmetics", "HideHunterCosmetics", function(ply, ITEM)
     if ply:Team() == TEAM_RED then return false end
 end)

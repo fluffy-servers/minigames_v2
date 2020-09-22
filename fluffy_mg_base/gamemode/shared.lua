@@ -6,15 +6,15 @@
 ]]
 --
 -- Load the other shared files
-DeriveGamemode('base')
-include('sound_tables.lua')
-include('sh_levels.lua')
-include('sh_scorehelper.lua')
-include('shop/sh_init.lua')
+DeriveGamemode("base")
+include("sound_tables.lua")
+include("sh_levels.lua")
+include("sh_scorehelper.lua")
+include("shop/sh_init.lua")
 -- These variables should be altered in each sub gamemode's shared.lua file
 -- If not defined, they will return to these values here
-GM.Name = 'Minigames'
-GM.Author = 'FluffyXVI'
+GM.Name = "Minigames"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     There doesn't appear to be any help text for this gamemode.
     Report this to the creator.
@@ -29,9 +29,9 @@ GM.RoundNumber = 5 -- How many rounds?
 GM.RoundTime = 90 -- How long should each round go for?
 GM.RoundCooldown = 5 -- How long between each round?
 GM.WarmupTime = 10 -- How long to wait for players to join before starting the game?
-GM.RoundType = 'default' -- What system should be used for game/round logic?
+GM.RoundType = "default" -- What system should be used for game/round logic?
 GM.GameTime = 600 -- If not using rounds, how long should the game go for?
-GM.EndOnTimeOut = false -- If using 'timed' RoundType, should this cut off the middle of a round?
+GM.EndOnTimeOut = false -- If using "timed" RoundType, should this cut off the middle of a round?
 GM.CanSuicide = false -- Should players be able to die at will? :(
 GM.ThirdPersonEnabled = false -- Should players have access to thirdperson?
 GM.SpawnProtection = false -- Should players have brief spawn protection?
@@ -72,14 +72,14 @@ TEAM_BLUE_SPAWNS = {"info_player_terrorist", "info_player_blue"}
 -- Extra team colors
 -- These can be selected with mg_team_control
 TEAM_COLORS = {}
-TEAM_COLORS['orange'] = Color(253, 150, 68)
-TEAM_COLORS['red'] = Color(252, 92, 101)
-TEAM_COLORS['blue'] = Color(0, 168, 255)
-TEAM_COLORS['green'] = Color(38, 222, 129)
-TEAM_COLORS['purple'] = Color(165, 94, 234)
-TEAM_COLORS['pink'] = Color(255, 159, 243)
-TEAM_COLORS['cyan'] = Color(72, 219, 251)
-TEAM_COLORS['yellow'] = Color(254, 211, 48)
+TEAM_COLORS["orange"] = Color(253, 150, 68)
+TEAM_COLORS["red"] = Color(252, 92, 101)
+TEAM_COLORS["blue"] = Color(0, 168, 255)
+TEAM_COLORS["green"] = Color(38, 222, 129)
+TEAM_COLORS["purple"] = Color(165, 94, 234)
+TEAM_COLORS["pink"] = Color(255, 159, 243)
+TEAM_COLORS["cyan"] = Color(72, 219, 251)
+TEAM_COLORS["yellow"] = Color(254, 211, 48)
 -- Upsettingly, Garry's Mod by default doesn't provide a way to change the name of teams
 -- This overrides the functions to create global variables for team names
 -- This also caches the old function and then uses it for reverse-compatibility
@@ -138,9 +138,9 @@ end
 -- seriously don't change it you'll break a lot of maps
 function GM:CreateTeams()
     if not GAMEMODE.TeamBased then return end
-    team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true)
+    team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS["red"], true)
     team.SetSpawnPoint(TEAM_RED, TEAM_RED_SPAWNS)
-    team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
+    team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS["blue"], true)
     team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
     team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 
@@ -212,26 +212,26 @@ end
 
 -- Much nicer wrapper for this function
 function GM:GetRoundState()
-    return GetGlobalString('RoundState', 'GameNotStarted')
+    return GetGlobalString("RoundState", "GameNotStarted")
 end
 
 function GM:SetRoundState(newstate)
-    return SetGlobalString('RoundState', newstate)
+    return SetGlobalString("RoundState", newstate)
 end
 
 -- This is the most common use of the above function
 -- Helps clean up code
 function GM:InRound()
-    return (GAMEMODE:GetRoundState() == 'InRound')
+    return (GAMEMODE:GetRoundState() == "InRound")
 end
 
 -- Another nice wrapper for a global variable
 function GM:GetRoundStartTime()
-    return GetGlobalFloat('RoundStart', 0)
+    return GetGlobalFloat("RoundStart", 0)
 end
 
 function GM:GetRoundNumber()
-    return GetGlobalInt('RoundNumber', 0)
+    return GetGlobalInt("RoundNumber", 0)
 end
 
 -- Helper function to scale data based on the number of players

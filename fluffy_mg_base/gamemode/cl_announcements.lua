@@ -206,18 +206,18 @@ function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, location, so
 end
 
 -- Net handler to parse announcements
-net.Receive('MinigamesAnnouncement', function()
+net.Receive("MinigamesAnnouncement", function()
     local tbl = net.ReadTable()
     if not tbl.type then return end
 
-    if tbl.type == 'countdown' then
+    if tbl.type == "countdown" then
         GAMEMODE:CountdownAnnouncement(tbl.length or 5, tbl.endtext or "", tbl.location, tbl.endsound, tbl.ticksound)
-    elseif tbl.type == 'pulse' then
+    elseif tbl.type == "pulse" then
         if not tbl.text then return end
         local duration = tbl.duration or 5
         GAMEMODE:PulseAnnouncement(duration, tbl.text, tbl.size or 1.5, tbl.location, tbl.sound)
-    elseif tbl.type == 'pulse_subtext' then
+    elseif tbl.type == "pulse_subtext" then
         if not tbl.text then return end
-        GAMEMODE:PulseAnnouncementTwoLine(tbl.length or 5, tbl.text, tbl.subtext or '', tbl.size or 1.25, tbl.location, tbl.sound)
+        GAMEMODE:PulseAnnouncementTwoLine(tbl.length or 5, tbl.text, tbl.subtext or "", tbl.size or 1.25, tbl.location, tbl.sound)
     end
 end)

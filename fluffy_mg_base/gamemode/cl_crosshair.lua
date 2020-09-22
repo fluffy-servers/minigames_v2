@@ -12,7 +12,7 @@ local crosshair_g = CreateClientConVar("crosshair_g", 255, true, false, "Crossha
 local crosshair_b = CreateClientConVar("crosshair_b", 255, true, false, "Crosshair blue component (0-255)")
 local crosshair_a = CreateClientConVar("crosshair_a", 255, true, false, "Crosshair alpha component (0-255)")
 -- Draw crosshair
-local crosshair_mat = Material('crosshair_outline/crosshair012.png', 'noclamp smooth')
+local crosshair_mat = Material("crosshair_outline/crosshair012.png", "noclamp smooth")
 
 -- Main function to actually draw the crosshair on the screen
 -- To draw in center of screen: DrawCrossHair(ScrW()/2, ScrH()/2)
@@ -26,7 +26,7 @@ function GM:DrawCrosshair(x, y, size, force, color)
         if not IsValid(wep) then return end
     end
 
-    local crosshair_enabled = GetConVar('crosshair')
+    local crosshair_enabled = GetConVar("crosshair")
     -- Check crosshair is enabled
     if not crosshair_enabled:GetBool() then return end
 
@@ -39,8 +39,8 @@ function GM:DrawCrosshair(x, y, size, force, color)
     -- Verify image
     local image = crosshair_image:GetString()
 
-    if not string.match(image, 'crosshair%d%d%d.png') then
-        image = 'crosshair001.png'
+    if not string.match(image, "crosshair%d%d%d.png") then
+        image = "crosshair001.png"
         crosshair_image:SetString(image)
     end
 
@@ -48,7 +48,7 @@ function GM:DrawCrosshair(x, y, size, force, color)
     local crosshair_num = tonumber(string.sub(image, 10, 12))
 
     if crosshair_num < 1 or crosshair_num > 200 then
-        image = 'crosshair001.png'
+        image = "crosshair001.png"
         crosshair_image:SetString(image)
     end
 
@@ -56,16 +56,16 @@ function GM:DrawCrosshair(x, y, size, force, color)
     local mode
 
     if crosshair_outlined:GetBool() then
-        mode = 'crosshair_outline/'
+        mode = "crosshair_outline/"
     else
-        mode = 'crosshair_white/'
+        mode = "crosshair_white/"
     end
 
     -- Update material if the image has changed
-    local mat_name = string.sub(crosshair_mat:GetString('$basetexture'), 7)
+    local mat_name = string.sub(crosshair_mat:GetString("$basetexture"), 7)
 
     if mat_name ~= (mode .. string.sub(image, 0, -5)) then
-        crosshair_mat = Material(mode .. image, 'noclamp smooth')
+        crosshair_mat = Material(mode .. image, "noclamp smooth")
     end
 
     if wep.DrawCrosshair ~= false or force then
@@ -92,10 +92,10 @@ end
 
 -- Open up the crosshair editing panel
 function GM:OpenCrosshairEditor()
-    local frame = vgui.Create('DFrame')
+    local frame = vgui.Create("DFrame")
     frame:SetSize(280, 512)
     frame:SetPos(128, 64)
-    frame:SetTitle('')
+    frame:SetTitle("")
 
     function frame:Paint(w, h)
         Derma_DrawBackgroundBlur(self, self.m_fCreateTime)
@@ -104,7 +104,7 @@ function GM:OpenCrosshairEditor()
         surface.DrawRect(0, 0, w, bar_h)
         surface.SetDrawColor(GAMEMODE.FCol1)
         surface.DrawRect(0, bar_h, w, h - bar_h)
-        draw.SimpleText('Crosshair Editor', 'FS_24', 8, 1, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        draw.SimpleText("Crosshair Editor", "FS_24", 8, 1, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
     end
 
     frame:MakePopup()
@@ -166,23 +166,23 @@ function GM:OpenCrosshairEditor()
     local a = math.Clamp(crosshair_a:GetInt(), 0, 255)
     c_picker:SetColor(Color(r, g, b, a))
     -- Scrollable list for crosshair panels
-    local list_scroll = vgui.Create('DScrollPanel', frame)
+    local list_scroll = vgui.Create("DScrollPanel", frame)
     list_scroll:SetSize(256, 120)
     list_scroll:SetPos(12, 384)
-    local icon_list = vgui.Create('DIconLayout', list_scroll)
+    local icon_list = vgui.Create("DIconLayout", list_scroll)
     icon_list:Dock(FILL)
     icon_list:SetSpaceX(2)
     icon_list:SetSpaceY(2)
 
     -- Add all 200 crosshair images
     for i = 1, 200 do
-        local p = icon_list:Add('DPanel')
+        local p = icon_list:Add("DPanel")
         p:SetSize(44, 44)
-        local b = vgui.Create('DButton', p)
+        local b = vgui.Create("DButton", p)
         b:Dock(FILL)
-        b:SetText('')
+        b:SetText("")
         b.n = string.format("%03d", i)
-        b.Material = Material('crosshair_outline/crosshair' .. b.n .. '.png', 'noclamp')
+        b.Material = Material("crosshair_outline/crosshair" .. b.n .. ".png", "noclamp")
 
         function b:PaintOver(w, h)
             surface.SetDrawColor(color_white)
@@ -191,7 +191,7 @@ function GM:OpenCrosshairEditor()
         end
 
         function b:DoClick()
-            local c = 'crosshair' .. self.n .. '.png'
+            local c = "crosshair" .. self.n .. ".png"
             crosshair_image:SetString(c)
         end
     end

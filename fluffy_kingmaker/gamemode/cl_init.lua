@@ -1,11 +1,11 @@
-﻿include('shared.lua')
+﻿include("shared.lua")
 GM.ScoringPaneEnabled = true
 
 function GM:ScoringPaneScore(ply)
     return ply:GetNWInt("KingPoints", 0)
 end
 
-hook.Add('PreDrawHalos', 'DrawKingHalo', function()
+hook.Add("PreDrawHalos", "DrawKingHalo", function()
     local king = GetGlobalEntity("KingPlayer")
     if not IsValid(king) then return end
     local pcolor = king:GetPlayerColor()
@@ -16,9 +16,9 @@ end)
 
 -- Draw BIG label above the King
 -- Being the best comes at a price
-hook.Add('HUDPaint', 'DrawKingNotice', function()
-    if not GetConVar('cl_drawhud'):GetBool() then return end
-    if GAMEMODE:GetRoundState() == 'GameNotStarted' then return end
+hook.Add("HUDPaint", "DrawKingNotice", function()
+    if not GetConVar("cl_drawhud"):GetBool() then return end
+    if GAMEMODE:GetRoundState() == "GameNotStarted" then return end
     local king = GetGlobalEntity("KingPlayer")
 
     if IsValid(king) and king ~= LocalPlayer() then

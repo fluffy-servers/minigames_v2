@@ -1,13 +1,13 @@
 ﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
-    SWEP.PrintName = 'Paint Bomb'
+    SWEP.PrintName = "Paint Bomb"
     SWEP.Slot = 5
-    SWEP.IconLetter = '2'
+    SWEP.IconLetter = "2"
 end
 
-SWEP.ViewModel = 'models/weapons/c_grenade.mdl'
-SWEP.WorldModel = 'models/weapons/w_grenade.mdl'
+SWEP.ViewModel = "models/weapons/c_grenade.mdl"
+SWEP.WorldModel = "models/weapons/w_grenade.mdl"
 SWEP.UseHands = true
 -- Primary ammo settings
 SWEP.Primary.ClipSize = 3
@@ -16,13 +16,13 @@ SWEP.Primary.Ammo = "Grenade"
 SWEP.Primary.Automatic = false
 
 function SWEP:Initialize()
-    self:SetHoldType('grenade')
+    self:SetHoldType("grenade")
 end
 
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
     self:Throw(2000)
-    self:EmitSound('WeaponFrag.Throw')
+    self:EmitSound("WeaponFrag.Throw")
     self:SetNextPrimaryFire(CurTime() + 1)
     self:SetNextSecondaryFire(CurTime() + 1)
     self:TakePrimaryAmmo(1)
@@ -31,7 +31,7 @@ end
 function SWEP:SecondaryAttack()
     if not self:CanPrimaryAttack() then return end
     self:Throw(750)
-    self:EmitSound('WeaponFrag.Roll')
+    self:EmitSound("WeaponFrag.Roll")
     self:SetNextPrimaryFire(CurTime() + 1)
     self:SetNextSecondaryFire(CurTime() + 1)
     self:TakePrimaryAmmo(1)
@@ -52,7 +52,7 @@ function SWEP:Throw(strength)
 end
 
 function SWEP:CreateGrenade(pos, velocity)
-    local grenade = ents.Create('paint_grenade')
+    local grenade = ents.Create("paint_grenade")
     if not IsValid(grenade) then return end
     grenade.WeaponEnt = self
     grenade.Player = self:GetOwner()

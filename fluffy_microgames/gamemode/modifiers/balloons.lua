@@ -1,5 +1,5 @@
-﻿MOD.Name = 'Balloons'
-MOD.Region = 'knockback'
+﻿MOD.Name = "Balloons"
+MOD.Region = "knockback"
 MOD.ScoreValue = 0.1
 MOD.ScoringPane = true
 MOD.WinValue = 3
@@ -7,7 +7,7 @@ MOD.RoundTime = 20
 
 local function spawnBalloons()
     local number = GAMEMODE:PlayerScale(0.4, 3, 8)
-    local positions = GAMEMODE:GetRandomLocations(number, 'edge')
+    local positions = GAMEMODE:GetRandomLocations(number, "edge")
 
     for i = 1, number do
         local pos = positions[i]

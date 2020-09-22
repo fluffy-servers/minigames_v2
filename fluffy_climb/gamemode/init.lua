@@ -1,7 +1,7 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
-include('sv_levelgen.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
+include("sv_levelgen.lua")
 
 -- Nobody wins in Climb ?
 -- Used to override default functionality on FFA round end
@@ -36,11 +36,11 @@ function GM:PlayerTick(ply)
     end
 end
 
-hook.Add('PreRoundStart', 'GenerateClimbLevel', function()
+hook.Add("PreRoundStart", "GenerateClimbLevel", function()
     -- Generate the level
     local height = GAMEMODE:GenerateLevel()
     GAMEMODE.CurrentHeight = height
-    SetGlobalInt('ClimbHeight', height)
+    SetGlobalInt("ClimbHeight", height)
 
     -- Reset best heights
     for k, v in pairs(player.GetAll()) do
@@ -51,18 +51,18 @@ end)
 -- Add scoring based on height at the end of a round
 -- Takes the best height, rounds down to the nearest 10% and adds 1 point per 10%
 -- eg. 48% -> 40% -> 4 points
-hook.Add('RoundEnd', 'ClimbHeightPoints', function()
+hook.Add("RoundEnd", "ClimbHeightPoints", function()
     for k, v in pairs(player.GetAll()) do
         if v.BestHeight then
             local ratio = v.BestHeight / GAMEMODE.CurrentHeight
             local p = math.Clamp(math.floor(ratio * 100), 0, 100)
-            v:AddStatPoints('Distance', p)
+            v:AddStatPoints("Distance", p)
             v:AddFrags(math.floor(p / 10))
         end
 
         if v:Alive() and not v.Spectating then
             v:AddFrags(1)
-            v:AddStatPoints('Survived Rounds', 1)
+            v:AddStatPoints("Survived Rounds", 1)
         end
     end
 end)
@@ -78,6 +78,6 @@ function GM:ClimbVictory(ply)
 end
 
 -- Register XP for Paintball
-hook.Add('RegisterStatsConversions', 'AddClimbStatConversions', function()
-    GAMEMODE:AddStatConversion('Distance', 'Distance Climbed', 0.01)
+hook.Add("RegisterStatsConversions", "AddClimbStatConversions", function()
+    GAMEMODE:AddStatConversion("Distance", "Distance Climbed", 0.01)
 end)

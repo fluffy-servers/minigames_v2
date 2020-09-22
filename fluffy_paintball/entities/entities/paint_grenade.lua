@@ -5,13 +5,13 @@ ENT.Base = "base_anim"
 ENT.PrintName = "Paint Bomb"
 
 if CLIENT then
-    ENT.PaintSplat = Material('decals/decal_paintsplatterpink001')
+    ENT.PaintSplat = Material("decals/decal_paintsplatterpink001")
 end
 
 function ENT:Initialize()
     self.SpawnTime = CurTime()
     if CLIENT then return end
-    self:SetModel('models/weapons/w_grenade.mdl')
+    self:SetModel("models/weapons/w_grenade.mdl")
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
@@ -30,7 +30,7 @@ function ENT:Explode()
     end
     util.BlastDamage(wep, self.Player, self:GetPos(), 300, 150)
 
-    --self:EmitSound('AlyxEMP.Discharge')
+    --self:EmitSound("AlyxEMP.Discharge")
     -- stop red message of doom
     timer.Simple(0.01, function()
         self:Remove()
@@ -64,7 +64,7 @@ function ENT:Think()
             self:Explode()
         end
     else
-        self:EmitSound('Grenade.Blip')
+        self:EmitSound("Grenade.Blip")
 
         if CLIENT then
             self:SetNextClientThink(CurTime() + 0.5)

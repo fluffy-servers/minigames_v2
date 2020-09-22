@@ -1,4 +1,4 @@
-﻿include('shared.lua')
+﻿include("shared.lua")
 
 -- Simple colour correction table
 local tab = {
@@ -14,7 +14,7 @@ local tab = {
 }
 
 -- Ghost visual effects
-hook.Add('RenderScreenspaceEffects', 'GhostEffects', function()
+hook.Add("RenderScreenspaceEffects", "GhostEffects", function()
     if not LocalPlayer():IsIceFrozen() then return end
     DrawColorModify(tab)
 end)
@@ -28,15 +28,15 @@ function GM:AdjustMouseSensitivity()
 end
 
 -- Display the message when the player is a ghost
-hook.Add('HUDPaint', 'GhostMessage', function()
+hook.Add("HUDPaint", "GhostMessage", function()
     if not LocalPlayer():Alive() or LocalPlayer().Spectating then return end
     if not LocalPlayer():IsIceFrozen() then return end
-    draw.SimpleText('Frozen!', "FS_40", ScrW() / 2 + 1, ScrH() - 72 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP) -- shadow
-    draw.SimpleText('Frozen!', "FS_40", ScrW() / 2, ScrH() - 72, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
+    draw.SimpleText("Frozen!", "FS_40", ScrW() / 2 + 1, ScrH() - 72 + 2, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP) -- shadow
+    draw.SimpleText("Frozen!", "FS_40", ScrW() / 2, ScrH() - 72, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_TOP)
 end)
 
 -- Render a frozen indicator above teammates
-hook.Add('PostPlayerDraw', 'DrawFrozenMarkers', function(ply)
+hook.Add("PostPlayerDraw", "DrawFrozenMarkers", function(ply)
     -- Check the player is on the same team and frozen
     if not IsValid(ply) then return end
     if ply == LocalPlayer() then return end
@@ -55,7 +55,7 @@ end)
 local ice_color = Color(129, 236, 236)
 
 -- Render a halo around frozen teammates
-hook.Add('PreDrawHalos', 'DrawFrozenHalos', function()
+hook.Add("PreDrawHalos", "DrawFrozenHalos", function()
     if not LocalPlayer():Alive() or LocalPlayer().Spectating then return end
     if LocalPlayer():Team() ~= TEAM_RED and LocalPlayer():Team() ~= TEAM_BLUE then return end
     local tbl = {}

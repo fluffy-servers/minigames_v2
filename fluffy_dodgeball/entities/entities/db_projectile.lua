@@ -1,6 +1,6 @@
 ﻿AddCSLuaFile()
-ENT.Type = 'anim'
-ENT.Base = 'base_anim'
+ENT.Type = "anim"
+ENT.Base = "base_anim"
 ENT.InitialVelocity = 1250
 ENT.NumBounces = 3
 ENT.DieEffect = ""
@@ -9,12 +9,12 @@ ENT.Damage = 100
 ENT.BounceSound = Sound("Rubber.BulletImpact")
 ENT.DieSound = Sound("physics/plastic/plastic_box_impact_hard1.wav")
 ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
-ENT.Material = Material('sprites/sent_ball')
+ENT.Material = Material("sprites/sent_ball")
 
 function ENT:Initialize()
     -- Physics initialisation
-    self:SetModel('models/Combine_Helicopter/helicopter_bomb01.mdl')
-    self:PhysicsInitSphere(16, 'metal_bouncy')
+    self:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
+    self:PhysicsInitSphere(16, "metal_bouncy")
     self:SetCollisionBounds(Vector(-16, -16, -16), Vector(16, 16, 16))
     -- Activate the physics object and apply force (if applicable)
     local phys = self:GetPhysicsObject()
@@ -43,7 +43,7 @@ function ENT:PhysicsCollide(data, phys)
     -- Damage players
     if IsValid(data.HitEntity) and data.HitEntity:IsPlayer() then
         if data.HitEntity:Team() ~= self:GetOwner():Team() then
-            local damage = self:GetNWInt('Size', 25)
+            local damage = self:GetNWInt("Size", 25)
             data.HitEntity:TakeDamage(damage, self:GetOwner())
 
             timer.Simple(0, function()
@@ -81,7 +81,7 @@ function ENT:Draw()
         end
     end
 
-    local size = self:GetNWInt('Size', 25)
+    local size = self:GetNWInt("Size", 25)
     render.SetMaterial(self.Material)
     render.DrawSprite(self:GetPos(), size, size, self.Color)
 end

@@ -1,7 +1,7 @@
 ﻿local icons = {}
-icons['paintable'] = Material('icon16/palette.png')
-icons['equipped'] = Material('icon16/tick.png')
-icons['locked'] = Material('icon16/lock.png')
+icons["paintable"] = Material("icon16/palette.png")
+icons["equipped"] = Material("icon16/tick.png")
+icons["locked"] = Material("icon16/lock.png")
 local rarity_colors = {}
 rarity_colors[1] = Color(52, 152, 219)
 rarity_colors[2] = Color(0, 119, 181)
@@ -16,31 +16,31 @@ rarity_names[4] = "Epic"
 rarity_names[5] = "Legendary"
 local camera_changes = {}
 
-camera_changes['back'] = function(p)
+camera_changes["back"] = function(p)
     p:SetCamPos(Vector(-100, 0, -22))
     p:SetLookAt(Vector(-50, 0, -22))
     p:SetFOV(35)
 end
 
-camera_changes['hat'] = function(p)
+camera_changes["hat"] = function(p)
     p:SetCamPos(Vector(0, 15, -5))
     p:SetLookAt(Vector(-50, 0, -5))
     p:SetFOV(25)
 end
 
-camera_changes['face'] = function(p)
+camera_changes["face"] = function(p)
     p:SetCamPos(Vector(0, 0, -12))
     p:SetLookAt(Vector(-50, 0, -12))
     p:SetFOV(25)
 end
 
-camera_changes['head'] = function(p)
+camera_changes["head"] = function(p)
     p:SetCamPos(Vector(0, 15, -12))
     p:SetLookAt(Vector(-50, 0, -12))
     p:SetFOV(25)
 end
 
-camera_changes['body'] = function(p)
+camera_changes["body"] = function(p)
     p:SetCamPos(Vector(0, 0, -32))
     p:SetLookAt(Vector(-50, 0, -32))
     p:SetFOV(40)
@@ -50,7 +50,7 @@ local PANEL = {}
 
 function PANEL:Init()
     self:SetSize(128, 128)
-    self:SetText('')
+    self:SetText("")
 end
 
 -- Branch handler -> pass off to the below functions for icon generation
@@ -67,13 +67,13 @@ function PANEL:Ready()
     self.ITEM = ITEM
 
     -- Decide what function to use
-    if ITEM.Type == 'Crate' then
+    if ITEM.Type == "Crate" then
         self:CrateIcon(ITEM)
-    elseif ITEM.Type == 'Paint' then
+    elseif ITEM.Type == "Paint" then
         self:PaintIcon(ITEM)
-    elseif ITEM.Type == 'Tracer' then
+    elseif ITEM.Type == "Tracer" then
         self:TracerIcon(ITEM)
-    elseif ITEM.Type == 'Trail' then
+    elseif ITEM.Type == "Trail" then
         self:TrailIcon(ITEM)
     else
         self:WearableIcon(ITEM)
@@ -88,9 +88,9 @@ function PANEL:Ready()
 end
 
 function PANEL:CrateIcon(ITEM)
-    self.icon = vgui.Create('DModelPanel', self)
+    self.icon = vgui.Create("DModelPanel", self)
     self.icon:Dock(FILL)
-    self.icon:SetModel('models/props_junk/cardboard_box003a.mdl')
+    self.icon:SetModel("models/props_junk/cardboard_box003a.mdl")
     self.icon.Entity:SetAngles(Angle(0, 90, 0))
     self.icon:SetCamPos(Vector(0, 48, 20))
     self.icon:SetFOV(60)
@@ -118,7 +118,7 @@ end
 function PANEL:TracerIcon(ITEM)
     self.icon = vgui.Create("DModelPanel", self)
     self.icon:Dock(FILL)
-    self.icon:SetModel('models/weapons/c_357.mdl')
+    self.icon:SetModel("models/weapons/c_357.mdl")
     self.icon.Entity:SetPos(Vector(-22, 0, -5))
     self.icon.Entity:SetAngles(Angle(0, 0, 0))
     self.icon:SetCamPos(Vector(0, 40, 0))
@@ -134,7 +134,7 @@ function PANEL:TrailIcon(ITEM)
     local off = 24
     self.icon = vgui.Create("DButton", self)
     self.icon:Dock(FILL)
-    self.icon:SetText('')
+    self.icon:SetText("")
     self.icon.Material = Material(ITEM.Material)
     self.icon.uv = 0
 
@@ -152,7 +152,7 @@ function PANEL:TrailIcon(ITEM)
 
         -- Scroll the trail if in the right category
         if IsValid(SHOP.InventoryPanel) then
-            if not self:IsHovered() and SHOP.InventoryPanel.Category == 'Trails' then
+            if not self:IsHovered() and SHOP.InventoryPanel.Category == "Trails" then
                 self.uv = self.uv + FrameTime() * 0.5
 
                 if self.uv > 1 then
@@ -222,7 +222,7 @@ function PANEL:WearableIcon(ITEM)
     self.icon:Dock(FILL)
     local model = LocalPlayer():GetModel()
 
-    if not string.find(model, 'models/player/') then
+    if not string.find(model, "models/player/") then
         model = "models/player/Group01/male_07.mdl"
     end
 
@@ -294,12 +294,12 @@ function PANEL:DoClick()
         return
     end
 
-    if ITEM.Type == 'Crate' then
+    if ITEM.Type == "Crate" then
         -- Add unbox button
         Menu:AddOption("Unbox", function()
             SHOP:RequestUnbox(self.key)
         end):SetIcon("icon16/box.png")
-    elseif ITEM.Type == 'Paint' then
+    elseif ITEM.Type == "Paint" then
     else -- Add no buttons :(
         -- Add equip button
         local text = "Equip"
@@ -358,20 +358,20 @@ function PANEL:PaintOver(w, h)
     -- Draw the name bar
     local color = rarity_colors[ITEM.Rarity or 1]
     draw.RoundedBoxEx(8, 0, h - 24, w, 24, color, false, false, true, true)
-    draw.SimpleText(ITEM.Name or '?', "FS_I16", w / 2, h - (24 / 2) - 1, Color(236, 240, 241), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+    draw.SimpleText(ITEM.Name or "?", "FS_I16", w / 2, h - (24 / 2) - 1, Color(236, 240, 241), TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     -- Draw any icons
     local yy = 2
     surface.SetDrawColor(Color(255, 255, 255))
 
     if ITEM.Locked then
-        surface.SetMaterial(icons['locked'])
+        surface.SetMaterial(icons["locked"])
         surface.DrawTexturedRect(w - 16, yy, 16, 16)
         yy = yy + 16
     end
 
     -- Draw tick mark if equipped
     if SHOP.InventoryEquipped and SHOP.InventoryEquipped[self.key] then
-        surface.SetMaterial(icons['equipped'])
+        surface.SetMaterial(icons["equipped"])
         surface.DrawTexturedRect(w - 16, yy, 16, 16)
         yy = yy + 16
     end
@@ -383,7 +383,7 @@ function PANEL:PaintOver(w, h)
             surface.DrawRect(w - 18, yy, 16, 16)
             yy = yy + 16
         else
-            surface.SetMaterial(icons['paintable'])
+            surface.SetMaterial(icons["paintable"])
             surface.DrawTexturedRect(w - 18, yy, 16, 16)
             yy = yy + 16
         end

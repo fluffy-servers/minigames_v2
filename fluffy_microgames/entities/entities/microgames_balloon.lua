@@ -33,12 +33,12 @@ ENT.BalloonTypes = {
 function ENT:Initialize()
     -- Select the type of balloon
     local r = util.SharedRandom("BalloonTypeRandom", 0, 1, self:EntIndex())
-    local bType = 'classic'
+    local bType = "classic"
 
     if r < 0.15 then
-        bType = 'star'
+        bType = "star"
     elseif r < 0.50 then
-        bType = 'heart'
+        bType = "heart"
     end
 
     -- Load balloon properties
@@ -50,7 +50,7 @@ function ENT:Initialize()
     self:SetColor(HSVToColor(hue, 1, 1))
     self:SetRenderMode(RENDERMODE_TRANSALPHA)
     -- Create physics object
-    self:PhysicsInitSphere(10, 'rubber')
+    self:PhysicsInitSphere(10, "rubber")
     local phys = self:GetPhysicsObject()
 
     if IsValid(phys) then

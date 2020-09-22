@@ -1,6 +1,7 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Bomb Tag'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+
+GM.Name = "Bomb Tag"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Try not to die in a firey explosion!
     
@@ -11,6 +12,7 @@ GM.HelpText = [[
     If you have the bomb, click to pass it to another player.
     If you don't, use your gun to knock players backwards.
 ]]
+
 GM.TeamBased = false -- Is the gamemode FFA or Teams?
 GM.Elimination = true
 GM.WinBySurvival = true

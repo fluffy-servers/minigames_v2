@@ -1,5 +1,5 @@
 ﻿AddCSLuaFile()
-SWEP.PrintName = 'Dodgeball Launcher'
+SWEP.PrintName = "Dodgeball Launcher"
 SWEP.ViewModel = "models/weapons/c_rpg.mdl"
 SWEP.WorldModel = "models/weapons/w_rocket_launcher.mdl"
 SWEP.UseHands = true
@@ -31,12 +31,12 @@ function SWEP:SecondaryAttack()
 
     if SERVER then
         local ball = self:FireBall(3000, 4)
-        ball:SetNWInt('Size', 35)
+        ball:SetNWInt("Size", 35)
     end
 end
 
 function SWEP:FireBall(velocity, bounces)
-    local ball = ents.Create('db_projectile')
+    local ball = ents.Create("db_projectile")
     ball:SetPos(self:GetOwner():GetShootPos() + self:GetOwner():GetAimVector() * 25)
     ball:SetOwner(self:GetOwner())
     ball.InitialVelocity = velocity or 2000

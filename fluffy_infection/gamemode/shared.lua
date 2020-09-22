@@ -2,9 +2,9 @@
     Infection
 ]]
 --
-DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Infection'
-GM.Author = 'FluffyXVI'
+DeriveGamemode("fluffy_mg_base")
+GM.Name = "Infection"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Oh no! A generic zombie outbreak!
     
@@ -27,11 +27,11 @@ GM.HUDStyle = HUD_STYLE_CLOCK_ALIVE
 
 function GM:CreateTeams()
     if (not GAMEMODE.TeamBased) then return end
-    team.SetUp(TEAM_RED, "Infected", TEAM_COLORS['green'], true)
+    team.SetUp(TEAM_RED, "Infected", TEAM_COLORS["green"], true)
 
     team.SetSpawnPoint(TEAM_RED, {"info_player_start"})
 
-    team.SetUp(TEAM_BLUE, "Survivors", TEAM_COLORS['blue'], true)
+    team.SetUp(TEAM_BLUE, "Survivors", TEAM_COLORS["blue"], true)
 
     team.SetSpawnPoint(TEAM_BLUE, {"info_player_start"})
 

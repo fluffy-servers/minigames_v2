@@ -1,12 +1,12 @@
-﻿SWEP.Base = 'weapon_mg_base'
+﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
-    SWEP.IconLetter = '.'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "."
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("weapon_laserdance", "HL2MPTypeDeath", ".", Color(255, 80, 0, 255))
 end
 
-SWEP.PrintName = 'Laser Cannon'
+SWEP.PrintName = "Laser Cannon"
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 1000
 SWEP.Primary.Delay = 0.5
@@ -25,8 +25,8 @@ SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_357.mdl"
 
 function SWEP:PrimaryAttack()
-    self:EmitSound('weapons/airboat/airboat_gun_energy1.wav', 75, math.random(100, 160))
-    self:ShootBulletEx(self.Primary.Damage, 1, self.Primary.Cone, 'ld_tracer')
+    self:EmitSound("weapons/airboat/airboat_gun_energy1.wav", 75, math.random(100, 160))
+    self:ShootBulletEx(self.Primary.Damage, 1, self.Primary.Cone, "ld_tracer")
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 
     -- Send the player flying backwards

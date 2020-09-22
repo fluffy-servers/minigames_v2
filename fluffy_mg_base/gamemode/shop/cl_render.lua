@@ -11,7 +11,7 @@ function SHOP:RenderCosmetics(ent, ply, force)
 
         -- Search for the attachment and calculate the position & angles
         if not ITEM.Attachment then
-            print('missing attachment!')
+            print("missing attachment!")
             continue
         end
 
@@ -69,9 +69,9 @@ end
 
 -- Hook to draw player cosmetics
 -- This calls the above function
-hook.Add('PostPlayerDraw', 'DrawPlayerCosmetics', function(ply)
+hook.Add("PostPlayerDraw", "DrawPlayerCosmetics", function(ply)
     if not ply:Alive() then return end
-    if ply == LocalPlayer() and (GetViewEntity():GetClass() == 'player' and not LocalPlayer().Thirdperson) then return end
+    if ply == LocalPlayer() and (GetViewEntity():GetClass() == "player" and not LocalPlayer().Thirdperson) then return end
     -- This renders the players cosmetics onto the player entity
     SHOP:RenderCosmetics(ply, ply)
 end)
@@ -107,10 +107,10 @@ function SHOP:UnequipCosmetic(ITEM, ply)
 end
 
 -- Clientside tracer effect
-hook.Add('EntityFireBullets', 'ShopTracerEffects', function(ent, data)
+hook.Add("EntityFireBullets", "ShopTracerEffects", function(ent, data)
     if not ent:IsPlayer() then return end
-    local effect = ent:GetNWString('ShopTracerEffect')
-    if not effect or effect == '' then return end
+    local effect = ent:GetNWString("ShopTracerEffect")
+    if not effect or effect == "" then return end
     data.Tracer = 1
     data.TracerName = effect
 

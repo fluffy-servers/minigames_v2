@@ -63,7 +63,6 @@ function ENT:RebuildPhysics(value)
 end
 
 function ENT:OnBallSizeChanged(varname, oldvalue, newvalue)
-    -- Do not rebuild if the size wasn't changed
     if oldvalue == newvalue then return end
     self:RebuildPhysics(newvalue)
 end

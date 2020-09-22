@@ -1,6 +1,6 @@
-﻿DeriveGamemode('fluffy_mg_base')
-GM.Name = 'Paintball'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Paintball"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Eliminate the other team or get the most kills!
     This is a fast-paced team deathmatch.
@@ -28,10 +28,10 @@ GM.WeaponSpawners = {
         ["3"] = {"paint_crossbow", "paint_bazooka"},
     },
     ["ammo"] = {
-        ['paint_shotgun'] = {'Buckshot', 12},
-        ['paint_bazooka'] = {'RPG_Round', 3},
-        ['paint_smg'] = {'SMG1', 60},
-        ['paint_crossbow'] = {'SniperRound', 5},
-        ['paint_grenade_wep'] = {'Grenade', 3},
+        ["paint_shotgun"] = {"Buckshot", 12},
+        ["paint_bazooka"] = {"RPG_Round", 3},
+        ["paint_smg"] = {"SMG1", 60},
+        ["paint_crossbow"] = {"SniperRound", 5},
+        ["paint_grenade_wep"] = {"Grenade", 3},
     }
 }

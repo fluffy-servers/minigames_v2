@@ -3,8 +3,8 @@
 if CLIENT then
     SWEP.Slot = 2
     SWEP.SlotPos = 0
-    SWEP.IconLetter = '-'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "-"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("inf_magnum", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
 
@@ -30,7 +30,7 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
-SWEP.HoldType = 'pistol'
+SWEP.HoldType = "pistol"
 
 function SWEP:CanPrimaryAttack()
     if self:Clip1() <= 0 then

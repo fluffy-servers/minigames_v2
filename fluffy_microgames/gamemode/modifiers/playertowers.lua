@@ -1,4 +1,4 @@
-﻿MOD.Name = 'Player Towers'
+﻿MOD.Name = "Player Towers"
 MOD.RoundTime = 15
 MOD.Countdown = true
 MOD.SurviveValue = 1

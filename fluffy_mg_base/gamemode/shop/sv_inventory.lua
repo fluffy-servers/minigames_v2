@@ -6,38 +6,38 @@ SHOP.PlayerEquippedSlots = SHOP.PlayerEquippedSlots or {}
 -- Default inventory for testing purposes
 local test_inventory = {
     {
-        VanillaID = 'unbox_test'
+        VanillaID = "unbox_test"
     },
     {
-        VanillaID = 'testtrail',
-        Name = 'Hilarious',
+        VanillaID = "testtrail",
+        Name = "Hilarious",
         Rarity = 2,
-        Type = 'Trail',
+        Type = "Trail",
         Paintable = true,
-        Material = 'trails/lol.vmt'
+        Material = "trails/lol.vmt"
     },
     {
-        VanillaID = 'testtrail',
-        Name = 'Hilarious',
+        VanillaID = "testtrail",
+        Name = "Hilarious",
         Rarity = 2,
-        Type = 'Trail',
+        Type = "Trail",
         Paintable = true,
-        Material = 'trails/lol.vmt'
+        Material = "trails/lol.vmt"
     },
     {
-        VanillaID = 'bewaredog'
+        VanillaID = "bewaredog"
     },
     {
-        VanillaID = 'gmanonhead'
+        VanillaID = "gmanonhead"
     },
     {
-        VanillaID = 'camera'
+        VanillaID = "camera"
     },
     {
-        VanillaID = 'tracer_disco'
+        VanillaID = "tracer_disco"
     },
-    SHOP.PaintList['blueberry'], {
-        VanillaID = 'tracer_lol',
+    SHOP.PaintList["blueberry"], {
+        VanillaID = "tracer_lol",
         Locked = true
     }
 }
@@ -48,7 +48,7 @@ function SHOP:DefaultInventory()
     return test_inventory
 end
 
--- Load a player's inventory
+-- Load a player inventory
 function SHOP:LoadInventory(ply, callback)
     SHOP.PlayerInventories[ply] = SHOP:DefaultInventory()
     local inventory = SHOP.PlayerInventories[ply]
@@ -59,7 +59,7 @@ end
 -- This makes sure the server & client about what items are equipped
 function SHOP:NetworkEquipped(ply)
     if not SHOP.PlayerEquipped[ply] then return end
-    net.Start('SHOP_NetworkEquipped')
+    net.Start("SHOP_NetworkEquipped")
     net.WriteTable(SHOP.PlayerEquipped[ply])
     net.Send(ply)
 end
@@ -67,14 +67,14 @@ end
 -- Network the entire inventory to the client
 -- Only use this when needed
 function SHOP:NetworkInventory(ply)
-    net.Start('SHOP_NetworkInventory')
+    net.Start("SHOP_NetworkInventory")
     net.WriteTable(SHOP.PlayerInventories[ply])
     net.Send(ply)
 end
 
 -- Add an item to the inventory
 function SHOP:AddItem(ITEM, ply)
-    if type(ITEM) ~= 'table' then
+    if type(ITEM) ~= "table" then
         ITEM = {
             VanillaID = ITEM
         }
@@ -84,8 +84,8 @@ function SHOP:AddItem(ITEM, ply)
     if not SHOP.PlayerInventories[ply] then return end
     local key = table.insert(SHOP.PlayerInventories[ply], ITEM)
     -- Network change to the client
-    net.Start('SHOP_InventoryChange')
-    net.WriteString('ADD')
+    net.Start("SHOP_InventoryChange")
+    net.WriteString("ADD")
     net.WriteTable(ITEM)
     net.Send(ply)
 
@@ -99,8 +99,8 @@ function SHOP:RemoveItem(key, ply)
     table.remove(SHOP.PlayerInventories[ply], key)
     SHOP:ShiftEquippedTable(ply, key)
     -- Network changes
-    net.Start('SHOP_InventoryChange')
-    net.WriteString('REMOVE')
+    net.Start("SHOP_InventoryChange")
+    net.WriteString("REMOVE")
     net.WriteInt(key, 16)
     net.Send(ply)
 end
@@ -133,11 +133,11 @@ function SHOP:EquipItem(key, ply, state)
         if SHOP.PlayerEquippedSlots[ply][slot] then return end
         local equipped = false
 
-        if ITEM.Type == 'Hat' then
+        if ITEM.Type == "Hat" then
             equipped = SHOP:EquipCosmetic(ITEM, ply)
-        elseif ITEM.Type == 'Tracer' then
+        elseif ITEM.Type == "Tracer" then
             equipped = SHOP:EquipTracer(ITEM, ply)
-        elseif ITEM.Type == 'Trail' then
+        elseif ITEM.Type == "Trail" then
             equipped = SHOP:EquipTrail(ITEM, ply)
         end
 
@@ -153,11 +153,11 @@ function SHOP:EquipItem(key, ply, state)
         ITEM = SHOP:ParseVanillaItem(ITEM)
         local slot = ITEM.Slot or ITEM.Type
 
-        if ITEM.Type == 'Hat' then
+        if ITEM.Type == "Hat" then
             SHOP:UnequipCosmetic(ITEM, ply)
-        elseif ITEM.Type == 'Tracer' then
+        elseif ITEM.Type == "Tracer" then
             SHOP:UnequipTracer(ply)
-        elseif ITEM.Type == 'Trail' then
+        elseif ITEM.Type == "Trail" then
             SHOP:UnequipTrail(ply)
         end
 
@@ -179,7 +179,7 @@ function SHOP:ShiftEquippedTable(ply, key)
                 SHOP:EquipItem(key, ply, false)
                 SHOP.PlayerEquipped[ply][eq] = nil
             elseif eq > key then
-                print('Shifted ', eq, eq - 1)
+                print("Shifted ", eq, eq - 1)
                 SHOP.PlayerEquipped[ply][eq] = nil
                 SHOP.PlayerEquipped[ply][eq - 1] = true
             end
@@ -190,17 +190,17 @@ function SHOP:ShiftEquippedTable(ply, key)
     end
 end
 
-hook.Add('PlayerInitialSpawn', 'LoadShopInventory', function(ply)
+hook.Add("PlayerInitialSpawn", "LoadShopInventory", function(ply)
     -- to do
     SHOP.PlayerInventories[ply] = table.Copy(test_inventory)
 end)
 
-hook.Add('PlayerDisconnected', 'ShopDisconnect', function(ply)
+hook.Add("PlayerDisconnected", "ShopDisconnect", function(ply)
     -- save inventory here
     SHOP.PlayerInventories[ply] = nil
 end)
 
-net.Receive('SHOP_NetworkInventory', function(len, ply)
+net.Receive("SHOP_NetworkInventory", function(len, ply)
     -- stop this from being lagged out
     if ply.LastVerification then
         if ply.LastVerification + 5 > CurTime() then return end
@@ -227,15 +227,16 @@ net.Receive('SHOP_NetworkInventory', function(len, ply)
     SHOP:NetworkEquipped(ply)
 end)
 
-net.Receive('SHOP_RequestItemAction', function(len, ply)
+net.Receive("SHOP_RequestItemAction", function(len, ply)
     if not SHOP.PlayerInventories[ply] then return end
     local action = net.ReadString()
     local key = net.ReadInt(16)
 
-    if action == 'EQUIP' then
+    if action == "EQUIP" then
         -- Handle equipping of items
         SHOP:EquipItem(key, ply)
-    elseif action == 'PAINT' then
+
+    elseif action == "PAINT" then
         -- Handle painting of items
         local paintcan = net.ReadInt(16)
         -- Verify the item can be painted
@@ -243,10 +244,10 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
         ITEM = SHOP:ParseVanillaItem(ITEM)
         if not ITEM.Paintable then return end
         local PAINT = SHOP.PlayerInventories[ply][paintcan]
-        if PAINT.Type ~= 'Paint' then return end
-        local reequip = false
+        if PAINT.Type ~= "Paint" then return end
 
-        -- Unequip the item if it's already equipped
+        local reequip = false
+        -- Unequip the item if already equipped
         if SHOP.PlayerEquipped[ply] and SHOP.PlayerEquipped[ply][key] then
             SHOP:EquipItem(key, ply, false)
             reequip = true
@@ -259,29 +260,33 @@ net.Receive('SHOP_RequestItemAction', function(len, ply)
         if reequip then
             SHOP:EquipItem(key, ply, true)
         end
-    elseif action == 'UNBOX' then
+
+    elseif action == "UNBOX" then
         -- Handle unboxing of items
         SHOP:OpenUnbox(key, ply)
         SHOP:RemoveItem(key, ply)
-    elseif action == 'DELETE' then
+
+    elseif action == "DELETE" then
         -- Handle deletion of items
-        -- Verify the item isn't locked
+        -- Verify the item is not locked
         local ITEM = SHOP.PlayerInventories[ply][key]
         ITEM = SHOP:ParseVanillaItem(ITEM)
         if ITEM.Locked then return end
         SHOP:RemoveItem(key, ply)
-    elseif action == 'GIFT' then
+
+    elseif action == "GIFT" then
         -- Handle gifting of items
-        -- Verify the item isn't locked
+        -- Verify the item is not locked
         local ITEM = SHOP.PlayerInventories[ply][key]
         ITEM = SHOP:ParseVanillaItem(ITEM)
         if ITEM.Locked then return end
+
         -- Verify the giftee is a player
         local giftee = net.ReadEntity()
         if not IsValid(giftee) then return end
         if not giftee:IsPlayer() then return end
         SHOP:AddItem(ITEM, giftee)
-        giftee:ChatPrint(ply:Nick() .. ' gave you an item!')
+        giftee:ChatPrint(ply:Nick() .. " gave you an item!")
         SHOP:RemoveItem(key, ply)
     end
 end)

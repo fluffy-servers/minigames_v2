@@ -30,7 +30,7 @@ if SERVER then
         if ready then
             self:NextThink(CurTime() + 2)
         elseif CurTime() > self.NextTime then
-            self:SetNWBool('GiftReady', true)
+            self:SetNWBool("GiftReady", true)
             self:PrepareWeapon()
         end
 
@@ -39,7 +39,7 @@ if SERVER then
 
     function ENT:PrepareWeapon()
         -- oh boy
-        local class = self:GetNWString('WeaponType', 'weapon_mg_shotgun')
+        local class = self:GetNWString("WeaponType", "weapon_mg_shotgun")
         local wep = ents.Create(class)
         wep:SetPos(self:GetPos() + Vector(0, 0, 48))
         wep:SetAngles(Angle(0, 0, 0))
@@ -55,34 +55,34 @@ if SERVER then
     end
 
     function ENT:CollectWeapon(ply)
-        print('Collecting weapon!')
+        print("Collecting weapon!")
         if not ply:IsPlayer() then return end
         local wep = self.WeaponEntity
 
         -- Reset the spawner
         if self.RandomTable then
-            self:SetNWString('WeaponType', table.Random(self.RandomTable))
+            self:SetNWString("WeaponType", table.Random(self.RandomTable))
         end
 
-        self:SetNWBool('GiftReady', false)
+        self:SetNWBool("GiftReady", false)
         self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
         -- Announce to the player
         local name = wep:GetPrintName()
-        GAMEMODE:PlayerOnlyAnnouncement(ply, 1.5, name, 1, 'top')
+        GAMEMODE:PlayerOnlyAnnouncement(ply, 1.5, name, 1, "top")
     end
 
     -- KV properties for mapping data
     function ENT:KeyValue(key, value)
         if not GAMEMODE.WeaponSpawners then return end
-        local wep_table = GAMEMODE.WeaponSpawners['spawns']
+        local wep_table = GAMEMODE.WeaponSpawners["spawns"]
 
-        if key == 'level' then
+        if key == "level" then
             self.RandomTable = wep_table[value]
-            self:SetNWString('WeaponType', table.Random(self.RandomTable))
-        elseif key == 'minspawn' then
+            self:SetNWString("WeaponType", table.Random(self.RandomTable))
+        elseif key == "minspawn" then
             self.MinRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
-        elseif key == 'maxspawn' then
+        elseif key == "maxspawn" then
             self.MaxRespawn = tonumber(value)
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
         end
@@ -91,12 +91,12 @@ end
 
 if CLIENT then
     function ENT:Draw()
-        if self:GetNWBool('GiftReady', false) then
+        if self:GetNWBool("GiftReady", false) then
             -- Draw particle effect
             if (self.NextReady or 0) < CurTime() then
                 local ef = EffectData()
                 ef:SetOrigin(self:GetPos())
-                util.Effect('spawner_ready', ef)
+                util.Effect("spawner_ready", ef)
                 self.NextReady = CurTime() + 1
             end
         end

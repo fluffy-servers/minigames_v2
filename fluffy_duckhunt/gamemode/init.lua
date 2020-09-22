@@ -1,6 +1,6 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 -- Appropiate weapon stuff
 function GM:PlayerLoadout(ply)
@@ -12,7 +12,7 @@ function GM:PlayerLoadout(ply)
     elseif ply:Team() == TEAM_RED then
         -- Snipers
         ply:StripWeapons()
-        ply:Give('dh_sniper')
+        ply:Give("dh_sniper")
         ply:SetWalkSpeed(475)
         ply:SetRunSpeed(525)
     end
@@ -46,19 +46,19 @@ function GM:CanPlayerSuicide(ply)
 end
 
 function GM:HandleEndRound(reason)
-    if type(reason) == 'number' then
+    if type(reason) == "number" then
         team.AddScore(reason, 1)
         local extra = nil
 
         if GAMEMODE.LastSurvivor then
-            extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. ' was the last survivor'
+            extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. " was the last survivor"
         end
 
-        return reason, team.GetName(reason) .. ' win the round!', extra
-    elseif type(reason) == 'Player' then
+        return reason, team.GetName(reason) .. " win the round!", extra
+    elseif type(reason) == "Player" then
         -- Winning player gets 3 points
         reason:AddFrags(3)
-        GAMEMODE:AddStatPoints(reason, 'Finished First', 1)
+        GAMEMODE:AddStatPoints(reason, "Finished First", 1)
 
         -- Other survivors get 1 point
         if reason:Team() == TEAM_BLUE then
@@ -67,7 +67,7 @@ function GM:HandleEndRound(reason)
             for k, v in pairs(team.GetPlayers(TEAM_BLUE)) do
                 if v.Spectating then continue end
                 if not v:Alive() then continue end
-                GAMEMODE:AddStatPoints(v, 'Survived Rounds', 1)
+                GAMEMODE:AddStatPoints(v, "Survived Rounds", 1)
 
                 if v ~= reason then
                     v:AddFrags(1)
@@ -75,7 +75,7 @@ function GM:HandleEndRound(reason)
             end
         end
 
-        return reason, reason:Nick() .. ' completed the course!'
+        return reason, reason:Nick() .. " completed the course!"
     else
         return 0, "Nobody wins"
     end
@@ -86,7 +86,7 @@ function GM:StatsRoundWin()
 end
 
 -- Register XP for Duck Hunt
-hook.Add('RegisterStatsConversions', 'AddDuckHuntStatConversions', function()
-    GAMEMODE:AddStatConversion('Finished First', 'Finished First', 5)
-    GAMEMODE:AddStatConversion('Runners Sniped', 'Runners Sniped', 0.5)
+hook.Add("RegisterStatsConversions", "AddDuckHuntStatConversions", function()
+    GAMEMODE:AddStatConversion("Finished First", "Finished First", 5)
+    GAMEMODE:AddStatConversion("Runners Sniped", "Runners Sniped", 0.5)
 end)

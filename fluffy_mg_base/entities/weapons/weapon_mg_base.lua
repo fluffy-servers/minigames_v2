@@ -2,8 +2,8 @@
     SWEP.PrintName = "Mingames Base Weapon"
     SWEP.Slot = 0
     SWEP.SlotPos = 0
-    SWEP.IconLetter = '-'
-    SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.IconLetter = "-"
+    SWEP.IconFont = "HL2MPTypeDeath"
 
     surface.CreateFont("CSSelectIcons", {
         font = "csd",
@@ -26,9 +26,11 @@ SWEP.Primary.ClipSize = -1
 SWEP.Primary.DefaultClip = -1
 SWEP.Primary.Ammo = "none"
 SWEP.Primary.Automatic = false
-SWEP.HoldType = 'pistol'
+SWEP.HoldType = "pistol"
+
 -- We don't have anything that uses secondary ammo so there's nothing here for it
 -- If making a gun derived from this you'd have to add this yourself
+
 -- Set the model for the gun
 -- Using hands is preferred
 SWEP.UseHands = true

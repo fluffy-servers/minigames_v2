@@ -19,7 +19,7 @@ function GM:LoadSpawnpoints()
         local region = v.Region
 
         if not region then
-            region = 'generic'
+            region = "generic"
         else
             if not GAMEMODE.Spawnpoints[region] then
                 GAMEMODE.Spawnpoints[region] = {}
@@ -30,7 +30,7 @@ function GM:LoadSpawnpoints()
     end
 end
 
-hook.Add('InitPostEntity', 'LoadMicrogamesSpawnpoints', function()
+hook.Add("InitPostEntity", "LoadMicrogamesSpawnpoints", function()
     GAMEMODE:LoadSpawnpoints()
 end)
 
@@ -41,14 +41,14 @@ function GM:PlayerSelectSpawn(ply, transition)
         GAMEMODE:LoadSpawnpoints()
     end
 
-    local region = GAMEMODE.CurrentRegion or 'generic'
+    local region = GAMEMODE.CurrentRegion or "generic"
     -- Iterate over the spawnpoints in a random order until we find a suitable one
     local spawntable = GAMEMODE.Spawnpoints[region]
     local chosen = nil
 
     for i = 0, 6 do
         chosen = table.Random(spawntable)
-        if hook.Call('IsSpawnpointSuitable', GAMEMODE, ply, chosen, i == 6) then return chosen end
+        if hook.Call("IsSpawnpointSuitable", GAMEMODE, ply, chosen, i == 6) then return chosen end
     end
 
     return chosen

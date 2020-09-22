@@ -1,8 +1,8 @@
-﻿MOD.Name = 'Colored Discs'
+﻿MOD.Name = "Colored Discs"
 MOD.SurviveValue = 2
 
 local function spawnDisc(pos, color)
-    local ent = ents.Create('microgames_disc')
+    local ent = ents.Create("microgames_disc")
     ent:SetPos(pos)
     ent:SetColor(color)
     ent:Spawn()
@@ -12,12 +12,12 @@ end
 
 local function giveCrowbars()
     for k, v in pairs(player.GetAll()) do
-        v:Give('weapon_crowbar')
+        v:Give("weapon_crowbar")
     end
 end
 
 function MOD:Initialize()
-    local positions = GAMEMODE:GetRandomLocations(6, 'ground')
+    local positions = GAMEMODE:GetRandomLocations(6, "ground")
     local colors = table.Shuffle(GAMEMODE.DiscColors)
     GAMEMODE.CorrectCircle = spawnDisc(positions[1], colors[1][2])
 
@@ -30,7 +30,7 @@ function MOD:Initialize()
 end
 
 function MOD:Loadout(ply)
-    ply:Give('weapon_crowbar')
+    ply:Give("weapon_crowbar")
 end
 
 function MOD:Cleanup()

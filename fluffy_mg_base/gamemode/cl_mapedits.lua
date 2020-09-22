@@ -6,12 +6,12 @@
 GM.MapOverrideProperties = {}
 
 local type_colors = {
-    ['blue'] = Color(0, 0, 150),
-    ['red'] = Color(150, 0, 0),
-    ['all'] = Color(0, 150, 0),
-    ['info_player_start'] = Color(0, 150, 0),
-    ['info_player_terrorist'] = Color(0, 0, 150),
-    ['info_player_counterterrorist'] = Color(150, 0, 0)
+    ["blue"] = Color(0, 0, 150),
+    ["red"] = Color(150, 0, 0),
+    ["all"] = Color(0, 150, 0),
+    ["info_player_start"] = Color(0, 150, 0),
+    ["info_player_terrorist"] = Color(0, 0, 150),
+    ["info_player_counterterrorist"] = Color(150, 0, 0)
 }
 
 local function drawMarker(v, color, size, text)
@@ -30,7 +30,7 @@ local function drawMarker(v, color, size, text)
 end
 
 hook.Add("HUDPaint", "MapEditVisualization", function()
-    local originalSpawns = GAMEMODE.MapOverrideProperties['originalSpawns']
+    local originalSpawns = GAMEMODE.MapOverrideProperties["originalSpawns"]
 
     if originalSpawns then
         for k, v in pairs(originalSpawns) do
@@ -40,7 +40,7 @@ hook.Add("HUDPaint", "MapEditVisualization", function()
         end
     end
 
-    local customSpawns = GAMEMODE.MapOverrideProperties['customSpawns']
+    local customSpawns = GAMEMODE.MapOverrideProperties["customSpawns"]
 
     if customSpawns then
         for k, v in pairs(customSpawns) do
@@ -51,7 +51,7 @@ hook.Add("HUDPaint", "MapEditVisualization", function()
     end
 end)
 
-net.Receive('VisualiseMapOverrides', function()
+net.Receive("VisualiseMapOverrides", function()
     local mode = net.ReadInt(8)
 
     if mode == 0 then
@@ -61,15 +61,15 @@ net.Receive('VisualiseMapOverrides', function()
         -- Register single custom spawn
         if not GAMEMODE.MapOverrideProperties then return end
 
-        if not GAMEMODE.MapOverrideProperties['customSpawns'] then
-            GAMEMODE.MapOverrideProperties['customSpawns'] = {}
+        if not GAMEMODE.MapOverrideProperties["customSpawns"] then
+            GAMEMODE.MapOverrideProperties["customSpawns"] = {}
         end
 
-        table.insert(GAMEMODE.MapOverrideProperties['customSpawns'], net.ReadTable())
+        table.insert(GAMEMODE.MapOverrideProperties["customSpawns"], net.ReadTable())
     elseif mode == 2 then
         -- Remove single custom spawn
         if not GAMEMODE.MapOverrideProperties then return end
-        if not GAMEMODE.MapOverrideProperties['customSpawns'] then return end
+        if not GAMEMODE.MapOverrideProperties["customSpawns"] then return end
     elseif mode == 3 then
     elseif mode == 4 then
     end

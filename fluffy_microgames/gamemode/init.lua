@@ -5,13 +5,13 @@
 	with slight modifications to call the microgame hooks
 ]]
 --
-AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-AddCSLuaFile('ply_extension.lua')
-include('shared.lua')
-include('sv_markers.lua')
-include('sv_modifiers.lua')
-include('sv_spawnpoints.lua')
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+AddCSLuaFile("ply_extension.lua")
+include("shared.lua")
+include("sv_markers.lua")
+include("sv_modifiers.lua")
+include("sv_spawnpoints.lua")
 GM.ForceNextModifier = CreateConVar("microgames_force_modifier", "")
 
 -- Reset the map before the round starts
@@ -30,7 +30,7 @@ function GM:PreStartRound()
     -- Reset stuff
     game.CleanUpMap()
     -- Check that we're not running over time
-    local gametime = GetGlobalFloat('GameStartTime', -1)
+    local gametime = GetGlobalFloat("GameStartTime", -1)
 
     if gametime > -1 and gametime + GAMEMODE.GameTime < CurTime() then
         GAMEMODE:EndGame()
@@ -39,10 +39,10 @@ function GM:PreStartRound()
     end
 
     -- Set global round data
-    SetGlobalInt('RoundNumber', round + 1)
-    SetGlobalString('RoundState', 'PreRound')
-    SetGlobalFloat('RoundStart', CurTime())
-    hook.Call('PreRoundStart')
+    SetGlobalInt("RoundNumber", round + 1)
+    SetGlobalString("RoundState", "PreRound")
+    SetGlobalFloat("RoundStart", CurTime())
+    hook.Call("PreRoundStart")
 
     -- Respawn the dead
     for k, v in pairs(player.GetAll()) do
@@ -58,7 +58,7 @@ function GM:PreStartRound()
             v:Spawn()
         end
 
-        v:AddStatPoints('Rounds Played', 1)
+        v:AddStatPoints("Rounds Played", 1)
     end
 
     -- Start the round after a short cooldown
@@ -72,16 +72,16 @@ function GM:StartRound()
     -- Pick new modifier
     GAMEMODE:NewModifier()
     -- Set global round data
-    SetGlobalString('RoundState', 'InRound')
-    SetGlobalFloat('RoundStart', CurTime())
+    SetGlobalString("RoundState", "InRound")
+    SetGlobalFloat("RoundStart", CurTime())
     -- yay hooks
-    hook.Call('RoundStart')
+    hook.Call("RoundStart")
     local roundtime = GAMEMODE.CurrentModifier.RoundTime or GAMEMODE.RoundTime
 
     -- End the round after a certain time
     -- Does not apply to endless round types
-    timer.Create('GamemodeTimer', roundtime, 0, function()
-        GAMEMODE:EndRound('TimeEnd')
+    timer.Create("GamemodeTimer", roundtime, 0, function()
+        GAMEMODE:EndRound("TimeEnd")
     end)
 end
 
@@ -90,25 +90,25 @@ function GM:EndRound(reason)
     -- Check that we're in a round
     if not GAMEMODE:InRound() then return end
     -- Stop the timer
-    timer.Remove('GamemodeTimer')
+    timer.Remove("GamemodeTimer")
     GAMEMODE:TeardownModifier(GAMEMODE.CurrentModifier)
     local winners = nil
     local msg = "The round has ended!"
     winners, msg = GAMEMODE:HandleEndRound(reason)
 
     -- Send the result to the players
-    if type(winners) == 'Player' then
-        net.Start('EndRound')
+    if type(winners) == "Player" then
+        net.Start("EndRound")
         net.WriteString(msg)
-        net.WriteString('')
+        net.WriteString("")
         net.Broadcast()
     end
 
     -- STATS: Add round wins
     GAMEMODE:StatsRoundWin(winners)
     -- Move to next round
-    SetGlobalString('RoundState', 'EndRound')
-    hook.Call('RoundEnd')
+    SetGlobalString("RoundState", "EndRound")
+    hook.Call("RoundEnd")
 
     -- No cooldown in this gamemode
     timer.Simple(GAMEMODE.RoundCooldown, function()
@@ -152,12 +152,12 @@ end
 -- Handles victory conditions for Free for All based gamemodes
 function GM:HandleFFAWin(reason)
     local winner = nil -- Default: everyone sucks
-    local msg = 'The round has ended!'
+    local msg = "The round has ended!"
     local modifier = GAMEMODE.CurrentModifier
 
     -- If the time ran out, get the player with the most frags
     -- Otherwise, the reason is likely the winner entity
-    if reason == 'TimeEnd' then
+    if reason == "TimeEnd" then
         winner = GAMEMODE:GetWinningPlayer(modifier)
     elseif IsEntity(reason) and reason:IsPlayer() then
         winner = reason
@@ -175,9 +175,9 @@ function GM:HandleFFAWin(reason)
     end
 
     if IsValid(winner) then
-        msg = winner:Nick() .. ' wins the round!'
+        msg = winner:Nick() .. " wins the round!"
     else
-        msg = 'Nobody has won the round'
+        msg = "Nobody has won the round"
     end
 
     return winner, msg
@@ -192,20 +192,20 @@ function GM:HandlePlayerDeath(ply, attacker, dmginfo)
     -- Add the frag to scoreboard
     if GAMEMODE.CurrentModifier.KillValue then
         attacker:AddFrags(GAMEMODE.CurrentModifier.KillValue)
-        GAMEMODE:AddStatPoints(attacker, 'Kills', 1)
+        GAMEMODE:AddStatPoints(attacker, "Kills", 1)
     end
 end
 
 -- Players cannot respawn in the middle of rounds
 function GM:CanRespawn(ply)
-    return (GAMEMODE:GetRoundState() == 'PreRound')
+    return (GAMEMODE:GetRoundState() == "PreRound")
 end
 
 -- Helper function to relay announcements
 function GM:Announce(title, subtext)
     if subtext then
-        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext, 1, 'center')
+        GAMEMODE:PulseAnnouncementTwoLine(3, title, subtext, 1, "center")
     else
-        GAMEMODE:PulseAnnouncement(3, title, 1, 'center')
+        GAMEMODE:PulseAnnouncement(3, title, 1, "center")
     end
 end

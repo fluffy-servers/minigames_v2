@@ -1,7 +1,7 @@
 ﻿-- Send the required files to clients & include shared
-AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 -- Give the player these weapons on loadout
 function GM:PlayerLoadout(ply)
@@ -16,7 +16,7 @@ function GM:PlayerLoadout(ply)
 end
 
 -- Give 1 pistol ammo when a player gets a kill
-hook.Add('DoPlayerDeath', 'OITCDeath', function(victim, attacker, dmg)
+hook.Add("DoPlayerDeath", "OITCDeath", function(victim, attacker, dmg)
     -- Verify the attacker is a player
     if not attacker:IsPlayer() then return end
     -- Verify it wasn't a suicide
@@ -26,8 +26,8 @@ hook.Add('DoPlayerDeath', 'OITCDeath', function(victim, attacker, dmg)
 end)
 
 -- Buff the knife in OITC
-hook.Add('ScalePlayerDamage', 'BuffOITCKnife', function(ply, hg, dmg)
-    if dmg:GetInflictor():GetClass() == 'weapon_mg_knife' then
+hook.Add("ScalePlayerDamage", "BuffOITCKnife", function(ply, hg, dmg)
+    if dmg:GetInflictor():GetClass() == "weapon_mg_knife" then
         dmg:SetDamage(100)
         dmg:ScaleDamage(10)
 

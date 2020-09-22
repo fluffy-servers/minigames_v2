@@ -1,8 +1,8 @@
 ﻿ITEM = {}
-ITEM.VanillaID = 'melonhead'
-ITEM.Name = 'Juicy Melon'
-ITEM.Model = 'models/props_junk/watermelon01.mdl'
-ITEM.Attachment = 'eyes'
+ITEM.VanillaID = "melonhead"
+ITEM.Name = "Juicy Melon"
+ITEM.Model = "models/props_junk/watermelon01.mdl"
+ITEM.Attachment = "eyes"
 ITEM.Rarity = 3
 
 ITEM.Modify = {

@@ -1,7 +1,7 @@
-﻿include('shared.lua')
+﻿include("shared.lua")
 
 function GM:PostDrawTranslucentRenderables()
-    local goal = GetGlobalInt('ClimbHeight', 0)
+    local goal = GetGlobalInt("ClimbHeight", 0)
 
     if goal > 1000 then
         render.SetColorMaterial()
