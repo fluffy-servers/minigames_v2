@@ -33,7 +33,7 @@ end
 function SWEP:PrimaryAttack()
     --models/debug/debugwhite
     --weapons/357/357_fire2.wav
-    self.Weapon:EmitSound(self.Primary.Sound, 35, math.random(95, 105))
+    self:EmitSound(self.Primary.Sound, 35, math.random(95, 105))
     self:ShootBullet(self.Primary.Damage, 1, self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 end
@@ -46,11 +46,12 @@ end
 -- Feel free to steal this code for any weapons
 function SWEP:ShootBullet(damage, numbullets, aimcone)
     -- Setup the bullet table and fire it
+    local owner = self:GetOwner()
     local scale = aimcone
     local bullet = {}
     bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(scale, scale, 0)
     bullet.Force = math.Round(damage * 2)
     bullet.Damage = math.Round(damage)
@@ -58,9 +59,8 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
     bullet.HullSize = 12
     bullet.Tracer = 1
     bullet.TracerName = 'snowball_tracer'
-    self.Owner:FireBullets(bullet)
+    owner:FireBullets(bullet)
     -- Make the firing look nice
-    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    --self.Owner:MuzzleFlash()
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    owner:SetAnimation(PLAYER_ATTACK1)
 end

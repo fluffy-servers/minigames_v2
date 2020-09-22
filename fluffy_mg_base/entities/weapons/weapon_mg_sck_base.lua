@@ -21,8 +21,8 @@ function SWEP:Initialize()
         self:CreateModels(self.VElements)
         self:CreateModels(self.WElements)
 
-        if IsValid(self.Owner) then
-            local vm = self.Owner:GetViewModel()
+        if IsValid(self:GetOwner()) then
+            local vm = self:GetOwner():GetViewModel()
 
             if IsValid(vm) then
                 self:ResetBonePositions(vm)
@@ -41,8 +41,8 @@ function SWEP:Initialize()
 end
 
 function SWEP:Holster()
-    if CLIENT and IsValid(self.Owner) then
-        local vm = self.Owner:GetViewModel()
+    if CLIENT and IsValid(self:GetOwner()) then
+        local vm = self:GetOwner():GetViewModel()
 
         if IsValid(vm) then
             self:ResetBonePositions(vm)
@@ -147,7 +147,7 @@ if CLIENT then
     end
 
     function SWEP:ViewModelDrawn()
-        local vm = self.Owner:GetViewModel()
+        local vm = self:GetOwner():GetViewModel()
         if not self.VElements then return end
         self:UpdateBonePositions(vm)
 
@@ -215,8 +215,8 @@ if CLIENT then
         -- This is the owner if the weapon is held, or itself if the weapon is dropped
         local bone_ent = self
 
-        if IsValid(self.Owner) then
-            bone_ent = self.Owner
+        if IsValid(self:GetOwner()) then
+            bone_ent = self:GetOwner()
         end
 
         for k, name in ipairs(self.wRenderOrder) do
@@ -273,7 +273,7 @@ if CLIENT then
             end
 
             if self.ViewModelFlip then
-                if IsValid(self.Owner) and ent == self.Owner:GetViewModel() then
+                if IsValid(self:GetOwner()) and ent == self:GetOwner():GetViewModel() then
                     ang.r = -ang.r
                 end
             end

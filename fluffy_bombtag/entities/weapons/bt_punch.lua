@@ -19,7 +19,7 @@ function SWEP:Initialize()
 end
 
 function SWEP:Deploy()
-    self.Weapon:SendWeaponAnim(ACT_VM_DRAW)
+    self:SendWeaponAnim(ACT_VM_DRAW)
 
     return true
 end
@@ -35,20 +35,21 @@ function SWEP:CanPrimaryAttack()
 end
 
 function SWEP:PrimaryAttack()
-    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    self.Weapon:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self.Weapon:EmitSound(self.Primary.Sound, 100, math.random(110, 130))
-    self.Weapon:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone)
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+    self:EmitSound(self.Primary.Sound, 100, math.random(110, 130))
+    self:ShootBullets(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone)
 end
 
 function SWEP:SecondaryAttack()
 end
 
 function SWEP:ShootBullets()
+    local owner = self:GetOwner()
     local bullet = {}
     bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(0.025, 0.025, 0)
     bullet.Tracer = 1
     bullet.Force = 100
@@ -61,14 +62,14 @@ function SWEP:ShootBullets()
 
         if tr.Entity:IsPlayer() then
             dmginfo:SetDamage(0)
-            local vel = self.Owner:GetAimVector() * 1000
+            local vel = owner:GetAimVector() * 1000
             vel.z = 300
             tr.Entity:SetVelocity(vel)
         end
     end
 
-    self.Owner:FireBullets(bullet)
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    owner:FireBullets(bullet)
+    owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)

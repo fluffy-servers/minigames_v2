@@ -22,7 +22,7 @@ end
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
     self:Throw(2000)
-    self.Weapon:EmitSound('WeaponFrag.Throw')
+    self:EmitSound('WeaponFrag.Throw')
     self:SetNextPrimaryFire(CurTime() + 1)
     self:SetNextSecondaryFire(CurTime() + 1)
     self:TakePrimaryAmmo(1)
@@ -31,7 +31,7 @@ end
 function SWEP:SecondaryAttack()
     if not self:CanPrimaryAttack() then return end
     self:Throw(750)
-    self.Weapon:EmitSound('WeaponFrag.Roll')
+    self:EmitSound('WeaponFrag.Roll')
     self:SetNextPrimaryFire(CurTime() + 1)
     self:SetNextSecondaryFire(CurTime() + 1)
     self:TakePrimaryAmmo(1)
@@ -39,22 +39,23 @@ end
 
 function SWEP:Throw(strength)
     if CLIENT then return end
-    local ang = self.Owner:EyeAngles()
-    local src = self.Owner:GetShootPos() - Vector(0, 0, 24) + (self.Owner:GetAimVector() + Vector(0, 0, 0.2)) * 8
-    self.Weapon:SendWeaponAnim(ACT_VM_THROW)
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
-    self:CreateGrenade(src, self.Owner:GetAimVector() * strength)
+    local owner = self:GetOwner()
+    local ang = owner:EyeAngles()
+    local src = owner:GetShootPos() - Vector(0, 0, 24) + (owner:GetAimVector() + Vector(0, 0, 0.2)) * 8
+    self:SendWeaponAnim(ACT_VM_THROW)
+    owner:SetAnimation(PLAYER_ATTACK1)
+    self:CreateGrenade(src, owner:GetAimVector() * strength)
 
     timer.Simple(0.3, function()
-        self.Weapon:SendWeaponAnim(ACT_VM_DRAW)
+        self:SendWeaponAnim(ACT_VM_DRAW)
     end)
 end
 
 function SWEP:CreateGrenade(pos, velocity)
     local grenade = ents.Create('paint_grenade')
     if not IsValid(grenade) then return end
-    grenade.Weapon = self.Weapon
-    grenade.Player = self.Owner
+    grenade.WeaponEnt = self
+    grenade.Player = self:GetOwner()
     grenade:SetPos(pos)
     grenade:SetGravity(0.4)
     grenade:Spawn()

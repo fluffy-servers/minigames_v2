@@ -48,7 +48,7 @@ end
 function SWEP:Reload()
     if self:GetReloading() then return end
 
-    if self:Clip1() < self.Primary.ClipSize and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
+    if self:Clip1() < self.Primary.ClipSize and self:GetOwner():GetAmmoCount(self.Primary.Ammo) > 0 then
         if self:StartReload() then return end
     end
 end
@@ -58,7 +58,7 @@ function SWEP:StartReload()
     if self:GetReloading() then return false end
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
-    if self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then return false end
+    if self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return false end
     if self:Clip1() >= self.Primary.ClipSize then return false end
     self:SendWeaponAnim(ACT_SHOTGUN_RELOAD_START)
     self:SetReloading(true)
@@ -70,14 +70,13 @@ end
 function SWEP:PerformReload()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
-    if self.Owner:GetAmmoCount(self.Primary.Ammo) <= 0 then return false end
+    if self:GetOwner():GetAmmoCount(self.Primary.Ammo) <= 0 then return false end
     if self:Clip1() >= self.Primary.ClipSize then return false end
-    self.Owner:RemoveAmmo(1, self.Primary.Ammo, false)
+    self:GetOwner():RemoveAmmo(1, self.Primary.Ammo, false)
     self:SetClip1(self:Clip1() + 1)
     self:SendWeaponAnim(ACT_VM_RELOAD)
     self:EmitSound("Weapon_Shotgun.Reload")
     self:SetReloadTimer(CurTime() + self:SequenceDuration())
-
     return true
 end
 
@@ -123,13 +122,15 @@ end
 -- Fire both shells on secondary attack
 function SWEP:SecondaryAttack()
     if self:Clip1() < 2 then return end
-    self.Weapon:EmitSound("Weapon_Shotgun.Double")
+    local owner = self:GetOwner()
+    self:EmitSound("Weapon_Shotgun.Double")
     self:ShootBullet(self.Primary.Damage, math.floor(self.Primary.NumShots * 1.5), self.Primary.Cone)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay + 0.25)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay + 0.25)
     self:TakePrimaryAmmo(2)
-    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 2, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 2, 0))
+    owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 2, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 2, 0))
+
     -- Adds the strong knockback effect
-    self.Owner:SetGroundEntity(NULL) -- Stop the user sticking to the ground
-    self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -self.Knockback)
+    owner:SetGroundEntity(NULL)
+    owner:SetLocalVelocity(owner:GetAimVector() * -self.Knockback)
 end

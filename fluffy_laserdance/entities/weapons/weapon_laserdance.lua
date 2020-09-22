@@ -25,13 +25,15 @@ SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_357.mdl"
 
 function SWEP:PrimaryAttack()
-    self.Weapon:EmitSound('weapons/airboat/airboat_gun_energy1.wav', 75, math.random(100, 160))
+    self:EmitSound('weapons/airboat/airboat_gun_energy1.wav', 75, math.random(100, 160))
     self:ShootBulletEx(self.Primary.Damage, 1, self.Primary.Cone, 'ld_tracer')
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
+
     -- Send the player flying backwards
-    self.Owner:ViewPunch(Angle(-10, 0, 0))
-    self.Owner:SetGroundEntity(NULL)
-    self.Owner:SetLocalVelocity(self.Owner:GetAimVector() * -1000)
+    local owner = self:GetOwner()
+    owner:ViewPunch(Angle(-10, 0, 0))
+    owner:SetGroundEntity(NULL)
+    owner:SetLocalVelocity(owner:GetAimVector() * -1000)
 end
 
 function SWEP:SecondaryAttack()

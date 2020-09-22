@@ -9,6 +9,7 @@ if CLIENT then
 end
 
 SWEP.PrintName = "Magnum"
+
 -- Primary fire damage and aim settings
 SWEP.Primary.Damage = 35
 SWEP.Primary.Cone = 0.015
@@ -16,12 +17,14 @@ SWEP.Primary.Delay = 0.35
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Sound = Sound("Weapon_357.Single")
 SWEP.Primary.Recoil = 1
+
 -- Primary ammo settings
 SWEP.Primary.ClipSize = 6
 SWEP.Primary.DefaultClip = 6
 SWEP.Primary.Ammo = "Pistol"
 SWEP.Primary.Automatic = false
 SWEP.Secondary.Automatic = true -- ???
+
 -- Set the model for the gun
 SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
@@ -37,7 +40,7 @@ function SWEP:CanPrimaryAttack()
     end
 
     -- For the screen shaky effect when firing
-    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 2, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 2, 0))
+    self:GetOwner():ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 2, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 2, 0))
 
     return true
 end

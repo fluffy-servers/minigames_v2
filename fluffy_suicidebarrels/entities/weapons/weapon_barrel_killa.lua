@@ -28,11 +28,11 @@ SWEP.Secondary.Ammo = "none"
 -- Generic primary attack function
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
-    self.Weapon:EmitSound(self.Primary.Sound)
+    self:EmitSound(self.Primary.Sound)
     self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, self.Primary.Tracer)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
     self:TakePrimaryAmmo(1)
     self:Reload()
-    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
+    self:GetOwner():ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
 end

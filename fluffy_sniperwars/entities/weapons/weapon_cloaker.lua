@@ -28,7 +28,7 @@ end)
 -- Ammo display
 -- Show how charged the utility is
 function SWEP:CustomAmmoDisplay()
-    self.LastUtility = self.Owner:GetNWFloat('LastUtility', 0)
+    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility', 0)
     self.AmmoDisplay = self.AmmoDisplay or {}
     self.AmmoDisplay.Draw = true
     self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100)
@@ -53,32 +53,33 @@ end
 -- Actual cloaking logic
 function SWEP:Cloak()
     if CLIENT then return end
+    local owner = self:GetOwner()
+
     -- Create a cool effect
     local ed = EffectData()
-    ed:SetOrigin(self.Owner:GetPos())
+    ed:SetOrigin(self:GetOwner():GetPos())
     util.Effect('teleport_flash', ed, true, true)
+
     -- Make the player invisible
-    self.Owner:SetNoDraw(true)
-    self.Owner:StripWeapons()
-    self.Owner:SetWalkSpeed(500)
-    self.Owner:SetRunSpeed(500)
+    owner:SetNoDraw(true)
+    owner:StripWeapons()
+    owner:SetWalkSpeed(500)
+    owner:SetRunSpeed(500)
 
     -- Hide trails
     if SHOP then
-        SHOP:RemoveTrail(self.Owner)
+        SHOP:RemoveTrail(owner)
     end
 
     -- Uncloak after 8 seconds
-    local ply = self.Owner
-
     timer.Simple(8, function()
-        Uncloak(ply)
+        Uncloak(owner)
     end)
 end
 
 -- Sync weapon and player last utility times
 function SWEP:Deploy()
-    self.LastUtility = self.Owner:GetNWFloat('LastUtility')
+    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility')
 end
 
 -- Only allow the player to cloak if the device is fully charged
@@ -89,10 +90,10 @@ end
 -- Cloak the player
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
-    self.Weapon:EmitSound(self.Primary.Sound)
+    self:EmitSound(self.Primary.Sound)
     self:Cloak()
-    self.Owner:SetNWFloat('LastUtility', CurTime() + 5)
-    self.LastUtility = self.Owner:GetNWFloat('LastUtility')
+    self:GetOwner():SetNWFloat('LastUtility', CurTime() + 5)
+    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility')
 end
 
 -- Disable shotgun

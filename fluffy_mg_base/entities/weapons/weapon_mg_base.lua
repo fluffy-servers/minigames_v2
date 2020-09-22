@@ -44,12 +44,12 @@ end
 -- Generic primary attack function
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
-    self.Weapon:EmitSound(self.Primary.Sound)
+    self:EmitSound(self.Primary.Sound)
     self:ShootBulletEx(self.Primary.Damage, self.Primary.NumShots, self.Primary.Cone, self.Primary.Tracer)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay)
     self:TakePrimaryAmmo(1)
-    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
+    self:GetOwner():ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil, math.Rand(-0.1, 0.1) * self.Primary.Recoil, 0))
 end
 
 function SWEP:SecondaryAttack()
@@ -65,14 +65,15 @@ end
 -- Helper function to fire bullets
 -- Firing bullets can be a bit of a pain but this really helps
 function SWEP:ShootBullet(damage, numbullets, aimcone)
+    local owner = self:GetOwner()
     if self.StableAccuracy then
         -- Spread penalty for moving
-        if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
+        if owner:KeyDown(IN_FORWARD) or owner:KeyDown(IN_BACK) or owner:KeyDown(IN_MOVELEFT) or owner:KeyDown(IN_MOVERIGHT) then
             aimcone = aimcone * 2.5
         end
 
         -- Accuracy increase for crouching or walking
-        if self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
+        if owner:KeyDown(IN_DUCK) or owner:KeyDown(IN_WALK) then
             aimcone = math.Clamp(aimcone / 2.5, 0, 10)
         end
     end
@@ -81,29 +82,30 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
     local scale = aimcone
     local bullet = {}
     bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(scale, scale, 0)
     bullet.Force = math.Round(damage / 10)
     bullet.Damage = math.Round(damage)
     bullet.AmmoType = self.Primary.Ammo
-    self.Owner:FireBullets(bullet)
+    owner:FireBullets(bullet)
+
     -- Make the firing look nice
-    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    --self.Owner:MuzzleFlash()
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    owner:SetAnimation(PLAYER_ATTACK1)
 end
 
 -- Helper function with slightly more functionality
 function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
+    local owner = self:GetOwner()
     if self.StableAccuracy then
         -- Spread penalty for moving
-        if self.Owner:KeyDown(IN_FORWARD) or self.Owner:KeyDown(IN_BACK) or self.Owner:KeyDown(IN_MOVELEFT) or self.Owner:KeyDown(IN_MOVERIGHT) then
+        if owner:KeyDown(IN_FORWARD) or owner:KeyDown(IN_BACK) or owner:KeyDown(IN_MOVELEFT) or owner:KeyDown(IN_MOVERIGHT) then
             aimcone = aimcone * 2.5
         end
 
         -- Accuracy increase for crouching or walking
-        if self.Owner:KeyDown(IN_DUCK) or self.Owner:KeyDown(IN_WALK) then
+        if owner:KeyDown(IN_DUCK) or owner:KeyDown(IN_WALK) then
             aimcone = math.Clamp(aimcone / 2.5, 0, 10)
         end
     end
@@ -112,8 +114,8 @@ function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
     local scale = aimcone
     local bullet = {}
     bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(scale, scale, 0)
     bullet.Force = math.Round(damage / 10)
     bullet.Damage = math.Round(damage)
@@ -124,10 +126,9 @@ function SWEP:ShootBulletEx(damage, numbullets, aimcone, tracer, callback)
     if callback then
         bullet.Callback = callback
     end
+    owner:FireBullets(bullet)
 
-    self.Owner:FireBullets(bullet)
     -- Make the firing look nice
-    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    --self.Owner:MuzzleFlash()
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    owner:SetAnimation(PLAYER_ATTACK1)
 end

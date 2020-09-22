@@ -37,8 +37,8 @@ end
 
 function SWEP:FireBall(velocity, bounces)
     local ball = ents.Create('db_projectile')
-    ball:SetPos(self.Owner:GetShootPos() + self.Owner:GetAimVector() * 25)
-    ball:SetOwner(self.Owner)
+    ball:SetPos(self:GetOwner():GetShootPos() + self:GetOwner():GetAimVector() * 25)
+    ball:SetOwner(self:GetOwner())
     ball.InitialVelocity = velocity or 2000
     ball.NumBounces = bounces or 3
     ball:Spawn()

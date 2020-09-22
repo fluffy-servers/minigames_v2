@@ -61,7 +61,7 @@ function SWEP:Reload()
     if self:Clip1() == self.Primary.ClipSize then return end
     -- Zoom out if applicable
     self:ZoomOut()
-    self.Weapon:DefaultReload(ACT_VM_RELOAD)
+    self:DefaultReload(ACT_VM_RELOAD)
 end
 
 function SWEP:CanSecondaryAttack()
@@ -70,7 +70,7 @@ end
 
 -- Automatically reload if out of ammo
 function SWEP:CanPrimaryAttack()
-    if self.Weapon:Clip1() <= 0 then
+    if self:Clip1() <= 0 then
         self:SetNextPrimaryFire(CurTime() + 0.5)
         self:Reload()
         self:ZoomOut()
@@ -93,7 +93,7 @@ function SWEP:PrimaryAttack()
     if SERVER then
         local strength1 = math.Rand(-0.15, -0.05) * self.Primary.Recoil
         local strength2 = math.Rand(-0.15, 0.15) * self.Primary.Recoil
-        self.Owner:ViewPunch(Angle(strength1, strength2, 0))
+        self:GetOwner():ViewPunch(Angle(strength1, strength2, 0))
     end
 end
 
@@ -111,15 +111,12 @@ end
 function SWEP:SetZoomMode(num)
     if num > #self.ZoomModes then
         num = 1
-        --self:SetNWBool('ReverseAnim', true)
-        --self:SetViewModelPosition(self.ScopePos, self.ScopeAng, 0.3)
-        --self.Owner:DrawViewModel(true)
     end
 
     -- Update the zoom
     self:SetNWInt('Mode', num)
-    self.Owner:SetFOV(self.ZoomModes[num], self.ZoomSpeeds[num])
-    self.Owner:DrawViewModel(num == 1)
+    self:GetOwner():SetFOV(self.ZoomModes[num], self.ZoomSpeeds[num])
+    self:GetOwner():DrawViewModel(num == 1)
 end
 
 -- Get the current zoom mode
@@ -129,9 +126,9 @@ end
 
 -- Useful function to return to zoom level 1 when needed
 function SWEP:ZoomOut()
-    if self.Weapon:GetZoomMode() ~= 1 and SERVER then
+    if self:GetZoomMode() ~= 1 and SERVER then
         self:SetZoomMode(1)
-        self.Owner:DrawViewModel(true)
+        self:GetOwner():DrawViewModel(true)
     end
 end
 
@@ -145,7 +142,7 @@ end
 
 -- Draw the scope if applicable
 function SWEP:DrawHUD()
-    local vm = self.Owner:GetViewModel()
+    local vm = self:GetOwner():GetViewModel()
     local mode = self:GetNWInt('Mode', 1)
 
     if mode ~= 1 then
@@ -155,18 +152,22 @@ function SWEP:DrawHUD()
         local wr = (h / 3) * 4
         local wr_half = (wr / 2)
         local w_half = (w / 2)
+
         -- Draw the scope circle
         surface.SetTexture(surface.GetTextureID('gmod/scope'))
         surface.SetDrawColor(0, 0, 0, 255)
         surface.DrawTexturedRect(w_half - wr_half, 0, wr, h)
+
         -- Draw the black outside of the scope
         surface.SetDrawColor(0, 0, 0, 255)
         surface.DrawRect(0, 0, w_half - wr_half + 4, h)
         surface.DrawRect(w_half + wr_half - 4, 0, w - (w_half + wr_half) + 8, h)
+
         -- Draw the crosshair
         -- No longer the stupid one from before I'm sorry
         surface.DrawLine(0, h / 2, w, h / 2)
         surface.DrawLine(w / 2, 0, w / 2, h)
+        
         -- Draw the ammo & health on top of the darkness
         -- This will probably not be great for performance but hey
         GAMEMODE:DrawAmmo()

@@ -28,27 +28,30 @@ end
 -- Actually launch the rocket entity
 function SWEP:Launch()
     if CLIENT then return end
+
     -- Find starting position & angles for the rocket
-    local ang = self.Owner:EyeAngles()
-    local src = self.Owner:GetShootPos() + (self.Owner:GetAimVector() * 8)
+    local owner = self:GetOwner()
+    local ang = owner:EyeAngles()
+    local src = owner:GetShootPos() + (owner:GetAimVector() * 8)
+
     -- Play animation & effects
-    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
-    self.Weapon:EmitSound('Weapon_RPG.Single')
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    owner:SetAnimation(PLAYER_ATTACK1)
+    self:EmitSound('Weapon_RPG.Single')
+
     -- FIRE THE ROCKET!
-    self:CreateRocket(src, self.Owner:GetAimVector() * 1000)
-    --timer.Simple(0.3, function() self.Weapon:SendWeaponAnim(ACT_VM_DRAW) end)
+    self:CreateRocket(src, owner:GetAimVector() * 1000)
 end
 
 -- Helper function to create a rocket entity
 function SWEP:CreateRocket(pos, velocity)
     local grenade = ents.Create('mg_mortar_rocket')
     if not IsValid(grenade) then return end
-    grenade.Weapon = self.Weapon
-    grenade.Player = self.Owner
+    grenade.WeaponEnt = self
+    grenade.Player = self:GetOwner()
     grenade:SetPos(pos)
     grenade:Spawn()
-    grenade:SetAngles(self.Owner:EyeAngles())
+    grenade:SetAngles(self:GetOwner():EyeAngles())
     local phys = grenade:GetPhysicsObject()
 
     if IsValid(phys) then

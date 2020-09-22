@@ -30,30 +30,31 @@ function SWEP:Initialize()
 end
 
 function SWEP:DrawWorldModel()
-    local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
     render.SetColorModulation(v.x, v.y, v.z)
     self:DrawModel()
     render.SetColorModulation(1, 1, 1)
 end
 
 function SWEP:PreDrawViewModel(vm, wep)
-    local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
     wep:SetColor(Color(v.x * 255, v.y * 255, v.z * 255))
 end
 
 function SWEP:PrimaryAttack()
-    local startpos = self.Owner:GetShootPos()
-    local endpos = startpos + self.Owner:GetAimVector() * 88
+    local owner = self:GetOwner()
+    local startpos = owner:GetShootPos()
+    local endpos = startpos + owner:GetAimVector() * 88
 
     local tr = util.TraceLine({
         start = startpos,
         endpos = endpos,
-        filter = self.Owner,
+        filter = owner,
         mask = MASK_SHOT_HULL
     })
 
     if IsValid(tr.Entity) or tr.HitWorld then
-        self.Weapon:SendWeaponAnim(ACT_VM_HITCENTER)
+        self:SendWeaponAnim(ACT_VM_HITCENTER)
         self:EmitSound('Weapon_Crowbar.Melee_Hit')
         self:ShootBullet(-1, 1, 0)
     else
@@ -64,13 +65,13 @@ function SWEP:PrimaryAttack()
     if IsValid(tr.Entity) and SERVER then
         local dmg = DamageInfo()
         dmg:SetDamage(self.Primary.Damage)
-        dmg:SetAttacker(self.Owner)
+        dmg:SetAttacker(owner)
         dmg:SetInflictor(self)
         dmg:SetDamageType(DMG_CLUB)
         tr.Entity:TakeDamageInfo(dmg)
     end
 
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    owner:SetAnimation(PLAYER_ATTACK1)
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
 end
 
@@ -82,27 +83,28 @@ end
 -- Feel free to steal this code for any weapons
 function SWEP:ShootBullet(damage, numbullets, aimcone)
     -- Setup the bullet table and fire it
+    local owner = self:GetOwner()
     local scale = aimcone
     local bullet = {}
     bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(scale, scale, 0)
     bullet.Force = math.Round(damage * 2)
     bullet.Damage = math.Round(damage)
     bullet.AmmoType = "Pistol"
     bullet.HullSize = 8
     bullet.Tracer = 0
-    self.Owner:FireBullets(bullet)
+    owner:FireBullets(bullet)
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)
     if SERVER then return end
     if tr.HitSky then return end
-    local v = self.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    
+    local v = self:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
     c = Color(v.x * 255, v.y * 255, v.z * 255)
     local s = 1 + 0.4 * math.random()
     util.DecalEx(self.PaintSplat, tr.HitEntity or game.GetWorld(), tr.HitPos, tr.HitNormal, c, s, s)
-
     return true
 end

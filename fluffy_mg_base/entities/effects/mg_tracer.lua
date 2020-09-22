@@ -4,10 +4,10 @@ local mat_light = Material("sprites/light_glow02_add")
 function EFFECT:Init(data)
     -- Load weapon data
     self.Position = data:GetStart()
-    self.Weapon = data:GetEntity()
+    self.WeaponEnt = data:GetEntity()
     self.Attachment = data:GetAttachment()
     -- Calculate positions
-    self.StartPos = self:GetTracerShootPos(self.Position, self.Weapon, self.Attachment)
+    self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Norm = (self.StartPos - self.EndPos):GetNormalized()
     self.Entity:SetRenderBoundsWS(self.StartPos, self.EndPos)
@@ -15,8 +15,8 @@ function EFFECT:Init(data)
     self.Color = color_white
     self.Alpha = 255
 
-    if IsValid(self.Weapon) then
-        local owner = self.Weapon:GetOwner()
+    if IsValid(self.WeaponEnt) then
+        local owner = self.WeaponEnt:GetOwner()
 
         if IsValid(owner) then
             local cv = owner:GetPlayerColor()

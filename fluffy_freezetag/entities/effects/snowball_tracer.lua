@@ -4,10 +4,10 @@ EFFECT.Mat = Material("sprites/sent_ball")
 function EFFECT:Init(data)
     -- Get data from the weapon
     self.Position = data:GetStart()
-    self.Weapon = data:GetEntity()
+    self.WeaponEnt = data:GetEntity()
     self.Attachment = data:GetAttachment()
     -- Calculate the positions
-    self.StartPos = self:GetTracerShootPos(self.Position, self.Weapon, self.Attachment)
+    self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Dir = self.EndPos - self.StartPos
     self.Length = (self.StartPos - self.EndPos):Length()

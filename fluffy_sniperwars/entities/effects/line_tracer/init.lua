@@ -14,7 +14,7 @@ function EFFECT:Init(data)
     self.Alpha = 150
     self.Color = Color(150, 150, 150, self.Alpha)
 
-    if LocalPlayer() == self.WeaponEnt.Owner and LocalPlayer():GetFOV() < 75 then
+    if LocalPlayer() == self.WeaponEnt:GetOwner() and LocalPlayer():GetFOV() < 75 then
         self.StartPos = LocalPlayer():GetShootPos() + Vector(0, 0, -10)
     end
 end

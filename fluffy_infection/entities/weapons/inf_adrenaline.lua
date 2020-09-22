@@ -79,7 +79,7 @@ end)
 -- Ammo display
 -- Show how charged the utility is
 function SWEP:CustomAmmoDisplay()
-    self.LastUtility = self.Owner:GetNWFloat('LastUtility', 0)
+    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility', 0)
     self.AmmoDisplay = self.AmmoDisplay or {}
     self.AmmoDisplay.Draw = true
     self.AmmoDisplay.PrimaryClip = math.Clamp(math.floor((CurTime() - self.LastUtility) * 4), 0, 100)
@@ -102,22 +102,20 @@ end
 
 -- Handle adrenaline usage
 function SWEP:Adrenaline()
-    -- Speed boost
-    self.Owner:SetWalkSpeed(475)
-    self.Owner:SetRunSpeed(475)
-    -- Set FOV
-    GAMEMODE:SetAdrenalineFOV(self.Owner, 115)
-    -- Adrenaline lasts for 8 seconds
-    local ply = self.Owner
+    local owner = self:GetOwner()
+
+    owner:SetWalkSpeed(475)
+    owner:SetRunSpeed(475)
+    GAMEMODE:SetAdrenalineFOV(owner, 115)
 
     timer.Simple(self.AdrenalineLength, function()
-        Unadrenaline(ply)
+        Unadrenaline(owner)
     end)
 end
 
 -- Sync weapon and player last utility times
 function SWEP:Deploy()
-    self.LastUtility = self.Owner:GetNWFloat('LastUtility')
+    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility')
 end
 
 -- Only allow the player to cloak if the device is fully charged
@@ -128,9 +126,9 @@ end
 -- Adrenaline usage
 function SWEP:PrimaryAttack()
     if not self:CanPrimaryAttack() then return end
-    self.Weapon:EmitSound(self.Primary.Sound)
-    self.Owner:SetNWFloat('LastUtility', CurTime() + 5)
-    self.LastUtility = self.Owner:GetNWFloat('LastUtility')
+    self:EmitSound(self.Primary.Sound)
+    self:GetOwner():SetNWFloat('LastUtility', CurTime() + 5)
+    self.LastUtility = self:GetOwner():GetNWFloat('LastUtility')
 
     if SERVER then
         self:Adrenaline()

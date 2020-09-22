@@ -21,12 +21,11 @@ function ENT:Explode()
     ed:SetOrigin(self:GetPos())
     ed:SetScale(0.1)
     util.Effect("Explosion", ed, true, true)
-    local wep = self.Weapon
 
+    local wep = self.WeaponEnt
     if not IsValid(wep) then
         wep = self.Player
     end
-
     util.BlastDamage(wep, self.Player, self:GetPos(), 300, 150)
 
     --self:EmitSound('AlyxEMP.Discharge')

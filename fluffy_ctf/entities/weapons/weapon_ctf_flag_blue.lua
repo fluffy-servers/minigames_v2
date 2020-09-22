@@ -16,18 +16,21 @@ function SWEP:Initialize()
 end
 
 function SWEP:PrimaryAttack()
+    local owner = self:GetOwner()
     self:SetNextPrimaryFire(CurTime() + 0.5)
     self:SetNextSecondaryFire(CurTime() + 0.4)
-    --Lagcomp before trace
-    self.Owner:LagCompensation(true)
-    --Trace to see what we hit if anything
-    local ShootPos = self.Owner:GetShootPos()
-    local ShootDest = ShootPos + (self.Owner:GetAimVector() * 70)
+
+    -- Lagcomp before trace
+    owner:LagCompensation(true)
+
+    -- Trace to see what we hit if anything
+    local ShootPos = owner:GetShootPos()
+    local ShootDest = ShootPos + (owner:GetAimVector() * 70)
 
     local tr_main = util.TraceLine({
         start = ShootPos,
         endpos = ShootDest,
-        filter = self.Owner,
+        filter = owner,
         mask = MASK_SHOT_HULL
     })
 
@@ -36,15 +39,15 @@ function SWEP:PrimaryAttack()
         endpos = ShootDest,
         mins = Vector(-8, -8, -8),
         maxs = Vector(8, 8, 8),
-        filter = self.Owner,
+        filter = owner,
         mask = MASK_SHOT_HULL
     })
 
     local HitEnt = IsValid(tr_main.Entity) and tr_main.Entity or tr_hull.Entity
-    --Trace is done, turn off lagcomp
-    self.Owner:LagCompensation(false)
+    -- Trace is done, turn off lagcomp
+    owner:LagCompensation(false)
 
-    --If we hit something (including world)
+    -- If we hit something (including world)
     if IsValid(HitEnt) or tr_main.HitWorld then
         --Animate view model
         self:SendWeaponAnim(ACT_VM_HITCENTER)
@@ -64,10 +67,10 @@ function SWEP:PrimaryAttack()
                 util.Effect("BloodImpact", edata)
 
                 -- do a bullet for blood decals
-                self.Owner:FireBullets({
+                owner:FireBullets({
                     Num = 1,
                     Src = ShootPos,
-                    Dir = self.Owner:GetAimVector(),
+                    Dir = owner:GetAimVector(),
                     Spread = Vector(0, 0, 0),
                     Tracer = 0,
                     Force = 1,
@@ -85,20 +88,20 @@ function SWEP:PrimaryAttack()
     end
 
     --Animate
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     --Damage entity
     if HitEnt and HitEnt:IsValid() then
         local dmg = DamageInfo()
         dmg:SetDamage(25)
-        dmg:SetAttacker(self.Owner)
+        dmg:SetAttacker(owner)
         dmg:SetInflictor(self)
-        dmg:SetDamagePosition(self.Owner:GetPos())
+        dmg:SetDamagePosition(owner:GetPos())
         dmg:SetDamageType(DMG_DISSOLVE)
-        HitEnt:DispatchTraceAttack(dmg, ShootPos + (self.Owner:GetAimVector() * 3), ShootDest)
+        HitEnt:DispatchTraceAttack(dmg, ShootPos + (owner:GetAimVector() * 3), ShootDest)
 
         if HitEnt:IsPlayer() then
-            local vel = self.Owner:GetAimVector() * 500
+            local vel = owner:GetAimVector() * 500
             vel.z = math.abs(vel.z) * 0.25 + 100
             HitEnt:SetVelocity(vel)
         end
@@ -109,20 +112,20 @@ function SWEP:SecondaryAttack()
     if CLIENT then return end
     self:Remove()
     self:TossFlag(625)
-    self.Owner:EmitSound(self.ThrowSound)
+    self:GetOwner():EmitSound(self.ThrowSound)
     -- Loadout and select crowbar
-    GAMEMODE:PlayerLoadout(self.Owner)
-    self.Owner:SelectWeapon('weapon_crowbar')
+    GAMEMODE:PlayerLoadout(self:GetOwner())
+    self:GetOwner():SelectWeapon('weapon_crowbar')
 end
 
 function SWEP:TossFlag(strength)
     local ent = ents.Create(self.DroppedEntity)
-    ent:SetPos(self.Owner:GetShootPos() + self.Owner:GetAimVector() * 40)
+    ent:SetPos(self:GetOwner():GetShootPos() + self:GetOwner():GetAimVector() * 40)
     ent:Spawn()
     local phys = ent:GetPhysicsObject()
 
     if phys:IsValid() then
-        local vel = self.Owner:GetAimVector() * phys:GetMass() * math.random(strength - 75, strength + 75)
+        local vel = self:GetOwner():GetAimVector() * phys:GetMass() * math.random(strength - 75, strength + 75)
         vel = vel + VectorRand() * 20
         phys:Wake()
         phys:ApplyForceCenter(vel)
@@ -155,15 +158,18 @@ if CLIENT then
         -- Check the model is valid
         local m = self:CheckCSModel()
         if not IsValid(m) then return end
+
+        local owner = self:GetOwner()
         local pos = self:GetPos()
         local ang = self:GetAngles()
 
         -- Lookup the hand attachment
-        if IsValid(self.Owner) then
-            local attid = self.Owner:LookupAttachment('anim_attachment_RH')
-            local att = self.Owner:GetAttachment(attid)
+        if IsValid(owner) then
+            local attid = owner:LookupAttachment('anim_attachment_RH')
+            local att = owner:GetAttachment(attid)
             pos = att.Pos
             ang = att.Ang
+
             -- Rotate and offset
             ang:RotateAroundAxis(ang:Right(), self.WorldRotation.p)
             ang:RotateAroundAxis(ang:Up(), self.WorldRotation.y)
@@ -183,9 +189,12 @@ if CLIENT then
         local m = self:CheckCSModel()
         m:Remove()
         self.CSModel = nil
-        if not IsValid(self.Owner) then return end
-        if not IsValid(self.Owner:GetViewModel()) then return end
-        self.Owner:GetViewModel():SetMaterial("")
+
+        -- ?
+        local owner = self:GetOwner()
+        if not IsValid(owner) then return end
+        if not IsValid(owner:GetViewModel()) then return end
+        owner:GetViewModel():SetMaterial("")
     end
 
     function SWEP:PreDrawViewModel(vm, ply, wep)
@@ -201,7 +210,7 @@ if CLIENT then
         local ang = self:GetAngles()
 
         -- Lookup the hand attachment
-        if IsValid(self.Owner) then
+        if IsValid(self:GetOwner()) then
             local vpos, vang = vm:GetBonePosition(23)
             pos, ang = vpos, vang
             -- Rotate and offset

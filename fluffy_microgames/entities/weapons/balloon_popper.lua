@@ -34,45 +34,44 @@ SWEP.HoldType = 'pistol'
 -- Custom bullet firing because we have an extra check to make the weapon 'wider'
 function SWEP:ShootBullets(damage, numbullets, aimcone)
     -- Setup the bullet table and fire it
+    local owner = self:GetOwner()
     local scale = aimcone
     local bullet = {}
     bullet.Num = numbullets
-    bullet.Src = self.Owner:GetShootPos()
-    bullet.Dir = self.Owner:GetAimVector()
+    bullet.Src = owner:GetShootPos()
+    bullet.Dir = owner:GetAimVector()
     bullet.Spread = Vector(scale, scale, 0)
     bullet.Force = math.Round(damage / 10)
     bullet.Damage = math.Round(damage)
     bullet.AmmoType = self.Primary.Ammo
     bullet.HullSize = 32
-    self.Owner:FireBullets(bullet)
+    owner:FireBullets(bullet)
+
     -- Make the firing look nice
-    self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-    --self.Owner:MuzzleFlash()
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+    self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
+    owner:SetAnimation(PLAYER_ATTACK1)
 
     -- Fire a secondary tracer
     -- Traces a box slightly bigger than a balloon
     -- Near-misses will still pop the balloon
     if SERVER then
-        local startpos = self.Owner:GetShootPos()
-        local endpos = self.Owner:GetShootPos() + (self.Owner:GetAimVector() * 1000)
+        local startpos = owner:GetShootPos()
+        local endpos = owner:GetShootPos() + (owner:GetAimVector() * 1000)
         local mins = Vector(-10, -10, -10)
         local maxs = Vector(10, 10, 10)
 
         local tr = util.TraceHull({
             start = startpos,
             endpos = endpos,
-            filter = self.Owner,
+            filter = owner,
             mins = mins,
             maxs = maxs,
             mask = MASK_SHOT_HULL
         })
 
         -- If the tracer hits a balloon - apply damage to it
-        if tr.Hit and not tr.HitWorld then
-            if tr.Entity.Balloon then
-                tr.Entity:TakeDamage(100, self.Owner, self)
-            end
+        if (tr.Hit and not tr.HitWorld) and tr.Entity.Balloon then
+            tr.Entity:TakeDamage(100, owner, self)
         end
     end
 end

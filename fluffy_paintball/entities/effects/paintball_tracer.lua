@@ -4,10 +4,10 @@ EFFECT.Mat = Material("sprites/sent_ball")
 function EFFECT:Init(data)
     -- Get data from the weapon
     self.Position = data:GetStart()
-    self.Weapon = data:GetEntity()
+    self.WeaponEnt = data:GetEntity()
     self.Attachment = data:GetAttachment()
     -- Calculate the positions
-    self.StartPos = self:GetTracerShootPos(self.Position, self.Weapon, self.Attachment)
+    self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Dir = self.EndPos - self.StartPos
     self.Length = (self.StartPos - self.EndPos):Length()
@@ -16,8 +16,8 @@ function EFFECT:Init(data)
     self.Color = color_white
     self.Life = 1
 
-    if IsValid(self.Weapon) then
-        local c = self.Weapon.Owner:GetNWVector('WeaponColor', Vector(1, 1, 1))
+    if IsValid(self.WeaponEnt) then
+        local c = self.WeaponEnt:GetOwner():GetNWVector('WeaponColor', Vector(1, 1, 1))
         self.Color = Color(c.x * 255, c.y * 255, c.z * 255)
     end
 end
