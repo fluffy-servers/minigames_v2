@@ -1,6 +1,7 @@
 ﻿AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
 include("shared.lua")
+
 -- Backwards compatibility for Pitfall maps
 GM.PlatformPositions = {}
 GM.PlatformPositions["pf_ocean"] = Vector(0, 0, 1500)
@@ -8,6 +9,7 @@ GM.PlatformPositions["pf_ocean_d"] = Vector(0, 0, 1500)
 GM.PlatformPositions["gm_flatgrass"] = Vector(0, 0, 0)
 GM.PlatformPositions["pf_midnight_v1_fix"] = Vector(0, 0, 0)
 GM.PlatformPositions["pf_midnight_v1"] = Vector(0, 0, 0)
+
 -- Color properties
 -- pf_settings can edit these
 GM.PColorStart = Color(0, 255, 128)
@@ -55,11 +57,9 @@ end
 hook.Add("EntityTakeDamage", "CreditPitfallKills", function(ply, dmginfo)
     if not ply:IsPlayer() then return end
 
-    if dmginfo:GetAttacker():GetClass() == "trigger_hurt" then
-        if ply.LastKnockback and (CurTime() - ply.KnockbackTime) < 5 then
-            attacker = ply.LastKnockback
-            dmginfo:SetAttacker(attacker)
-        end
+    if dmginfo:GetAttacker():GetClass() == "trigger_hurt" and ply.LastKnockback and (CurTime() - ply.KnockbackTime) < 5 then
+        local attacker = ply.LastKnockback
+        dmginfo:SetAttacker(attacker)
     end
 end)
 
@@ -157,8 +157,7 @@ function GM:SpawnPlatforms()
         end
 
         -- All else fails, just generate them randomly at 0, 0, 0
-        local p = Vector(0, 0, 0)
-        GAMEMODE:RandomPlatforms(pos)
+        GAMEMODE:RandomPlatforms(Vector(0, 0, 0))
     else
         GAMEMODE:RandomPlatforms(pos)
     end
@@ -192,7 +191,7 @@ function GM:RandomPlatforms(pos)
     for level = 1, levels do
         for row = 1, rows do
             for col = 1, columns do
-                self:SpawnPlatform(Vector(px, py, pz), (level == 1))
+                self:SpawnPlatform(Vector(px, py, pz), level == 1)
                 py = py + size
             end
 
@@ -208,7 +207,7 @@ end
 
 -- Certain maps have platform positions predefined
 -- In this case, spawn the platforms at these markers
-function GM:MarkerPlatforms(ents)
+function GM:MarkerPlatforms(markers)
     local levels = math.random(1, 3)
 
     if math.random() > 0.5 then
@@ -219,12 +218,12 @@ function GM:MarkerPlatforms(ents)
 
     -- Level is randomly assigned between a certain amount
     -- Each marker has a "level" - higher levels = more platforms?
-    for k, v in pairs(ents) do
+    for k, v in pairs(markers) do
         if size > v.Size then continue end
 
         for level = 1, levels do
             if level > v.MaxLevels then break end
-            self:SpawnPlatform(v:GetPos(), (level == 1))
+            self:SpawnPlatform(v:GetPos(), level == 1)
         end
     end
 end

@@ -37,12 +37,9 @@ function GM:SetupModifier(modifier)
     end
 
     -- Check custom start conditions if applicable
-    if modifier.CanStart then
-        if not modifier:CanStart() then
-            GAMEMODE:NewModifier()
-
-            return
-        end
+    if modifier.CanStart and not modifier:CanStart() then
+        GAMEMODE:NewModifier()
+        return
     end
 
     -- Handle regions
@@ -225,18 +222,15 @@ function GM:CheckRoundEnd()
     -- Handle elimination if the modifier has it enabled
     local modifier = GAMEMODE.CurrentModifier
 
-    if modifier.Elimination then
-        if GAMEMODE:GetNumberAlive() <= 1 then
-            for k, v in pairs(player.GetAll()) do
-                if v:Alive() and not v.Spectating then
-                    GAMEMODE:EndRound(v)
-
-                    return
-                end
+    if modifier.Elimination and GAMEMODE:GetNumberAlive() <= 1 then
+        for k, v in pairs(player.GetAll()) do
+            if v:Alive() and not v.Spectating then
+                GAMEMODE:EndRound(v)
+                return
             end
-
-            GAMEMODE:EndRound(nil)
         end
+
+        GAMEMODE:EndRound(nil)
     end
 end
 

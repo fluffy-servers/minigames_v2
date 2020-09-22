@@ -2,10 +2,17 @@
 ENT.Type = "anim"
 ENT.Base = "base_anim"
 
-local mixedmodels = {"models/hunter/blocks/cube2x2x025.mdl", "models/hunter/blocks/cube2x2x025.mdl", "models/hunter/tubes/circle2x2.mdl", "models/hunter/tubes/circle2x2.mdl", "models/hunter/blocks/cube075x075x075.mdl", "models/hunter/tubes/circle4x4c.mdl", "models/hunter/triangles/2x2.mdl", "models/hunter/triangles/2x2.mdl", "models/hunter/triangles/3x3.mdl",}
-
---"models/hunter/misc/shell2x2a.mdl",
-local props = {}
+local mixedmodels = {
+    "models/hunter/blocks/cube2x2x025.mdl",
+    "models/hunter/blocks/cube2x2x025.mdl",
+    "models/hunter/tubes/circle2x2.mdl",
+    "models/hunter/tubes/circle2x2.mdl",
+    "models/hunter/blocks/cube075x075x075.mdl",
+    "models/hunter/tubes/circle4x4c.mdl",
+    "models/hunter/triangles/2x2.mdl",
+    "models/hunter/triangles/2x2.mdl",
+    "models/hunter/triangles/3x3.mdl"
+}
 
 ENT.FallSounds = {Sound("doors/vent_open1.wav"), Sound("doors/vent_open2.wav"), Sound("doors/vent_open3.wav")}
 

@@ -59,22 +59,20 @@ function GM:EntityTakeDamage(ent, dmg)
 
     local amount = dmg:GetDamage()
 
-    if ent:Health() - amount <= 0 then
-        if attacker:Team() ~= ent:Team() then
-            -- Freeze!
-            dmg:SetDamage(0)
-            ent:SetHealth(1)
-            ent:AddDeaths(1)
-            ent:IceFreeze()
-            attacker:AddFrags(1)
-            attacker:AddStatPoints("Enemies Frozen", 1)
-            GAMEMODE:CheckVictory()
-            net.Start("PlayerKilledByPlayer")
-            net.WriteEntity(ent)
-            net.WriteString("snowball_cannon")
-            net.WriteEntity(attacker)
-            net.Broadcast()
-        end
+    if ent:Health() - amount <= 0 and attacker:Team() ~= ent:Team()then
+        -- Freeze!
+        dmg:SetDamage(0)
+        ent:SetHealth(1)
+        ent:AddDeaths(1)
+        ent:IceFreeze()
+        attacker:AddFrags(1)
+        attacker:AddStatPoints("Enemies Frozen", 1)
+        GAMEMODE:CheckVictory()
+        net.Start("PlayerKilledByPlayer")
+        net.WriteEntity(ent)
+        net.WriteString("snowball_cannon")
+        net.WriteEntity(attacker)
+        net.Broadcast()
     end
 end
 

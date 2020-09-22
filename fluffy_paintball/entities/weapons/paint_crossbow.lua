@@ -92,7 +92,7 @@ function SWEP:ShootBullet(damage, numbullets, aimcone)
     bullet.Tracer = 1
     bullet.TracerName = "paintball_tracer"
     owner:FireBullets(bullet)
-    
+
     -- Make the firing look nice
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
     owner:SetAnimation(PLAYER_ATTACK1)

@@ -93,7 +93,7 @@ local function Unadrenaline(ply)
     if not IsValid(ply) then return end
     if not ply:Alive() then return end
     if ply:Team() ~= TEAM_BLUE then return end
-    
+
     GAMEMODE:SetHumanSpeed(ply)
     GAMEMODE:SetAdrenalineFOV(ply, 0)
 end

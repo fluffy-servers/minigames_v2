@@ -1,6 +1,7 @@
 ﻿include("shared.lua")
 
 -- Stop the plyayer information showing up on mouseover
+-- this is copied from base / sandbox
 function GM:HUDDrawTargetID()
     local tr = util.GetPlayerTrace(LocalPlayer())
     local trace = util.TraceLine(tr)
@@ -29,16 +30,18 @@ function GM:HUDDrawTargetID()
     local y = MouseY
     x = x - w / 2
     y = y + 30
+
     -- The fonts internal drop shadow looks lousy with AA on
     draw.SimpleText(text, font, x + 1, y + 1, Color(0, 0, 0, 120))
     draw.SimpleText(text, font, x + 2, y + 2, Color(0, 0, 0, 50))
     draw.SimpleText(text, font, x, y, self:GetTeamColor(trace.Entity))
     y = y + h + 5
-    local text = trace.Entity:Health() .. "%"
-    local font = "TargetIDSmall"
+    text = trace.Entity:Health() .. "%"
+    font = "TargetIDSmall"
     surface.SetFont(font)
-    local w, h = surface.GetTextSize(text)
-    local x = MouseX - w / 2
+
+    w, h = surface.GetTextSize(text)
+    x = MouseX - w / 2
     draw.SimpleText(text, font, x + 1, y + 1, Color(0, 0, 0, 120))
     draw.SimpleText(text, font, x + 2, y + 2, Color(0, 0, 0, 50))
     draw.SimpleText(text, font, x, y, self:GetTeamColor(trace.Entity))
@@ -49,8 +52,10 @@ end
 function GM:CalcView(ply, pos, angles, fov)
     -- If the player is not a barrel, call the default version of this function
     if LocalPlayer():Team() ~= TEAM_RED then return self.BaseClass:CalcView(ply, pos, angles, fov) end
+
     -- Bots can't see anyway
     if ply:IsBot() then return end
+
     -- Barrels (Team Red) get thirdperson always
     local view = {}
     angles = ply:EyeAngles()

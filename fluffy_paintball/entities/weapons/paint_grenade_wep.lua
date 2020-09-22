@@ -40,7 +40,6 @@ end
 function SWEP:Throw(strength)
     if CLIENT then return end
     local owner = self:GetOwner()
-    local ang = owner:EyeAngles()
     local src = owner:GetShootPos() - Vector(0, 0, 24) + (owner:GetAimVector() + Vector(0, 0, 0.2)) * 8
     self:SendWeaponAnim(ACT_VM_THROW)
     owner:SetAnimation(PLAYER_ATTACK1)

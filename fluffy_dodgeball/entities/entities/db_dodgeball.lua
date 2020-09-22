@@ -11,11 +11,12 @@ ENT.RenderGroup = RENDERGROUP_TRANSLUCENT
 function ENT:Initialize()
     if CLIENT then return end
     self:SetModel("models/Combine_Helicopter/helicopter_bomb01.mdl")
-    local size = self.Size
+
     local hsize = self.Size / 2
     self:PhysicsInitSphere(hsize, "metal_bouncy")
     self:SetCollisionBounds(Vector(-hsize, -hsize, -hsize), Vector(hsize, hsize, hsize))
     self:PhysWake()
+
     self.CurrentBounces = 0
     self.LastTime = CurTime()
 end
@@ -51,7 +52,7 @@ end
 
 -- Custom physics movement
 function ENT:PhysicsUpdate(phys)
-    vel = Vector(0, 0, ((-9.81 * phys:GetMass()) * 0.65))
+    vel = Vector(0, 0, -9.81 * phys:GetMass() * 0.65)
     phys:ApplyForceCenter(vel)
 end
 

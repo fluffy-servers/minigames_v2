@@ -41,17 +41,15 @@ function ENT:PhysicsCollide(data, phys)
     end
 
     -- Damage players
-    if IsValid(data.HitEntity) and data.HitEntity:IsPlayer() then
-        if data.HitEntity:Team() ~= self:GetOwner():Team() then
-            local damage = self:GetNWInt("Size", 25)
-            data.HitEntity:TakeDamage(damage, self:GetOwner())
+    if IsValid(data.HitEntity) and data.HitEntity:IsPlayer() and data.HitEntity:Team() ~= self:GetOwner():Team() then
+        local damage = self:GetNWInt("Size", 25)
+        data.HitEntity:TakeDamage(damage, self:GetOwner())
 
-            timer.Simple(0, function()
-                self:Remove()
-            end)
+        timer.Simple(0, function()
+            self:Remove()
+        end)
 
-            return
-        end
+        return
     end
 
     -- Adjust velocity

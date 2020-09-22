@@ -35,7 +35,6 @@ end
 function SWEP:Launch()
     if CLIENT then return end
     local owner = self:GetOwner()
-    local ang = owner:EyeAngles()
     local src = owner:GetShootPos() + (owner:GetAimVector() * 8)
     self:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
     owner:SetAnimation(PLAYER_ATTACK1)

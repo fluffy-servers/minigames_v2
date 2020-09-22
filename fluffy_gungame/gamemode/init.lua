@@ -25,22 +25,21 @@ function GM:PlayerLoadout(ply)
     end
 
     local prog = GAMEMODE.Progression
-
     if stage > #prog then
         GAMEMODE:EndRound(ply)
-
         return
     end
 
     local wep = prog[stage]
     local last = prog[#prog]
     if ply:HasWeapon(wep) and wep ~= last then return end
+
     ply:RemoveAllAmmo()
     ply:StripWeapons()
     GAMEMODE:StockAmmo(ply)
     ply:Give(last, true)
-    local given = ply:Give(wep)
 
+    ply:Give(wep)
     if kill ~= last then
         ply:SelectWeapon(wep)
     end

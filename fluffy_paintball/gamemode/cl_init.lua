@@ -51,7 +51,6 @@ function GM:DrawRoundState()
     -- Draw the box
     local xx = 24
     local yy = 24
-    local c_pos = 72
     draw.RoundedBoxEx(8, xx, yy, 128, 32, GAMEMODE.FCol2, true, true, false, false)
 
     -- Draw the time
@@ -64,20 +63,20 @@ function GM:DrawRoundState()
     end
 
     yy = yy + 32
+
     -- Draw the round number box
     draw.RoundedBoxEx(0, xx, yy - 1, 128, 24 + 3, GAMEMODE.FCol3, false, false, true, true)
     draw.RoundedBoxEx(0, xx, yy, 128, 24, GAMEMODE.FCol2, false, false, true, true)
     local rmax = GAMEMODE.RoundNumber or 5
-    local round = GAMEMODE:GetRoundNumber()
-    local round_message = "Round " .. round .. " / " .. rmax
+    round = GAMEMODE:GetRoundNumber()
+    round_message = "Round " .. round .. " / " .. rmax
 
     if round == rmax then
         round_message = "Final Round!"
     end
-
-    local round = GAMEMODE:GetRoundNumber()
     draw.SimpleText(round_message, "FS_24", xx + 64, yy + 14, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     yy = yy + 25
+
     -- Draw the team boxes
     local red_col = team.GetColor(TEAM_RED)
     local blue_col = team.GetColor(TEAM_BLUE)
@@ -89,6 +88,7 @@ function GM:DrawRoundState()
     draw.RoundedBoxEx(8, xx + 64, yy, 64, score_h + 2, blue_shadow, false, false, false, true)
     draw.RoundedBoxEx(8, xx + 64, yy, 64, score_h, blue_col, false, false, false, true)
     xx = xx + 32
+
     -- Draw the scores for each team
     local red_kills = GetGlobalInt("1TeamKills", 0)
     local blue_kills = GetGlobalInt("2TeamKills", 0)
@@ -96,6 +96,7 @@ function GM:DrawRoundState()
     draw.SimpleText(red_kills, "FS_32", xx, yy + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
     draw.SimpleText(blue_kills, "FS_32", xx + 64, yy + 16 + 1, GAMEMODE.FColShadow, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER) -- shadow
     draw.SimpleText(blue_kills, "FS_32", xx + 64, yy + 16, GAMEMODE.FCol1, TEXT_ALIGN_CENTER, TEXT_ALIGN_CENTER)
+
     -- Draw the round wins for each team
     local red_score = team.GetScore(1)
     local blue_score = team.GetScore(2)

@@ -57,10 +57,8 @@ function MOD:GravGunPunt(ply, ent)
     if not ply:IsPlayer() then return end
     local phys = ent:GetPhysicsObject()
 
-    if phys:IsValid() then
-        if phys:IsMotionEnabled() then
-            phys:EnableMotion(false)
-        end
+    if phys:IsValid() and phys:IsMotionEnabled()  then
+        phys:EnableMotion(false)
     end
 end
 

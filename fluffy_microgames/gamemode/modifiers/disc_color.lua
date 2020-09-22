@@ -10,12 +10,6 @@ local function spawnDisc(pos, color)
     return ent
 end
 
-local function giveCrowbars()
-    for k, v in pairs(player.GetAll()) do
-        v:Give("weapon_crowbar")
-    end
-end
-
 function MOD:Initialize()
     local positions = GAMEMODE:GetRandomLocations(6, "ground")
     local colors = table.Shuffle(GAMEMODE.DiscColors)

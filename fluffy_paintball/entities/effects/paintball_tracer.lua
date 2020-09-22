@@ -25,7 +25,7 @@ end
 function EFFECT:Think()
     self.Life = self.Life - 10 * FrameTime()
 
-    return (self.Life > 0)
+    return self.Life > 0
 end
 
 function EFFECT:Render()

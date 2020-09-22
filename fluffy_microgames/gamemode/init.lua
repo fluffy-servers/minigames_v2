@@ -198,7 +198,7 @@ end
 
 -- Players cannot respawn in the middle of rounds
 function GM:CanRespawn(ply)
-    return (GAMEMODE:GetRoundState() == "PreRound")
+    return GAMEMODE:GetRoundState() == "PreRound"
 end
 
 -- Helper function to relay announcements

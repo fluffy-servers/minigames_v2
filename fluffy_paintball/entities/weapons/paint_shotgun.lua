@@ -38,7 +38,7 @@ function SWEP:SecondaryAttack()
     self:SetNextSecondaryFire(CurTime() + self.Primary.Delay + 0.25)
     self:TakePrimaryAmmo(2)
     owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 2, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 2, 0))
-    
+
     -- Adds the strong knockback effect
     owner:SetGroundEntity(NULL) -- Stop the user sticking to the ground
     owner:SetLocalVelocity(owner:GetAimVector() * -self.Knockback)

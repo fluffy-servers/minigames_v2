@@ -101,7 +101,7 @@ end
 function SWEP:DoImpactEffect(tr, nDamageType)
     if SERVER then return end
     if tr.HitSky then return end
-    
+
     local v = self:GetOwner():GetNWVector("WeaponColor", Vector(1, 1, 1))
     c = Color(v.x * 255, v.y * 255, v.z * 255)
     local s = 1 + 0.4 * math.random()

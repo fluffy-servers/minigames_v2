@@ -10,7 +10,7 @@ end
 function EFFECT:Think()
     self.Alpha = self.Alpha - FrameTime() * 85
 
-    return (self.Alpha > 0)
+    return self.Alpha > 0
 end
 
 function EFFECT:Render()

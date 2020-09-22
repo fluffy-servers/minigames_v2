@@ -6,10 +6,12 @@ function EFFECT:Init(data)
     self.Position = data:GetStart()
     self.WeaponEnt = data:GetEntity()
     self.Attachment = data:GetAttachment()
+
     -- Calculate the positions
     self.StartPos = self:GetTracerShootPos(self.Position, self.WeaponEnt, self.Attachment)
     self.EndPos = data:GetOrigin()
     self.Length = (self.StartPos - self.EndPos):Length()
+
     -- Calculate the color
     self.Color = color_white
     self.Alpha = 255
@@ -27,9 +29,9 @@ end
 function EFFECT:Think()
     self.Alpha = self.Alpha - FrameTime() * 150
     self:SetRenderBoundsWS(self.StartPos, self.EndPos)
-    -- Kill the tracer if alpha is less than 0
 
-    return (self.Alpha > 0)
+    -- Kill the tracer if alpha is less than 0
+    return self.Alpha > 0
 end
 
 function EFFECT:Render()

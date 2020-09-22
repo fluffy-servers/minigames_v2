@@ -1,7 +1,6 @@
 ﻿function EFFECT:Init(data)
     self.Pos = data:GetOrigin()
     self:SetRenderBounds(Vector() * -200, Vector() * 200)
-    local dist = LocalPlayer():GetPos():Distance(self.Pos)
     local emitter = ParticleEmitter(self.Pos)
 
     for i = 1, 40 do
