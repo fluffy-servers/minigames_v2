@@ -13,9 +13,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: rafraser/action-glua-lint@master
+      - uses: TASSIA710/action-glua-lint@master
         with:
           failOnWarning: true
+          directory: /
           lint_unusedParameters: false
           lint_unusedLoopVars: false
           lint_whitespaceStyle: false
