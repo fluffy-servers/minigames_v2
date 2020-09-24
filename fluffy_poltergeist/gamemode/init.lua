@@ -1,10 +1,10 @@
-AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('init.lua')
-AddCSLuaFile('ply_extension.lua')
-AddCSLuaFile('tables.lua')
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("init.lua")
+AddCSLuaFile("ply_extension.lua")
+AddCSLuaFile("tables.lua")
 
-AddCSLuaFile('shared.lua')
-include('shared.lua')
+AddCSLuaFile("shared.lua")
+include("shared.lua")
 
 function GM:PlayerLoadout(ply)
     ply:StripWeapons()

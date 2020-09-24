@@ -239,7 +239,7 @@ end
 GM.Modifiers = {}
 for _, file in pairs(file.Find("gamemodes/fluffy_microgames/gamemode/modifiers/*.lua", "GAME")) do
     local k = string.Replace(file, ".lua", "")
-    
+
     MOD = {}
     include("modifiers/" .. file)
     GM.Modifiers[k] = MOD
