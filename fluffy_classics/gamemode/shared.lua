@@ -1,8 +1,8 @@
-DeriveGamemode('fluffy_mg_base')
-include('maps.lua')
+DeriveGamemode("fluffy_mg_base")
+include("maps.lua")
 
-GM.Name = 'Classics'
-GM.Author = 'FluffyXVI'
+GM.Name = "Classics"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Simple Deathmatch maps. Eliminate the others to win!
 
@@ -22,8 +22,8 @@ GM.RoundNumber = 10
 function GM:Initialize()
     local map = game.GetMap()
 
-    -- In the event we haven't loaded something properly yet, wait a little longer
-    -- It's pretty important that this stays in sync!
+    -- In the event we haven"t loaded something properly yet, wait a little longer
+    -- It"s pretty important that this stays in sync!
     if not map or not GAMEMODE.FFAMaps then
         timer.Simple(1, function() GAMEMODE:CheckMapProperties() end)
     else
@@ -46,11 +46,11 @@ end
 -- This is different to standard Minigames teams
 function GM:CreateTeams()
 	if not GAMEMODE.TeamBased then return end
-	
-	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true)
+
+	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS["red"], true)
 	team.SetSpawnPoint(TEAM_RED, TEAM_BLUE_SPAWNS)
-	
-	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
+
+	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS["blue"], true)
 	team.SetSpawnPoint(TEAM_BLUE, TEAM_RED_SPAWNS)
 
 	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
@@ -60,20 +60,20 @@ end
 -- Default weapon spawners configuration
 GM.WeaponSpawners = {
     ["spawns"] = {
-        ["1"] = {'weapon_mg_knife', 'weapon_mg_pistol', 'weapon_mg_smg'},
-        ["2"] = {'weapon_mg_shotgun', 'weapon_mg_smg', 'weapon_crossbow', 'weapon_357'},
-        ["3"] = {'weapon_mg_sniper', 'weapon_rpg', 'weapon_mg_mortar', 'weapon_frag'}
+        ["1"] = {"weapon_mg_knife", "weapon_mg_pistol", "weapon_mg_smg"},
+        ["2"] = {"weapon_mg_shotgun", "weapon_mg_smg", "weapon_crossbow", "weapon_357"},
+        ["3"] = {"weapon_mg_sniper", "weapon_rpg", "weapon_mg_mortar", "weapon_frag"}
     },
 
     ["ammo"] = {
-        ['weapon_mg_shotgun'] = {'Buckshot', 12},
-        ['weapon_mg_pistol'] = {'Pistol', 12},
-        ['weapon_mg_smg'] = {'SMG1', 60},
-        ['weapon_crossbow'] = {'XBowBolt', 5},
-        ['weapon_357'] = {'357', 12},
-        ['weapon_mg_sniper'] = {'Pistol', 12},
-        ['weapon_rpg'] = {'RPG_Round', 3},
-        ['weapon_mg_mortar'] = {'RPG_Round', 3},
-        ['weapon_frag'] = {'Grenade', 3}
+        ["weapon_mg_shotgun"] = {"Buckshot", 12},
+        ["weapon_mg_pistol"] = {"Pistol", 12},
+        ["weapon_mg_smg"] = {"SMG1", 60},
+        ["weapon_crossbow"] = {"XBowBolt", 5},
+        ["weapon_357"] = {"357", 12},
+        ["weapon_mg_sniper"] = {"Pistol", 12},
+        ["weapon_rpg"] = {"RPG_Round", 3},
+        ["weapon_mg_mortar"] = {"RPG_Round", 3},
+        ["weapon_frag"] = {"Grenade", 3}
     }
 }

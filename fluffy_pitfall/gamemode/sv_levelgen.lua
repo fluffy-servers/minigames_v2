@@ -1,6 +1,6 @@
 local block_options = {
-    'circle',
-    'square'
+    "circle",
+    "square"
 }
 
 -- Spawn a platform at a given position
@@ -13,14 +13,14 @@ function GM:SpawnPlatform(pos, addspawn, model)
 	prop:Spawn()
 	prop:Activate()
     prop:ApplyModel(model)
-    
-	--- Add a spawn if required
+
+    --- Add a spawn if required
     local spawn
     if addspawn then
         spawn = ents.Create("info_player_start")
         if not IsValid(spawn) then return end
 	end
-    
+
 	-- Make sure the platform origin is perfect
 	local center = prop:GetCenter()
     if addspawn then
@@ -35,7 +35,7 @@ local function GenerateSquareLayer(basepos, model, level, size)
 
     for row = 1, rows do
         for col = 1, cols do
-            GAMEMODE:SpawnPlatform(pos, (level == 1), model)
+            GAMEMODE:SpawnPlatform(pos, level == 1, model)
             pos.y = pos.y + psize
         end
         pos.x = pos.x + psize
@@ -47,7 +47,7 @@ local function GenerateHexagonLayer(basepos, _, level, size)
     local rows, cols, psize = unpack(size)
     local pos = Vector(basepos)
 
-    -- Scale up both rows and cols since it's so tightly packed
+    -- Scale up both rows and cols since it"s so tightly packed
     rows = math.ceil(rows * 1.5)
     cols = math.ceil(cols * 1.25)
 
@@ -57,7 +57,7 @@ local function GenerateHexagonLayer(basepos, _, level, size)
 
     for row = 1, rows do
         for col = 1, math.ceil(cols/2) do
-            GAMEMODE:SpawnPlatform(pos, (level == 1), 'hexagon')
+            GAMEMODE:SpawnPlatform(pos, level == 1, "hexagon")
             pos.y = pos.y + w*2
         end
 
@@ -87,7 +87,7 @@ local function GenerateDiscLayer(basepos, model, level, size)
             local xx = radius * math.cos(ang)
             local yy = radius * math.sin(ang)
             local p = Vector(xx, yy, basepos.z)
-            GAMEMODE:SpawnPlatform(p, (level == 1), 'circle')
+            GAMEMODE:SpawnPlatform(p, level == 1, "circle")
         end
     end
 end
@@ -204,13 +204,13 @@ function GM:GenerateLangton(basepos, _)
 
     -- Generate a rule between 3 and 9 characters long
     -- All rules must start with an L (starting with an R is just a direction change)
-    -- All rules must have at least one R in them (and one L, but that's satisfied already)
+    -- All rules must have at least one R in them (and one L, but that"s satisfied already)
     local len = math.random(3, 9)
-    local rule = ''
-    while not string.match(rule, 'R') do
-        rule = 'L'
+    local rule = ""
+    while not string.match(rule, "R") do
+        rule = "L"
         while #rule < len do
-            rule = rule .. table.Random({'L', 'R', 'F', 'L', 'R'})
+            rule = rule .. table.Random({"L", "R", "F", "L", "R"})
         end
     end
 
@@ -232,9 +232,9 @@ function GM:GenerateLangton(basepos, _)
 
         -- Change direction
         local change = rule:sub(cell, cell)
-        if change == 'L' then
+        if change == "L" then
             orientation = (orientation + 5) % 4
-        elseif change == 'R' then
+        elseif change == "R" then
             orientation = (orientation + 3) % 4
         end
 
@@ -253,10 +253,10 @@ function GM:GenerateLangton(basepos, _)
             local cell = grid[x][y]
             if cell == 0 then continue end
 
-            local xx = basepos.x + (x-25) * psize
-            local yy = basepos.y + (y-25) * psize
-            local zz = basepos.z + jump*cell
-            GAMEMODE:SpawnPlatform(Vector(xx, yy, zz), true, model)
+            local px = basepos.x + (x-25) * psize
+            local py = basepos.y + (y-25) * psize
+            local pz = basepos.z + jump*cell
+            GAMEMODE:SpawnPlatform(Vector(px, py, pz), true, model)
         end
     end
 end
@@ -265,8 +265,8 @@ end
 function GM:GenerateLevel(basepos)
     local layer_func = table.Random({GenerateSquareLayer, GenerateHexagonLayer, GenerateDiscLayer})
 
-    -- I'm aware that this bit sucks, but doing things the 'proper' way broke badly
-    -- this whole function is still in dev don't sue me yet
+    -- I"m aware that this bit sucks, but doing things the "proper" way broke badly
+    -- this whole function is still in dev don"t sue me yet
     local r = math.random()
     if r > 0.9 then
         GAMEMODE:GenerateLangton(basepos)

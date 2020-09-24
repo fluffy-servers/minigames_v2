@@ -135,7 +135,7 @@ function SWEP:DoAttack(alt)
             end
         else
             -- Attack hit world
-            self:EmitSound('Weapon_Crowbar.Melee_Hit')
+            self:EmitSound("Weapon_Crowbar.Melee_Hit")
             util.Decal("ManhackCut", src - forward, trace_end + forward, true)
         end
     else
@@ -154,8 +154,8 @@ end
 function SWEP:SecondaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Secondary.Delay)
     self:SetNextSecondaryFire(CurTime() + self.Secondary.Delay)
-    
-    self.Owner:SetAnimation(PLAYER_ATTACK1)
+
+    self:GetOwner():SetAnimation(PLAYER_ATTACK1)
     self:DoAttack()
 end
 

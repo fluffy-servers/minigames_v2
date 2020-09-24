@@ -74,7 +74,6 @@ if SERVER then
             self.NextTime = CurTime() + math.random(self.MinRespawn, self.MaxRespawn)
         end
     end
-    
 end
 
 if CLIENT then

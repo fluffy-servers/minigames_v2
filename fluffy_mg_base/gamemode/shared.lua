@@ -34,7 +34,7 @@ GM.RoundTime = 90               -- How long should each round go for?
 GM.RoundCooldown = 5            -- How long between each round?
 GM.WarmupTime = 10              -- How long to wait for players to join before starting the game?
 
-GM.RoundType = 'default'        -- What system should be used for game/round logic?
+GM.RoundType = "default"        -- What system should be used for game/round logic?
 GM.GameTime = 600               -- If not using rounds, how long should the game go for?
 GM.EndOnTimeOut = false         -- If using 'timed' RoundType, should this cut off the middle of a round?
 

@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "GALIL"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = 'v'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "v"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_galil", "CSTypeDeath", "v", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 175
 SWEP.Primary.Ammo = "AR2"
 SWEP.Primary.Automatic = true
 
-SWEP.HoldType = 'ar2'
+SWEP.HoldType = "ar2"
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_galil.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_galil.mdl"

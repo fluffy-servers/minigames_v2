@@ -30,7 +30,7 @@ if SERVER then
         if key == "level" then
             if not GAMEMODE.WeaponSpawners then return end
             local wep_table = GAMEMODE.WeaponSpawners["spawns"]
-            
+
             self.RandomTable = wep_table[value]
             self:SetNWString("ItemType", table.Random(self.RandomTable))
         end

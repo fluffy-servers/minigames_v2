@@ -83,7 +83,7 @@ function GM:PlayerSpawn(ply)
 	if equips and equips[1] then
 		equips[1]:Use(ply)
 	end
-    
+
     -- Exit out of spectate
     ply:EndSpectate()
 
@@ -346,7 +346,7 @@ hook.Add("PlayerCanPickupWeapon", "WeaponSpawnerAmmo", function(ply, wep)
     end
 end)
 
-hook.Add('PlayerCanPickupItem', 'HealthSpawnerItem', function(ply, ent)
+hook.Add("PlayerCanPickupItem", "HealthSpawnerItem", function(ply, ent)
     if ent.SpawnerEntity then
         ent.SpawnerEntity:CollectItem(ent)
     end

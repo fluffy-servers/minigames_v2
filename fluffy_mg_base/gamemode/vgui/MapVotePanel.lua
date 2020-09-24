@@ -30,25 +30,25 @@ function PANEL:AddChildren(width, height)
     end
 
     function map_icon:PaintOver(w, h)
-        local gamemode = 'gamemode'
-        local map_pretty = 'map'
+        local gamemode = "gamemode"
+        local map_pretty = "map"
 
         if p.Options then
-            gamemode = p.Options[1] or 'gamemode'
-            local split = string.Split(p.Options[2] or 'map', '_')
-            map_pretty = ''
+            gamemode = p.Options[1] or "gamemode"
+            local split = string.Split(p.Options[2] or "map", "_")
+            map_pretty = ""
             for k, v in pairs(split) do
                 if #v < 4 and (k == 1 or k == #split) then continue end
-                map_pretty = map_pretty .. ' ' .. v:sub(1, 1):upper() .. v:sub(2)
+                map_pretty = map_pretty .. " " .. v:sub(1, 1):upper() .. v:sub(2)
             end
         end
 
         draw.SimpleText(gamemode, "FS_L32", w - 3, h - 28 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         draw.SimpleText(gamemode, "FS_L32", w - 4, h - 28 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-        
+
         draw.SimpleText(map_pretty, "FS_L40", w - 3, h - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
         draw.SimpleText(map_pretty, "FS_L40", w - 4, h - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
-        
+
         if GAMEMODE.CurrentVote and p.Index and GAMEMODE.CurrentVote == p.Index then
             draw.SimpleText("✓", "FS_L40", w - 3, h - 56 - 1, GAMEMODE.FColShadow, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)
             draw.SimpleText("✓", "FS_L40", w - 4, h - 56 - 2, GAMEMODE.FCol1, TEXT_ALIGN_RIGHT, TEXT_ALIGN_BOTTOM)

@@ -6,33 +6,33 @@
 -- This sanity checks the keys provided in the rotation file + provides nice names
 -- is there a better way to store this?
 GM.VoteGamemodes = {
-    ['fluffy_assassination'] = {'Assassination', 'Team DM'},
-    ['fluffy_balls'] = {'Ballz', 'FFA'},
-    ['fluffy_bombtag'] = {'Bomb Tag', 'FFA'},
-    ['fluffy_classics'] = {'Classics', 'Mix'},
-    ['fluffy_climb'] = {'Climb!', 'FFA'},
-    ['fluffy_cratewars'] = {'Crate Wars', 'Team DM'},
-    ['fluffy_ctf'] = {'Capture the Flag', 'Team DM'},
-    ['fluffy_dodgeball'] = {'Dodgeball', 'Team DM'},
-    ['fluffy_duckhunt'] = {'Duck Hunt', 'Hunter vs Hunted'},
-    ['fluffy_freezetag'] = {'Freeze Tag', 'Team DM'},
-    ['fluffy_gungame'] = {'Gun Game', 'FFA'},
-    ['fluffy_incoming'] = {'Incoming!', 'FFA'},
-    ['fluffy_infection'] = {'Infection [Beta]', 'Hunted vs Hunted'},
-    ['fluffy_junkjoust'] = {'Junk Joust', 'FFA'},
-    ['fluffy_kingmaker'] = {'Kingmaker', 'FFA'},
-    ['fluffy_laserdance'] = {'Laser Dance', 'FFA'},
-    ['fluffy_microgames'] = {'Microgames', 'FFA'},
-    ['fluffy_mortar'] = {'Mortar Wars', 'Team DM'},
-    ['fluffy_oitc'] = {'One in the Chamber', 'Team DM'},
-    ['fluffy_paintball'] = {'Paintball', 'Team DM'},
-    ['fluffy_pitfall'] = {'Pitfall', 'FFA'},
-    ['fluffy_poltergeist'] = {'Poltergeist', 'Hunter vs Hunted'},
-    ['fluffy_shotguns'] = {'Super Shotguns', 'Team DM'},
-    ['fluffy_sniperwars'] = {'Sniper Wars', 'Team DM'},
-    ['fluffy_spectrum'] = {'Spectrum', 'FFA'},
-    ['fluffy_stalker'] = {'Stalker', 'Hunter vs Hunted'},
-    ['fluffy_suicidebarrels'] = {'Suicide Barrels', 'Hunter vs Hunted'},
+    ["fluffy_assassination"] = {"Assassination", "Team DM"},
+    ["fluffy_balls"] = {"Ballz", "FFA"},
+    ["fluffy_bombtag"] = {"Bomb Tag", "FFA"},
+    ["fluffy_classics"] = {"Classics", "Mix"},
+    ["fluffy_climb"] = {"Climb!", "FFA"},
+    ["fluffy_cratewars"] = {"Crate Wars", "Team DM"},
+    ["fluffy_ctf"] = {"Capture the Flag", "Team DM"},
+    ["fluffy_dodgeball"] = {"Dodgeball", "Team DM"},
+    ["fluffy_duckhunt"] = {"Duck Hunt", "Hunter vs Hunted"},
+    ["fluffy_freezetag"] = {"Freeze Tag", "Team DM"},
+    ["fluffy_gungame"] = {"Gun Game", "FFA"},
+    ["fluffy_incoming"] = {"Incoming!", "FFA"},
+    ["fluffy_infection"] = {"Infection [Beta]", "Hunted vs Hunted"},
+    ["fluffy_junkjoust"] = {"Junk Joust", "FFA"},
+    ["fluffy_kingmaker"] = {"Kingmaker", "FFA"},
+    ["fluffy_laserdance"] = {"Laser Dance", "FFA"},
+    ["fluffy_microgames"] = {"Microgames", "FFA"},
+    ["fluffy_mortar"] = {"Mortar Wars", "Team DM"},
+    ["fluffy_oitc"] = {"One in the Chamber", "Team DM"},
+    ["fluffy_paintball"] = {"Paintball", "Team DM"},
+    ["fluffy_pitfall"] = {"Pitfall", "FFA"},
+    ["fluffy_poltergeist"] = {"Poltergeist", "Hunter vs Hunted"},
+    ["fluffy_shotguns"] = {"Super Shotguns", "Team DM"},
+    ["fluffy_sniperwars"] = {"Sniper Wars", "Team DM"},
+    ["fluffy_spectrum"] = {"Spectrum", "FFA"},
+    ["fluffy_stalker"] = {"Stalker", "Hunter vs Hunted"},
+    ["fluffy_suicidebarrels"] = {"Suicide Barrels", "Hunter vs Hunted"},
 }
 
 function GM:LoadRotationFromFile()
@@ -87,7 +87,7 @@ function GM:GenerateVotingQueue()
 
     if #gamemodes > 6 then
         -- Option A (most common): if we have more than 6 gamemodes, pick 6 gamemodes
-        -- We have the flexibility here to ensure we don't repeat gamemodes
+        -- We have the flexibility here to ensure we don"t repeat gamemodes
         local selected_gamemodes = table.Shuffle(gamemodes)
         for k, v in pairs(selected_gamemodes) do
             if v == GAMEMODE_NAME then continue end
@@ -97,15 +97,15 @@ function GM:GenerateVotingQueue()
         end
     elseif #gamemodes == 6 then
         -- Option B: if we have exactly 6 gamemodes, then we simply pick a map for each gamemode
-        -- This means we will see the current gamemode again, but that's fine in this case
-        -- If the current gamemode has more than one map, we'll pick a new map
+        -- This means we will see the current gamemode again, but that"s fine in this case
+        -- If the current gamemode has more than one map, we"ll pick a new map
         for k, v in pairs(gamemodes) do
             if v == GAMEMODE_NAME then
                 if #GAMEMODE.VoteMaps[v] == 1 then
                     -- Only one map for the current gamemode
                     table.insert(options, {v, current_map})
                 else
-                    -- Ensure we don't get duplicate maps on the same gamemode
+                    -- Ensure we don"t get duplicate maps on the same gamemode
                     local map = current_map
                     while map == current_map do
                         map = table.Random(GAMEMODE.VoteMaps[v])
@@ -120,13 +120,13 @@ function GM:GenerateVotingQueue()
     else
         -- Option C: if we have less than 6 gamemodes, then we pick 6 maps at random
         -- Avoid playing exactly the same thing twice in a row
-        -- This *will* crash if there's less than 7 maps but that's a risk I'm willing to take
+        -- This *will* crash if there"s less than 7 maps but that"s a risk I"m willing to take
         while #options < 6 do
             local gm = table.Random(gamemodes)
             local map = table.Random(GAMEMODE.VoteMaps[gm])
             if gm == GAMEMODE_NAME and map == current_map then continue end
 
-            -- Check we haven't added this combination yet
+            -- Check we haven"t added this combination yet
             local seen
             for k, v in pairs(options) do
                 if v[1] == gm and v[2] == map then
@@ -159,9 +159,9 @@ function GM:StartVoting()
 
     local nice_options = table.Copy(options)
     nice_options = GAMEMODE:PrettifyVoteTable(nice_options)
-    
+
     -- Send to clients
-    net.Start('SendMapVoteTable')
+    net.Start("SendMapVoteTable")
         net.WriteTable(nice_options)
     net.Broadcast()
 
@@ -214,7 +214,7 @@ function GM:EndVote()
     local winner = GAMEMODE.CurrentVoteTable[GAMEMODE:PickWinningVote()]
     local winning_gamemode = winner[1]
     local winning_map = winner[2]
-    
+
     -- Change the gamemode and map
     game.ConsoleCommand("gamemode " .. winning_gamemode .. "\n")
 

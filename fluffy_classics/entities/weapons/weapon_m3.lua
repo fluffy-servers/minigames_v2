@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "M3"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = 'k'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "k"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_m3", "CSTypeDeath", "k", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 40
 SWEP.Primary.Ammo = "Buckshot"
 SWEP.Primary.Automatic = false
 
-SWEP.HoldType = 'shotgun'
+SWEP.HoldType = "shotgun"
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_m3super90.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_m3super90.mdl"

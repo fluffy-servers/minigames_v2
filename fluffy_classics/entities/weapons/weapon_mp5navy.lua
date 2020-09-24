@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "MP5"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = 'x'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "x"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_mp5navy", "CSTypeDeath", "x", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 150
 SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Automatic = true
 
-SWEP.HoldType = 'smg'
+SWEP.HoldType = "smg"
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_mp5.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_mp5.mdl"

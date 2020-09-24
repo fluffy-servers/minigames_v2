@@ -1,15 +1,15 @@
-﻿AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-include('shared.lua')
-include('sv_levelgen.lua')
+﻿AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+include("shared.lua")
+include("sv_levelgen.lua")
 
 -- Backwards compatibility for Pitfall maps
 GM.PlatformPositions = {}
-GM.PlatformPositions['pf_ocean'] = Vector(0, 0, 0)
-GM.PlatformPositions['pf_ocean_d'] = Vector(0, 0, 0)
-GM.PlatformPositions['gm_flatgrass'] = Vector(0, 0, 0)
-GM.PlatformPositions['pf_midnight_v1_fix'] = Vector(0, 0, 0)
-GM.PlatformPositions['pf_midnight_v1'] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_ocean"] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_ocean_d"] = Vector(0, 0, 0)
+GM.PlatformPositions["gm_flatgrass"] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_midnight_v1_fix"] = Vector(0, 0, 0)
+GM.PlatformPositions["pf_midnight_v1"] = Vector(0, 0, 0)
 
 -- Color properties
 -- pf_settings can edit these
@@ -60,7 +60,7 @@ hook.Add("EntityTakeDamage", "CreditPitfallKills", function(ply, dmginfo)
 end)
 
 -- Handle player death
--- It's hard to track kills in this gamemode
+-- Tracking kills is difficult
 function GM:DoPlayerDeath(ply, attacker, dmginfo)
     -- Always make the ragdoll
     ply:CreateRagdoll()
@@ -84,9 +84,9 @@ function GM:DoPlayerDeath(ply, attacker, dmginfo)
 end
 
 -- Spawn platforms
-hook.Add('PreRoundStart', 'CreatePlatforms', function()
+hook.Add("PreRoundStart", "CreatePlatforms", function()
     GAMEMODE:ClearLevel()
-    
+
     local pos = GAMEMODE.PlatformPositions[game.GetMap()] or Vector(0, 0, 0)
     GAMEMODE:GenerateLevel(pos)
 end)

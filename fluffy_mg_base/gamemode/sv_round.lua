@@ -304,7 +304,7 @@ function GM:HandleTeamWin(reason)
             winners = GAMEMODE.HunterTeam
         end
 
-        msg = team.GetName(winners) .. ' win the round!'    
+        msg = team.GetName(winners) .. " win the round!"
         if GAMEMODE.LastSurvivor then
             extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. " was the last survivor"
         end
