@@ -112,10 +112,16 @@ function GM:EntityTakeDamage(ent, dmginfo)
                 -- Disable propkilling, only props with pilots can do damage
                 return true
             end
+        else
+            return true
         end
     elseif string.find(ent:GetClass(), "prop_phys") then
         -- Only the gun can stop props
         if not attacker:IsWeapon() then return true end
+        local ply_attacker = dmginfo:GetInflictor()
+        print(ply_attacker)
+        if not ply_attacker:IsPlayer() then return true end
+
         -- Apply damage to props
         dmginfo:SetDamageForce(dmginfo:GetDamageForce() * 15)
 
@@ -130,8 +136,8 @@ function GM:EntityTakeDamage(ent, dmginfo)
                 ply:EmitSound(table.Random(GAMEMODE.PropDie))
                 ply:KillSilent()
                 ply:KillProp(dmginfo:GetDamageForce())
-                GAMEMODE:DoPlayerDeath(ply, attacker, dmginfo)
-                GAMEMODE:PlayerDeath(ply, dmginfo:GetInflictor(), attacker)
+                GAMEMODE:DoPlayerDeath(ply, ply_attacker, dmginfo)
+                GAMEMODE:PlayerDeath(ply, attacker, ply_attacker)
             end
         end
     end
