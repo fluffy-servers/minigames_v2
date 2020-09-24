@@ -1,8 +1,8 @@
-local PANEL = {}
+﻿local PANEL = {}
 
 function PANEL:Init()
-	local cl_playermodel = LocalPlayer():GetInfo("cl_playermodel")
-	local modelname = GAMEMODE:TranslatePlayerModel(cl_playermodel, LocalPlayer())
+    local cl_playermodel = LocalPlayer():GetInfo("cl_playermodel")
+    local modelname = GAMEMODE:TranslatePlayerModel(cl_playermodel, LocalPlayer())
     self:SetModel(modelname or LocalPlayer():GetModel())
 end
 
@@ -22,14 +22,15 @@ function PANEL:LayoutEntity(ent)
     if not self.Angles then
         self.Angles = Angle(0, 0, 0)
     end
-    
-    if self.Transition then 
+
+    if self.Transition then
         ent:SetAngles(self.Angles)
-        return 
+
+        return
     end
-    
+
     if self.Pressed then
-        local mx, my = gui.MousePos()
+        local mx, _ = gui.MousePos()
         self.Angles = self.Angles - Angle(0, (self.PressX or mx) - mx, 0)
         self.PressX, self.PressY = gui.MousePos()
         ent:SetAngles(self.Angles)
@@ -46,8 +47,10 @@ function PANEL:SetAngle(angle)
 end
 
 function PANEL:TransitionCamera(height, distance, angle, duration)
-    if not self.Angles then self.Angles = Angle(0, 0, 0) end
-    
+    if not self.Angles then
+        self.Angles = Angle(0, 0, 0)
+    end
+
     self.Transition = {
         old = self:GetCamPos(),
         old_look = self:GetLookAt(),
@@ -62,23 +65,21 @@ end
 
 function PANEL:Think()
     if self.Transition then
-        local time_percent = (CurTime() - self.Transition.start)/self.Transition.duration
+        local time_percent = (CurTime() - self.Transition.start) / self.Transition.duration
         local smooth = math.EaseInOut(time_percent, 0.5, 0.5)
         smooth = math.min(smooth, 1)
-        
         local trans_pos = self.Transition.old + (self.Transition.new - self.Transition.old) * smooth
         local trans_look = self.Transition.old_look + (self.Transition.new_look - self.Transition.old_look) * smooth
         local angle = self.Transition.old_angle + (self.Transition.new_angle - self.Transition.old_angle) * smooth
-        
         self:SetCamPos(trans_pos)
         self:SetLookAt(trans_look)
         self.Angles = Angle(0, angle, 0)
-        
+
         if time_percent >= 1 then
             self.Transition = nil
         end
     end
-    
+
     self.Entity.GetPlayerColor = function() return LocalPlayer():GetPlayerColor() end
 end
 

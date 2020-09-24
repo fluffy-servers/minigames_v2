@@ -1,9 +1,8 @@
---[[
+﻿--[[
     Serverside announcements library
     Mostly just a net handler
     See cl_announcements.lua for more information
 --]]
-
 -- Serverside function for making a countdown announcement
 function GM:CountdownAnnouncement(length, endtext, location, endsound, ticksound)
     local tbl = {
@@ -14,8 +13,9 @@ function GM:CountdownAnnouncement(length, endtext, location, endsound, ticksound
         ticksound = ticksound,
         location = location or 'center',
     }
+
     net.Start('MinigamesAnnouncement')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Broadcast()
 end
 
@@ -29,8 +29,9 @@ function GM:PulseAnnouncement(duration, text, size, location, sound)
         size = size,
         location = location or 'center'
     }
+
     net.Start('MinigamesAnnouncement')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Broadcast()
 end
 
@@ -45,8 +46,9 @@ function GM:PulseAnnouncementTwoLine(duration, text, subtext, size, location, so
         size = size,
         location = location or 'center'
     }
+
     net.Start('MinigamesAnnouncement')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Broadcast()
 end
 
@@ -60,8 +62,9 @@ function GM:PlayerOnlyAnnouncement(ply, duration, text, size, location, sound)
         size = size,
         location = location or 'center'
     }
+
     net.Start('MinigamesAnnouncement')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Send(ply)
 end
 
@@ -75,8 +78,9 @@ function GM:TableOnlyAnnouncement(recipients, duration, text, size, location, so
         size = size,
         location = location or 'center'
     }
+
     net.Start('MinigamesAnnouncement')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Send(recipients)
 end
 
@@ -88,9 +92,9 @@ function GM:EntityCameraAnnouncement(ent, duration, offset, distance)
         pos = offset,
         dist = distance,
     }
-    
+
     net.Start('CoolTransition')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Broadcast()
 end
 
@@ -98,16 +102,16 @@ end
 -- No checking on this side - be careful!
 function GM:CoolTransitionTable(tbl)
     net.Start('CoolTransition')
-        net.WriteTable(tbl)
+    net.WriteTable(tbl)
     net.Broadcast()
 end
 
 -- Generates a lovely confetti effect
 function GM:ConfettiEffect(winners)
     if GAMEMODE.DisableConfetti then return end
-    
     -- Sort the winners into a nice table
     local tbl = {}
+
     if IsEntity(winners) then
         tbl = {winners}
     elseif type(winners) == 'number' then
@@ -115,12 +119,11 @@ function GM:ConfettiEffect(winners)
     elseif type(winners) == 'table' then
         tbl = winners
     end
-    
+
     -- Create confetti for all living winners
-    for k,v in pairs(tbl) do
+    for k, v in pairs(tbl) do
         if not v:IsPlayer() then continue end
         if not v:Alive() then continue end
-        
         local effectdata = EffectData()
         effectdata:SetOrigin(v:GetPos())
         util.Effect('win_confetti', effectdata)
@@ -129,10 +132,8 @@ end
 
 function GM:ConfettiEffectSingle(ply)
     if GAMEMODE.DisableConfetti then return end
-
     if not ply:IsPlayer() then return end
     if not ply:Alive() then return end
-
     local effectdata = EffectData()
     effectdata:SetOrigin(ply:GetPos())
     util.Effect('win_confetti', effectdata)

@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "MAC10"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = 'l'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "l"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_mac10", "CSTypeDeath", "l", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 150
 SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Automatic = true
 
-SWEP.HoldType = 'smg'
+SWEP.HoldType = "smg"
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_mac10.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_mac10.mdl"

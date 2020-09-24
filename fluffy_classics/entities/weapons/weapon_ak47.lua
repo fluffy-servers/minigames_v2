@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "AK47"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = 'b'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "b"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_ak47", "CSTypeDeath", "b", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 150
 SWEP.Primary.Ammo = "AR2"
 SWEP.Primary.Automatic = true
 
-SWEP.HoldType = 'ar2'
+SWEP.HoldType = "ar2"
 SWEP.ViewModel = "models/weapons/cstrike/c_rif_ak47.mdl"
 SWEP.WorldModel = "models/weapons/w_rif_ak47.mdl"

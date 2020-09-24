@@ -1,15 +1,15 @@
 -- Send the required files to clients & include shared
-AddCSLuaFile('cl_init.lua')
-AddCSLuaFile('shared.lua')
-AddCSLuaFile('maps.lua')
-include('shared.lua')
+AddCSLuaFile("cl_init.lua")
+AddCSLuaFile("shared.lua")
+AddCSLuaFile("maps.lua")
+include("shared.lua")
 
 -- No weapons on loadout
 function GM:PlayerLoadout(ply)
 	-- Strip any old weapons & ammo just in case
 	ply:StripWeapons()
 	ply:StripAmmo()
-	
+
 	ply:SetWalkSpeed(200)
 	ply:SetRunSpeed(400)
 end

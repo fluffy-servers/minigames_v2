@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "P90"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = 'm'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "m"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_p90", "CSTypeDeath", "m", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 250
 SWEP.Primary.Ammo = "SMG1"
 SWEP.Primary.Automatic = true
 
-SWEP.HoldType = 'smg'
+SWEP.HoldType = "smg"
 SWEP.ViewModel = "models/weapons/cstrike/c_smg_p90.mdl"
 SWEP.WorldModel = "models/weapons/w_smg_p90.mdl"

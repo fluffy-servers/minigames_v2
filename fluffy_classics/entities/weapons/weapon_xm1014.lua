@@ -1,12 +1,12 @@
-SWEP.Base = 'weapon_cs_base'
+SWEP.Base = "weapon_cs_base"
 SWEP.PrintName = "XM1014"
 
 if CLIENT then
 	SWEP.Slot = 2
 	SWEP.SlotPos = 0
-    
-	SWEP.IconLetter = ']'
-	SWEP.IconFont = 'CSTypeDeath'
+
+	SWEP.IconLetter = "]"
+	SWEP.IconFont = "CSTypeDeath"
     killicon.AddFont("weapon_xm1014", "CSTypeDeath", "]", Color(255, 80, 0, 255))
 end
 
@@ -22,6 +22,6 @@ SWEP.Primary.DefaultClip = 35
 SWEP.Primary.Ammo = "Buckshot"
 SWEP.Primary.Automatic = true
 
-SWEP.HoldType = 'shotgun'
+SWEP.HoldType = "shotgun"
 SWEP.ViewModel = "models/weapons/cstrike/c_shot_xm1014.mdl"
 SWEP.WorldModel = "models/weapons/w_shot_xm1014.mdl"

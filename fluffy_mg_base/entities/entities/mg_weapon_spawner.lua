@@ -1,4 +1,4 @@
-AddCSLuaFile()
+﻿AddCSLuaFile()
 ENT.Base = "mg_spawner_base"
 ENT.DefaultItem = "weapon_mg_shotgun"
 
@@ -6,6 +6,7 @@ if SERVER then
     function ENT:Initialize()
         if not GAMEMODE.WeaponSpawners then
             self:Remove()
+
             return
         end
 
@@ -29,7 +30,7 @@ if SERVER then
         if key == "level" then
             if not GAMEMODE.WeaponSpawners then return end
             local wep_table = GAMEMODE.WeaponSpawners["spawns"]
-            
+
             self.RandomTable = wep_table[value]
             self:SetNWString("ItemType", table.Random(self.RandomTable))
         end

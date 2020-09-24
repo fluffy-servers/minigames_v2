@@ -1,4 +1,4 @@
--- Generate and save images of all Minigames items
+﻿-- Generate and save images of all Minigames items
 SHOP.GeneratingImages = nil
 
 local function NextImageGeneration()
@@ -8,6 +8,7 @@ local function NextImageGeneration()
     if SHOP.GeneratingImages.index > #SHOP.GeneratingImages.items then
         SHOP.GeneratingImages.panel:Remove()
         SHOP.GeneratingImages = nil
+
         return
     end
 
@@ -20,13 +21,11 @@ local function NextImageGeneration()
     local name = SHOP.GeneratingImages.items[SHOP.GeneratingImages.index]
     local ITEM = SHOP.VanillaItems[name]
     SHOP.GeneratingImages.name = name
-
-    local panel = vgui.Create('ShopItemPanel')
+    local panel = vgui.Create("ShopItemPanel")
     panel:SetPos(16, 16)
     panel.key = key
     panel.ITEM = ITEM
     panel:Ready()
-
     SHOP.GeneratingImages.panel = panel
     SHOP.GeneratingImages.screenshot = true
 end
@@ -34,8 +33,8 @@ end
 local function StartImageGeneration()
     file.CreateDir("shop_images")
     print("Starting icon generation...")
-
     local item_names = table.GetKeys(SHOP.VanillaItems)
+
     SHOP.GeneratingImages = {
         index = 0,
         screenshot = false,
@@ -48,9 +47,10 @@ local function StartImageGeneration()
         NextImageGeneration()
     end)
 end
+
 concommand.Add("minigames_generate_item_icons", StartImageGeneration)
 
-hook.Add('PostRender', 'ShopGenerateImages', function()
+hook.Add("PostRender", "ShopGenerateImages", function()
     if not SHOP.GeneratingImages then return end
     if not SHOP.GeneratingImages.screenshot then return end
     SHOP.GeneratingImages.screenshot = false

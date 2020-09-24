@@ -1,21 +1,19 @@
---[[
+﻿--[[
     Robert A Fraser 2018
     Minigames Reborn
 	
 	Base file for the gamemode which is loaded on both client and server
-]]--
-
+]]
+--
 -- Load the other shared files
-DeriveGamemode('base')
-include('sound_tables.lua')
-include('sh_levels.lua')
-include('sh_scorehelper.lua')
-include('shop/sh_init.lua')
+DeriveGamemode("base")
+include("sound_tables.lua")
+include("sh_levels.lua")
+include("sh_scorehelper.lua")
+include("shop/sh_init.lua")
 
--- These variables should be altered in each sub gamemode's shared.lua file
--- If not defined, they will return to these values here
-GM.Name = 'Minigames'
-GM.Author = 'FluffyXVI'
+GM.Name = "Minigames"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     There doesn't appear to be any help text for this gamemode.
     Report this to the creator.
@@ -36,7 +34,7 @@ GM.RoundTime = 90               -- How long should each round go for?
 GM.RoundCooldown = 5            -- How long between each round?
 GM.WarmupTime = 10              -- How long to wait for players to join before starting the game?
 
-GM.RoundType = 'default'        -- What system should be used for game/round logic?
+GM.RoundType = "default"        -- What system should be used for game/round logic?
 GM.GameTime = 600               -- If not using rounds, how long should the game go for?
 GM.EndOnTimeOut = false         -- If using 'timed' RoundType, should this cut off the middle of a round?
 
@@ -59,8 +57,8 @@ GM.ShowTeamScoreboard = true    -- Should the team scores be displayed at the to
 GM.MinPlayers = 2               -- How many players are needed to play the gamemode
 
 function GM:Initialize()
-	-- Gamemode crashes without this function so don't remove it
-	-- There's nothing that needs to be handled here, hence the blank
+    -- Gamemode crashes without this function so don't remove it
+    -- There's nothing that needs to be handled here, hence the blank
 end
 
 -- Fisher-Yates table shuffle
@@ -69,6 +67,7 @@ function table.Shuffle(t)
         local j = math.random(i)
         t[i], t[j] = t[j], t[i]
     end
+
     return t
 end
 
@@ -86,26 +85,28 @@ TEAM_RED = 1
 TEAM_BLUE = 2
 
 TEAM_RED_SPAWNS = {"info_player_counterterrorist", "info_player_red"}
+
 TEAM_BLUE_SPAWNS = {"info_player_terrorist", "info_player_blue"}
 
 -- Extra team colors
 -- These can be selected with mg_team_control
 TEAM_COLORS = {}
-TEAM_COLORS['orange'] = Color(253, 150, 68)
-TEAM_COLORS['red'] = Color(252, 92, 101)
-TEAM_COLORS['blue'] = Color(0, 168, 255)
-TEAM_COLORS['green'] = Color(38, 222, 129)
-TEAM_COLORS['purple'] = Color(165, 94, 234)
-TEAM_COLORS['pink'] = Color(255, 159, 243)
-TEAM_COLORS['cyan'] = Color(72, 219, 251)
-TEAM_COLORS['yellow'] = Color(254, 211, 48)
-
+TEAM_COLORS["orange"] = Color(253, 150, 68)
+TEAM_COLORS["red"] = Color(252, 92, 101)
+TEAM_COLORS["blue"] = Color(0, 168, 255)
+TEAM_COLORS["green"] = Color(38, 222, 129)
+TEAM_COLORS["purple"] = Color(165, 94, 234)
+TEAM_COLORS["pink"] = Color(255, 159, 243)
+TEAM_COLORS["cyan"] = Color(72, 219, 251)
+TEAM_COLORS["yellow"] = Color(254, 211, 48)
 -- Upsettingly, Garry's Mod by default doesn't provide a way to change the name of teams
 -- This overrides the functions to create global variables for team names
 -- This also caches the old function and then uses it for reverse-compatibility
 local old = team.GetName
+
 function team.GetName(id)
     local name = GetGlobalString("Team" .. tostring(id) .. ".GName", "")
+
     if name == "" then
         return old(id)
     else
@@ -118,18 +119,22 @@ function team.SetName(id, name)
 end
 
 local oldc = team.GetColor
+
 function team.GetColor(id)
     local color = GetGlobalVector("Team" .. tostring(id) .. ".GColor", false)
+
     if not color then
         return oldc(id)
     else
         color = Color(color.x, color.y, color.z)
+
         return color
     end
 end
 
 function team.SetColor(id, color)
     color = Vector(color.r, color.g, color.b)
+
     return SetGlobalVector("Team" .. tostring(id) .. ".GColor", color)
 end
 
@@ -151,25 +156,26 @@ end
 -- Not sure why I did this but oh well, way too late to change it
 -- seriously don't change it you'll break a lot of maps
 function GM:CreateTeams()
-	if not GAMEMODE.TeamBased then return end
-	
-	team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS['red'], true)
-	team.SetSpawnPoint(TEAM_RED, TEAM_RED_SPAWNS)
-	
-	team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS['blue'], true)
-	team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
+    if not GAMEMODE.TeamBased then return end
+    team.SetUp(TEAM_RED, "Red Team", TEAM_COLORS["red"], true)
+    team.SetSpawnPoint(TEAM_RED, TEAM_RED_SPAWNS)
+    team.SetUp(TEAM_BLUE, "Blue Team", TEAM_COLORS["blue"], true)
+    team.SetSpawnPoint(TEAM_BLUE, TEAM_BLUE_SPAWNS)
+    team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
 
-	team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
-	team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
+    team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_counterterrorist", "info_player_blue", "info_player_red"})
 end
 
 -- Get a table of all alive players
 function GM:GetAlivePlayers()
     local tbl = {}
-    for k,v in pairs(player.GetAll()) do
-        if v:Alive() and v:Team() != TEAM_SPECTATOR and !v.Spectating then table.insert(tbl, v) end
+
+    for k, v in pairs(player.GetAll()) do
+        if v:Alive() and v:Team() ~= TEAM_SPECTATOR and not v.Spectating then
+            table.insert(tbl, v)
+        end
     end
-    
+
     return tbl
 end
 
@@ -182,11 +188,16 @@ end
 -- Convenience function to get number of non-spectators
 function GM:NumNonSpectators()
     local num = 0
-    for k,v in pairs(player.GetAll()) do
+
+    for k, v in pairs(player.GetAll()) do
         if GAMEMODE.TeamBased then
-            if v:Team() != TEAM_SPECTATOR and v:Team() != TEAM_UNASSIGNED and v:Team() != 0 then num = num + 1 end
+            if v:Team() ~= TEAM_SPECTATOR and v:Team() ~= TEAM_UNASSIGNED and v:Team() ~= 0 then
+                num = num + 1
+            end
         else
-            if v:Team() != TEAM_SPECTATOR then num = num + 1 end
+            if v:Team() ~= TEAM_SPECTATOR then
+                num = num + 1
+            end
         end
     end
 
@@ -196,48 +207,56 @@ end
 -- Convenience function to get number of living players in a team
 function GM:GetTeamLivingPlayers(t)
     local alive = 0
-    for k,v in pairs(team.GetPlayers(t)) do
-        if v:Alive() and !v.Spectating then alive = alive + 1 end
+
+    for k, v in pairs(team.GetPlayers(t)) do
+        if v:Alive() and not v.Spectating then
+            alive = alive + 1
+        end
     end
+
     return alive
 end
 
 function GM:GetTeamSurvivors(t)
     local tbl = {}
-    for k,v in pairs(team.GetPlayers(t)) do
-        if v:Alive() and !v.Spectating then table.insert(tbl, v) end
+
+    for k, v in pairs(team.GetPlayers(t)) do
+        if v:Alive() and not v.Spectating then
+            table.insert(tbl, v)
+        end
     end
-    
+
     return tbl
 end
 
 -- Much nicer wrapper for this function
 function GM:GetRoundState()
-    return GetGlobalString('RoundState', 'GameNotStarted')
+    return GetGlobalString("RoundState", "GameNotStarted")
 end
 
 function GM:SetRoundState(newstate)
-    return SetGlobalString('RoundState', newstate)
+    return SetGlobalString("RoundState", newstate)
 end
 
 -- This is the most common use of the above function
 -- Helps clean up code
 function GM:InRound()
-    return (GAMEMODE:GetRoundState() == 'InRound')
+    return GAMEMODE:GetRoundState() == "InRound"
 end
 
 -- Another nice wrapper for a global variable
 function GM:GetRoundStartTime()
-    return GetGlobalFloat('RoundStart', 0)
+    return GetGlobalFloat("RoundStart", 0)
 end
 
 function GM:GetRoundNumber()
-    return GetGlobalInt('RoundNumber', 0)
+    return GetGlobalInt("RoundNumber", 0)
 end
 
 -- Helper function to scale data based on the number of players
 function GM:PlayerScale(ratio, min, max)
     local players = GAMEMODE:GetNumberAlive()
+
     return math.Clamp(math.ceil(players * ratio), min, max)
 end
 
@@ -252,7 +271,6 @@ GM.ValidModels = {
     male07 = "models/player/Group01/male_07.mdl",
     male08 = "models/player/Group01/male_08.mdl",
     male09 = "models/player/Group01/male_09.mdl",
-    
     female01 = "models/player/Group01/female_01.mdl",
     female02 = "models/player/Group01/female_02.mdl",
     female03 = "models/player/Group01/female_03.mdl",
@@ -263,12 +281,13 @@ GM.ValidModels = {
 
 -- Convert the playermodel name into a model
 function GM:TranslatePlayerModel(name, ply)
-    if GAMEMODE.ValidModels[name] != nil then
+    if GAMEMODE.ValidModels[name] ~= nil then
         return GAMEMODE.ValidModels[name]
     elseif ply.TemporaryModel then
         return ply.TemporaryModel
     else
         ply.TemporaryModel = table.Random(GAMEMODE.ValidModels)
+
         return ply.TemporaryModel
     end
 end

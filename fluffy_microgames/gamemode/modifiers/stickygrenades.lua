@@ -1,7 +1,6 @@
-MOD.Name = 'Sticky Grenades'
+﻿MOD.Name = "Sticky Grenades"
 MOD.Elimination = true
-MOD.Region = 'empty'
-
+MOD.Region = "empty"
 MOD.KillValue = 1
 
 function MOD:Initialize()
@@ -12,6 +11,6 @@ function MOD:Loadout(ply)
     ply:SetRunSpeed(1)
     ply:SetWalkSpeed(1)
     ply:SetJumpPower(1)
-    ply:Give('weapon_frag')
-    ply:GiveAmmo(100, 'Grenade')
+    ply:Give("weapon_frag")
+    ply:GiveAmmo(100, "Grenade")
 end
