@@ -281,8 +281,8 @@ if CLIENT then
     end
 
     function SWEP:CreateModelPart(v)
-        if not v.model or v.model == "" then continue end
-        if IsValid(v.modelEnt) and v.createdModel == v.model then continue end
+        if not v.model or v.model == "" then return end
+        if IsValid(v.modelEnt) and v.createdModel == v.model then return end
 
         if string.find(v.model, ".mdl") and file.Exists(v.model, "GAME") then
             v.modelEnt = ClientsideModel(v.model, RENDER_GROUP_VIEW_MODEL_OPAQUE)
@@ -302,8 +302,8 @@ if CLIENT then
     end
 
     function SWEP:CreateSpritePart(v)
-        if not v.sprite or v.sprite == "" then continue end
-        if v.spriteMaterial and v.createdSprite == v.sprite then continue end
+        if not v.sprite or v.sprite == "" then return end
+        if v.spriteMaterial and v.createdSprite == v.sprite then return end
 
         if file.Exists("materials/" .. v.sprite .. ".vmt", "GAME") then
             local name = v.sprite .. "-"

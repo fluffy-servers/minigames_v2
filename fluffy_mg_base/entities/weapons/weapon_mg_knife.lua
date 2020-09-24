@@ -16,6 +16,20 @@ if CLIENT then
     killicon.AddFont("weapon_mg_knife", "CSKillIcons", "j", Color(255, 80, 0, 255))
 end
 
+SWEP.PrintName              = "Knife"
+SWEP.ViewModel 				= "models/weapons/cstrike/c_knife_t.mdl"
+SWEP.WorldModel 			= "models/weapons/w_knife_t.mdl" 
+SWEP.UseHands               = true
+
+SWEP.Primary.Automatic			= true
+SWEP.Primary.Damage 			= 50
+SWEP.Secondary.ClipSize			= -1
+SWEP.Secondary.DefaultClip		= -1
+SWEP.Secondary.Damage			= -1
+SWEP.Secondary.Automatic		= true
+SWEP.Secondary.Ammo			    = "none"
+SWEP.Secondary.Delay 			= 0.75
+
 SWEP.AttackRange = 56
 
 function SWEP:Think()
@@ -116,9 +130,9 @@ function SWEP:DoAttack(alt)
             -- Apply damage
             local dmg = DamageInfo()
             dmg:SetDamage(self.Primary.Damage)
-            dmg:SetAttacker(owner)
+            dmg:SetAttacker(attacker)
             dmg:SetInflictor(self)
-            dmg:SetDamageForce(owner:GetAimVector() * 1500)
+            dmg:SetDamageForce(attacker:GetAimVector() * 1500)
             dmg:SetDamagePosition(tr.HitPos)
             dmg:SetDamageType(DMG_SLASH)
             tr.Entity:DispatchTraceAttack(dmg, tr)
@@ -126,7 +140,7 @@ function SWEP:DoAttack(alt)
             -- Blood effects for humans
             if tr.Entity:IsPlayer() then
                 local edata = EffectData()
-                edata:SetStart(owner:GetShootPos())
+                edata:SetStart(attacker:GetShootPos())
                 edata:SetOrigin(tr.HitPos)
                 edata:SetNormal(tr.Normal)
                 edata:SetEntity(tr.Entity)

@@ -63,7 +63,7 @@ function GM:OnPlayerChangedTeam(ply, old, new)
         ply:SetPos(pos)
     end
 
-    PrintMessage(HUD_PRINTTALK, Format("%s joined "%s"", ply:Nick(), team.GetName(new)))
+    PrintMessage(HUD_PRINTTALK, Format("%s joined %s", ply:Nick(), team.GetName(new)))
 end
 
 -- Useful function to swap the current teams

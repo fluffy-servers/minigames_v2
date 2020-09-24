@@ -18,7 +18,7 @@ if SERVER then
         if not ply:IsPlayer() then return end
 
         -- Announce to the player
-        local name = self.WeaponEntity:GetPrintName()
+        local name = self.ItemEntity:GetPrintName()
         GAMEMODE:PlayerOnlyAnnouncement(ply, 1.5, name, 1, "top")
 
         local BaseClass = baseclass.Get("mg_spawner_base")

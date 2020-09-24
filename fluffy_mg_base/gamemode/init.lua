@@ -325,7 +325,7 @@ end)
 
 hook.Add("WeaponEquip", "WeaponSpawnerEquip", function(wep, ply)
     if wep.SpawnerEntity then
-        wep.SpawnerEntity:CollectWeapon(ply)
+        wep.SpawnerEntity:CollectItem(ply)
     end
 end)
 

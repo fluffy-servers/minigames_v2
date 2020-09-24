@@ -263,8 +263,8 @@ function GM:OpenEndGamePanel()
 
     function scoreboard:PaintTeamInfo()
         if GAMEMODE.TeamBased and scoreboard.ShowTeams then
-            local tab_width = (w - 40) / 2
-            local t2 = w - tab_width - 16
+            local tab_width = (ww - 40) / 2
+            local t2 = ww - tab_width - 16
             draw.RoundedBox(8, 16, 48, tab_width, 48, team.GetColor(TEAM_BLUE))
             GAMEMODE:DrawShadowText(team.GetName(TEAM_BLUE), "FS_32", 28, 72, color_white, TEXT_ALIGN_LEFT, TEXT_ALIGN_CENTER)
             draw.RoundedBox(8, t2, 48, tab_width, 48, team.GetColor(TEAM_RED))
