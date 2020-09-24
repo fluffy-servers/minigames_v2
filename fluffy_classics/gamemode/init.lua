@@ -16,5 +16,5 @@ end
 
 -- Disable picking up the same weapon twice
 hook.Add("PlayerCanPickupWeapon", "StopDoublePickup", function(ply, wep)
-	if ply:HasWeapon(wep:GetClass()) then return false end
+	if ply:HasWeapon(wep:GetClass()) and not IsValid(wep.SpawnerEntity) then return false end
 end)
