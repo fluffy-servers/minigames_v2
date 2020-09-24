@@ -51,7 +51,6 @@ function GM:SetHumanSpeed(ply)
 end
 
 function GM:SetAdrenalineFOV(ply, fov)
-    print(ply, fov)
     ply.adrenaline_fov = fov
     ply:SetFOV(fov, 0.5)
 end

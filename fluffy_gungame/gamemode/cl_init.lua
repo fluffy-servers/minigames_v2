@@ -49,7 +49,6 @@ end)
 function GM:CreateScoringPane()
     if GAMEMODE.ScorePane then
         GAMEMODE.ScorePane:Remove()
-        print("Removing old pane")
     end
 
     local Frame = vgui.Create("DPanel")

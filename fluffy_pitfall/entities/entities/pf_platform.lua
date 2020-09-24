@@ -39,10 +39,8 @@ end
 
 function ENT:Initialize()
     if CLIENT then return end
-    -- Set the model and data based on the game submode
-    local mode = GetGlobalString("PitfallType", "square")
-    self:SetModel("models/hunter/blocks/cube2x2x025.mdl")
-    gametypefunctions[mode](self)
+
+	self:SetModel("models/hunter/blocks/cube2x2x025.mdl")
     self:SetColor(GAMEMODE.PColorStart)
     -- Initialize physics
     self:PhysicsInit(SOLID_VPHYSICS)
@@ -61,6 +59,10 @@ function ENT:Initialize()
     self:SetTrigger(true)
 end
 
+function ENT:ApplyModel(mode)
+    gametypefunctions[mode](self)
+end
+
 -- Make platforms take damage when someone is touching them
 function ENT:Touch(ent)
     -- 3 seconds of spawn protection in rounds
@@ -71,8 +73,7 @@ function ENT:Touch(ent)
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
     local scale = CurTime() - self.CreationTime
-    scale = 1 + (4 * (scale / GAMEMODE.RoundTime))
-    -- yay damage
+    scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
     self:AddDamage(FrameTime() * 40 * scale)
 end
 

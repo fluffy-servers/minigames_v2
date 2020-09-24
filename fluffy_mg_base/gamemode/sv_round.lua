@@ -298,9 +298,13 @@ function GM:HandleTeamWin(reason)
             msg = "Draw! Both teams are tied!"
         end
     elseif GAMEMODE.TeamSurvival then
-        winners = GAMEMODE.HunterTeam
-        msg = team.GetName(GAMEMODE.HunterTeam) .. " win the round!"
+        if reason == GAMEMODE.SurvivorTeam then
+            winners = GAMEMODE.SurvivorTeam
+        else
+            winners = GAMEMODE.HunterTeam
+        end
 
+        msg = team.GetName(winners) .. ' win the round!'    
         if GAMEMODE.LastSurvivor then
             extra = string.sub(GAMEMODE.LastSurvivor:Nick(), 1, 10) .. " was the last survivor"
         end

@@ -195,17 +195,8 @@ function GM:HelpPanel()
         DisableClipping(false)
     end
 
-    if GAMEMODE.TeamBased and not GAMEMODE.TeamSurvival and GAMEMODE.PlayerChooseTeams then
-        play_button:SetWide(192)
-        play_button.Message = "Choose Team"
-
-        function play_button:DoClick()
-            GAMEMODE:OpenInfoOption("Team", GAMEMODE.TeamPanel)
-        end
-    else
-        function play_button:DoClick()
-            GAMEMODE:GetInfoFrame():Close()
-        end
+    function play_button:DoClick()
+        GAMEMODE:GetInfoFrame():Close()
     end
 end
 

@@ -19,38 +19,42 @@ GM.HelpText = [[
     Report this to the creator.
 ]]
 
--- These variables should be altered in each sub gamemode's shared.lua file
--- If not defined, they will return to these values here
-GM.TeamBased = false                -- Is the gamemode team based, or is it FFA?
-GM.Elimination = false              -- Should players stay dead, or should they respawn?
-GM.PlayerChooseTeams = true         -- Can players choose their own teams?
-GM.DeathLingerTime = 3              -- How long should players linger on their corpse before ghosting?
-GM.RespawnTime = 2                  -- How long do players have to wait before respawning?
-GM.AutoRespawn = true               -- Should players automatically respawn?
+GM.IsMinigames = true           -- Don't change, easy lookup for other addons
 
-GM.RoundNumber = 5                  -- How many rounds?
-GM.RoundTime = 90                   -- How long should each round go for?
-GM.RoundCooldown = 5                -- How long between each round?
-GM.WarmupTime = 10                  -- How long to wait for players to join before starting the game?
-GM.RoundType = "default"            -- What system should be used for game/round logic?
-GM.GameTime = 600                   -- If not using rounds, how long should the game go for?
-GM.EndOnTimeOut = false             -- If using "timed" RoundType, should this cut off the middle of a round?
+GM.TeamBased = false            -- Is the gamemode team based, or is it FFA?
+GM.Elimination = false          -- Should players stay dead, or should they respawn?
+GM.PlayerChooseTeams = true     -- Can players choose their own teams?
 
-GM.CanSuicide = false               -- Should players be able to die at will? :(
-GM.ThirdPersonEnabled = false       -- Should players have access to thirdperson?
-GM.SpawnProtection = false          -- Should players have brief spawn protection?
-GM.EnableFallDamage = false         -- Should players take fall damage?
-GM.DeathSounds = true               -- Should voicelines play on player death?
-GM.KillValue = 1                    -- How many points should be awarded for a kill?
+GM.DeathLingerTime = 3          -- How long should players linger on their corpse before ghosting?
+GM.RespawnTime = 2              -- How long do players have to wait before respawning?
+GM.AutoRespawn = true           -- Should players automatically respawn?
 
-GM.TeamSurvival = false             -- Is this a Hunter vs Hunted gametype?
-GM.SurvivorTeam = TEAM_BLUE         -- Survivor team
-GM.HunterTeam = TEAM_RED            -- Hunter team
+GM.RoundNumber = 5              -- How many rounds?
+GM.RoundTime = 90               -- How long should each round go for?
+GM.RoundCooldown = 5            -- How long between each round?
+GM.WarmupTime = 10              -- How long to wait for players to join before starting the game?
 
-GM.DisableConfetti = false          -- Should the round win confetti be disabled?
-GM.HUDTeamColor = true              -- Should the HUD color be based on the team color?
-GM.ShowTeamScoreboard = true        -- Should the team scores be displayed at the top of the scoreboard?
-GM.MinPlayers = 2                   -- How many players are needed to play the gamemode
+GM.RoundType = 'default'        -- What system should be used for game/round logic?
+GM.GameTime = 600               -- If not using rounds, how long should the game go for?
+GM.EndOnTimeOut = false         -- If using 'timed' RoundType, should this cut off the middle of a round?
+
+GM.CanSuicide = false           -- Should players be able to die at will? :(
+GM.ThirdPersonEnabled = false   -- Should players have access to thirdperson?
+GM.SpawnProtection = false      -- Should players have brief spawn protection?
+GM.EnableFallDamage = false     -- Should players take fall damage?
+
+GM.DeathSounds = true	        -- Should voicelines play on player death?
+GM.KillValue = 1                -- How many points should be awarded for a kill?
+
+GM.TeamSurvival = false		    -- Is this a Hunter vs Hunted gametype?
+GM.SurvivorTeam = TEAM_BLUE	    -- Survivor team
+GM.HunterTeam = TEAM_RED	    -- Hunter team
+
+GM.DisableConfetti = false      -- Should the round win confetti be disabled?
+GM.HUDTeamColor = true          -- Should the HUD color be based on the team color?
+GM.ShowTeamScoreboard = true    -- Should the team scores be displayed at the top of the scoreboard?
+
+GM.MinPlayers = 2               -- How many players are needed to play the gamemode
 
 function GM:Initialize()
     -- Gamemode crashes without this function so don't remove it
@@ -65,6 +69,15 @@ function table.Shuffle(t)
     end
 
     return t
+end
+
+-- Utility function to get table keys
+function table.Keys(t)
+    local keyset = {}
+    for k, _ in pairs(t) do
+        table.insert(keyset, k)
+    end
+    return keyset
 end
 
 -- These teams should work fantastically for most gamemodes
