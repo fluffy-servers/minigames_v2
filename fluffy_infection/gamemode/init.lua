@@ -81,6 +81,33 @@ function GM:CanPlayerSuicide(ply)
     return true
 end
 
+-- Handle Infection spawnpoints a bit differently
+function GM:PlayerSelectSpawn(ply)
+    if ply:Team() == TEAM_BLUE then
+        if not IsTableOfEntitiesValid(GAMEMODE.SurvivorSpawns) then
+            -- If there are any info_player_survivor spawns in the map, then use these
+            GAMEMODE.SurvivorSpawns = ents.FindByClass("info_player_survivor")
+
+            -- Otherwise, we'll use info_player_start entities
+            if #GAMEMODE.SurvivorSpawns < 2 then
+                GAMEMODE.SurvivorSpawns = table.Add(GAMEMODE.SurvivorSpawns, ents.FindByClass("info_player_start"))
+            end
+        end
+        return GAMEMODE:AttemptSpawnPoint(ply, GAMEMODE.SurvivorSpawns)
+    elseif ply:Team() == TEAM_RED then
+        if not IsTableOfEntitiesValid(GAMEMODE.InfectedSpawns) then
+            -- If there are any info_player_infected spawns in the map, then use these
+            GAMEMODE.InfectedSpawns = ents.FindByClass("info_player_infected")
+
+            -- Otherwise, we'll use info_player_start entities
+            if #GAMEMODE.InfectedSpawns < 2 then
+                GAMEMODE.InfectedSpawns = table.Add(GAMEMODE.InfectedSpawns, ents.FindByClass("info_player_start"))
+            end
+        end
+        return GAMEMODE:AttemptSpawnPoint(ply, GAMEMODE.InfectedSpawns)
+    end
+end
+
 -- Track survived rounds
 function GM:StatsRoundWin(winners)
     if winners == TEAM_BLUE then
