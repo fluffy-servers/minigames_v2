@@ -85,7 +85,6 @@ TEAM_RED = 1
 TEAM_BLUE = 2
 
 TEAM_RED_SPAWNS = {"info_player_counterterrorist", "info_player_red"}
-
 TEAM_BLUE_SPAWNS = {"info_player_terrorist", "info_player_blue"}
 
 -- Extra team colors
@@ -99,11 +98,11 @@ TEAM_COLORS["purple"] = Color(165, 94, 234)
 TEAM_COLORS["pink"] = Color(255, 159, 243)
 TEAM_COLORS["cyan"] = Color(72, 219, 251)
 TEAM_COLORS["yellow"] = Color(254, 211, 48)
+
 -- Upsettingly, Garry's Mod by default doesn't provide a way to change the name of teams
 -- This overrides the functions to create global variables for team names
 -- This also caches the old function and then uses it for reverse-compatibility
 local old = team.GetName
-
 function team.GetName(id)
     local name = GetGlobalString("Team" .. tostring(id) .. ".GName", "")
 
@@ -119,7 +118,6 @@ function team.SetName(id, name)
 end
 
 local oldc = team.GetColor
-
 function team.GetColor(id)
     local color = GetGlobalVector("Team" .. tostring(id) .. ".GColor", false)
 
