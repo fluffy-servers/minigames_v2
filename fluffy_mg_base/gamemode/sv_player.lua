@@ -2,6 +2,7 @@
     Functions related to the player
     Stuff like playermodels, FFA colors, etc.
 --]]
+
 -- Stop suicide in some gamemodes
 function GM:CanPlayerSuicide()
     return self.CanSuicide
@@ -34,57 +35,41 @@ function GM:PlayerSetModel(ply)
     end
 end
 
--- Select a spawn entity for the player
--- Edited from base gamemode
-function GM:PlayerSelectSpawn(pl)
+
+-- Attempt to pick a spawnpoint from a list of entities
+function GM:AttemptSpawnPoint(ply, ents, attempts)
+    attempts = attempts or 10
+    local chosen = nil
+
+    for i = 1, attempts do
+        chosen = table.Random(ents)
+        if not IsValid(chosen) or not chosen:IsInWorld() then continue end
+
+        if hook.Call("IsSpawnpointSuitable", GAMEMODE, ply, chosen, i == attempts) then
+            return chosen
+        end
+    end
+
+    -- Even if the last attempt isn't viable, we need *somewhere* to spawn
+    return chosen
+end
+
+function GM:PlayerSelectSpawn(ply)
     if self.TeamBased then
-        local ent = self:PlayerSelectTeamSpawn(pl:Team(), pl)
-        if (IsValid(ent)) then return ent end
-    end
-
-    -- Save information about all of the spawn points
-    -- in a team based game you'd split up the spawns
-    if not IsTableOfEntitiesValid(self.SpawnPoints) then
-        if #ents.FindByClass("info_player_start") > 2 and not self.TeamBased then
-            -- If there's plenty of info_player_starts, only use these in FFA gamemodes
-            self.LastSpawnPoint = 0
-            self.SpawnPoints = ents.FindByClass("info_player_start")
-        else
-            self.LastSpawnPoint = 0
-            self.SpawnPoints = ents.FindByClass("info_player_start")
-            self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass("info_player_deathmatch"))
-            self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass("info_player_combine"))
-            self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass("info_player_rebel"))
-            self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass("info_player_counterterrorist"))
-            self.SpawnPoints = table.Add(self.SpawnPoints, ents.FindByClass("info_player_terrorist"))
+        local spawns = team.GetSpawnPoints(ply:Team())
+        if IsTableOfEntitiesValid(spawns) then
+            return GAMEMODE:AttemptSpawnPoint(ply, spawns)
         end
     end
 
-    local Count = table.Count(self.SpawnPoints)
-
-    if Count == 0 then
-        Msg("[PlayerSelectSpawn] Error! No spawn points!\n")
-
-        return nil
-    end
-
-    local ChosenSpawnPoint = nil
-
-    -- Try to work out the best, random spawnpoint
-    for i = 1, Count do
-        ChosenSpawnPoint = table.Random(self.SpawnPoints)
-
-        if (IsValid(ChosenSpawnPoint) and ChosenSpawnPoint:IsInWorld()) then
-            if ((ChosenSpawnPoint == pl:GetVar("LastSpawnpoint") or ChosenSpawnPoint == self.LastSpawnPoint) and Count > 1) then continue end
-
-            if (hook.Call("IsSpawnpointSuitable", GAMEMODE, pl, ChosenSpawnPoint, i == Count)) then
-                self.LastSpawnPoint = ChosenSpawnPoint
-                pl:SetVar("LastSpawnpoint", ChosenSpawnPoint)
-
-                return ChosenSpawnPoint
-            end
+    -- Find FFA spawn entities
+    if not IsTableOfEntitiesValid(GAMEMODE.SpawnPoints) then
+        GAMEMODE.SpawnPoints = ents.FindByClass("info_player_start")
+        if #GAMEMODE.SpawnPoints < 2 then
+            GAMEMODE.SpawnPoints = table.Add(GAMEMODE.SpawnPoints, ents.FindByClass("info_player_terrorist"))
+            GAMEMODE.SpawnPoints = table.Add(GAMEMODE.SpawnPoints, ents.FindByClass("info_player_counterterrorist"))
         end
     end
 
-    return ChosenSpawnPoint
+    return GAMEMODE:AttemptSpawnPoint(ply, GAMEMODE.SpawnPoints)
 end

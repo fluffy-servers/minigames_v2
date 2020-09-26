@@ -18,7 +18,7 @@ end
 
 SWEP.PrintName              = "Knife"
 SWEP.ViewModel 				= "models/weapons/cstrike/c_knife_t.mdl"
-SWEP.WorldModel 			= "models/weapons/w_knife_t.mdl" 
+SWEP.WorldModel 			= "models/weapons/w_knife_t.mdl"
 SWEP.UseHands               = true
 
 SWEP.Primary.Automatic			= true
