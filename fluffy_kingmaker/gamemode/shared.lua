@@ -1,7 +1,6 @@
-DeriveGamemode('fluffy_mg_base')
-
-GM.Name = 'Kingmaker'
-GM.Author = 'FluffyXVI'
+﻿DeriveGamemode("fluffy_mg_base")
+GM.Name = "Kingmaker"
+GM.Author = "FluffyXVI"
 GM.HelpText = [[
     Become the King and survive!
     
@@ -10,16 +9,12 @@ GM.HelpText = [[
     
     The King is defenseless apart from a slight speed & health boost.
 ]]
-
-GM.TeamBased = false	-- Is the gamemode FFA or Teams?
+GM.TeamBased = false -- Is the gamemode FFA or Teams?
 GM.Elimination = false
 GM.WinBySurvival = false
-
-GM.RoundNumber = 7      -- How many rounds?
-GM.RoundTime = 60      -- Seconds each round lasts for
-
+GM.RoundNumber = 7 -- How many rounds?
+GM.RoundTime = 60 -- Seconds each round lasts for
 GM.ThirdpersonEnabled = true
 
 function GM:Initialize()
-
 end

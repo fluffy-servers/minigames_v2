@@ -1,13 +1,13 @@
-SWEP.Base = "weapon_mg_base"
+﻿SWEP.Base = "weapon_mg_base"
 
 if CLIENT then
-	SWEP.Slot = 2
-	SWEP.SlotPos = 0
-	
-	SWEP.IconLetter = '-'
-	SWEP.IconFont = 'HL2MPTypeDeath'
+    SWEP.Slot = 2
+    SWEP.SlotPos = 0
+    SWEP.IconLetter = "-"
+    SWEP.IconFont = "HL2MPTypeDeath"
     killicon.AddFont("inf_magnum", "HL2MPTypeDeath", "-", Color(255, 80, 0, 255))
 end
+
 SWEP.PrintName = "Magnum"
 
 -- Primary fire damage and aim settings
@@ -30,15 +30,17 @@ SWEP.UseHands = true
 SWEP.ViewModel = "models/weapons/cstrike/c_pist_deagle.mdl"
 SWEP.ViewModelFOV = 62
 SWEP.WorldModel = "models/weapons/w_pist_deagle.mdl"
-SWEP.HoldType = 'pistol'
+SWEP.HoldType = "pistol"
 
 function SWEP:CanPrimaryAttack()
     if self:Clip1() <= 0 then
         self:Reload()
+
         return false
-	end
-	
-	-- For the screen shaky effect when firing
-    self.Owner:ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil*2, math.Rand(-0.1, 0.1) * self.Primary.Recoil*2, 0))
+    end
+
+    -- For the screen shaky effect when firing
+    self:GetOwner():ViewPunch(Angle(math.Rand(-0.2, -0.1) * self.Primary.Recoil * 2, math.Rand(-0.1, 0.1) * self.Primary.Recoil * 2, 0))
+
     return true
 end

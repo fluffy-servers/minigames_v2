@@ -1,7 +1,6 @@
-AddCSLuaFile()
+﻿AddCSLuaFile()
 ENT.Type = "anim"
 ENT.Base = "base_anim"
-
 ENT.CrateHealth = 50
 ENT.Model = "models/props_junk/wood_crate001a.mdl"
 ENT.Team = TEAM_BLUE
@@ -12,8 +11,8 @@ function ENT:Initialize()
     self:PhysicsInit(SOLID_VPHYSICS)
     self:SetMoveType(MOVETYPE_VPHYSICS)
     self:SetSolid(SOLID_VPHYSICS)
-
     local phys = self:GetPhysicsObject()
+
     if IsValid(phys) then
         phys:Wake()
     end
@@ -27,11 +26,13 @@ end
 
 function ENT:OnTakeDamage(dmg)
     local attacker = dmg:GetAttacker()
-    if attacker:IsPlayer() then
-        if attacker:Team() == self.Team then return end
+
+    if attacker:IsPlayer() and attacker:Team() == self.Team then
+        return
     end
 
     self:SetHealth(self:Health() - dmg:GetDamage())
+
     if self:Health() <= 0 then
         self:Break(dmg:GetDamageForce(), attacker)
     end
@@ -45,6 +46,7 @@ function ENT:Break(force, attacker)
     if attacker:IsPlayer() then
         attacker:AddFrags(1)
     end
+
     team.AddRoundScore(self.Team, -1)
     GAMEMODE:CheckRoundEnd()
 end

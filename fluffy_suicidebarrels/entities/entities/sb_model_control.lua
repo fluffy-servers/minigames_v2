@@ -1,16 +1,13 @@
-ENT.Type = "point"
+﻿ENT.Type = "point"
 
-/*
+--[[
 function ENT:Initialize()
     GAMEMODE.BarrelModels = ["models/props_c17/oildrum001_explosive.mdl"]
     GAMEMODE.BarrelSkins = [0]
 end
-*/
-
+]]
 -- KV properties for mapping data
 function ENT:KeyValue(key, value)
-    print(key, value)
-
     if string.StartWith(key, "model") then
         local idx = tonumber(string.sub(key, 6))
         local model = value

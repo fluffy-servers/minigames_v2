@@ -1,6 +1,5 @@
-MOD.Name = "Stop Moving"
+﻿MOD.Name = "Stop Moving"
 MOD.RoundTime = 1.5
-
 MOD.SurviveValue = 1
 
 function MOD:Initialize()
