@@ -28,10 +28,14 @@ end
 
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout(ply)
-    ply:Give("weapon_platformbreaker")
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
+
+    -- Give weapons after the safe period has ended
+    timer.Simple(GAMEMODE.SafeTime, function()
+        ply:Give("weapon_platformbreaker")
+    end)
 end
 
 -- Credit damage to players for Knockbacks
