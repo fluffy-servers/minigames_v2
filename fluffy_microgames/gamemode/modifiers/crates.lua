@@ -12,6 +12,7 @@ local function spawnCrates()
         ent:SetPos(pos)
         ent:SetModel("models/props_junk/wood_crate001a.mdl")
         ent:Spawn()
+        ent:SetHealth(1)
     end
 end
 
