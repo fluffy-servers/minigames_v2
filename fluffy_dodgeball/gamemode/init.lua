@@ -84,6 +84,11 @@ function GM:CollectBall(ball, team)
     ball:SetNWVector("RColor", c)
 end
 
+-- Only balls can be picked up in Dodgeball
+function GM:GravGunPickupAllowed(ply, ent)
+    return ent:GetClass() == "db_dodgeball"
+end
+
 -- Handle collection when the gravity gun picks up a ball
 function GM:GravGunOnPickedUp(ply, ent)
     if ply:Team() ~= TEAM_BLUE and ply:Team() ~= TEAM_RED then return end
