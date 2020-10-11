@@ -288,8 +288,9 @@ function GM:DrawRoundState()
     if GAME_STATE == "Warmup" then
         local start_time = GetGlobalFloat("WarmupTime", CurTime())
         local t = GAMEMODE.WarmupTime - (CurTime() - start_time)
-        GAMEMODE:DrawShadowText("Round starting in " .. math.ceil(t) .. "...", "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
+        if t < 0.5 then return end
 
+        GAMEMODE:DrawShadowText("Round starting in " .. math.ceil(t) .. "...", "FS_40", 4, 4, GAMEMODE.FCol1, TEXT_ALIGN_LEFT, TEXT_ALIGN_TOP)
         return
     end
 
