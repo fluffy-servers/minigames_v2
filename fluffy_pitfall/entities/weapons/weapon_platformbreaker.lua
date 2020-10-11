@@ -21,16 +21,16 @@ SWEP.Primary.BulletForce = 1
 SWEP.Primary.NumShots = 1
 SWEP.Primary.Cone = 0.01
 SWEP.Primary.ClipSize = -1
-SWEP.Primary.Delay = 0.55
+SWEP.Primary.Delay = 0.35
 SWEP.Primary.DefaultClip = -1
-SWEP.Primary.Automatic = false
+SWEP.Primary.Automatic = true
 SWEP.Primary.Ammo = "none"
 
 SWEP.Secondary.ClipSize = 9999
 SWEP.Secondary.DefaultClip = 9999
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = 9999
-SWEP.Secondary.Delay = 1.5
+SWEP.Secondary.Delay = 1.8
 SWEP.Secondary.NextUse = 0
 SWEP.Secondary.Recoil = 2
 
