@@ -87,14 +87,23 @@ end
 hook.Add("PreRoundStart", "CreatePlatforms", function()
     GAMEMODE:ClearLevel()
 
-    local pos = GAMEMODE.PlatformPositions[game.GetMap()] or Vector(0, 0, 0)
+    -- Find the position for the center platform
+    local pos = GAMEMODE.PlatformPositions[game.GetMap()]
+    if not pos then
+        local origins = ents.FindByClass("pf_origin")
+        if #origins < 1 then
+            pos = Vector(0, 0, 0)
+        else
+            pos = origins[1]:GetPos()
+        end
+    end
     GAMEMODE:GenerateLevel(pos)
 end)
 
 -- Remove any leftover entities when the level is cleared
 function GM:ClearLevel()
     local classes = {"pf_platform", "info_player_start", "gmod_player_start", "info_player_terrorist", "info_player_counterterrorist"}
-    
+
     for _, class in pairs(classes) do
         for k,v in pairs(ents.FindByClass(class)) do
             v:Remove()

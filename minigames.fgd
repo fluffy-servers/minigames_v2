@@ -240,6 +240,11 @@
     colorbonus(string) : "Color Bonus" : "255,128,0" : "Color of platforms with bonuses. RGB comma separated no spaces."
 ]
 
+@PointClass = pf_origin:
+    "Origin marker for Pitfall maps. This should mark the center location of the bottom layer of platforms. Without this entity, this defaults to 0, 0, 0."
+[
+]
+
 // POLTERGEIST
 @PointClass iconsprite("editor/env_shooter.vmt") = pg_spawner:
     "Spawn point for Poltergeist entities"
