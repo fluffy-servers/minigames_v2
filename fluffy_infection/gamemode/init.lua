@@ -93,6 +93,7 @@ function GM:PlayerSelectSpawn(ply)
                 GAMEMODE.SurvivorSpawns = table.Add(GAMEMODE.SurvivorSpawns, ents.FindByClass("info_player_start"))
             end
         end
+
         return GAMEMODE:AttemptSpawnPoint(ply, GAMEMODE.SurvivorSpawns)
     elseif ply:Team() == TEAM_RED then
         if not IsTableOfEntitiesValid(GAMEMODE.InfectedSpawns) then
@@ -104,6 +105,7 @@ function GM:PlayerSelectSpawn(ply)
                 GAMEMODE.InfectedSpawns = table.Add(GAMEMODE.InfectedSpawns, ents.FindByClass("info_player_start"))
             end
         end
+        
         return GAMEMODE:AttemptSpawnPoint(ply, GAMEMODE.InfectedSpawns)
     end
 end

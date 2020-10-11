@@ -57,7 +57,7 @@ end
 function GM:PlayerSelectSpawn(ply)
     if self.TeamBased then
         local spawns = team.GetSpawnPoints(ply:Team())
-        if IsTableOfEntitiesValid(spawns) then
+        if #spawns > 0 and IsTableOfEntitiesValid(spawns) then
             return GAMEMODE:AttemptSpawnPoint(ply, spawns)
         end
     end

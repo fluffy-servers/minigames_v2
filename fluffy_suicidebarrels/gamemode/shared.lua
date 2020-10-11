@@ -23,6 +23,7 @@ GM.HelpText = [[
 ]]
 TEAM_RED = 1
 TEAM_BLUE = 2
+
 -- Configure teams for Hunter vs Hunted
 GM.TeamBased = true
 GM.TeamSurvival = true
@@ -36,17 +37,14 @@ GM.ThirdPersonEnabled = false -- This gamemode overrides some functions to do wi
 GM.ForceFFAColors = true -- Force team gamemodes to use FFA colors
 
 function GM:CreateTeams()
-    if (not GAMEMODE.TeamBased) then return end
+    if not GAMEMODE.TeamBased then return end
     team.SetUp(TEAM_RED, "Barrels", TEAM_COLORS["red"], true)
-
     team.SetSpawnPoint(TEAM_RED, {"info_player_counterterrorist", "info_player_rebel"})
 
     team.SetUp(TEAM_BLUE, "Humans", TEAM_COLORS["blue"], true)
-
     team.SetSpawnPoint(TEAM_BLUE, {"info_player_terrorist", "info_player_combine"})
 
     team.SetUp(TEAM_SPECTATOR, "Spectators", Color(255, 255, 80), true)
-
     team.SetSpawnPoint(TEAM_SPECTATOR, {"info_player_start", "info_player_terrorist", "info_player_combine"})
 end
 
