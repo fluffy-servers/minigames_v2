@@ -10,14 +10,14 @@
 		"pvp_smugglestruggle_version2",
 		"gm_passo_v2",
 		"pvp_fortfantastic_v1",
-		"pvp_rivertown_day"
+		"pvp_rivertown_day_v1"
 	],
 	"bombtag": [
 		"bt_rainbow",
 		"bt_museum",
 		"bt_canal",
 		"bt_yeoldearena_v2",
-		"bt_reactor",
+		"bt_reactor_v1",
 		"bt_courtyard_kerfuffle"
 	],
 	"climb": [
@@ -28,7 +28,8 @@
 		"db_arena_v3",
 		"db_terminus_v4",
 		"db_bunkerchunker_v2",
-		"db_dreamscape_v5"
+		"db_dreamscape_v5",
+		"db_gym"
 	],
 	"duckhunt": [
 		"dh_gauntlet_v2",
@@ -46,17 +47,12 @@
 		"pvp_smugglestruggle_version2",
 		"gm_passo_v2",
 		"pvp_fortfantastic_v1",
-		"pvp_rivertown_day"
+		"pvp_rivertown_day_v1"
 	],
 	"incoming": [
 		"inc_duo",
 		"inc_linear",
 		"inc_rectangular"
-	],
-	"infection": [
-		"pvp_rivertown_day",
-		"pvp_hexagons",
-		"pvp_fincity"
 	],
 	"junkjoust": [
 		"jj_foul_v1",
@@ -73,7 +69,7 @@
 		"pvp_smugglestruggle_version2",
 		"gm_passo_v2",
 		"pvp_fortfantastic_v1",
-		"pvp_rivertown_day"
+		"pvp_rivertown_day_v1"
 	],
 	"laserdance": [
 		"ld_toxic",
@@ -131,7 +127,7 @@
 		"pvp_smugglestruggle_version2",
 		"gm_passo_v2",
 		"pvp_fortfantastic_v1",
-		"pvp_rivertown_day"
+		"pvp_rivertown_day_v1"
 	],
 	"suicidebarrels": [
 		"sb_snowfall",

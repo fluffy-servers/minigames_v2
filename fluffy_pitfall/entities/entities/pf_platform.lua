@@ -69,12 +69,14 @@ function ENT:Touch(ent)
     if not GAMEMODE:InRound() then return end
     if GAMEMODE:GetRoundStartTime() + 3 > CurTime() then return end
     -- Only living players make the platforms fall
+
     if not IsValid(ent) then return end
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
+    
     local scale = CurTime() - self.CreationTime
     scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
-    self:AddDamage(FrameTime() * 40 * scale)
+    self:AddDamage(FrameTime() * 160 * scale)
 end
 
 -- Called when this platform is damaged by an entity
@@ -100,9 +102,7 @@ function ENT:OnTakeDamage(dmg)
         self:AddDamage(100, attacker)
     elseif inflictor:GetClass() == "weapon_platformbreaker" then
         -- pew pew does some damage
-        local scale = CurTime() - self.CreationTime
-        scale = 1 + (4 * (scale / GAMEMODE.RoundTime))
-        self:AddDamage(25 * scale, attacker)
+        self:AddDamage(100, attacker)
     else
         -- Deal damage based on round time
         local scale = CurTime() - self.CreationTime
@@ -133,7 +133,7 @@ function ENT:AddDamage(amount, ply)
         self.Dropped = true
         self:EmitSound(table.Random(self.ActivateSounds), 50, math.random(70, 130))
 
-        timer.Simple(0.7, function()
+        timer.Simple(0.5, function()
             if not IsValid(self) then return end
             self:EmitSound(table.Random(self.FallSounds), 65, math.random(70, 130))
             self:Drop()
