@@ -33,7 +33,7 @@ function GM:PlayerLoadout(ply)
     ply:SetJumpPower(200)
 
     -- Give weapons after the safe period has ended
-    timer.Simple(GAMEMODE.SafeTime, function()
+    timer.Simple(GAMEMODE.RoundCooldown + GAMEMODE.SafeTime, function()
         ply:Give("weapon_platformbreaker")
     end)
 end
