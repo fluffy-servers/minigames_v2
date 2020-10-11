@@ -93,24 +93,12 @@ end)
 
 -- Remove any leftover entities when the level is cleared
 function GM:ClearLevel()
-    for k, v in pairs(ents.FindByClass("pf_platform")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("info_player_start")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("gmod_player_start")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("info_player_terrorist")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("info_player_counterterrorist")) do
-        v:Remove()
+    local classes = {"pf_platform", "info_player_start", "gmod_player_start", "info_player_terrorist", "info_player_counterterrorist"}
+    
+    for _, class in pairs(classes) do
+        for k,v in pairs(ents.FindByClass(class)) do
+            v:Remove()
+        end
     end
 end
 
