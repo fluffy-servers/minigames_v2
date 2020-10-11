@@ -34,21 +34,6 @@ function GM:PlayerLoadout(ply)
     ply:SetJumpPower(200)
 end
 
--- Handle spawns slightly differently due to the random platforms
-function GM:PlayerSelectSpawn(ply)
-    local spawns = ents.FindByClass("info_player_start")
-    if (#spawns <= 0) then return false end
-    local selected = table.Random(spawns)
-
-    while selected.spawnUsed do
-        selected = table.Random(spawns)
-    end
-
-    selected.spawnUsed = true
-
-    return selected
-end
-
 -- Credit damage to players for Knockbacks
 hook.Add("EntityTakeDamage", "CreditPitfallKills", function(ply, dmginfo)
     if not ply:IsPlayer() then return end
