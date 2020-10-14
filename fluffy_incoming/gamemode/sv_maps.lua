@@ -5,7 +5,8 @@ GM.PropSpawnTimer = 0
 
 -- Spawn props at appropiate times
 hook.Add("Tick", "TickPropSpawn", function()
-    if not GAMEMODE:InRound() then return end
+    local roundstate = GAMEMODE:GetRoundState()
+    if roundstate ~= "InRound" and roundstate ~= "PreRound" then return end
 
     -- Get information from the currently selected props category
     -- See sv_maps for the prop data
@@ -31,7 +32,7 @@ hook.Add("Tick", "TickPropSpawn", function()
             -- Set physical properties
             local phys = ent:GetPhysicsObject()
             if not IsValid(phys) then return end
-            
+
             phys:SetMass(40000)
             phys:SetMaterial(material)
 
