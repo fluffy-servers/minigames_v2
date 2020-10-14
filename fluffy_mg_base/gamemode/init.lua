@@ -1,6 +1,5 @@
 ﻿--[[
     The core of the gamemode
-    Probably needs to be split into some more files at this point
 --]]
 
 -- Send all the required files to the client

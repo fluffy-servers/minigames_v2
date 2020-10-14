@@ -4,9 +4,10 @@
         - PreRoundStart
         - RoundStart
         - RoundEnd
-    Please don't override the functions unless absolutely critical
+    Please don't override the functions unless absolutely critical - use hooks!
     Some functions regarding winning conditions are designed to be overridden
 --]]
+
 -- Thinking for round coordination
 -- Usually check for round start and end conditions
 hook.Add("Think", "MinigamesRoundThink", function()

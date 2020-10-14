@@ -3,6 +3,7 @@
 	This mostly just registers fonts and colors
 	Most other HUD stuff is in the other client files
 --]]
+
 -- Include useful files
 include("shared.lua")
 include("cl_announcements.lua")

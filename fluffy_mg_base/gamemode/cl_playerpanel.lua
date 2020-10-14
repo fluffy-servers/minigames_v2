@@ -1,4 +1,10 @@
-﻿local lightblue = Color(0, 168, 255)
+﻿--[[
+    Draw the player panel, also known as the MOTD
+    This is the first thing the player sees upon joining
+    and contains Rules, Teams, etc.
+--]]
+
+local lightblue = Color(0, 168, 255)
 local darkblue = Color(0, 151, 230)
 local white = Color(241, 242, 246)
 local offwhite = Color(223, 228, 234)

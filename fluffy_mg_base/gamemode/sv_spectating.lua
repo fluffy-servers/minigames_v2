@@ -1,8 +1,9 @@
 ﻿--[[
-    Spectating functionality is contained in this file
+    Spectating functionality is handled in this file
 
-    Pending reworks!
+    This handles moving players to spectator upon death, and also moving around as spectator
 --]]
+
 -- Fairly self-explanatory
 function GM:PlayerSpawnAsSpectator(ply, mode, target)
     if ply:Alive() then

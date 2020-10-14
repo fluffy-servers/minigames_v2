@@ -2,6 +2,7 @@
     Handler for the thirdperson code
     Set the shared variable GM.ThirdpersonEnabled to use this file
 --]]
+
 -- Thirdperson toggle when F3 (default) is pressed
 hook.Add("PlayerBindPress", "ThirdpersonToggle", function(ply, bind, pressed)
     if bind == "gm_showspare1" and pressed then

@@ -1,10 +1,4 @@
-﻿--[[
-    Robert A Fraser 2018
-    Suicide Barrels
-    Inspired by countless prior gmod gamemodes
-]]
---
-DeriveGamemode("fluffy_mg_base")
+﻿DeriveGamemode("fluffy_mg_base")
 GM.Name = "Suicide Barrels"
 GM.Author = "FluffyXVI"
 GM.HelpText = [[

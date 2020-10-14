@@ -1,6 +1,12 @@
-﻿-- Database configuration is stored in db_config
--- This means I can upload this file to github or whatever without leaking my DB password
+﻿--[[
+    Handles the database connection and running queries
+--]]
+
+-- Database configuration is loaded from this file
+-- This file is not included in the Git repository
+-- See the documentation for what should go in this file
 include("db_config.lua")
+
 GM.MinigamesPQueries = {}
 CreateConVar("mg_db_enabled", 1, FCVAR_NONE, "Should the Minigames DB be enabled?")
 

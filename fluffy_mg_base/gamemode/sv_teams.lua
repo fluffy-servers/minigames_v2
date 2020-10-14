@@ -1,4 +1,9 @@
-﻿function GM:PlayerRequestTeam(ply, teamid)
+﻿--[[
+    Handles player management of teams
+    This controls when and how players are allowed to change teams
+--]]
+
+function GM:PlayerRequestTeam(ply, teamid)
     -- If players are spectating, they can change to Unassigned (and vice versa)
     -- This only applies in some cases where general team switching won't fly
     -- tidy this up at some point

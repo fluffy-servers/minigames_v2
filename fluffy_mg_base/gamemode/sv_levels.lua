@@ -2,6 +2,7 @@
     Serverside handling of levels
     This includes the database interface for XP
 --]]
+
 -- Prepare some prepared queries to make database stuff faster and more secure
 hook.Add("InitPostEntity", "PrepareLevelStuff", function()
     local db = GAMEMODE:CheckDBConnection()

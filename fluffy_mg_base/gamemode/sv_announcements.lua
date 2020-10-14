@@ -3,6 +3,7 @@
     Mostly just a net handler
     See cl_announcements.lua for more information
 --]]
+
 -- Serverside function for making a countdown announcement
 function GM:CountdownAnnouncement(length, endtext, location, endsound, ticksound)
     local tbl = {
