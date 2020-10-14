@@ -23,9 +23,9 @@ function GM:CheckpointTriggered(ply, stage, message)
     ply.CheckpointStage = stage
 
     if message then
-        GAMEMODE:PulseAnnouncementTwoLine(3, "Checkpoint!", message)
+        GAMEMODE:PlayerOnlyTwoLineAnnouncement(ply, 3, "Checkpoint!", message)
     else
-        GAMEMODE:PulseAnnouncement(3, "Checkpoint!")
+        GAMEMODE:PlayerOnlyAnnouncement(ply, 3, "Checkpoint!")
     end
 end
 
