@@ -3,78 +3,25 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("sv_maps.lua")
 
-GM.CurrentPropsCategory = "Both"
-GM.PropSpawnTimer = 0
-
--- Spawn props at appropiate times
-hook.Add("Tick", "TickPropSpawn", function()
-    if not GAMEMODE:InRound() then return end
-
-    -- Get information from the currently selected props category
-    -- See sv_maps for the prop data
-    local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
-    local props = data.models
-
-    -- Choose material
-    local material = data.materials
-    if istable(data.materials) then
-        material = table.Random(materials)
-    elseif not material then
-        material = "plastic"
-    end
-
-    if GAMEMODE.PropSpawnTimer < CurTime() then
-        -- Spawn a prop at every spawner
-        for k, v in pairs(ents.FindByClass("inc_prop_spawner")) do
-            local ent = ents.Create("prop_physics")
-            ent:SetModel(props[math.random(1, #props)])
-            ent:SetPos(v:GetPos())
-            ent:Spawn()
-
-            -- Set physical properties
-            local phys = ent:GetPhysicsObject()
-            phys:SetMass(40000)
-            phys:SetMaterial(material)
-
-            -- Call the data function on every entity
-            if data.func then
-                data.func(ent)
-            end
-        end
-
-        GAMEMODE.PropSpawnTimer = CurTime() + (data.delay or 2)
-    end
+-- Record starting distances
+hook.Add("PlayerSpawn", "IncomingCheckSpawnDistance", function(ply)
+    ply.StartingDistance = GAMEMODE:GetDistanceToEnd(ply)
 end)
 
--- Randomly pick a group of props
-hook.Add("PreRoundStart", "IncomingPropsChange", function()
-    -- If the map has a category restriction, pay attention to that
-    local category
-    if GAMEMODE.MapInfo[game.GetMap()].categories then
-        category = table.Random(GAMEMODE.MapInfo[game.GetMap()].categories)
-    else
-        category = table.Random(table.GetKeys(GAMEMODE.DefaultProps))
-    end
-    GAMEMODE.CurrentPropsCategory = category
-
-    -- Reset distances
+-- Reset best distances on round start
+hook.Add("PreRoundStart", "IncomingResetBestDistance", function()
     for k, v in pairs(player.GetAll()) do
         v.BestDistance = nil
     end
 end)
 
--- Record starting distances
-hook.Add("PlayerSpawn", "IncomingCheckDistance", function(ply)
-    ply.StartingDistance = GAMEMODE:GetDistanceToEnd(ply)
-end)
-
 -- Get the distance the player has to the end
--- This function also tracks the current best distance
 function GM:GetDistanceToEnd(ply)
     local endpos = GAMEMODE:EndingPoint()
     return ply:GetPos():Distance(endpos)
 end
 
+-- Check if a player has set their new best distance to the end goal
 function GM:CheckBestDistance(ply)
     if not ply.StartingDistance then return end
     local distance = GAMEMODE:GetDistanceToEnd(ply)
@@ -121,7 +68,13 @@ function GM:IncomingVictory(ply)
     GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5)
 end
 
+-- Equivalent of 1XP for every 100% of distance travelled
+hook.Add("RegisterStatsConversions", "AddIncomingStatConversions", function()
+    GAMEMODE:AddStatConversion("Distance", "Distance Travelled", 0.01)
+end)
+
 -- Network resources
+-- todo: workshop this!
 function IncludeResFolder(dir)
     local files = file.Find(dir .. "*", "GAME")
     local FindFileTypes = {".mdl", ".vmt", ".vtf", ".dx90", ".dx80", ".phy", ".sw", ".vvd", ".wav", ".mp3"}
@@ -134,11 +87,6 @@ function IncludeResFolder(dir)
         end
     end
 end
-
--- Equivalent of 1XP for every 100% of distance travelled
-hook.Add("RegisterStatsConversions", "AddIncomingStatConversions", function()
-    GAMEMODE:AddStatConversion("Distance", "Distance Travelled", 0.01)
-end)
 
 IncludeResFolder("materials/models/clannv/incoming/")
 IncludeResFolder("models/clannv/incoming/box/")

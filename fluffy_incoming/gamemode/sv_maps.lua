@@ -1,113 +1,50 @@
-﻿GM.DefaultProps = {}
+﻿include("sv_prop_presets.lua")
 
-GM.DefaultProps["Geometric"] = {
-    models = {
-        "models/clannv/incoming/box/box1.mdl",
-        "models/clannv/incoming/box/box2.mdl",
-        "models/clannv/incoming/box/box3.mdl",
-        "models/clannv/incoming/cone/cone1.mdl",
-        "models/clannv/incoming/cone/cone2.mdl",
-        "models/clannv/incoming/cone/cone3.mdl",
-        "models/clannv/incoming/cylinder/cylinder1.mdl",
-        "models/clannv/incoming/cylinder/cylinder2.mdl",
-        "models/clannv/incoming/cylinder/cylinder3.mdl",
-        "models/clannv/incoming/hexagon/hexagon1.mdl",
-        "models/clannv/incoming/hexagon/hexagon2.mdl",
-        "models/clannv/incoming/hexagon/hexagon3.mdl",
-        "models/clannv/incoming/pentagon/pentagon1.mdl",
-        "models/clannv/incoming/pentagon/pentagon2.mdl",
-        "models/clannv/incoming/pentagon/pentagon3.mdl",
-        "models/clannv/incoming/sphere/sphere1.mdl",
-        "models/clannv/incoming/sphere/sphere2.mdl",
-        "models/clannv/incoming/sphere/sphere3.mdl",
-        "models/clannv/incoming/triangle/triangle1.mdl",
-        "models/clannv/incoming/triangle/triangle2.mdl",
-        "models/clannv/incoming/triangle/triangle3.mdl"
-    }
-}
+GM.CurrentPropsCategory = "Both"
+GM.PropSpawnTimer = 0
 
-GM.DefaultProps["Vehicles"] = {
-    models = {
-        "models/props_vehicles/van001a_physics.mdl",
-        "models/props_vehicles/car001a_hatchback.mdl",
-        "models/props_vehicles/car001b_hatchback.mdl",
-        "models/props_vehicles/car002a_physics.mdl",
-        "models/props_vehicles/car002b_physics.mdl",
-        "models/props_vehicles/car003a_physics.mdl",
-        "models/props_vehicles/car003b_physics.mdl",
-        "models/props_vehicles/car004a_physics.mdl",
-        "models/props_vehicles/car004b_physics.mdl",
-        "models/props_vehicles/car005a_physics.mdl",
-        "models/props_vehicles/car005b_physics.mdl",
-        "models/props_vehicles/apc001.mdl",
-        "models/props_vehicles/trailer001a.mdl",
-        "models/props_vehicles/trailer002a.mdl",
-        "models/props_vehicles/truck001a.mdl",
-        "models/props_vehicles/truck003a.mdl"
-    }
-}
+-- Spawn props at appropiate times
+hook.Add("Tick", "TickPropSpawn", function()
+    if not GAMEMODE:InRound() then return end
 
-GM.DefaultProps["Both"] = {
-    models = {
-        "models/props_vehicles/van001a_physics.mdl",
-        "models/props_vehicles/car001a_hatchback.mdl",
-        "models/props_vehicles/car001b_hatchback.mdl",
-        "models/props_vehicles/car002a_physics.mdl",
-        "models/props_vehicles/car002b_physics.mdl",
-        "models/props_vehicles/car003a_physics.mdl",
-        "models/props_vehicles/car003b_physics.mdl",
-        "models/props_vehicles/car004a_physics.mdl",
-        "models/props_vehicles/car004b_physics.mdl",
-        "models/props_vehicles/car005a_physics.mdl",
-        "models/props_vehicles/car005b_physics.mdl",
-        "models/props_vehicles/apc001.mdl",
-        "models/props_vehicles/trailer001a.mdl",
-        "models/props_vehicles/trailer002a.mdl",
-        "models/props_vehicles/truck001a.mdl",
-        "models/props_vehicles/truck003a.mdl",
-        "models/clannv/incoming/box/box1.mdl",
-        "models/clannv/incoming/box/box2.mdl",
-        "models/clannv/incoming/box/box3.mdl",
-        "models/clannv/incoming/cone/cone1.mdl",
-        "models/clannv/incoming/cone/cone2.mdl",
-        "models/clannv/incoming/cone/cone3.mdl",
-        "models/clannv/incoming/cylinder/cylinder1.mdl",
-        "models/clannv/incoming/cylinder/cylinder2.mdl",
-        "models/clannv/incoming/cylinder/cylinder3.mdl",
-        "models/clannv/incoming/hexagon/hexagon1.mdl",
-        "models/clannv/incoming/hexagon/hexagon2.mdl",
-        "models/clannv/incoming/hexagon/hexagon3.mdl",
-        "models/clannv/incoming/pentagon/pentagon1.mdl",
-        "models/clannv/incoming/pentagon/pentagon2.mdl",
-        "models/clannv/incoming/pentagon/pentagon3.mdl",
-        "models/clannv/incoming/sphere/sphere1.mdl",
-        "models/clannv/incoming/sphere/sphere2.mdl",
-        "models/clannv/incoming/sphere/sphere3.mdl",
-        "models/clannv/incoming/triangle/triangle1.mdl",
-        "models/clannv/incoming/triangle/triangle2.mdl",
-        "models/clannv/incoming/triangle/triangle3.mdl"
-    }
-}
+    -- Get information from the currently selected props category
+    -- See sv_maps for the prop data
+    local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
+    local props = data.models
 
-GM.DefaultProps["CubesAndSpheres"] = {
-    models = {
-        "models/hunter/blocks/cube05x05x05.mdl",
-        "models/hunter/blocks/cube075x075x075.mdl",
-        "models/hunter/blocks/cube1x1x1.mdl",
-        "models/hunter/blocks/cube1x150x1.mdl",
-        "models/hunter/blocks/cube1x6x1.mdl",
-        "models/hunter/blocks/cube2x2x2.mdl",
-        "models/hunter/blocks/cube2x4x1.mdl",
-        "models/hunter/blocks/cube2x6x1.mdl",
-        "models/hunter/blocks/cube4x4x4.mdl",
-        "models/hunter/misc/sphere175x175.mdl",
-        "models/hunter/misc/sphere1x1.mdl",
-        "models/hunter/misc/sphere2x2.mdl",
-        "models/hunter/misc/sphere375x375.mdl"
-    },
-
-    func = function(e)
-        local c = HSVToColor(math.random(360),1,1)
-        e:SetColor(c)
+    -- Choose material
+    local material = data.materials
+    if istable(data.materials) then
+        material = table.Random(materials)
+    elseif not material then
+        material = "plastic"
     end
-}
+
+    if GAMEMODE.PropSpawnTimer < CurTime() then
+        -- Spawn a prop at every spawner
+        for k, v in pairs(ents.FindByClass("inc_prop_spawner")) do
+            local ent = ents.Create("prop_physics")
+            ent:SetModel(props[math.random(1, #props)])
+            ent:SetPos(v:GetPos())
+            ent:Spawn()
+
+            -- Set physical properties
+            local phys = ent:GetPhysicsObject()
+            phys:SetMass(40000)
+            phys:SetMaterial(material)
+
+            -- Call the data function on every entity
+            if data.func then
+                data.func(ent)
+            end
+        end
+
+        GAMEMODE.PropSpawnTimer = CurTime() + (data.delay or 2)
+    end
+end)
+
+-- Randomly pick a group of props
+-- Todo: Map flexibility
+hook.Add("PreRoundStart", "IncomingPropsChange", function()
+    GAMEMODE.CurrentPropsCategory = table.Random(table.GetKeys(GAMEMODE.PropPresets))
+end)
