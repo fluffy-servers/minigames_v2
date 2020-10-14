@@ -49,7 +49,7 @@ function GM:PlayerSelectSpawn(ply)
     end
 
     -- Get checkpoint spawns for this level
-    local stageSpawns = GAMEMODE.CheckpointSpawns[spawnStage]
+    local stageSpawns = GAMEMODE.CheckpointSpawns[stage]
     if not stageSpawns then
         return GAMEMODE.BaseClass:PlayerSelectSpawn(ply)
     end
