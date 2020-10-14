@@ -1,6 +1,6 @@
 ﻿include("sv_prop_presets.lua")
 
-GM.CurrentPropsCategory = "Both"
+GM.CurrentPropsCategory = "Geometric"
 GM.PropSpawnTimer = 0
 
 -- Spawn props at appropiate times

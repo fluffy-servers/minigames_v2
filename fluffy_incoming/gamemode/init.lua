@@ -15,6 +15,18 @@ hook.Add("PreRoundStart", "IncomingResetBestDistance", function()
     end
 end)
 
+-- Trigger checkpoints
+function GM:CheckpointTriggered(ply, stage, message)
+    if ply.CheckpointStage and stage < ply.CheckpointStage then return end
+    ply.CheckpointStage = stage
+
+    if message then
+        GAMEMODE:PulseAnnouncementTwoLine(3, "Checkpoint!", message)
+    else
+        GAMEMODE:PulseAnnouncement(3, "Checkpoint!")
+    end
+end
+
 -- Get the distance the player has to the end
 function GM:GetDistanceToEnd(ply)
     local endpos = GAMEMODE:EndingPoint()
