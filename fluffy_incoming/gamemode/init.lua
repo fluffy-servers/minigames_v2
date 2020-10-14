@@ -14,12 +14,6 @@ function GM:PlayerLoadout(ply)
     --ply:Give("weapon_crowbar")
 end
 
--- Get the winning position of this map
--- This is hardcoded into sv_maps.lua because entities are weird for some reason
-function GM:EndingPoint()
-    return GAMEMODE.MapInfo[game.GetMap()].endpos or Vector(0, 0, 0)
-end
-
 GM.CurrentPropsCategory = "Both"
 GM.PropSpawnTimer = 0
 
