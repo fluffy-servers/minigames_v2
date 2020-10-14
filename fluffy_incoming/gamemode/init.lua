@@ -5,19 +5,21 @@ include("sv_maps.lua")
 
 -- Record starting distances
 hook.Add("PlayerSpawn", "IncomingCheckSpawnDistance", function(ply)
+    if ply.CheckpointStage and ply.CheckpointStage > 0 then return end
     ply.StartingDistance = GAMEMODE:GetDistanceToEnd(ply)
 end)
 
 -- Reset best distances on round start
 hook.Add("PreRoundStart", "IncomingResetBestDistance", function()
     for k, v in pairs(player.GetAll()) do
+        v.CheckpointStage = 0
         v.BestDistance = nil
     end
 end)
 
 -- Trigger checkpoints
 function GM:CheckpointTriggered(ply, stage, message)
-    if ply.CheckpointStage and stage < ply.CheckpointStage then return end
+    if ply.CheckpointStage and stage <= ply.CheckpointStage then return end
     ply.CheckpointStage = stage
 
     if message then
@@ -25,6 +27,34 @@ function GM:CheckpointTriggered(ply, stage, message)
     else
         GAMEMODE:PulseAnnouncement(3, "Checkpoint!")
     end
+end
+
+-- Select player spawn based on checkpoint stage
+function GM:PlayerSelectSpawn(ply)
+    local stage = ply.CheckpointStage
+    if not stage or stage < 1 then
+        return GAMEMODE.BaseClass:PlayerSelectSpawn(ply)
+    end
+
+    -- Sort checkpoint spawns by stage
+    if not GAMEMODE.CheckpointSpawns then GAMEMODE.CheckpointSpawns = {} end
+    if not GAMEMODE.CheckpointSpawns[stage] or not IsTableOfEntitiesValid(GAMEMODE.CheckpointSpawns[stage]) then
+        local spawns = ents.FindByClass("inc_checkpoint_spawn")
+        for _,v in pairs(spawns) do
+            local spawnStage = v.CheckpointStage
+            if not GAMEMODE.CheckpointSpawns[spawnStage] then GAMEMODE.CheckpointSpawns[spawnStage] = {} end
+
+            table.insert(GAMEMODE.CheckpointSpawns[spawnStage], v)
+        end
+    end
+
+    -- Get checkpoint spawns for this level
+    local stageSpawns = GAMEMODE.CheckpointSpawns[spawnStage]
+    if not stageSpawns then
+        return GAMEMODE.BaseClass:PlayerSelectSpawn(ply)
+    end
+
+    return GAMEMODE:AttemptSpawnPoint(ply, stageSpawns)
 end
 
 -- Get the distance the player has to the end

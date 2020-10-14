@@ -2,6 +2,6 @@ ENT.Type = "point"
 
 function ENT:KeyValue(key, value)
     if key == "stage" then
-        self.CheckpointStage = value
+        self.CheckpointStage = tonumber(value)
     end
 end
