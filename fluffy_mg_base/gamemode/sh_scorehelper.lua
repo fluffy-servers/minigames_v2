@@ -1,7 +1,7 @@
 ﻿--[[
     A small handful of score-related utility functions
-]]
---
+--]]
+
 -- Return a table of {player, score} pairs, sorted by highest score
 -- Can specify an optional scoring function, defaults to frags
 function GM:GetSortedScores(func)
