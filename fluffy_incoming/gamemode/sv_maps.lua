@@ -11,6 +11,9 @@ hook.Add("Tick", "TickPropSpawn", function()
     -- Get information from the currently selected props category
     -- See sv_maps for the prop data
     local data = GAMEMODE.PropPresets[GAMEMODE.CurrentPropsCategory]
+    if not data then
+        ErrorNoHalt("Invalid prop preset specified - this is probably a map issue!")
+    end
     local props = data.models
 
     -- Choose material
@@ -49,5 +52,24 @@ end)
 -- Randomly pick a group of props
 -- Todo: Map flexibility
 hook.Add("PreRoundStart", "IncomingPropsChange", function()
-    GAMEMODE.CurrentPropsCategory = table.Random(table.GetKeys(GAMEMODE.PropPresets))
+    GAMEMODE.CurrentPropsCategory = table.Random(GAMEMODE.MapPresets)
+end)
+
+-- Handle custom model control
+GM.MapPresets = GM.MapPresets or {"Geometric", "Vehicles", "Geometric and Vehicles", "Cubes And Spheres"}
+
+hook.Add("InitPostEntity", "IncomingCustomProps", function()
+    local controls = ents.FindByClass("inc_model_control")
+    if not controls or #controls < 1 then return end
+
+    GAMEMODE.MapPresets = {}
+    for _, v in pairs(controls) do
+        if string.StartWith(v.Preset, "Custom") then
+            GAMEMODE.PropPresets[v.Preset] = v.CustomPreset
+        end
+        table.insert(GAMEMODE.MapPresets, v.Preset)
+    end
+
+    print("Loaded custom presets!")
+    PrintTable(GAMEMODE.MapPresets)
 end)
