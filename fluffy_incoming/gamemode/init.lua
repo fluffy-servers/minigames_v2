@@ -21,26 +21,37 @@ function GM:EndingPoint()
 end
 
 GM.CurrentPropsCategory = "Both"
--- Prop spawn timer loop
--- Spawns props at the top of the slope at a fixed interval
-INCPropSpawnTimer = 0
+GM.PropSpawnTimer = 0
 
+-- Spawn props at appropiate times
 hook.Add("Tick", "TickPropSpawn", function()
     if not GAMEMODE:InRound() then return end
+
     -- Get information from the currently selected props category
     -- See sv_maps for the prop data
     local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
     local props = data.models
-    local delay = data.delay or 2
 
-    if INCPropSpawnTimer < CurTime() then
+    -- Choose material
+    local material = data.materials
+    if istable(data.materials) then
+        material = table.Random(materials)
+    elseif not material then
+        material = "plastic"
+    end
+
+    if GAMEMODE.PropSpawnTimer < CurTime() then
         -- Spawn a prop at every spawner
         for k, v in pairs(ents.FindByClass("inc_prop_spawner")) do
             local ent = ents.Create("prop_physics")
             ent:SetModel(props[math.random(1, #props)])
             ent:SetPos(v:GetPos())
             ent:Spawn()
-            ent:GetPhysicsObject():SetMass(40000)
+
+            -- Set physical properties
+            local phys = ent:GetPhysicsObject()
+            phys:SetMass(40000)
+            phys:SetMaterial(material)
 
             -- Call the data function on every entity
             if data.func then
@@ -48,7 +59,7 @@ hook.Add("Tick", "TickPropSpawn", function()
             end
         end
 
-        INCPropSpawnTimer = CurTime() + delay
+        GAMEMODE.PropSpawnTimer = CurTime() + (data.delay or 2)
     end
 end)
 
@@ -56,15 +67,14 @@ end)
 hook.Add("PreRoundStart", "IncomingPropsChange", function()
     -- If the map has a category restriction, pay attention to that
     local category
-
     if GAMEMODE.MapInfo[game.GetMap()].categories then
         category = table.Random(GAMEMODE.MapInfo[game.GetMap()].categories)
     else
         category = table.Random(table.GetKeys(GAMEMODE.DefaultProps))
     end
-
     GAMEMODE.CurrentPropsCategory = category
 
+    -- Reset distances
     for k, v in pairs(player.GetAll()) do
         v.BestDistance = nil
     end
@@ -75,8 +85,10 @@ end)
 function GM:GetDistanceToEnd(ply)
     local endpos = GAMEMODE:EndingPoint()
     if not endpos then return end
+
     local distance = ply:GetPos():Distance(endpos)
     local maxdist = GAMEMODE.MapInfo[game.GetMap()].distance
+
     local percent = 1 - (distance / maxdist)
     if percent < 0 then return end
 
@@ -93,15 +105,6 @@ end
 -- This is used for better scoring than all-or-nothing
 hook.Add("DoPlayerDeath", "IncomingDistanceCheck", function(ply)
     GAMEMODE:GetDistanceToEnd(ply)
-end)
-
-hook.Add("EntityTakeDamage", "CrowbarKnockback", function(ent, dmg)
-    if not ent:IsPlayer() then return true end
-    if not dmg:GetAttacker():IsPlayer() then return end
-    dmg:SetDamage(0)
-    ent:SetGroundEntity(NULL)
-    local v = dmg:GetDamageForce() + Vector(0, 0, 5)
-    ent:SetVelocity(v * 25)
 end)
 
 -- Add scoring based on distance at the end of a round
@@ -131,8 +134,7 @@ end
 -- Network resources
 function IncludeResFolder(dir)
     local files = file.Find(dir .. "*", "GAME")
-
-    local FindFileTypes = {".mdl", ".vmt", ".vtf", ".dx90", ".dx80", ".phy", ".sw", ".vvd", ".wav", ".mp3",}
+    local FindFileTypes = {".mdl", ".vmt", ".vtf", ".dx90", ".dx80", ".phy", ".sw", ".vvd", ".wav", ".mp3"}
 
     for k, v in pairs(files) do
         for k2, v2 in pairs(FindFileTypes) do
