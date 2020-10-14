@@ -1,0 +1,1 @@
+ENT.Base = "inc_prop_spawner"

@@ -1,10 +1,10 @@
 ﻿--[[
-    Robert A Fraser 2018
-    Minigames Reborn
-	
-	Base file for the gamemode which is loaded on both client and server
-]]
---
+    Shared file for the base gamemode
+    
+    This file lists all the settings that can be added
+    This also adds some team functions, and a bunch of other utilities
+--]]
+
 -- Load the other shared files
 DeriveGamemode("base")
 include("sound_tables.lua")

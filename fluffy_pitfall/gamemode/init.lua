@@ -28,25 +28,14 @@ end
 
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout(ply)
-    ply:Give("weapon_platformbreaker")
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
-end
 
--- Handle spawns slightly differently due to the random platforms
-function GM:PlayerSelectSpawn(ply)
-    local spawns = ents.FindByClass("info_player_start")
-    if (#spawns <= 0) then return false end
-    local selected = table.Random(spawns)
-
-    while selected.spawnUsed do
-        selected = table.Random(spawns)
-    end
-
-    selected.spawnUsed = true
-
-    return selected
+    -- Give weapons after the safe period has ended
+    timer.Simple(GAMEMODE.RoundCooldown + GAMEMODE.SafeTime, function()
+        ply:Give("weapon_platformbreaker")
+    end)
 end
 
 -- Credit damage to players for Knockbacks

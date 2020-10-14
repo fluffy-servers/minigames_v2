@@ -1,5 +1,5 @@
 ﻿--[[
-    Welcome to the Minigames HUD v2!
+    Welcome to the Minigames HUD v3!
     This file has been pretty much completely made for lots of improvements around the board!
     Note: this HUD isn't the most efficient thing ever created, but the latest updates have improved framerates significantly.
 --]]

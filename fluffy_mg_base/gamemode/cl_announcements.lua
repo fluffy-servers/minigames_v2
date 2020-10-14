@@ -7,6 +7,7 @@
 		- Pulse
 		- Pulse w/ subtext
 --]]
+
 -- Draw text that can be scaled
 -- Useful for cool animations without creating lost of different font sizes
 local function drawScaledText(x, y, text, font, color, scale)

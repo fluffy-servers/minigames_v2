@@ -180,6 +180,45 @@
 [
 ]
 
+@SolidClass = inc_checkpoint_trigger:
+    "Trigger zone for checkpoint stages."
+[
+    stage(integer) : "Checkpoint Stage" : 1 : "Stage of this checkpoint"
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = inc_checkpoint_spawn:
+    "Spawnpoints for a given checkpoint stage. Players will spawn here after passing the corresponding inc_checkpoint_trigger"
+[
+    stage(integer) : "Checkpoint Stage" : 1 : "Stage of this checkpoint"
+]
+
+@PointClass = inc_model_control:
+    "Control each model preset for this level. Each preset will need one single control entity. This can either be one of the pre-defined presets, or you can add your own models."
+[
+    preset(choices): "Preset" : "Custom" : "Preset to use. Other settings have no effect, unless this is Custom." =
+    [
+        "Custom" : "Custom"
+        "Geometric" : "Geometric"
+        "Vehicles" : "Vehicles"
+        "Geometric and Vehicles" : "Geometric and Vehicles"
+        "Cubes And Spheres" : "Cubes And Spheres"
+    ]
+
+    delay(integer) : "Spawn Delay" : 2 : "Number of seconds between prop spawns. This may need to be adjusted for larger props, but try and keep this the same."
+    material(string) : "Material Override" : "" : "Material override to use. Defaults to plastic. You might consider gmod_ice or gmod_bouncy."
+
+    model0(studio) : "Custom Model 1" : "" : "Model for custom presets"
+    model1(studio) : "Custom Model 2" : "" : "Model for custom presets"
+    model2(studio) : "Custom Model 3" : "" : "Model for custom presets"
+    model3(studio) : "Custom Model 4" : "" : "Model for custom presets"
+    model4(studio) : "Custom Model 5" : "" : "Model for custom presets"
+    model5(studio) : "Custom Model 6" : "" : "Model for custom presets"
+    model6(studio) : "Custom Model 7" : "" : "Model for custom presets"
+    model7(studio) : "Custom Model 8" : "" : "Model for custom presets"
+    model8(studio) : "Custom Model 9" : "" : "Model for custom presets"
+    model9(studio) : "Custom Model 10" : "" : "Model for custom presets. If you need more than 10 models, you can add more without SmartEdit."
+]
+
 // INFECTION
 @PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_zombie:
     "This is a team spawnpoint for INFECTED. This only works in Infection."

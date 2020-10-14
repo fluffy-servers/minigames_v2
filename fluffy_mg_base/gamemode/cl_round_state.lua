@@ -1,15 +1,20 @@
-﻿-- HUD enums so the numbers make actual sense
-HUD_STYLE_DEFAULT = 1 -- Simple clock with round counter attached
-HUD_STYLE_TIMER = 2 -- Simple clock with game timer attached
-HUD_STYLE_TIMER_ONLY = 3 -- Large timer instead of clock
-HUD_STYLE_TEAM_SCORE = 4 -- Large timer, with team scores underneath
-HUD_STYLE_TEAM_SCORE_ROUNDS = 5 -- Large timer, with team round wins underneath
-HUD_STYLE_TEAM_SCORE_SINGLE = 6 -- Large timer, with single team score underneath
-HUD_STYLE_CLOCK_TEAM_SCORE = 7 -- Simple clock, with team scores underneath
-HUD_STYLE_CLOCK_TEAM_SCORE_ROUNDS = 8 -- Simple clock, with team round wins underneath
-HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE = 9 -- Simple clock, with single team score underneath
-HUD_STYLE_CLOCK_ALIVE = 10 -- Simple clock, with number of alive players underneath
-HUD_STYLE_CLOCK_TIMER_ALIVE = 11 -- Simple clock, with game timer attached + number of alive players underneath
+﻿--[[
+    Rounds are complicated - this contains all the round state options that can be used
+--]]
+
+-- HUD enums so the numbers make actual sense
+HUD_STYLE_DEFAULT = 1                   -- Simple clock with round counter attached
+HUD_STYLE_TIMER = 2                     -- Simple clock with game timer attached
+HUD_STYLE_TIMER_ONLY = 3                -- Large timer instead of clock
+HUD_STYLE_TEAM_SCORE = 4                -- Large timer, with team scores underneath
+HUD_STYLE_TEAM_SCORE_ROUNDS = 5         -- Large timer, with team round wins underneath
+HUD_STYLE_TEAM_SCORE_SINGLE = 6         -- Large timer, with single team score underneath
+HUD_STYLE_CLOCK_TEAM_SCORE = 7          -- Simple clock, with team scores underneath
+HUD_STYLE_CLOCK_TEAM_SCORE_ROUNDS = 8   -- Simple clock, with team round wins underneath
+HUD_STYLE_CLOCK_TEAM_SCORE_SINGLE = 9   -- Simple clock, with single team score underneath
+HUD_STYLE_CLOCK_ALIVE = 10              -- Simple clock, with number of alive players underneath
+HUD_STYLE_CLOCK_TIMER_ALIVE = 11        -- Simple clock, with game timer attached + number of alive players underneath
+
 -- These should match cl_hud
 local c_pos = 72
 local seg = 36

@@ -6,7 +6,16 @@
 	 - Map vote screen
 	 - Stats / leaderboard overview
 --]]
-local sounds = {"vo/coast/odessa/male01/nlo_cheer01.wav", "vo/coast/odessa/male01/nlo_cheer02.wav", "vo/coast/odessa/male01/nlo_cheer03.wav", "vo/coast/odessa/male01/nlo_cheer04.wav", "vo/coast/odessa/female01/nlo_cheer01.wav", "vo/coast/odessa/female01/nlo_cheer02.wav", "vo/coast/odessa/female01/nlo_cheer03.wav",}
+
+local sounds = {
+    "vo/coast/odessa/male01/nlo_cheer01.wav",
+    "vo/coast/odessa/male01/nlo_cheer02.wav", 
+    "vo/coast/odessa/male01/nlo_cheer03.wav",
+    "vo/coast/odessa/male01/nlo_cheer04.wav", 
+    "vo/coast/odessa/female01/nlo_cheer01.wav", 
+    "vo/coast/odessa/female01/nlo_cheer02.wav", 
+    "vo/coast/odessa/female01/nlo_cheer03.wav"
+}
 
 function GM:OpenEndGamePanel()
     local frame = vgui.Create("DFrame")

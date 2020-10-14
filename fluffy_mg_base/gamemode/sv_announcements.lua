@@ -3,6 +3,7 @@
     Mostly just a net handler
     See cl_announcements.lua for more information
 --]]
+
 -- Serverside function for making a countdown announcement
 function GM:CountdownAnnouncement(length, endtext, location, endsound, ticksound)
     local tbl = {
@@ -59,6 +60,23 @@ function GM:PlayerOnlyAnnouncement(ply, duration, text, size, location, sound)
         duration = duration,
         sound = sound,
         text = text,
+        size = size,
+        location = location or 'center'
+    }
+
+    net.Start('MinigamesAnnouncement')
+    net.WriteTable(tbl)
+    net.Send(ply)
+end
+
+-- Send a two-line announcement to only one player
+function GM:PlayerOnlyTwoLineAnnouncement(ply, duration, text, subtext, size, location, sound)
+    local tbl = {
+        type = 'pulse_subtext',
+        duration = duration,
+        sound = sound,
+        text = text,
+        subtext = subtext,
         size = size,
         location = location or 'center'
     }

@@ -2,6 +2,7 @@
     Useful functions that are used for TeamSurvival gamemodes
 	Examples: Suicide Barrels
 --]]
+
 -- Make new players join the Hunter team on connection
 hook.Add("PlayerInitialSpawn", "HunterTeamAssignment", function(ply)
     if GAMEMODE.TeamSurvival and GAMEMODE.HunterTeam then
