@@ -9,7 +9,7 @@ hook.Add("Tick", "TickPropSpawn", function()
 
     -- Get information from the currently selected props category
     -- See sv_maps for the prop data
-    local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
+    local data = GAMEMODE.PropPresets[GAMEMODE.CurrentPropsCategory]
     local props = data.models
 
     -- Choose material
