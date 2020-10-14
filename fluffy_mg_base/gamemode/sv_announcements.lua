@@ -69,6 +69,23 @@ function GM:PlayerOnlyAnnouncement(ply, duration, text, size, location, sound)
     net.Send(ply)
 end
 
+-- Send a two-line announcement to only one player
+function GM:PlayerOnlyTwoLineAnnouncement(ply, duration, text, subtext, size, location, sound)
+    local tbl = {
+        type = 'pulse_subtext',
+        duration = duration,
+        sound = sound,
+        text = text,
+        subtext = subtext,
+        size = size,
+        location = location or 'center'
+    }
+
+    net.Start('MinigamesAnnouncement')
+    net.WriteTable(tbl)
+    net.Send(ply)
+end
+
 -- Send a pulse announcement to many players
 function GM:TableOnlyAnnouncement(recipients, duration, text, size, location, sound)
     local tbl = {
