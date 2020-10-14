@@ -3,17 +3,6 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("sv_maps.lua")
 
--- Nobody wins in Incoming ?
--- Used to override default functionality on FFA round end
-function GM:GetWinningPlayer()
-    return nil
-end
-
--- No weapons
-function GM:PlayerLoadout(ply)
-    --ply:Give("weapon_crowbar")
-end
-
 GM.CurrentPropsCategory = "Both"
 GM.PropSpawnTimer = 0
 
@@ -74,16 +63,23 @@ hook.Add("PreRoundStart", "IncomingPropsChange", function()
     end
 end)
 
+-- Record starting distances
+hook.Add("PlayerSpawn", "IncomingCheckDistance", function(ply)
+    ply.StartingDistance = GAMEMODE:GetDistanceToEnd(ply)
+end)
+
 -- Get the distance the player has to the end
 -- This function also tracks the current best distance
 function GM:GetDistanceToEnd(ply)
     local endpos = GAMEMODE:EndingPoint()
-    if not endpos then return end
+    return ply:GetPos():Distance(endpos)
+end
 
-    local distance = ply:GetPos():Distance(endpos)
-    local maxdist = GAMEMODE.MapInfo[game.GetMap()].distance
+function GM:CheckBestDistance(ply)
+    if not ply.StartingDistance then return end
+    local distance = GAMEMODE:GetDistanceToEnd(ply)
 
-    local percent = 1 - (distance / maxdist)
+    local percent = 1 - (distance / ply.StartingDistance)
     if percent < 0 then return end
 
     if ply.BestDistance then
@@ -98,7 +94,7 @@ end
 -- Get a % of how close the player got to the ending
 -- This is used for better scoring than all-or-nothing
 hook.Add("DoPlayerDeath", "IncomingDistanceCheck", function(ply)
-    GAMEMODE:GetDistanceToEnd(ply)
+    GAMEMODE:CheckBestDistance(ply)
 end)
 
 -- Add scoring based on distance at the end of a round
@@ -106,7 +102,7 @@ end)
 -- eg. 48% -> 40% -> 4 points
 hook.Add("RoundEnd", "IncomingDistancePoints", function()
     for k, v in pairs(player.GetAll()) do
-        GAMEMODE:GetDistanceToEnd(v)
+        GAMEMODE:CheckBestDistance(v)
 
         if v.BestDistance then
             local p = math.floor(v.BestDistance * 100)
