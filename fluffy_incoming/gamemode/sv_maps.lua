@@ -30,6 +30,8 @@ hook.Add("Tick", "TickPropSpawn", function()
 
             -- Set physical properties
             local phys = ent:GetPhysicsObject()
+            if not IsValid(phys) then return end
+            
             phys:SetMass(40000)
             phys:SetMaterial(material)
 
