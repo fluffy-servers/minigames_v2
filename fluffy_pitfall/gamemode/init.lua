@@ -8,6 +8,7 @@ function GM:PlayerLoadout(ply)
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
+    ply:StripWeapons()
 
     -- Give weapons after the safe period has ended
     timer.Simple(GAMEMODE.RoundCooldown + GAMEMODE.SafeTime, function()
