@@ -180,6 +180,45 @@
 [
 ]
 
+@SolidClass = inc_checkpoint_trigger:
+    "Trigger zone for checkpoint stages."
+[
+    stage(integer) : "Checkpoint Stage" : 1 : "Stage of this checkpoint"
+]
+
+@PointClass base(Angles) studio("models/editor/playerstart.mdl") = inc_checkpoint_spawn:
+    "Spawnpoints for a given checkpoint stage. Players will spawn here after passing the corresponding inc_checkpoint_trigger"
+[
+    stage(integer) : "Checkpoint Stage" : 1 : "Stage of this checkpoint"
+]
+
+@PointClass = inc_model_control:
+    "Control each model preset for this level. Each preset will need one single control entity. This can either be one of the pre-defined presets, or you can add your own models."
+[
+    preset(choices): "Preset" : "Custom" : "Preset to use. Other settings have no effect, unless this is Custom." =
+    [
+        "Custom" : "Custom"
+        "Geometric" : "Geometric"
+        "Vehicles" : "Vehicles"
+        "Geometric and Vehicles" : "Geometric and Vehicles"
+        "Cubes And Spheres" : "Cubes And Spheres"
+    ]
+
+    delay(integer) : "Spawn Delay" : 2 : "Number of seconds between prop spawns. This may need to be adjusted for larger props, but try and keep this the same."
+    material(string) : "Material Override" : "" : "Material override to use. Defaults to plastic. You might consider gmod_ice or gmod_bouncy."
+
+    model0(studio) : "Custom Model 1" : "" : "Model for custom presets"
+    model1(studio) : "Custom Model 2" : "" : "Model for custom presets"
+    model2(studio) : "Custom Model 3" : "" : "Model for custom presets"
+    model3(studio) : "Custom Model 4" : "" : "Model for custom presets"
+    model4(studio) : "Custom Model 5" : "" : "Model for custom presets"
+    model5(studio) : "Custom Model 6" : "" : "Model for custom presets"
+    model6(studio) : "Custom Model 7" : "" : "Model for custom presets"
+    model7(studio) : "Custom Model 8" : "" : "Model for custom presets"
+    model8(studio) : "Custom Model 9" : "" : "Model for custom presets"
+    model9(studio) : "Custom Model 10" : "" : "Model for custom presets. If you need more than 10 models, you can add more without SmartEdit."
+]
+
 // INFECTION
 @PointClass base(Angles) studio("models/editor/playerstart.mdl") = info_player_zombie:
     "This is a team spawnpoint for INFECTED. This only works in Infection."
@@ -240,11 +279,41 @@
     colorbonus(string) : "Color Bonus" : "255,128,0" : "Color of platforms with bonuses. RGB comma separated no spaces."
 ]
 
+@PointClass = pf_origin:
+    "Origin marker for Pitfall maps. This should mark the center location of the bottom layer of platforms. Without this entity, this defaults to 0, 0, 0."
+[
+]
+
 // POLTERGEIST
 @PointClass iconsprite("editor/env_shooter.vmt") = pg_spawner:
     "Spawn point for Poltergeist entities"
 [
     frequency(integer) : "Spawn Frequency" : 3 : "How often to respawn props at this location?"
+]
+
+@PointClass = pg_model_control:
+    "Control the models that can be spawned in this map. If this entity exists in the map, none of the default models will spawn!"
+[
+    model0(studio) : "Custom Model 1" : "" : "Model option for prop spawns"
+    model1(studio) : "Custom Model 2" : "" : "Model option for prop spawns"
+    model2(studio) : "Custom Model 3" : "" : "Model option for prop spawns"
+    model3(studio) : "Custom Model 4" : "" : "Model option for prop spawns"
+    model4(studio) : "Custom Model 5" : "" : "Model option for prop spawns"
+    model5(studio) : "Custom Model 6" : "" : "Model option for prop spawns"
+    model6(studio) : "Custom Model 7" : "" : "Model option for prop spawns"
+    model7(studio) : "Custom Model 8" : "" : "Model option for prop spawns"
+    model8(studio) : "Custom Model 9" : "" : "Model option for prop spawns"
+    model9(studio) : "Custom Model 10" : "" : "Model option for prop spawns"
+    model10(studio) : "Custom Model 11" : "" : "Model option for prop spawns"
+    model11(studio) : "Custom Model 12" : "" : "Model option for prop spawns"
+    model12(studio) : "Custom Model 13" : "" : "Model option for prop spawns"
+    model13(studio) : "Custom Model 14" : "" : "Model option for prop spawns"
+    model14(studio) : "Custom Model 15" : "" : "Model option for prop spawns"
+    model15(studio) : "Custom Model 16" : "" : "Model option for prop spawns"
+    model16(studio) : "Custom Model 17" : "" : "Model option for prop spawns"
+    model17(studio) : "Custom Model 18" : "" : "Model option for prop spawns"
+    model18(studio) : "Custom Model 19" : "" : "Model option for prop spawns"
+    model19(studio) : "Custom Model 20" : "" : "Model option for prop spawns. If you need more, you can add so without SmartEdit."
 ]
 
 // SUPER SHOTGUNS
@@ -258,3 +327,17 @@
 
 // SUICIDE BARRELS
 // No entities applicable.
+@PointClass = sb_model_control:
+    "Control the models & skins used for barrels in this map. Barrels are randomly picked from these options."
+[
+    model0(studio) : "Custom Model 1" : "" : "1st barrel model."
+    skin0(integer) : "Custom Skin 1" : "" : "1st barrel skin. Defaults to 0."
+    model1(studio) : "Custom Model 2" : "" : "2nd barrel model"
+    skin1(integer) : "Custom Skin 1" : "" : "2st barrel skin. Defaults to 0."
+    model2(studio) : "Custom Model 3" : "" : "3rd barrel model"
+    skin2(integer) : "Custom Skin 1" : "" : "3st barrel skin. Defaults to 0."
+    model3(studio) : "Custom Model 4" : "" : "4th barrel model"
+    skin3(integer) : "Custom Skin 1" : "" : "4st barrel skin. Defaults to 0."
+    model4(studio) : "Custom Model 5" : "" : "5th barrel model. If you need more than 5 models, you can add more without SmartEdit."
+    skin4(integer) : "Custom Skin 1" : "" : "5st barrel skin. Defaults to 0."
+]

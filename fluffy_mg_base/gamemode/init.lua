@@ -1,6 +1,5 @@
 ﻿--[[
     The core of the gamemode
-    Probably needs to be split into some more files at this point
 --]]
 
 -- Send all the required files to the client
@@ -135,7 +134,6 @@ function GM:PlayerInitialSpawn(ply)
     -- Otherwise, automatically assign teams (hopefully evenly..)
     if not GAMEMODE.TeamBased then
         ply:SetTeam(TEAM_UNASSIGNED)
-
         return
     else
         GAMEMODE:PlayerRequestTeam(ply, team.BestAutoJoinTeam())

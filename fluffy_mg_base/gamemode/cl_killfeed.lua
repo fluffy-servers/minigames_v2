@@ -1,4 +1,7 @@
-﻿-- I stole this from sandbox/base which is why the variable naming sucks so much
+﻿--[[
+    Handle everything to do with the killfeed
+    This is blatantly stolen from the base gamemode, so apologies for the terrible naming
+--]]
 
 local hud_deathnotice_time_cvar = CreateClientConVar("mg_deathnotice_time", "6", true, false, "Amount of time to show death notice")
 local have_killsound_cvar = CreateClientConVar("mg_killsound_enabled", 1, true, false, "Enable a sound effect when you get a kill")

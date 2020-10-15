@@ -1,10 +1,4 @@
-﻿--[[
-    Robert A Fraser 2018
-    Duck Hunt
-    Originally by Niandra Lades
-]]
---
-DeriveGamemode("fluffy_mg_base")
+﻿DeriveGamemode("fluffy_mg_base")
 GM.Name = "Duck Hunt"
 GM.Author = "FluffyXVI"
 GM.HelpText = [[

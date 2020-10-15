@@ -17,3 +17,25 @@ GM.DeathSounds = true
 
 function GM:Initialize()
 end
+
+function GM:EndingPoint()
+    if SERVER then
+        local p = GetGlobalVector("WinningPosition", Vector(-1, -1, -1))
+        if p ~= Vector(-1, -1, -1) then
+            return p
+        else
+            local win = ents.FindByClass("*_winners_area")[1]
+            if not win then
+                ErrorNoHalt("No winning area in map!")
+                return
+            end
+
+            local mins, maxs = win:GetModelBounds()
+            local point = (mins+maxs)/2
+            SetGlobalVector("WinningPosition", point)
+            return point
+        end
+    else
+        return GetGlobalVector("WinningPosition", nil)
+    end
+end

@@ -1,3 +1,25 @@
+-- Backwards compatibility for Pitfall maps
+-- Otherwise, defaults to pf_origin location
+-- If entity does not exist, then defaults to Vector(0, 0, 0)
+GM.PlatformPositions = {}
+GM.PlatformPositions["pf_ocean"] = Vector(0, 0, 16)
+
+-- Color properties
+-- pf_settings can edit these
+GM.PColorStart = Color(0, 255, 128)
+GM.PColorEnd = Color(255, 0, 128)
+GM.PDR = GM.PColorEnd.r - GM.PColorStart.r
+GM.PDG = GM.PColorEnd.g - GM.PColorStart.g
+GM.PDB = GM.PColorEnd.b - GM.PColorStart.b
+
+-- Update the above settings
+function GM:UpdatePDColors()
+    GAMEMODE.PDR = GAMEMODE.PColorEnd.r - GAMEMODE.PColorStart.r
+    GAMEMODE.PDG = GAMEMODE.PColorEnd.g - GAMEMODE.PColorStart.g
+    GAMEMODE.PDB = GAMEMODE.PColorEnd.b - GAMEMODE.PColorStart.b
+end
+
+
 local block_options = {
     "circle",
     "square"
@@ -113,7 +135,7 @@ function GM:ApproximateCentre(basepos, psize, rows, cols, levels)
     if not cols then cols = rows end
     local px = basepos.x - (psize * rows)/2
     local py = basepos.y - (psize * cols)/2
-    local pz = basepos.z + 150 * ((levels or 0)-1)
+    local pz = basepos.z + 150 * ((levels or 0) - 1)
     return px, py, pz
 end
 
@@ -159,18 +181,19 @@ function GM:GenerateIncreasingPyramid(basepos, layerfunc)
         rows = rows + 1
     end
 
-    local model = table.Random(block_options)
-    local psize = 96
-    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns, levels)
-
     -- Ensure we have at least three levels
     if levels <= 3 then
         levels = 3
     end
 
+    local model = table.Random(block_options)
+    local psize = 96
+    local px, py, pz = GAMEMODE:ApproximateCentre(basepos, psize, rows, columns, levels)
+
     -- Generate layers increasing in size
     for level = 1, levels do
         layerfunc(Vector(px, py, pz), model, level, {rows, columns, psize})
+        print(level, pz)
         pz = pz - 150
 
         rows = rows + math.random(1, 3)

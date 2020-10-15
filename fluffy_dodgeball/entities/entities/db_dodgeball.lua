@@ -19,6 +19,11 @@ function ENT:Initialize()
 
     self.CurrentBounces = 0
     self.LastTime = CurTime()
+
+    -- Attempt to unstuck balls in the world
+    if util.IsInWorld(self:GetPos() - Vector(0, 0, self.Size/2)) then
+        self:SetPos(self:GetPos() + Vector(0, 0, self.Size + 8))
+    end
 end
 
 -- Destroy the ball if damaged by trigger_hurt entities, otherwise apply physics damage

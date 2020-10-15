@@ -12,15 +12,19 @@ GM.HelpText = [[
     
     Secondary fire will send players flying.
 ]]
+
 GM.TeamBased = false -- Is the gamemode FFA or Teams?
 GM.Elimination = true
 GM.WinBySurvival = true
+GM.ThirdpersonEnabled = true
+
 GM.RoundNumber = 10 -- How many rounds?
 GM.RoundTime = 90 -- Seconds each round lasts for
-GM.ThirdpersonEnabled = true
 GM.RoundType = "timed"
 GM.GameTime = 500
 GM.HUDStyle = HUD_STYLE_CLOCK_TIMER_ALIVE
+
+GM.SafeTime = 3
 
 function GM:Initialize()
 end

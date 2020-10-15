@@ -1,7 +1,8 @@
 ﻿--[[
     Handles the map and gamemode rotation system
-    Map icons are delivered via. webserver
+    Map icons are delivered via. webserver (todo: add convar for this)
 --]]
+
 -- List of gamemodes in rotation
 -- This sanity checks the keys provided in the rotation file + provides nice names
 -- is there a better way to store this?

@@ -3,50 +3,17 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("sv_levelgen.lua")
 
--- Backwards compatibility for Pitfall maps
-GM.PlatformPositions = {}
-GM.PlatformPositions["pf_ocean"] = Vector(0, 0, 1000)
-GM.PlatformPositions["pf_ocean_d"] = Vector(0, 0, 0)
-GM.PlatformPositions["gm_flatgrass"] = Vector(0, 0, 0)
-GM.PlatformPositions["pf_midnight_v1_fix"] = Vector(0, 0, 0)
-GM.PlatformPositions["pf_midnight_v1"] = Vector(0, 0, 0)
-
--- Color properties
--- pf_settings can edit these
-GM.PColorStart = Color(0, 255, 128)
-GM.PColorEnd = Color(255, 0, 128)
-GM.PDR = GM.PColorEnd.r - GM.PColorStart.r
-GM.PDG = GM.PColorEnd.g - GM.PColorStart.g
-GM.PDB = GM.PColorEnd.b - GM.PColorStart.b
-
--- Update the above settings
-function GM:UpdatePDColors()
-    GAMEMODE.PDR = GAMEMODE.PColorEnd.r - GAMEMODE.PColorStart.r
-    GAMEMODE.PDG = GAMEMODE.PColorEnd.g - GAMEMODE.PColorStart.g
-    GAMEMODE.PDB = GAMEMODE.PColorEnd.b - GAMEMODE.PColorStart.b
-end
-
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout(ply)
-    ply:Give("weapon_platformbreaker")
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
-end
+    ply:StripWeapons()
 
--- Handle spawns slightly differently due to the random platforms
-function GM:PlayerSelectSpawn(ply)
-    local spawns = ents.FindByClass("info_player_start")
-    if (#spawns <= 0) then return false end
-    local selected = table.Random(spawns)
-
-    while selected.spawnUsed do
-        selected = table.Random(spawns)
-    end
-
-    selected.spawnUsed = true
-
-    return selected
+    -- Give weapons after the safe period has ended
+    timer.Simple(GAMEMODE.RoundCooldown + GAMEMODE.SafeTime, function()
+        ply:Give("weapon_platformbreaker")
+    end)
 end
 
 -- Credit damage to players for Knockbacks
@@ -87,30 +54,27 @@ end
 hook.Add("PreRoundStart", "CreatePlatforms", function()
     GAMEMODE:ClearLevel()
 
-    local pos = GAMEMODE.PlatformPositions[game.GetMap()] or Vector(0, 0, 0)
+    -- Find the position for the center platform
+    local pos = GAMEMODE.PlatformPositions[game.GetMap()]
+    if not pos then
+        local origins = ents.FindByClass("pf_origin")
+        if #origins < 1 then
+            pos = Vector(0, 0, 0)
+        else
+            pos = origins[1]:GetPos()
+        end
+    end
     GAMEMODE:GenerateLevel(pos)
 end)
 
 -- Remove any leftover entities when the level is cleared
 function GM:ClearLevel()
-    for k, v in pairs(ents.FindByClass("pf_platform")) do
-        v:Remove()
-    end
+    local classes = {"pf_platform", "info_player_start", "gmod_player_start", "info_player_terrorist", "info_player_counterterrorist"}
 
-    for k, v in pairs(ents.FindByClass("info_player_start")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("gmod_player_start")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("info_player_terrorist")) do
-        v:Remove()
-    end
-
-    for k, v in pairs(ents.FindByClass("info_player_counterterrorist")) do
-        v:Remove()
+    for _, class in pairs(classes) do
+        for k,v in pairs(ents.FindByClass(class)) do
+            v:Remove()
+        end
     end
 end
 

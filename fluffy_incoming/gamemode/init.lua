@@ -3,81 +3,72 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("sv_maps.lua")
 
--- Nobody wins in Incoming ?
--- Used to override default functionality on FFA round end
-function GM:GetWinningPlayer()
-    return nil
-end
-
--- No weapons
-function GM:PlayerLoadout(ply)
-    --ply:Give("weapon_crowbar")
-end
-
--- Get the winning position of this map
--- This is hardcoded into sv_maps.lua because entities are weird for some reason
-function GM:EndingPoint()
-    return GAMEMODE.MapInfo[game.GetMap()].endpos or Vector(0, 0, 0)
-end
-
-GM.CurrentPropsCategory = "Both"
--- Prop spawn timer loop
--- Spawns props at the top of the slope at a fixed interval
-INCPropSpawnTimer = 0
-
-hook.Add("Tick", "TickPropSpawn", function()
-    if not GAMEMODE:InRound() then return end
-    -- Get information from the currently selected props category
-    -- See sv_maps for the prop data
-    local data = GAMEMODE.DefaultProps[GAMEMODE.CurrentPropsCategory]
-    local props = data.models
-    local delay = data.delay or 2
-
-    if INCPropSpawnTimer < CurTime() then
-        -- Spawn a prop at every spawner
-        for k, v in pairs(ents.FindByClass("inc_prop_spawner")) do
-            local ent = ents.Create("prop_physics")
-            ent:SetModel(props[math.random(1, #props)])
-            ent:SetPos(v:GetPos())
-            ent:Spawn()
-            ent:GetPhysicsObject():SetMass(40000)
-
-            -- Call the data function on every entity
-            if data.func then
-                data.func(ent)
-            end
-        end
-
-        INCPropSpawnTimer = CurTime() + delay
-    end
+-- Record starting distances
+hook.Add("PlayerSpawn", "IncomingCheckSpawnDistance", function(ply)
+    if ply.CheckpointStage and ply.CheckpointStage > 0 then return end
+    ply.StartingDistance = GAMEMODE:GetDistanceToEnd(ply)
 end)
 
--- Randomly pick a group of props
-hook.Add("PreRoundStart", "IncomingPropsChange", function()
-    -- If the map has a category restriction, pay attention to that
-    local category
-
-    if GAMEMODE.MapInfo[game.GetMap()].categories then
-        category = table.Random(GAMEMODE.MapInfo[game.GetMap()].categories)
-    else
-        category = table.Random(table.GetKeys(GAMEMODE.DefaultProps))
-    end
-
-    GAMEMODE.CurrentPropsCategory = category
-
+-- Reset best distances on round start
+hook.Add("PreRoundStart", "IncomingResetBestDistance", function()
     for k, v in pairs(player.GetAll()) do
+        v.CheckpointStage = 0
         v.BestDistance = nil
     end
 end)
 
+-- Trigger checkpoints
+function GM:CheckpointTriggered(ply, stage, message)
+    if ply.CheckpointStage and stage <= ply.CheckpointStage then return end
+    ply.CheckpointStage = stage
+
+    if message then
+        GAMEMODE:PlayerOnlyTwoLineAnnouncement(ply, 3, "Checkpoint!", message)
+    else
+        GAMEMODE:PlayerOnlyAnnouncement(ply, 3, "Checkpoint!")
+    end
+end
+
+-- Select player spawn based on checkpoint stage
+function GM:PlayerSelectSpawn(ply)
+    local stage = ply.CheckpointStage
+    if not stage or stage < 1 then
+        return GAMEMODE.BaseClass:PlayerSelectSpawn(ply)
+    end
+
+    -- Sort checkpoint spawns by stage
+    if not GAMEMODE.CheckpointSpawns then GAMEMODE.CheckpointSpawns = {} end
+    if not GAMEMODE.CheckpointSpawns[stage] or not IsTableOfEntitiesValid(GAMEMODE.CheckpointSpawns[stage]) then
+        local spawns = ents.FindByClass("inc_checkpoint_spawn")
+        for _,v in pairs(spawns) do
+            local spawnStage = v.CheckpointStage
+            if not GAMEMODE.CheckpointSpawns[spawnStage] then GAMEMODE.CheckpointSpawns[spawnStage] = {} end
+
+            table.insert(GAMEMODE.CheckpointSpawns[spawnStage], v)
+        end
+    end
+
+    -- Get checkpoint spawns for this level
+    local stageSpawns = GAMEMODE.CheckpointSpawns[stage]
+    if not stageSpawns then
+        return GAMEMODE.BaseClass:PlayerSelectSpawn(ply)
+    end
+
+    return GAMEMODE:AttemptSpawnPoint(ply, stageSpawns)
+end
+
 -- Get the distance the player has to the end
--- This function also tracks the current best distance
 function GM:GetDistanceToEnd(ply)
     local endpos = GAMEMODE:EndingPoint()
-    if not endpos then return end
-    local distance = ply:GetPos():Distance(endpos)
-    local maxdist = GAMEMODE.MapInfo[game.GetMap()].distance
-    local percent = 1 - (distance / maxdist)
+    return ply:GetPos():Distance(endpos)
+end
+
+-- Check if a player has set their new best distance to the end goal
+function GM:CheckBestDistance(ply)
+    if not ply.StartingDistance then return end
+    local distance = GAMEMODE:GetDistanceToEnd(ply)
+
+    local percent = 1 - (distance / ply.StartingDistance)
     if percent < 0 then return end
 
     if ply.BestDistance then
@@ -92,16 +83,7 @@ end
 -- Get a % of how close the player got to the ending
 -- This is used for better scoring than all-or-nothing
 hook.Add("DoPlayerDeath", "IncomingDistanceCheck", function(ply)
-    GAMEMODE:GetDistanceToEnd(ply)
-end)
-
-hook.Add("EntityTakeDamage", "CrowbarKnockback", function(ent, dmg)
-    if not ent:IsPlayer() then return true end
-    if not dmg:GetAttacker():IsPlayer() then return end
-    dmg:SetDamage(0)
-    ent:SetGroundEntity(NULL)
-    local v = dmg:GetDamageForce() + Vector(0, 0, 5)
-    ent:SetVelocity(v * 25)
+    GAMEMODE:CheckBestDistance(ply)
 end)
 
 -- Add scoring based on distance at the end of a round
@@ -109,7 +91,7 @@ end)
 -- eg. 48% -> 40% -> 4 points
 hook.Add("RoundEnd", "IncomingDistancePoints", function()
     for k, v in pairs(player.GetAll()) do
-        GAMEMODE:GetDistanceToEnd(v)
+        GAMEMODE:CheckBestDistance(v)
 
         if v.BestDistance then
             local p = math.floor(v.BestDistance * 100)
@@ -128,11 +110,16 @@ function GM:IncomingVictory(ply)
     GAMEMODE:EntityCameraAnnouncement(ply, GAMEMODE.RoundCooldown or 5)
 end
 
+-- Equivalent of 1XP for every 100% of distance travelled
+hook.Add("RegisterStatsConversions", "AddIncomingStatConversions", function()
+    GAMEMODE:AddStatConversion("Distance", "Distance Travelled", 0.01)
+end)
+
 -- Network resources
+-- todo: workshop this!
 function IncludeResFolder(dir)
     local files = file.Find(dir .. "*", "GAME")
-
-    local FindFileTypes = {".mdl", ".vmt", ".vtf", ".dx90", ".dx80", ".phy", ".sw", ".vvd", ".wav", ".mp3",}
+    local FindFileTypes = {".mdl", ".vmt", ".vtf", ".dx90", ".dx80", ".phy", ".sw", ".vvd", ".wav", ".mp3"}
 
     for k, v in pairs(files) do
         for k2, v2 in pairs(FindFileTypes) do
@@ -142,11 +129,6 @@ function IncludeResFolder(dir)
         end
     end
 end
-
--- Equivalent of 1XP for every 100% of distance travelled
-hook.Add("RegisterStatsConversions", "AddIncomingStatConversions", function()
-    GAMEMODE:AddStatConversion("Distance", "Distance Travelled", 0.01)
-end)
 
 IncludeResFolder("materials/models/clannv/incoming/")
 IncludeResFolder("models/clannv/incoming/box/")

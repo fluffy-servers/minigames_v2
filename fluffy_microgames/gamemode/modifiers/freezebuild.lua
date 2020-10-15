@@ -25,6 +25,8 @@ local function spawnSawblade(position)
     local saw = ents.Create("prop_physics")
     saw:SetModel("models/props_junk/sawblade001a.mdl")
     saw:SetPos(position + Vector(math.Rand(-1, 1), math.Rand(-1, 1), 1) * 8)
+    saw:SetMaterial("models/debug/debugwhite")
+    saw:SetColor(Color(0, 155, 0))
     saw:Spawn()
 end
 
@@ -59,6 +61,7 @@ function MOD:GravGunPunt(ply, ent)
 
     if phys:IsValid() and phys:IsMotionEnabled()  then
         phys:EnableMotion(false)
+        ent:SetColor(Color(155, 0, 0))
     end
 end
 

@@ -3,6 +3,8 @@
     This allows for server owners to update maps to suit various gamemodes
     This data is stored locally in server data files
 --]]
+
+-- Spawnpoint classes that can be added by the spawn tool
 local spawnpoint_classes = {"info_player_start", "info_player_terrorist", "info_player_counterterrorist"}
 
 -- Load configured map override properties from a file
