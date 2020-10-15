@@ -291,6 +291,31 @@
     frequency(integer) : "Spawn Frequency" : 3 : "How often to respawn props at this location?"
 ]
 
+@PointClass = pg_model_control:
+    "Control the models that can be spawned in this map. If this entity exists in the map, none of the default models will spawn!"
+[
+    model0(studio) : "Custom Model 1" : "" : "Model option for prop spawns"
+    model1(studio) : "Custom Model 2" : "" : "Model option for prop spawns"
+    model2(studio) : "Custom Model 3" : "" : "Model option for prop spawns"
+    model3(studio) : "Custom Model 4" : "" : "Model option for prop spawns"
+    model4(studio) : "Custom Model 5" : "" : "Model option for prop spawns"
+    model5(studio) : "Custom Model 6" : "" : "Model option for prop spawns"
+    model6(studio) : "Custom Model 7" : "" : "Model option for prop spawns"
+    model7(studio) : "Custom Model 8" : "" : "Model option for prop spawns"
+    model8(studio) : "Custom Model 9" : "" : "Model option for prop spawns"
+    model9(studio) : "Custom Model 10" : "" : "Model option for prop spawns"
+    model10(studio) : "Custom Model 11" : "" : "Model option for prop spawns"
+    model11(studio) : "Custom Model 12" : "" : "Model option for prop spawns"
+    model12(studio) : "Custom Model 13" : "" : "Model option for prop spawns"
+    model13(studio) : "Custom Model 14" : "" : "Model option for prop spawns"
+    model14(studio) : "Custom Model 15" : "" : "Model option for prop spawns"
+    model15(studio) : "Custom Model 16" : "" : "Model option for prop spawns"
+    model16(studio) : "Custom Model 17" : "" : "Model option for prop spawns"
+    model17(studio) : "Custom Model 18" : "" : "Model option for prop spawns"
+    model18(studio) : "Custom Model 19" : "" : "Model option for prop spawns"
+    model19(studio) : "Custom Model 20" : "" : "Model option for prop spawns. If you need more, you can add so without SmartEdit."
+]
+
 // SUPER SHOTGUNS
 // No entities applicable.
 
@@ -302,3 +327,17 @@
 
 // SUICIDE BARRELS
 // No entities applicable.
+@PointClass = sb_model_control:
+    "Control the models & skins used for barrels in this map. Barrels are randomly picked from these options."
+[
+    model0(studio) : "Custom Model 1" : "" : "1st barrel model."
+    skin0(integer) : "Custom Skin 1" : "" : "1st barrel skin. Defaults to 0."
+    model1(studio) : "Custom Model 2" : "" : "2nd barrel model"
+    skin1(integer) : "Custom Skin 1" : "" : "2st barrel skin. Defaults to 0."
+    model2(studio) : "Custom Model 3" : "" : "3rd barrel model"
+    skin2(integer) : "Custom Skin 1" : "" : "3st barrel skin. Defaults to 0."
+    model3(studio) : "Custom Model 4" : "" : "4th barrel model"
+    skin3(integer) : "Custom Skin 1" : "" : "4st barrel skin. Defaults to 0."
+    model4(studio) : "Custom Model 5" : "" : "5th barrel model. If you need more than 5 models, you can add more without SmartEdit."
+    skin4(integer) : "Custom Skin 1" : "" : "5st barrel skin. Defaults to 0."
+]
