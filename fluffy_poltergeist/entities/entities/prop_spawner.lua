@@ -30,7 +30,7 @@ function ENT:CreateProp(model)
     prop:SetAngles(self:GetAngles())
     prop:SetModel(model)
     prop:Spawn()
-
+    prop:SetSkin(math.random(0, self:SkinCount()-1))
     return prop
 end
 
