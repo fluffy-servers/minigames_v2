@@ -30,7 +30,7 @@ end
 function GM:ApplyBarrelModel(ply)
     local idx = math.random(#GAMEMODE.BarrelModels)
     ply:SetModel(GAMEMODE.BarrelModels[idx])
-    ply:SetSkin(GAMEMODE.BarrelSkins[idx])
+    ply:SetSkin(GAMEMODE.BarrelSkins[idx] or 0)
 end
 
 -- Pick player models
