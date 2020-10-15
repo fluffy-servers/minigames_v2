@@ -15,8 +15,8 @@ function ENT:Think()
 end
 
 function ENT:SpawnProp()
-    if table.Count(ents.FindByClass("prop_phys*")) > 100 then return end
-    local prop = self:CreateProp(self:GetPos(), self:GetAngles(), table.Random(GAMEMODE.PropModels))
+    if table.Count(ents.FindByClass("prop_phys*")) > GAMEMODE.MaxProps then return end
+    local prop = self:CreateProp(table.Random(GAMEMODE.PropModels))
     local phys = prop:GetPhysicsObject()
 
     if phys and phys:IsValid() then
@@ -24,10 +24,10 @@ function ENT:SpawnProp()
     end
 end
 
-function ENT:CreateProp(pos, ang, model)
+function ENT:CreateProp(model)
     local prop = ents.Create("prop_physics")
-    prop:SetPos(pos)
-    prop:SetAngles(ang)
+    prop:SetPos(self:GetPos())
+    prop:SetAngles(self:GetAngles())
     prop:SetModel(model)
     prop:Spawn()
 
