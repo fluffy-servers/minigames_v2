@@ -97,7 +97,8 @@
 		"pb_paintballarena_v2"
 	],
 	"pitfall": [
-		"pf_ocean"
+		"pf_ocean",
+		"pf_toxic_v1"
 	],
 	"poltergeist": [
 		"pg_bigtower",
