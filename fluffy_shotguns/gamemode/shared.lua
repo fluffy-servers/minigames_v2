@@ -17,6 +17,7 @@ GM.RespawnTime = 1
 GM.AutoRespawn = true
 GM.SpawnProtection = true -- Spawn protection enabled
 GM.SpawnProtectionTime = 2
+GM.HealthOnKill = 50
 
 function GM:Initialize()
 end
