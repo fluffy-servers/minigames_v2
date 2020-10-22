@@ -50,7 +50,7 @@ function GM:CreateInfoFrame2()
     end
 
     function discord_ad:DoClick()
-        gui.OpenURL("https://discord.gg/UdMTckn")
+        gui.OpenURL(GetConVar("mg_discord_ad"):GetString())
     end
 
     local header_buttons = {
