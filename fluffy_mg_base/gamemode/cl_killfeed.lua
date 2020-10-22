@@ -5,6 +5,7 @@
 
 local hud_deathnotice_time_cvar = CreateClientConVar("mg_deathnotice_time", "6", true, false, "Amount of time to show death notice")
 local have_killsound_cvar = CreateClientConVar("mg_killsound_enabled", 1, true, false, "Enable a sound effect when you get a kill")
+local killsound_sound_cvar = CreateClientConVar("mg_killsound_sound", "hl1/fvox/bell.wav", true, false, "Choose a sound effect for when you get a kill")
 local draw_hud_cvar = GetConVar("cl_drawhud")
 
 -- These are our kill icons
@@ -174,5 +175,5 @@ function GM:DrawDeathNotice(x, y)
 end
 
 function GM:PlayKillSound()
-    sound.Play("hl1/fvox/bell.wav", LocalPlayer():GetPos(), 75, math.random(120, 140))
+    sound.Play(killsound_sound_cvar:GetString(), LocalPlayer():GetPos(), 75, math.random(120, 140))
 end

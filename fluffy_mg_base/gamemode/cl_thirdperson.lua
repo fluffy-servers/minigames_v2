@@ -25,7 +25,7 @@ function GM:ThirdPersonView(ply, pos, angles, fov)
 
     -- not sure how much commenting will help
     if ply:Alive() and ply:GetObserverMode() == OBS_MODE_NONE and (LocalPlayer().Thirdperson) then
-        view.fov = 60 -- GetConVar("default_fov"):GetFloat()
+        view.fov = 90 -- GetConVar("default_fov"):GetFloat()
         -- Calculate the angle better
         local newP = angles.p
 
