@@ -25,6 +25,7 @@ AddCSLuaFile("shared.lua")
 AddCSLuaFile("sound_tables.lua")
 AddCSLuaFile("sh_levels.lua")
 AddCSLuaFile("sh_scorehelper.lua")
+AddCSLuaFile("sh_convars.lua")
 
 -- Add workshop content
 resource.AddWorkshop("1518438705")
