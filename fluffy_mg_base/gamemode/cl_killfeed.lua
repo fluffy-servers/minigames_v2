@@ -3,11 +3,6 @@
     This is blatantly stolen from the base gamemode, so apologies for the terrible naming
 --]]
 
-local hud_deathnotice_time_cvar = CreateClientConVar("mg_deathnotice_time", "6", true, false, "Amount of time to show death notice")
-local have_killsound_cvar = CreateClientConVar("mg_killsound_enabled", 1, true, false, "Enable a sound effect when you get a kill")
-local killsound_sound_cvar = CreateClientConVar("mg_killsound_sound", "hl1/fvox/bell.wav", true, false, "Choose a sound effect for when you get a kill")
-local draw_hud_cvar = GetConVar("cl_drawhud")
-
 -- These are our kill icons
 local Color_Icon = Color(255, 80, 0, 255)
 local NPC_Color = Color(250, 50, 50, 255)
@@ -47,7 +42,7 @@ net.Receive("PlayerKilledByPlayer", function()
     local inflictor = net.ReadString()
     local attacker = net.ReadEntity()
 
-    if attacker == LocalPlayer() and have_killsound_cvar:GetBool() then
+    if attacker == LocalPlayer() and GetConVar("mg_killsound_enabled"):GetBool() then
         GAMEMODE:PlayKillSound()
     end
 
@@ -146,8 +141,8 @@ local function DrawDeath(x, y, death, hud_deathnotice_time)
 end
 
 function GM:DrawDeathNotice(x, y)
-    if not draw_hud_cvar:GetBool() then return end
-    local hud_deathnotice_time = hud_deathnotice_time_cvar:GetFloat()
+    if not GetConVar("cl_drawhud"):GetBool() then return end
+    local hud_deathnotice_time = GetConVar("mg_deathnotice_time"):GetFloat()
     x = x * ScrW()
     y = y * ScrH()
 
@@ -175,5 +170,5 @@ function GM:DrawDeathNotice(x, y)
 end
 
 function GM:PlayKillSound()
-    sound.Play(killsound_sound_cvar:GetString(), LocalPlayer():GetPos(), 75, math.random(120, 140))
+    sound.Play(GetConVar("mg_killsound_sound"):GetString(), LocalPlayer():GetPos(), 75, math.random(120, 140))
 end

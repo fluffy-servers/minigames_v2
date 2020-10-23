@@ -10,6 +10,7 @@ DeriveGamemode("base")
 include("sound_tables.lua")
 include("sh_levels.lua")
 include("sh_scorehelper.lua")
+include("sh_convars.lua")
 include("shop/sh_init.lua")
 
 GM.Name = "Minigames"

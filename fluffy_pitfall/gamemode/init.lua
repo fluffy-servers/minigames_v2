@@ -3,34 +3,12 @@ AddCSLuaFile("shared.lua")
 include("shared.lua")
 include("sv_levelgen.lua")
 
--- Backwards compatibility for Pitfall maps
-GM.PlatformPositions = {}
-GM.PlatformPositions["pf_ocean"] = Vector(0, 0, 1000)
-GM.PlatformPositions["pf_ocean_d"] = Vector(0, 0, 0)
-GM.PlatformPositions["gm_flatgrass"] = Vector(0, 0, 0)
-GM.PlatformPositions["pf_midnight_v1_fix"] = Vector(0, 0, 0)
-GM.PlatformPositions["pf_midnight_v1"] = Vector(0, 0, 0)
-
--- Color properties
--- pf_settings can edit these
-GM.PColorStart = Color(0, 255, 128)
-GM.PColorEnd = Color(255, 0, 128)
-GM.PDR = GM.PColorEnd.r - GM.PColorStart.r
-GM.PDG = GM.PColorEnd.g - GM.PColorStart.g
-GM.PDB = GM.PColorEnd.b - GM.PColorStart.b
-
--- Update the above settings
-function GM:UpdatePDColors()
-    GAMEMODE.PDR = GAMEMODE.PColorEnd.r - GAMEMODE.PColorStart.r
-    GAMEMODE.PDG = GAMEMODE.PColorEnd.g - GAMEMODE.PColorStart.g
-    GAMEMODE.PDB = GAMEMODE.PColorEnd.b - GAMEMODE.PColorStart.b
-end
-
 -- Players start with a platform breaker weapon
 function GM:PlayerLoadout(ply)
     ply:SetWalkSpeed(350)
     ply:SetRunSpeed(360)
     ply:SetJumpPower(200)
+    ply:StripWeapons()
 
     -- Give weapons after the safe period has ended
     timer.Simple(GAMEMODE.RoundCooldown + GAMEMODE.SafeTime, function()

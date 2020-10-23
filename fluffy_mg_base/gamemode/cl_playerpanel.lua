@@ -50,7 +50,7 @@ function GM:CreateInfoFrame2()
     end
 
     function discord_ad:DoClick()
-        gui.OpenURL("https://discord.gg/UdMTckn")
+        gui.OpenURL(GetConVar("mg_discord_ad"):GetString())
     end
 
     local header_buttons = {
@@ -184,7 +184,7 @@ function GM:HelpPanel()
     -- Create the MOTD display
     local motd = vgui.Create("DHTML", panel)
     motd:Dock(FILL)
-    motd:OpenURL("https://www.fluffyservers.com/guide/minigames.html")
+    motd:OpenURL(GetConVar("mg_motd"):GetString())
     motd:Call("UpdateGamemodeName('" .. name .. "')")
     motd:Call("UpdateGamemodeDesc('" .. string.Replace(helptext, "\n", "</p><p>") .. "')")
     -- Create the play button OR a choose team button
