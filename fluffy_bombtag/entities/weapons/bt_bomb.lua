@@ -1,4 +1,4 @@
-﻿SWEP.Base = "weapon_mg_base"
+﻿SWEP.Base = "weapon_mg_melee"
 
 if CLIENT then
     SWEP.IconLetter = "G"
@@ -20,6 +20,7 @@ SWEP.Primary.Delay = 0.025
 
 SWEP.NextTick = 0
 SWEP.EndingTime = 0
+SWEP.AttackRange = 48
 
 function SWEP:Initialize()
     self:SetWeaponHoldType(self.HoldType)
@@ -66,7 +67,15 @@ end
 
 function SWEP:PrimaryAttack()
     self:SetNextPrimaryFire(CurTime() + self.Primary.Delay)
-    self:Trace()
+    self:DoAttack()
+end
+
+function SWEP:AttackHit(ent)
+    if CLIENT then return end
+
+    if IsValid(ent) and ent:IsPlayer() then
+        self:PassBomb(ent)
+    end
 end
 
 -- Pass the bomb to a new player
@@ -75,6 +84,7 @@ function SWEP:PassBomb(ply)
     local owner = self:GetOwner()
     owner:SetCarrier(false)
     owner:Give("bt_punch")
+
     ply:SetCarrier(true)
     ply:SetTime(owner:GetTime())
     ply:StripWeapons()
@@ -87,23 +97,6 @@ function SWEP:PassBomb(ply)
 
     local name = string.sub(ply:Nick(), 1, 10)
     GAMEMODE:PulseAnnouncement(2, name .. " has the bomb!", 1, "top")
-end
-
-function SWEP:Trace()
-    if CLIENT then return end
-    local owner = self:GetOwner()
-    local pos = owner:GetShootPos()
-    local aim = owner:GetAimVector() * 32
-
-    -- Search for player in a radius just in front of the player
-    -- This is nothing short of scuffed - move this to handled like a melee weapon
-    local entities = ents.FindInSphere(pos + aim, 32)
-    for k, v in pairs(entities) do
-        if v:IsPlayer() and v ~= owner then
-            self:PassBomb(v)
-            return
-        end
-    end
 end
 
 function SWEP:SecondaryAttack()
