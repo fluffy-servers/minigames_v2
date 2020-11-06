@@ -91,6 +91,7 @@ end
 
 function SWEP:Trace()
     if CLIENT then return end
+    local owner = self:GetOwner()
     local pos = owner:GetShootPos()
     local aim = owner:GetAimVector() * 32
 
@@ -103,8 +104,6 @@ function SWEP:Trace()
             return
         end
     end
-
-
 end
 
 function SWEP:SecondaryAttack()
