@@ -1,4 +1,4 @@
-﻿SWEP.Base = "weapon_mg_base"
+﻿SWEP.Base = "weapon_mg_melee"
 
 if SERVER then
     SWEP.Weight = 5
@@ -54,111 +54,46 @@ function SWEP:Deploy()
     return true
 end
 
--- port from weapon_knife.cpp
-function SWEP:FindHullIntersection(src, tr, mins, maxs, ent)
-    local vecHullEnd = src + ((tr.HitPos - src) * 2)
-    local data = {}
-    data.start = src
-    data.endpos = vecHullEnd
-    data.filter = ent
-    data.mask = MASK_SOLID
-    data.mins = mins
-    data.maxs = maxs
+function SWEP:AttackHit(ent, tr)
+    self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
 
-    local tmp = util.TraceLine(data)
-    if tmp.Hit then
-        return tmp
-    end
-
-    local distance = 999999
-    for i = 0, 1 do
-        for j = 0, 1 do
-            for k = 0, 1 do
-                local vecEnd = Vector()
-                vecEnd.x = vecHullEnd.x + (i > 0 and maxs.x or mins.x)
-                vecEnd.y = vecHullEnd.y + (j > 0 and maxs.y or mins.y)
-                vecEnd.z = vecHullEnd.z + (k > 0 and maxs.z or mins.z)
-                data.endpos = vecEnd
-
-                tmp = util.TraceLine(data)
-                if tmp.Hit then
-                    local dist = (tmp.HitPos - src):Length()
-                    if dist < distance then
-                        tr = tmp
-                        distance = dist
-                    end
-                end
-            end
-        end
-    end
-
-    return tr
-end
-
-function SWEP:DoAttack(alt)
     local attacker = self:GetOwner()
-    attacker:LagCompensation(true)
-
     local range = self.AttackRange
     local forward = attacker:GetAimVector()
     local src = attacker:GetShootPos()
     local trace_end = src + forward * range
 
-    -- Setup trace structure
-    local trace = {}
-    trace.filter = attacker
-    trace.start = src
-    trace.mask = MASK_SOLID
-    trace.endpos = trace_end
-    trace.mins = Vector(-16, -16, -18)
-    trace.maxs = Vector(16, 16, 18)
+    if IsValid(ent) then
+        -- Apply damage
+        local dmg = DamageInfo()
+        dmg:SetDamage(self.Primary.Damage)
+        dmg:SetAttacker(attacker)
+        dmg:SetInflictor(self)
+        dmg:SetDamageForce(attacker:GetAimVector() * 1500)
+        dmg:SetDamagePosition(tr.HitPos)
+        dmg:SetDamageType(DMG_SLASH)
+        ent:DispatchTraceAttack(dmg, tr)
 
-    -- Run the trace
-    -- This does some fancy hull stuff for approximating near-misses
-    local tr = util.TraceLine(trace)
-    if not tr.Hit then tr = util.TraceHull(trace) end
-    if tr.Hit and (tr.Entity or tr.HitWorld) then
-        local dmins, dmaxs = attacker:GetHullDuck()
-        tr = self:FindHullIntersection(src, tr, dmins, dmaxs, attacker)
-        trace_end = tr.HitPos
-    end
-
-    if tr.Hit then
-        self:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
-
-        if IsValid(tr.Entity) then
-            -- Apply damage
-            local dmg = DamageInfo()
-            dmg:SetDamage(self.Primary.Damage)
-            dmg:SetAttacker(attacker)
-            dmg:SetInflictor(self)
-            dmg:SetDamageForce(attacker:GetAimVector() * 1500)
-            dmg:SetDamagePosition(tr.HitPos)
-            dmg:SetDamageType(DMG_SLASH)
-            tr.Entity:DispatchTraceAttack(dmg, tr)
-
-            -- Blood effects for humans
-            if tr.Entity:IsPlayer() then
-                local edata = EffectData()
-                edata:SetStart(attacker:GetShootPos())
-                edata:SetOrigin(tr.HitPos)
-                edata:SetNormal(tr.Normal)
-                edata:SetEntity(tr.Entity)
-                util.Effect("BloodImpact", edata)
-                self:EmitSound("Weapon_Knife.Hit")
-            end
-        else
-            -- Attack hit world
-            self:EmitSound("Weapon_Crowbar.Melee_Hit")
-            util.Decal("ManhackCut", src - forward, trace_end + forward, true)
+        -- Blood effects for humans
+        if ent:IsPlayer() then
+            local edata = EffectData()
+            edata:SetStart(attacker:GetShootPos())
+            edata:SetOrigin(tr.HitPos)
+            edata:SetNormal(tr.Normal)
+            edata:SetEntity(ent)
+            util.Effect("BloodImpact", edata)
+            self:EmitSound("Weapon_Knife.Hit")
         end
     else
-        -- Attack missed
-        self:EmitSound("Weapon_Knife.Slash")
-        self:SendWeaponAnim(ACT_VM_MISSCENTER)
+        -- Attack hit world
+        self:EmitSound("Weapon_Crowbar.Melee_Hit")
+        util.Decal("ManhackCut", src - forward, trace_end + forward, true)
     end
+end
 
-    attacker:LagCompensation(false)
+function SWEP:AttackMissed()
+    self:EmitSound("Weapon_Knife.Slash")
+    self:SendWeaponAnim(ACT_VM_MISSCENTER)
 end
 
 function SWEP:PrimaryAttack()
@@ -171,16 +106,6 @@ function SWEP:SecondaryAttack()
 
     self:GetOwner():SetAnimation(PLAYER_ATTACK1)
     self:DoAttack()
-end
-
-function SWEP:EntityFaceBack(ent)
-    local angle = self:GetOwner():GetAngles().y - ent:GetAngles().y
-
-    if angle < -180 then
-        angle = 360 + angle
-    end
-
-    return angle <= 90 and angle >= -90
 end
 
 function SWEP:DoImpactEffect(tr, nDamageType)
