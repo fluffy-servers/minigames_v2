@@ -5,6 +5,8 @@
 --
 AddCSLuaFile()
 
+ENT.Type = "anim"
+ENT.Base = "base_anim"
 ENT.PrintName = "Ball"
 ENT.MinSize = 24
 ENT.MaxSize = 64
