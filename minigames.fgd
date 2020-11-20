@@ -331,13 +331,13 @@
     "Control the models & skins used for barrels in this map. Barrels are randomly picked from these options."
 [
     model0(studio) : "Custom Model 1" : "" : "1st barrel model."
-    skin0(integer) : "Custom Skin 1" : "" : "1st barrel skin. Defaults to 0."
+    skin0(integer) : "Custom Skin 1" : 0 : "1st barrel skin. Defaults to 0."
     model1(studio) : "Custom Model 2" : "" : "2nd barrel model"
-    skin1(integer) : "Custom Skin 1" : "" : "2st barrel skin. Defaults to 0."
+    skin1(integer) : "Custom Skin 1" : 0 : "2st barrel skin. Defaults to 0."
     model2(studio) : "Custom Model 3" : "" : "3rd barrel model"
-    skin2(integer) : "Custom Skin 1" : "" : "3st barrel skin. Defaults to 0."
+    skin2(integer) : "Custom Skin 1" : 0 : "3st barrel skin. Defaults to 0."
     model3(studio) : "Custom Model 4" : "" : "4th barrel model"
-    skin3(integer) : "Custom Skin 1" : "" : "4st barrel skin. Defaults to 0."
+    skin3(integer) : "Custom Skin 1" : 0 : "4st barrel skin. Defaults to 0."
     model4(studio) : "Custom Model 5" : "" : "5th barrel model. If you need more than 5 models, you can add more without SmartEdit."
-    skin4(integer) : "Custom Skin 1" : "" : "5st barrel skin. Defaults to 0."
+    skin4(integer) : "Custom Skin 1" : 0 : "5st barrel skin. Defaults to 0."
 ]
