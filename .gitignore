@@ -1,5 +1,7 @@
-/*/
-!/fluffy_*
-!/minigames_*
-/fluffy_*_standalone
-fluffy_mg_base/gamemode/db_config.lua
+# temporary
+base
+murder
+sandbox
+terrortown
+
+gamemodes/fluffy_mg_base/gamemode/db_config.lua
