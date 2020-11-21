@@ -288,3 +288,12 @@ function GM:TranslatePlayerModel(name, ply)
         return ply.TemporaryModel
     end
 end
+
+-- Get the gamemode name, respecting the proxy case
+function GM:GamemodeName()
+    if GAMEMODE_NAME == "minigames" then
+        return GetConVar("mg_proxy_gamemode"):GetString()
+    else
+        return GAMEMODE_NAME
+    end
+end

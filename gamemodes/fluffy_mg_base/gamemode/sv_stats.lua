@@ -129,7 +129,7 @@ function meta:LoadStatsFromDB()
     local q = GAMEMODE.MinigamesPQueries["getstats"]
     if not q then return end
     q:setString(1, self:SteamID64())
-    q:setString(2, string.Replace(GAMEMODE_NAME, "fluffy_", ""))
+    q:setString(2, string.Replace(GAMEMODE:GamemodeName(), "fluffy_", ""))
 
     -- Success function
     function q:onSuccess(data)
@@ -173,7 +173,7 @@ function meta:UpdateStatsToDB()
         local q = GAMEMODE.MinigamesPQueries["updatestats"]
         if not q then return end
         q:setString(1, self:SteamID64())
-        q:setString(2, string.Replace(GAMEMODE_NAME, "fluffy_", ""))
+        q:setString(2, string.Replace(GAMEMODE:GamemodeName(), "fluffy_", ""))
         q:setString(3, k)
         q:setNumber(4, v)
         q:start()

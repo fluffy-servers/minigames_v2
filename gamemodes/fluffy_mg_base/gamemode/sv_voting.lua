@@ -91,7 +91,7 @@ function GM:GenerateVotingQueue()
         -- We have the flexibility here to ensure we don"t repeat gamemodes
         local selected_gamemodes = table.Shuffle(gamemodes)
         for k, v in pairs(selected_gamemodes) do
-            if v == GAMEMODE_NAME then continue end
+            if v == GAMEMODE:GamemodeName() then continue end
             local map = table.Random(GAMEMODE.VoteMaps[v])
             table.insert(options, {v, map})
             if #options == 6 then break end
@@ -101,7 +101,7 @@ function GM:GenerateVotingQueue()
         -- This means we will see the current gamemode again, but that"s fine in this case
         -- If the current gamemode has more than one map, we"ll pick a new map
         for k, v in pairs(gamemodes) do
-            if v == GAMEMODE_NAME then
+            if v == GAMEMODE:GamemodeName() then
                 if #GAMEMODE.VoteMaps[v] == 1 then
                     -- Only one map for the current gamemode
                     table.insert(options, {v, current_map})
@@ -125,7 +125,7 @@ function GM:GenerateVotingQueue()
         while #options < 6 do
             local gm = table.Random(gamemodes)
             local map = table.Random(GAMEMODE.VoteMaps[gm])
-            if gm == GAMEMODE_NAME and map == current_map then continue end
+            if gm == GAMEMODE:GamemodeName() and map == current_map then continue end
 
             -- Check we haven"t added this combination yet
             local seen
@@ -217,7 +217,12 @@ function GM:EndVote()
     local winning_map = winner[2]
 
     -- Change the gamemode and map
-    game.ConsoleCommand("gamemode " .. winning_gamemode .. "\n")
+    -- Respect the proxy
+    if GAMEMODE_NAME == "minigames" then
+        game.ConsoleCommand("mg_proxy_gamemode " .. winning_gamemode .. "\n")
+    else
+        game.ConsoleCommand("gamemode " .. winning_gamemode .. "\n")
+    end
 
     timer.Simple(5, function()
         game.ConsoleCommand("changelevel " .. winning_map .. "\n")
