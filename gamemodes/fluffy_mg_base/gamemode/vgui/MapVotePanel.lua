@@ -37,7 +37,7 @@ function PANEL:AddChildren(width, height)
             gamemode = p.Options[1] or "gamemode"
             local split = string.Split(p.Options[2] or "map", "_")
             map_pretty = ""
-            
+
             if #split == 2 then
                 -- Take the second segment only
                 map_pretty = split[2]:sub(1, 1):upper() .. split[2]:sub(2)

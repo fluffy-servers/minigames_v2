@@ -2,12 +2,14 @@
     All convars are created in this file
 --]]
 
--- Shared convars
+-- Shared convars go here
 
 if SERVER then
-    -- Server-specific convars
+    -- Server-specific convars go here
 
+    return
 elseif CLIENT then
-    -- Client-specific convars
-    
+    -- Client-specific convars go here
+
+    return
 end

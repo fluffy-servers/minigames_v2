@@ -9,11 +9,11 @@
 
 local sounds = {
     "vo/coast/odessa/male01/nlo_cheer01.wav",
-    "vo/coast/odessa/male01/nlo_cheer02.wav", 
+    "vo/coast/odessa/male01/nlo_cheer02.wav",
     "vo/coast/odessa/male01/nlo_cheer03.wav",
-    "vo/coast/odessa/male01/nlo_cheer04.wav", 
-    "vo/coast/odessa/female01/nlo_cheer01.wav", 
-    "vo/coast/odessa/female01/nlo_cheer02.wav", 
+    "vo/coast/odessa/male01/nlo_cheer04.wav",
+    "vo/coast/odessa/female01/nlo_cheer01.wav",
+    "vo/coast/odessa/female01/nlo_cheer02.wav",
     "vo/coast/odessa/female01/nlo_cheer03.wav"
 }
 

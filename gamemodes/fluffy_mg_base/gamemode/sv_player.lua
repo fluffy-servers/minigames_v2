@@ -66,7 +66,7 @@ function GM:PlayerSelectSpawn(ply)
     if not IsTableOfEntitiesValid(GAMEMODE.SpawnPoints) or #GAMEMODE.SpawnPoints < 1 then
         GAMEMODE.SpawnPoints = ents.FindByClass("info_player_start")
         GAMEMODE.SpawnPoints = table.Add(GAMEMODE.SpawnPoints, ents.FindByClass("info_player_deathmatch"))
-        
+
         if #GAMEMODE.SpawnPoints < 2 then
             GAMEMODE.SpawnPoints = table.Add(GAMEMODE.SpawnPoints, ents.FindByClass("info_player_terrorist"))
             GAMEMODE.SpawnPoints = table.Add(GAMEMODE.SpawnPoints, ents.FindByClass("info_player_counterterrorist"))

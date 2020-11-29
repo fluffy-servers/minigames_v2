@@ -68,12 +68,12 @@ function ENT:Touch(ent)
     -- Spawn protection before platforms fall
     if not GAMEMODE:InRound() then return end
     if GAMEMODE:GetRoundStartTime() + GAMEMODE.SafeTime > CurTime() then return end
-    
+
     -- Only living players make the platforms fall
     if not IsValid(ent) then return end
     if not ent:IsPlayer() then return end
     if not ent:Alive() or ent.Spectating then return end
-    
+
     local scale = CurTime() - self.CreationTime
     scale = 1 + (4 * (scale/GAMEMODE.RoundTime))
     self:AddDamage(FrameTime() * 160 * scale)

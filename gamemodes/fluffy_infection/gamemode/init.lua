@@ -105,7 +105,7 @@ function GM:PlayerSelectSpawn(ply)
                 GAMEMODE.InfectedSpawns = table.Add(GAMEMODE.InfectedSpawns, ents.FindByClass("info_player_start"))
             end
         end
-        
+
         return GAMEMODE:AttemptSpawnPoint(ply, GAMEMODE.InfectedSpawns)
     end
 end
