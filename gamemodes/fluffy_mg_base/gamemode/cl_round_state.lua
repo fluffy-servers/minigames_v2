@@ -25,22 +25,23 @@ local TIME_ICON = Material("fluffy/time.png", "noclamp smooth")
 
 -- COMPONENTS
 function GM:GetRoundTimeRemaining()
-    local RoundTime = GetGlobalFloat("RoundStart")
-    if not RoundTime then return end
-    local RoundMax = GAMEMODE.RoundTime or 60
+    local startTime = GetGlobalFloat("RoundStart")
+    if not startTime then return end
 
+    local roundMax = isfunction(GAMEMODE.RoundTime) and GAMEMODE.RoundTime() or GAMEMODE.RoundTime or 60
     if GAMEMODE:GetRoundState() == "PreRound" then
-        RoundMax = GAMEMODE.RoundCooldown or 5
+        roundMax = GAMEMODE.RoundCooldown or 5
     end
 
-    return math.max(RoundMax - (CurTime() - RoundTime), 0), RoundMax
+    return math.max(roundMax - (CurTime() - startTime), 0), roundMax
 end
 
 function GM:GetGameTimeRemaining()
-    local GameTime = GetGlobalFloat("GameStartTime")
-    if not GameTime then return end
+    local startTime = GetGlobalFloat("GameStartTime")
+    if not startTime then return end
 
-    return (GameTime + GAMEMODE.GameTime) - CurTime()
+    local gameTime = isfunction(GAMEMODE.GameTime) and GAMEMODE.GameTime() or GAMEMODE.GameTime
+    return (startTime + gameTime) - CurTime()
 end
 
 function GM:GetGameTimeRemainingFormatted()
@@ -63,7 +64,7 @@ end
 
 function GM:GetRoundInfo()
     local round = GAMEMODE:GetRoundNumber()
-    local rmax = GAMEMODE.RoundNumber or 5
+    local rmax = isfunction(GAMEMODE.RoundNumber) and GAMEMODE.RoundNumber() or GAMEMODE.RoundNumber or 5
     local round_message = "Round " .. round .. " / " .. rmax
 
     if round == rmax then
