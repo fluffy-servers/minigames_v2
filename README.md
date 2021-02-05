@@ -1,4 +1,11 @@
 # Minigames
+## End of Life
+Fluffy Servers has come to a close and, while I'd love to keep pouring my heart into Minigames, I don't have the time or passion to maintain this project like I used to. No further content is expected for Minigames.
+
+If you're still making content for Minigames, please feel free to open a PR and I'll get around to reviewing it. If there's any developer features or tweaks you'd like made to the base, get in touch.
+
+I'd like to thank everyone who played Minigames on Fluffy Servers in the three years we were running - special thanks to everyone who helped create content. Minigames has been a fantastic learning experience for me, and I hope that if you're reading this README that you can still find some value out of this project.
+
 ## Introduction
 Minigames is a collection of exciting gamemodes developed by Fluffy Servers. We have new and original content, as well as remakes of gamemodes from the glory days of Fretta.
 
