@@ -87,7 +87,8 @@ function GM:PreStartRound()
     -- Different gamemode round types have different logic
     if GAMEMODE.RoundType == "default" then
         -- End the game once all the rounds have been played
-        if round >= GAMEMODE.RoundNumber then
+        local rmax = isfunction(GAMEMODE.RoundNumber) and GAMEMODE.RoundNumber() or GAMEMODE.RoundNumber
+        if round >= rmax then
             GAMEMODE:EndGame()
 
             return
@@ -170,8 +171,9 @@ function GM:StartRound()
 
     -- End the round after a certain time
     -- Does not apply to endless round types
-    if GAMEMODE.RoundType ~= "timed_endless" and GAMEMODE.RoundTime > 0 then
-        timer.Create("GamemodeTimer", GAMEMODE.RoundTime, 0, function()
+    local roundTime = isfunction(GAMEMODE.RoundTime) and GAMEMODE.RoundTime() or GAMEMODE.RoundTime
+    if GAMEMODE.RoundType ~= "timed_endless" and roundTime > 0 then
+        timer.Create("GamemodeTimer", roundTime, 0, function()
             GAMEMODE:EndRound("TimeEnd")
         end)
     end
