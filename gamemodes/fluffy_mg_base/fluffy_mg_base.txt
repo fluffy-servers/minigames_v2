@@ -1,5 +1,5 @@
 "fluffy_mg_base"
 {
 	"base"	"base"
-	"title"	"Minigames"
+	"title"	"Minigames Base"
 }
