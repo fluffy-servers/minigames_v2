@@ -2,5 +2,6 @@
 {
 	"base"		"base"
 	"title"		"Minigames"
+	"maps"		"^mg_, ^pvp_"
 	"category"	"pvp"
 }
