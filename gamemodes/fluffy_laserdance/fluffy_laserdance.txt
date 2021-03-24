@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Laser Dance"
-	"maps"	"^ld_"
+	"base"		"fluffy_mg_base"
+	"title"		"Laser Dance"
+	"maps"		"^ld_"
+	"category" 	"pvp"
 }

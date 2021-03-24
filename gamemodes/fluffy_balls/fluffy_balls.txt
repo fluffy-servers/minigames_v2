@@ -1,5 +1,6 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Ballz"
+	"base"		"fluffy_mg_base"
+	"title"		"Ballz"
+	"category" 	"pvp"
 }

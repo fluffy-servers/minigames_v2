@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Bomb Tag"
-    "maps"	"^bt_"
+	"base"		"fluffy_mg_base"
+	"title"		"Bomb Tag"
+    "maps"		"^bt_"
+	"category" 	"pvp"
 }

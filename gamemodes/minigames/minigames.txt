@@ -1,5 +1,6 @@
 "minigames"
 {
-	"base"	"base"
-	"title"	"Minigames"
+	"base"		"base"
+	"title"		"Minigames"
+	"category"	"pvp"
 }

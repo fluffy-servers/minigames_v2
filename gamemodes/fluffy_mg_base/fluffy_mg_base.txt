@@ -1,6 +1,5 @@
-"minigames"
+"fluffy_mg_base"
 {
 	"base"	"base"
 	"title"	"Minigames"
-    "maps"	"^pvp_"
 }

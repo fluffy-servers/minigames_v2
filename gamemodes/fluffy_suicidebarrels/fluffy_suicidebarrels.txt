@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Suicide Barrels"
-	"maps"	"^sb_"
+	"base"		"fluffy_mg_base"
+	"title"		"Suicide Barrels"
+	"maps"		"^sb_"
+	"category"	"pvp"
 }

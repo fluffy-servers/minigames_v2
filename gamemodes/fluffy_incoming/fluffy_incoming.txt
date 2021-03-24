@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Incoming!"
-    "maps"	"^inc_"
+	"base"		"fluffy_mg_base"
+	"title"		"Incoming!"
+    "maps"		"^inc_"
+	"category" 	"pvp"
 }

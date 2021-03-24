@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"One In The Chamber"
-	"maps"	"^oitc_"
+	"base"		"fluffy_mg_base"
+	"title"		"One In The Chamber"
+	"maps"		"^oitc_"
+	"category" 	"pvp"
 }

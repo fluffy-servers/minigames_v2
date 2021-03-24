@@ -1,5 +1,6 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Kingmaker"
+	"base"		"fluffy_mg_base"
+	"title"		"Kingmaker"
+	"category" 	"pvp"
 }

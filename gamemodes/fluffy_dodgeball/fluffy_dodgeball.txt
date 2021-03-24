@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_base"
-	"title"	"Dodgeball"
-    "maps"	"^db_"
+	"base"		"fluffy_base"
+	"title"		"Dodgeball"
+    "maps"		"^db_"
+	"category" 	"pvp"
 }

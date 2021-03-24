@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_base"
-	"title"	"Super Shotguns"
-    "maps"	"^sg_"
+	"base"		"fluffy_base"
+	"title"		"Super Shotguns"
+    "maps"		"^sg_"
+	"category"	"pvp"
 }

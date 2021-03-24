@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_base"
-	"title"	"Freeze Tag"
-    "maps"	"^ft_"
+	"base"		"fluffy_base"
+	"title"		"Freeze Tag"
+    "maps"		"^ft_"
+	"category" 	"pvp"
 }
