@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Capture The Flag"
-    "maps"	"^ctf_"
+	"base"		"fluffy_mg_base"
+	"title"		"Capture The Flag"
+    "maps"		"^ctf_"
+	"category" 	"pvp"
 }

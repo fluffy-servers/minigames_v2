@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Climb!"
-    "maps"	"^climb_"
+	"base"		"fluffy_mg_base"
+	"title"		"Climb!"
+    "maps"		"^climb_"
+	"category" 	"pvp"
 }

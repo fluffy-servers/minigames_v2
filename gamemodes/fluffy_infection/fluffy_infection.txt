@@ -1,5 +1,6 @@
 "minigames"
 {
-	"base"	"fluffy_base"
-	"title"	"Infection"
+	"base"		"fluffy_base"
+	"title"		"Infection"
+	"category" 	"pvp"
 }

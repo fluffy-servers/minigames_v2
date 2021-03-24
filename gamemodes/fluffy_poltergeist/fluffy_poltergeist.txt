@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Poltergeist"
-    "maps"	"^pg_"
+	"base"		"fluffy_mg_base"
+	"title"		"Poltergeist"
+    "maps"		"^pg_"
+	"category"	"pvp"
 }

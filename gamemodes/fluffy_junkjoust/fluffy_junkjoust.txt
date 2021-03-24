@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_base"
-	"title"	"Junk Joust"
-    "maps"	"^jj_"
+	"base"		"fluffy_base"
+	"title"		"Junk Joust"
+    "maps"		"^jj_"
+	"category" 	"pvp"
 }

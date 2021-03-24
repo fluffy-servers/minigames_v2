@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Lava"
-    "maps"	"^lava_"
+	"base"		"fluffy_mg_base"
+	"title"		"Lava"
+    "maps"		"^lava_"
+	"category" 	"pvp"
 }

@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Gun Game"
-    "maps" "^gg_"
+	"base"		"fluffy_mg_base"
+	"title"		"Gun Game"
+    "maps" 		"^gg_"
+	"category" 	"pvp"
 }

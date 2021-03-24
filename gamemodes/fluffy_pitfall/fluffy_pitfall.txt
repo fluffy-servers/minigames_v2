@@ -1,6 +1,7 @@
 "minigames"
 {
-	"base"	"fluffy_mg_base"
-	"title"	"Pitfall"
-    "maps"	"^til_, ^pf_"
+	"base"		"fluffy_mg_base"
+	"title"		"Pitfall"
+    "maps"		"^til_, ^pf_"
+	"category"	"pvp"
 }

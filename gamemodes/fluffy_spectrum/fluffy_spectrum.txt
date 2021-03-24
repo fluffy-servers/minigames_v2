@@ -1,5 +1,6 @@
 "minigames"
 {
-	"base"	"fluffy_base"
-	"title"	"Spectrum"
+	"base"		"fluffy_base"
+	"title"		"Spectrum"
+	"category"	"pvp"
 }
