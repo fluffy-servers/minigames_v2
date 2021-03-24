@@ -4,7 +4,7 @@
 
 ### March 2021 - Categories Update
 
-The [March 2021 Garry's Mode Update](https://store.steampowered.com/news/app/4000/view/2988675197234811880) adds support for gamemode categories on the server browser. I've quickly whipped up a [1.3.11 update](https://github.com/fluffy-servers/minigames_v2/releases/tag/1.3.11) which adds these categories to the Minigames gamemodes.
+The [March 2021 Garry's Mod Update](https://store.steampowered.com/news/app/4000/view/2988675197234811880) adds support for gamemode categories on the server browser. I've quickly whipped up a [1.3.11 update](https://github.com/fluffy-servers/minigames_v2/releases/tag/1.3.11) which adds these categories to the Minigames gamemodes.
 
 Also relevant - check out [the guide on how to use the proxy gamemode](https://github.com/fluffy-servers/minigames_v2/wiki/Server-Setup#proxy-gamemode) to keep your server stable in the server browser.
 
