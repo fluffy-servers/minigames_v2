@@ -2,6 +2,10 @@
 
 ## End of Life
 
+### Maps
+
+If you're looking for the maps for these gamemodes, the old Fluffy Servers map list is still available [here](https://fluffyservers.com/fastdlmg/maps/).
+
 ### March 2021 - Categories Update
 
 The [March 2021 Garry's Mod Update](https://store.steampowered.com/news/app/4000/view/2988675197234811880) adds support for gamemode categories on the server browser. I've quickly whipped up a [1.3.11 update](https://github.com/fluffy-servers/minigames_v2/releases/tag/1.3.11) which adds these categories to the Minigames gamemodes.
